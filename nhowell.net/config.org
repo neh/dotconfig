@@ -7,7 +7,7 @@
 
 * Sway
 :PROPERTIES:
-:header-args: :tangle ~/.config/sway/config
+:header-args: :tangle ~/.config/sway/config :mkdirp yes
 :END:
 
 I use [[https://github.com/swaywm/sway][sway]].
@@ -415,7 +415,7 @@ exec $terminal
 
 * Waybar
 :PROPERTIES:
-:header-args: :tangle "litwaybar.conf"
+:header-args: :tangle "litwaybar.conf" :mkdirp yes
 :END:
 
 #+begin_src conf :tangle no :noweb-ref waybar-sway
