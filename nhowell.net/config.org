@@ -1,0 +1,1333 @@
+#+property: header-args :mkdirp yes :comments no :results silent
+#+startup: showall
+
+#+title: My config files
+#+author: Nathan Howell
+#+email: nath@nhowell.net
+
+* Sway
+:PROPERTIES:
+:header-args: :tangle ~/.config/sway/config
+:END:
+
+I use [[https://github.com/swaywm/sway][sway]].
+
+Set some of the basic options like font, terminal, etc.
+
+#+begin_src conf
+font pango:DejaVu Sans 10
+set $terminal termite
+floating_modifier Mod4
+#+end_src
+
+I'm a crazy dvorak user, and I like my movement keys on the home row right hand keys, so I set some variables to use later.
+
+#+begin_src conf
+set $left h
+set $down t
+set $up n
+set $right s
+#+end_src
+
+Terminal launching. I use a custom every-terminal-is-in-one-tmux-session setup. More on that elsewhere in this file. I still have a binding to launch a non-tmux terminal though.
+
+#+begin_src conf
+bindsym Mod4+c exec $terminal -e ~/bin/tmux-main-attach
+bindsym Mod4+Shift+c exec $terminal
+#+end_src
+
+App launching. Using rofi currently.
+
+#+begin_src conf
+bindsym Mod4+e exec --no-startup-id \
+    i3-dmenu-desktop --dmenu="rofi -dmenu -i -p 'run: '" --entry-type=name
+#+end_src
+
+Here we have keybindings that deal with windows.
+
+#+begin_src conf
+# kill focused window
+bindsym Mod4+k kill
+
+# change focus
+bindsym Mod4+$left focus left
+bindsym Mod4+$down focus down
+bindsym Mod4+$up focus up
+bindsym Mod4+$right focus right
+
+# move focused window
+bindsym Mod4+Shift+$left move left
+bindsym Mod4+Shift+$down move down
+bindsym Mod4+Shift+$up move up
+bindsym Mod4+Shift+$right move right
+
+# toggle tiling / floating
+bindsym Mod4+r floating toggle
+#+end_src
+
+And layout-related keybindings.
+
+#+begin_src conf
+# split in horizontal orientation
+bindsym Mod4+z split h
+
+# split in vertical orientation
+bindsym Mod4+v split v, layout stacking
+
+# enter fullscreen mode for the focused container
+bindsym Mod4+f exec ~/bin/fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+# bindsym Mod4+j layout stacking
+# bindsym Mod4+Shift+j layout tabbed
+# bindsym Mod4+x layout toggle split
+
+bindsym Mod4+space layout toggle all
+
+# focus the parent container
+bindsym Mod4+u focus parent
+
+# focus the child container
+bindsym Mod1+d focus child
+#+end_src
+
+Some special window handling rules.
+
+#+begin_src conf
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [app_id="zenity"] floating enable
+
+for_window [class="Firefox"] inhibit_idle fullscreen
+for_window [class="Chromium"] inhibit_idle fullscreen
+for_window [app_id="firefox"] inhibit_idle fullscreen
+for_window [app_id="chromium"] inhibit_idle fullscreen
+#+end_src
+
+Workspace keybindings.
+
+#+begin_src conf
+# switch to workspace
+bindsym Mod4+1 workspace number 1
+bindsym Mod4+2 workspace number 2
+bindsym Mod4+3 workspace number 3
+bindsym Mod4+4 workspace number 4
+bindsym Mod4+5 workspace number 5
+bindsym Mod4+6 workspace number 6
+bindsym Mod4+7 workspace number 7
+bindsym Mod4+8 workspace number 8
+bindsym Mod4+9 workspace number 9
+bindsym Mod4+0 workspace number 10
+
+bindsym Mod4+Tab workspace back_and_forth
+bindsym Mod4+p workspace back_and_forth
+bindsym Control+Mod1+Tab workspace back_and_forth
+bindsym Mod4+Control+$left workspace prev
+bindsym Mod4+Control+$right workspace next
+bindsym Mod4+Control+Shift+$left move workspace to output left
+bindsym Mod4+Control+Shift+$right move workspace to output right
+
+# move focused container to workspace
+bindsym Mod4+Shift+1 move container to workspace number 1
+bindsym Mod4+Shift+2 move container to workspace number 2
+bindsym Mod4+Shift+3 move container to workspace number 3
+bindsym Mod4+Shift+4 move container to workspace number 4
+bindsym Mod4+Shift+5 move container to workspace number 5
+bindsym Mod4+Shift+6 move container to workspace number 6
+bindsym Mod4+Shift+7 move container to workspace number 7
+bindsym Mod4+Shift+8 move container to workspace number 8
+bindsym Mod4+Shift+9 move container to workspace number 9
+bindsym Mod4+Shift+0 move container to workspace number 10
+#+end_src
+
+Window border handling.
+
+#+begin_src conf
+bindsym Mod4+b border toggle
+# default_border normal
+default_floating_border normal
+default_border pixel 4
+smart_borders on
+#+end_src
+
+Output configuration for work laptop.
+
+#+begin_src conf
+set $work_monitor_left "Ancor Communications Inc ASUS PB278 E1LMTF061086"
+set $work_monitor_right "Ancor Communications Inc ASUS PB278 E3LMTF122568"
+
+set $home_monitor "Goldstar Company Ltd LG Ultra HD 0x0000EFE8"
+
+workspace 1 output $work_monitor_right
+workspace 2 output $work_monitor_right
+workspace 3 output $work_monitor_right
+workspace 4 output $work_monitor_left
+workspace 5 output $work_monitor_left
+workspace 7 output $work_monitor_left
+workspace 8 output $work_monitor_left
+
+output eDP-1 {
+    # scale 1.0
+    # disable
+    pos 4000,1000
+}
+
+output $work_monitor_left {
+    transform 270
+    pos 0,0
+}
+
+output $work_monitor_right {
+    pos 1440,220
+}
+#+end_src
+
+Set the background colour on all outputs.
+
+#+begin_src conf
+output * {
+    background #222222 solid_color
+}
+#+end_src
+
+A bit of laptop display management. I use laptops docked a lot of the time, and usually don't use the internal display when docked. So I want that display disabled when the laptop has external active displays and then is closed, and I want it enabled when opening the laptop.
+
+#+begin_src conf
+bindswitch --locked lid:off output eDP-1 enable
+bindswitch --locked lid:on exec ~/bin/dock-outputs.py
+#+end_src
+
+Global input device settings. I dvorak.
+
+#+begin_src conf
+input type:keyboard {
+    xkb_layout us
+    xkb_variant dvorak
+
+    repeat_delay 275
+    repeat_rate 40
+}
+#+end_src
+
+[[https://shop.keyboard.io/][Keyboard.io]] pointer settings.
+
+#+begin_src conf
+input "4617:8961:Keyboardio_Model_01_Mouse" {
+    pointer_accel 0.1
+    accel_profile adaptive
+    natural_scroll enabled
+    scroll_factor 1.5
+}
+#+end_src
+
+Thinkpad pointing device settings, covering older and newer devices.
+
+#+begin_src conf
+input "2:10:TPPS/2_IBM_TrackPoint" {
+    pointer_accel 0.5
+    natural_scroll enabled
+    scroll_factor 1.5
+    scroll_method on_button_down
+    scroll_button button2
+}
+
+input "1267:32:Elan_TrackPoint" {
+    pointer_accel 0.5
+    natural_scroll enabled
+    scroll_factor 1.5
+    scroll_method on_button_down
+    scroll_button button2
+}
+
+input "2:7:SynPS/2_Synaptics_TouchPad" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 1.7
+    tap enabled
+    tap_button_map lrm
+    dwt enabled
+    drag enabled
+    click_method clickfinger
+    scroll_method two_finger
+}
+
+input "1267:32:Elan_Touchpad" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 1.7
+    tap enabled
+    tap_button_map lrm
+    dwt enabled
+    drag enabled
+    click_method clickfinger
+    scroll_method two_finger
+}
+#+end_src
+
+Settings for the logitech mice I have.
+
+#+begin_src conf
+input "1133:16489:Logitech_MX_Master_2S" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+
+input "1133:16478:Logitech_M720_Triathlon" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+
+input "1133:4133:Logitech_M510" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+#+end_src
+
+Audio keybindings.
+
+#+begin_src conf
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id \
+    pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl set-sink-mute @DEFAULT_SINK@ 0
+bindsym XF86AudioLowerVolume exec --no-startup-id \
+    pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ 0
+bindsym XF86AudioMute exec --no-startup-id \
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+#+end_src
+
+Handle laptop display brightness.
+
+#+begin_src conf
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/bin/brightness up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/bin/brightness down
+#+end_src
+
+"System" keybindings. Config reloads, exiting, locking, that kind of thing. Most of my WM keybindings are chains of keys, so here I hit one globally bound key (Mod4+w) which opens up the keys that are bound within that [[https://i3wm.org/docs/userguide.html#binding_modes][mode]].
+
+#+begin_src conf
+mode "system" {
+        # reload the configuration file
+        bindsym r reload, mode "default"
+
+        bindsym b exec "waybar", mode "default"
+        bindsym Shift+b exec "killall waybar && waybar", mode "default"
+
+        bindsym n exec --no-startup-id makoctl dismiss, mode "default"
+        bindsym Shift+n exec --no-startup-id makoctl dismiss --all, mode "default"
+
+        bindsym Shift+q exit, mode "default"
+
+        bindsym M output eDP-1 enable, mode "default"
+        bindsym D output eDP-1 disable, mode "default"
+
+        bindsym s exec --no-startup-id ~/bin/wl-screenshot, mode "default"
+
+        # Lock
+        bindsym l exec --no-startup-id swaylock -c 000000, mode "default"
+        # Suspend
+        bindsym Shift+s exec --no-startup-id \
+            swaylock -c 000000 && systemctl suspend, mode "default"
+
+        bindsym Escape mode "default"
+}
+bindsym Mod4+w mode "system"
+#+end_src
+
+Window resizing keybindings.
+
+#+begin_src conf
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym $left       resize shrink width 10 px or 3 ppt
+        bindsym $down       resize grow height 10 px or 3 ppt
+        bindsym $up         resize shrink height 10 px or 3 ppt
+        bindsym $right      resize grow width 10 px or 3 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym Mod4+l mode "resize"
+#+end_src
+
+App-related keybindings.
+
+#+begin_src conf
+mode "apps" {
+        bindsym s [class="Slack"] focus, mode "default"
+        bindsym e [class="Thunderbird"] focus, mode "default"
+        bindsym m [class=".*Google Play Music.*"] focus, mode "default"
+        bindsym t [title="^Signal"] focus, mode "default"
+        bindsym j [title=" - JIRA$"] focus, mode "default"
+        bindsym c [class="Emacs"] focus, mode "default"
+        bindsym f [class="Firefox"] focus, mode "default"
+
+        bindsym u [urgent=latest] focus, mode "default"
+
+        bindsym Escape mode "default"
+}
+bindsym Mod4+g mode "apps"
+#+end_src
+
+#+begin_src conf
+force_display_urgency_hint 1500 ms
+#+end_src
+
+Colour settings. [[https://i3wm.org/docs/userguide.html#_changing_colors][Like i3]].
+
+#+begin_src conf
+# client.<class> <border> <background> <text> <indicator> <child_border>
+client.focused #fe8019 #fe8019 #282828 #fe8019 #fe8019
+# client.focused #ebdbb2 #ebdbb2 #282828 #ebdbb2 #ebdbb2
+#client.focused_inactive #458588 #458588 #282828
+client.focused_inactive #7c6f64 #7c6f64 #282828 #7c6f64 #7c6f64
+client.unfocused #383838 #282828 #bdae93 #282828 #383838
+client.urgent #fabd2f #fabd2f #282828 #fabd2f #fabd2f
+#+end_src
+
+Startup commands. I also start a terminal on login, which is really just a leftover from testing and breaking my setup and finding it handy to have a terminal open when little else works.
+
+#+begin_src conf
+exec --no-startup-id redshift -l $(curl -s ipinfo.io | jq -j .loc | tr ',' ':') -m wayland
+exec --no-startup-id ~/bin/focus-opacity.py
+exec --no-startup-id waybar
+exec --no-startup-id mako
+exec --no-startup-id \
+    swayidle timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    timeout 900 'swaylock -c 000000' \
+    before-sleep 'swaylock -c 000000'
+
+exec $terminal
+#+end_src
+
+* Waybar
+:PROPERTIES:
+:header-args: :tangle "litwaybar.conf"
+:END:
+
+#+begin_src conf :tangle no :noweb-ref waybar-sway
+"sway/workspaces": {
+     "disable-scroll": false,
+     "all-outputs": false,
+     "format": "{icon}{name}",
+     "format-icons": {
+//         "1": "",
+//         "2": "",
+//         "3": "",
+//         "4": "",
+//         "5": "",
+        "urgent": " ",
+        "focused": "",
+//         "default": ""
+        "default": ""
+    }
+},
+"sway/mode": {
+    "format": " {}"
+},
+"sway/window": {
+    "all-outputs": true,
+    "max-length": 120
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-clock
+"clock": {
+    "format": "{:%a %b %e  %H:%M}",
+    "format-alt": "{:%Y-%m-%d}"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-tray
+"tray": {
+    // "icon-size": 21,
+    "spacing": 10
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-cpumem
+"cpu": {
+    "states": {
+        "warning": 70,
+        "critical": 95
+    },
+    "format": " {}%",
+    "format-warning": " {}%",
+    "format-critical": " {}%"
+},
+"memory": {
+    "states": {
+        //"normal": 30,
+        "warning": 40,
+        "critical": 85
+    },
+    "format": " {}%",
+    //"format-normal": "normal",
+    "format-warning": " w{}%",
+    "format-critical": " c{}%"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-battery
+"battery": {
+    "states": {
+        "full": 100,
+        "good": 90,
+        "normal": 89,
+        "warning": 20,
+        "critical": 10
+    },
+    "format-normal": "{icon} {capacity}%",
+    "format-good": "",
+    "format-full": "",
+    "format-charging-normal": " {capacity}%",
+    "format-charging-good": "",
+    "format-charging-full": "",
+    "format-icons": ["", "", "", "", ""]
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-pulseaudio
+"pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": "",
+    "format-icons": {
+        "headphones": "",
+        "handsfree": "",
+        "headset": "",
+        "phone": "",
+        "portable": "",
+        "car": "",
+        "default": ["", ""]
+    },
+    "on-click": "pavucontrol"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-network
+"network#wireless": {
+    "interface": "wlp*",
+    "format-wifi": " {essid} ({signalStrength}%)",
+    "format-disconnected": "⚠ Disconnected",
+    "on-click": "nm-connection-editor"
+},
+"network#wired": {
+    "interface": "enp*",
+    "format-ethernet": " {ipaddr}",
+    "format-linked": "",
+    "format-disconnected": "",
+    "on-click": "nm-connection-editor"
+},
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 60,
+        "format-critical": "{temperatureC}°C {icon}",
+        "format": ""
+        //"format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": ["", ""]
+    }
+#+end_src
+
+#+begin_src conf :tangle ~/.config/waybar/config :noweb yes
+[{
+    "layer": "top",
+    "height": 26,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/window"
+    ],
+    "modules-center": [
+        "sway/mode"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "battery",
+        "temperature",
+        "network#wired",
+        "network#wireless",
+        "idle_inhibitor",
+        "pulseaudio",
+        "clock",
+        "tray"
+    ],
+    <<waybar-sway>>,
+    <<waybar-clock>>,
+    <<waybar-tray>>,
+    <<waybar-pulseaudio>>,
+    <<waybar-cpumem>>,
+    <<waybar-battery>>,
+    <<waybar-network>>
+},
+{
+    "output": ["eDP-2"],
+    "layer": "top",
+    "height": 26,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/window"
+    ],
+    "modules-center": [
+        "sway/mode"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "battery",
+        "network#wireless",
+        "backlight",
+        "pulseaudio",
+        "clock",
+        "tray"
+    ],
+    <<waybar-sway>>,
+    <<waybar-clock>>,
+    <<waybar-tray>>,
+    <<waybar-pulseaudio>>,
+    <<waybar-cpumem>>,
+    <<waybar-battery>>,
+    <<waybar-network>>
+}]
+#+end_src
+
+#+begin_src css :tangle ~/.config/waybar/style.css
+,* {
+    border: none;
+    border-radius: 0;
+    font-family: DejaVu Sans, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    min-height: 0;
+    color: #ebdbb2;
+}
+
+window#waybar {
+    /* background: rgba(43, 48, 59, 0.5); */
+    background: #282828;
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+/*     color: #ebdbb2; */
+}
+
+#workspaces button {
+    padding: 0 4px;
+    /* background: transparent; */
+    background-color: #3c3836;
+    /* color: white; */
+    /* border-bottom: 3px solid transparent; */
+}
+
+#workspaces button.visible {
+    background-color: #928374;
+    color: #282828;
+}
+
+#workspaces button.visible label {
+    color: #282828;
+    font-weight: bold;
+}
+
+#workspaces button.focused {
+    background-color: #ebdbb2;
+    color: #282828;
+}
+
+#workspaces button.focused label {
+    color: #282828;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    background-color: #fabd2f;
+}
+
+#workspaces button.urgent label {
+    color: #282828;
+}
+
+#window {
+    padding: 0 10px;
+}
+
+#mode {
+    background: #b8bb26;
+    color: #282828;
+    font-weight: bold;
+}
+
+#clock, #battery, #battery.charging, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #idle_inhibitor, #backlight, #temperature-critical {
+    padding: 0 10px;
+    margin: 0 5px;
+}
+
+#temperature, #memory.normal, #cpu.normal, #battery.normal, #battery.full:not(.charging), #battery.good:not(.charging) {
+    padding: 0;
+    margin: 0;
+}
+
+#clock {
+    background-color: #3c3836;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
+}
+
+#battery.critical:not(.charging), #battery.warning:not(.charging) {
+    background: #f53c3c;
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#battery.warning:not(.charging) {
+    background: #f1c40f;
+    color: black;
+}
+
+#cpu {
+    /* background: #2ecc71; */
+    /* color: #000000; */
+}
+
+#memory {
+    /* background: #9b59b6; */
+}
+
+#network.linked {
+    background: #f1c40f;
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#network {
+    /* background: #2980b9; */
+}
+
+#pulseaudio {
+    /* background: #f1c40f; */
+    /* color: black; */
+}
+
+#pulseaudio.muted {
+    /* background: #90b1b1; */
+    color: #f1c40f;
+    /* color: #2a5c45; */
+    border-bottom: 2px solid #f1c40f;
+}
+
+#custom-spotify {
+    background: #66cc99;
+    color: #2a5c45;
+}
+
+#tray {
+    /* background-color: #2980b9; */
+}
+#+end_src
+
+* Little bits
+** Fade inactive windows
+
+#+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
+import i3ipc
+from time import sleep
+
+ipc = i3ipc.Connection()
+
+fade_time = 0.08
+fade_steps = 10
+opacity = 0.90
+
+
+def fade_opacity(c, start, end):
+    step = round(abs(start - end) / fade_steps, 2)
+    for i in range(fade_steps):
+        if start > end:
+            c.command('opacity ' + str(end + step))
+            end += step
+        elif end > start:
+            c.command('opacity ' + str(start + step))
+            start += step
+        sleep(fade_time / fade_steps)
+
+
+def on_window_focus(ipc, e):
+    current = False
+    for c in ipc.get_tree():
+        if c.focused:
+            current = c
+        if not c.focused:
+            c.command('opacity ' + str(opacity))
+    if current:
+        fade_opacity(current, opacity, 1)
+
+
+ipc.on("window::focus", on_window_focus)
+ipc.main()
+#+end_src
+
+Full opacity for all windows.
+
+#+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
+import i3ipc
+from time import sleep
+
+ipc = i3ipc.Connection()
+
+for c in ipc.get_tree():
+    c.command('opacity 1')
+#+end_src
+
+** Screenshootering (because Wayland)
+*** Visual area
+Use [[https://github.com/emersion/slurp][slurp]] to get a visual area selector, and [[https://github.com/emersion/grim][grim]] to take the shot. Set all windows to full opacity first, and use zenity to get a gtk file chooser.
+
+#+begin_src bash :tangle ~/bin/wl-screenshot :shebang #!/bin/bash
+~/bin/no-opacity.py
+grim -g "$(slurp)" $(zenity --file-selection --save --confirm-overwrite)
+#+end_src
+
+*** TODO Whole output/window etc.
+Multi output handling? Click to select? Use rofi with an output/window list?
+
+*** Support bits
+
+Set all windows to full opacity. Useful to run before taking a screenshot, since I have non-focused windows at slightly less than full opacity.
+
+#+begin_src python :tangle ~/bin/no-opacity.py :shebang #!/usr/bin/env python
+import i3ipc
+ipc = i3ipc.Connection()
+
+for c in ipc.get_tree():
+    c.command('opacity 1')
+#+end_src
+
+Get the title of the most recently focused window on each workspace. I want to modify this (translate to C++) to contribute to waybar so I can have the window title on the bar for each workspace show the title of the window that's actually on that screen.
+
+#+begin_src python :shebang #!/usr/bin/env python :results output
+import i3ipc
+ipc = i3ipc.Connection()
+
+visible_workspaces = []
+for workspace in ipc.get_workspaces():
+    if workspace.visible:
+        visible_workspaces.append(workspace.name)
+
+for node in ipc.get_tree():
+    if node.type == 'workspace' and node.name in visible_workspaces:
+         print(node.name)
+         for subnode in node.nodes + node.floating_nodes:
+             if subnode.id == node.focus[0] and subnode.type in ['con', 'floating_con']:
+                  print(subnode.name)
+#+end_src
+
+#+begin_src python :tangle ~/bin/dock-outputs.py :shebang #!/usr/bin/env python :results output
+import i3ipc
+ipc = i3ipc.Connection()
+
+for output in ipc.get_outputs():
+    if output.active and output.name != 'eDP-1':
+        # print(output.name)
+        ipc.command('output eDP-1 disable')
+        break
+#+end_src
+
+** Smart window sizing
+
+#+begin_src python :tangle ~/bin/smart-sizing.py :shebang #!/usr/bin/env python :results output
+import inspect
+import pprint
+import i3ipc
+ipc = i3ipc.Connection()
+
+pp = pprint.PrettyPrinter(indent=2)
+
+sizes = {
+    "Emacs": 830,
+    # "Firefox": 1250,
+    # "Chrome": 1250,
+    # "Chromium": 1250,
+}
+
+
+def on_window_focus(ipc, e):
+    # for output in ipc.get_outputs():
+    #     if output.active:
+    #         pp.pprint(inspect.getmembers(output))
+
+    # for yo in ipc.get_tree().find_focused().workspace().descendents():
+    #     print(yo.type, yo.name)
+    #     if not yo.name:
+    #         print(yo.rect.width, yo.rect.height)
+
+    # for ws in ipc.get_workspaces():
+    #     if ws.visible:
+    #         pp.pprint(inspect.getmembers(ws))
+
+    for thing in ipc.get_tree():
+        if thing.type == "con":
+            # if thing.window_class:
+            #     print(thing.window_class)
+            # if thing.window_role:
+            #     print(thing.window_role)
+            if thing.window_class in sizes:
+                # while 'parent' in thing:
+                # pp.pprint(inspect.getmembers(thing))
+                # print(thing.name, thing.rect.width)
+                print(thing.name, thing.parent.id)
+                if abs(thing.rect.width - sizes[thing.window_class]) > 15:
+                    print("Resizing %s from %d to %d" % (thing.name,
+                                                         thing.rect.width,
+                                                         sizes[thing.window_class]))
+                    thing.command("resize set width %d px" % sizes[thing.window_class])
+
+
+ipc.on("window::focus", on_window_focus)
+ipc.main()
+#+end_src
+
+** All terminal windows are tmux
+A while ago I decided that I wanted all my terminal windows to automatically be part of a single tmux session. I hacked something together that worked in a couple of hours that still had a few quirks and used it for longer than I should have (got used to the quirks). Eventually I sat down and made it work better and here we have it.
+
+The goals here are:
+- Every terminal window I launch is part of one tmux session
+- tmux functionality is only visible when there’s a reason
+
+#+begin_src bash :tangle ~/bin/tmux-main-attach :shebang #!/bin/bash
+create_window=''
+if $(tmux has-session -t main); then
+    # create_window="new-window $@ ; set-hook pane-exited kill-window ; set-hook pane-exited detach ;"
+    if [[ ! -z "$@" ]]; then
+        create_window="new-window $@ ; set-hook pane-exited detach ;"
+    else
+        create_window="new-window ;"
+    fi
+fi
+tmux new-session -t main \; ${create_window} attach \; set-option destroy-unattached on \; set-hook session-created 'run-shell ~/bin/tmux-bg-status.sh' \; set-hook session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; set-hook session-closed 'run-shell ~/bin/tmux-bg-status.sh'
+#+end_src
+
+
+#+begin_src bash :tangle ~/bin/tmux-bg-status.sh :shebang #!/bin/bash
+declare -a windows
+declare -a active_windows
+
+windows=($(tmux list-windows -t main -F '#I'))
+active_windows=($(for sess in $(tmux list-sessions -F '#S' | grep '^main-.*'); do tmux list-windows -t $sess -F '#{?window_active,#I,}'; done))
+unique_active_windows=($(printf "%s\n" "${active_windows[@]}" | sort -u))
+
+tmux set-window-option -g -t main window-status-format "#{?#{m:* #I *, ${active_windows[*]} },,#I (#W)}"
+if [[ ${#unique_active_windows[@]} -lt ${#windows[@]} ]]; then
+    tmux set-option -t main -g status on
+else
+    tmux set-option -t main -g status off
+fi
+#+end_src
+
+Not sure this one is used anywhere (was =~/bin/tmux-kill-main-attached=).
+
+#+begin_src bash :shebang #!/bin/bash
+# tmux kill-window \; kill-session
+tmux kill-window \;
+#+end_src
+
+** Wrap Azure CLI docker container
+
+Simple wrapper so I can just run =az= from my normal shell and be using the =az= CLI from the official docker container.
+
+#+begin_src bash :tangle ~/bin/az :shebang #!/usr/bin/env bash
+docker run --rm -v $HOME:/root azuresdk/azure-cli-python:latest az $@
+#+end_src
+
+And a quick command to update the container with =azup=:
+
+#+begin_src bash :tangle ~/bin/azup :shebang #!/usr/bin/env bash
+docker pull azuresdk/azure-cli-python:latest
+#+end_src
+
+* Terminal
+** termite
+
+#+begin_src conf :tangle ~/.config/termite/config :noweb yes
+[options]
+font = Iosevka Term 11.5
+
+[colors]
+<<termite-gruvbox-dark-hard>>
+#+end_src
+
+#+begin_src conf :noweb-ref termite-custom :tangle no
+# foreground      = #ebdbb2
+# foreground_bold = #ebdbb2
+# cursor          = #ebdbb2
+# background      = #282828
+# color0  = #282828
+# color8  = #928374
+# color1  = #cc241d
+# color9  = #fb4934
+# color2  = #98971a
+# color10 = #b8bb26
+# color3  = #d79921
+# color11 = #fabd2f
+# color4  = #458588
+# color12 = #83a598
+# color5  = #b16286
+# color13 = #d3869b
+# color6  = #689d6a
+# color14 = #8ec07c
+# color7  = #a89984
+# color15 = #ebdbb2
+#+end_src
+
+#+begin_src conf :noweb-ref termite-solarized-light :tangle no
+### Solarized light
+# foreground = #657b83
+# foreground_bold = #073642
+# #foreground_dim = #888888
+# background = #fdf6e3
+# cursor = #586e75
+
+# # if unset, will reverse foreground and background
+# # highlight = #839496
+
+# # colors from color0 to color254 can be set
+# color0 = #073642
+# color1 = #dc322f
+# color2 = #859900
+# color3 = #b58900
+# color4 = #268bd2
+# color5 = #d33682
+# color6 = #2aa198
+# color7 = #eee8d5
+# color8 = #002b36
+# color9 = #cb4b16
+# color10 = #586e75
+# color11 = #657b83
+# color12 = #839496
+# color13 = #6c71c4
+# color14 = #93a1a1
+# color15 = #fdf6e3
+#+end_src
+
+#+begin_src conf :noweb-ref termite-solarized-dark :tangle no
+### Solarized dark
+# foreground = #839496
+# foreground_bold = #eee8d5
+# #foreground_dim = #888888
+# background = #002b36
+# cursor = #93a1a1
+
+# # if unset, will reverse foreground and background
+# #highlight = #839496
+
+# # colors from color0 to color254 can be set
+# color0 = #073642
+# color1 = #dc322f
+# color2 = #859900
+# color3 = #b58900
+# color4 = #268bd2
+# color5 = #d33682
+# color6 = #2aa198
+# color7 = #eee8d5
+# color8 = #002b36
+# color9 = #cb4b16
+# color10 = #586e75
+# color11 = #657b83
+# color12 = #839496
+# color13 = #6c71c4
+# color14 = #93a1a1
+# color15 = #fdf6e3
+#+end_src
+
+#+begin_src conf :noweb-ref termite-darktooth :tangle no
+# Base16 Darktooth
+# Author: Jason Milkins (https://github.com/jasonm23)
+
+foreground          = #A89984
+foreground_bold     = #D5C4A1
+cursor              = #D5C4A1
+cursor_foreground   = #1D2021
+background          = rgba(29, 32, 33)
+
+# 16 color space
+
+# Black, Gray, Silver, White
+color0  = #1D2021
+color8  = #665C54
+color7  = #A89984
+color15 = #FDF4C1
+
+# Red
+color1  = #FB543F
+color9  = #FB543F
+
+# Green
+color2  = #95C085
+color10 = #95C085
+
+# Yellow
+color3  = #FAC03B
+color11 = #FAC03B
+
+# Blue
+color4  = #0D6678
+color12 = #0D6678
+
+# Purple
+color5  = #8F4673
+color13 = #8F4673
+
+# Teal
+color6  = #8BA59B
+color14 = #8BA59B
+
+# Extra colors
+color16 = #FE8625
+color17 = #A87322
+color18 = #32302F
+color19 = #504945
+color20 = #928374
+color21 = #D5C4A1
+#+end_src
+
+#+begin_src conf :noweb-ref termite-gruvbox-dark-hard :tangle no
+# Base16 Gruvbox dark, hard
+# Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+
+foreground          = #d5c4a1
+foreground_bold     = #ebdbb2
+cursor              = #ebdbb2
+cursor_foreground   = #1d2021
+background          = rgba(29, 32, 33)
+
+# 16 color space
+
+# Black, Gray, Silver, White
+color0  = #1d2021
+color8  = #665c54
+color7  = #d5c4a1
+color15 = #fbf1c7
+
+# Red
+color1  = #fb4934
+color9  = #fb4934
+
+# Green
+color2  = #b8bb26
+color10 = #b8bb26
+
+# Yellow
+color3  = #fabd2f
+color11 = #fabd2f
+
+# Blue
+color4  = #83a598
+color12 = #83a598
+
+# Purple
+color5  = #d3869b
+color13 = #d3869b
+
+# Teal
+color6  = #8ec07c
+color14 = #8ec07c
+
+# Extra colors
+color16 = #fe8019
+color17 = #d65d0e
+color18 = #3c3836
+color19 = #504945
+color20 = #bdae93
+color21 = #ebdbb2
+#+end_src
+
+#+begin_src conf :noweb-ref termite- :tangle no
+#+end_src
+
+#+begin_src conf :noweb-ref termite- :tangle no
+#+end_src
+
+#+begin_src conf :noweb-ref termite- :tangle no
+#+end_src
+
+#+begin_src conf :noweb-ref termite- :tangle no
+#+end_src
+
+#+begin_src conf :noweb-ref termite- :tangle no
+#+end_src
+
+#+begin_src bash
+for pid in $(pgrep termite); do
+  kill -s USR1 $pid
+done
+#+end_src
+
+** tmux
+:properties:
+:header-args: :tangle ~/.tmux.conf
+:end:
+
+#+begin_src conf
+set-option -g prefix C-Space
+bind-key ^b send-prefix
+#+end_src
+
+#+begin_src conf
+set-option -g base-index 1
+set-option -g renumber-windows on
+set-option -g default-terminal 'xterm-256color'
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+set -g mouse on
+set-option -g bell-action current
+set-window-option -g aggressive-resize on
+set-option -s escape-time 0
+set-option -g history-limit 10000
+set-option -g focus-events on
+set-option -ga update-environment ' AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY'
+#+end_src
+
+#+begin_src conf
+set-option -g status-keys 'vi'
+set-window-option -g mode-keys 'vi'
+set-window-option -g xterm-keys on
+#+end_src
+
+#+begin_src conf
+set-option -g set-titles on
+set-option -g set-titles-string "#T"
+#+end_src
+
+#+begin_src conf
+# set-option -g pane-border-fg '#222222'
+# set-option -g pane-border-bg '#222222'
+set-option -g pane-border-style fg='#222222',bg='#222222'
+# set-option -g pane-active-border-fg '#222222'
+# set-option -g pane-active-border-bg '#222222'
+set-option -g pane-active-border-style fg='#222222',bg='#222222'
+#+end_src
+
+#+begin_src conf
+# set-option -g status-fg white
+# set-option -g status-fg white
+# set-option -g status-bg colour236
+set-option -g status-style fg=white,bg=colour236
+set-option -g status-left ''
+set-option -g status-right '[#S] [#(cut -d" " -f1-3 /proc/loadavg)]'
+
+set-window-option -g window-status-format ' #F#I:#W '
+set-window-option -g window-status-current-format ' #F#I:#W '
+# set-window-option -g window-status-current-fg black
+# set-window-option -g window-status-current-bg colour112
+set-window-option -g window-status-current-style fg=black,bg=colour112
+
+set-option -g -t main status off
+set-option -g -t main status-position top
+set-option -g -t main status-left ''
+set-option -g -t main status-right '#I '
+set-option -g -t main status-justify centre
+set-option -g -t main destroy-unattached off
+set-window-option -g -t main window-status-current-format ''
+#+end_src
+
+#+begin_src conf
+bind-key b send-prefix
+bind-key a last-window
+bind-key ^a last-window
+bind-key -r C-h swap-window -t:-
+bind-key -r C-s swap-window -t:+
+
+bind-key -n M-h previous-window
+bind-key -n M-s next-window
+
+bind-key C-b set-option -g status
+
+# Smart pane switching with awareness of vim splits
+# See: https://github.com/christoomey/vim-tmux-navigator
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
+bind -n C-t if-shell "$is_vim" "send-keys C-t" "select-pane -D"
+bind -n C-n if-shell "$is_vim" "send-keys C-n" "select-pane -U"
+bind -n C-s if-shell "$is_vim" "send-keys C-s" "select-pane -R"
+#bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+
+bind-key n select-pane -t:.-
+bind-key t select-pane -t:.+
+bind-key -r C-n select-pane -t:.-
+bind-key -r C-t select-pane -t:.+
+bind-key -n C-M-n select-pane -t:.-
+bind-key -n C-M-t select-pane -t:.+
+
+bind-key c new-window -c "#{pane_current_path}"
+bind-key | split-window -h -c "#{pane_current_path}"
+bind-key - split-window -c "#{pane_current_path}"
+bind-key -n ^_ detach-client
+
+bind-key r source-file ~/.tmux.conf
+
+bind-key p paste-buffer
+bind-key P run "tmux set-buffer \"$(wl-paste -pn)\"; tmux paste-buffer"
+bind-key y run "tmux show-buffer | wl-copy"
+
+bind-key ` copy-mode
+bind-key Space copy-mode
+bind-key C-Space copy-mode
+bind-key -Tcopy-mode-vi t send -X cursor-down
+bind-key -Tcopy-mode-vi n send -X cursor-up
+bind-key -Tcopy-mode-vi h send -X cursor-left
+bind-key -Tcopy-mode-vi s send -X cursor-right
+bind-key -Tcopy-mode-vi v send -X begin-selection
+bind-key -Tcopy-mode-vi y send -X copy-selection
+
+bind-key -Tchoose t send-keys -X cursor-down
+bind-key -Tchoose n send-keys -X cursor-up
+#+end_src
+
+TPM setup. I think I should remove this and just manually install what I want here.
+
+#+begin_src conf
+# set -g @plugin 'tmux-plugins/tpm'
+# set -g @plugin 'seebi/tmux-colors-solarized'
+# set -g @colors-solarized 'light'
+
+# run -b '~/.tmux/plugins/tpm/tpm'
+#+end_src
+
+Startup commands.
+
+#+begin_src conf
+new-session -s main
+#+end_src
