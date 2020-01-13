@@ -5,760 +5,6 @@
 #+author: Nathan Howell
 #+email: nath@nhowell.net
 
-* Sway
-:PROPERTIES:
-:header-args: :tangle ~/.config/sway/config :mkdirp yes
-:END:
-
-I use [[https://github.com/swaywm/sway][sway]].
-
-Set some of the basic options like font, terminal, etc.
-
-#+begin_src conf
-font pango:DejaVu Sans 10
-set $terminal termite
-floating_modifier Mod4
-#+end_src
-
-I'm a crazy dvorak user, and I like my movement keys on the home row right hand keys, so I set some variables to use later.
-
-#+begin_src conf
-set $left h
-set $down t
-set $up n
-set $right s
-#+end_src
-
-Terminal launching. I use a custom every-terminal-is-in-one-tmux-session setup. More on that elsewhere in this file. I still have a binding to launch a non-tmux terminal though.
-
-#+begin_src conf
-bindsym Mod4+c exec $terminal -e ~/bin/tmux-main-attach
-bindsym Mod4+Shift+c exec $terminal
-#+end_src
-
-App launching. Using rofi currently.
-
-#+begin_src conf
-bindsym Mod4+e exec --no-startup-id \
-    i3-dmenu-desktop --dmenu="rofi -dmenu -i -p 'run: '" --entry-type=name
-#+end_src
-
-Here we have keybindings that deal with windows.
-
-#+begin_src conf
-# kill focused window
-bindsym Mod4+k kill
-
-# change focus
-bindsym Mod4+$left focus left
-bindsym Mod4+$down focus down
-bindsym Mod4+$up focus up
-bindsym Mod4+$right focus right
-
-# move focused window
-bindsym Mod4+Shift+$left move left
-bindsym Mod4+Shift+$down move down
-bindsym Mod4+Shift+$up move up
-bindsym Mod4+Shift+$right move right
-
-# toggle tiling / floating
-bindsym Mod4+r floating toggle
-#+end_src
-
-And layout-related keybindings.
-
-#+begin_src conf
-# split in horizontal orientation
-bindsym Mod4+z split h
-
-# split in vertical orientation
-bindsym Mod4+v split v, layout stacking
-
-# enter fullscreen mode for the focused container
-bindsym Mod4+f exec ~/bin/fullscreen
-
-# change container layout (stacked, tabbed, toggle split)
-# bindsym Mod4+j layout stacking
-# bindsym Mod4+Shift+j layout tabbed
-# bindsym Mod4+x layout toggle split
-
-bindsym Mod4+space layout toggle all
-
-# focus the parent container
-bindsym Mod4+u focus parent
-
-# focus the child container
-bindsym Mod1+d focus child
-#+end_src
-
-Some special window handling rules.
-
-#+begin_src conf
-for_window [window_role="task_dialog"] floating enable
-for_window [window_role="bubble"] floating enable
-for_window [app_id="zenity"] floating enable
-
-for_window [class="Firefox"] inhibit_idle fullscreen
-for_window [class="Chromium"] inhibit_idle fullscreen
-for_window [app_id="firefox"] inhibit_idle fullscreen
-for_window [app_id="chromium"] inhibit_idle fullscreen
-#+end_src
-
-Workspace keybindings.
-
-#+begin_src conf
-# switch to workspace
-bindsym Mod4+1 workspace number 1
-bindsym Mod4+2 workspace number 2
-bindsym Mod4+3 workspace number 3
-bindsym Mod4+4 workspace number 4
-bindsym Mod4+5 workspace number 5
-bindsym Mod4+6 workspace number 6
-bindsym Mod4+7 workspace number 7
-bindsym Mod4+8 workspace number 8
-bindsym Mod4+9 workspace number 9
-bindsym Mod4+0 workspace number 10
-
-bindsym Mod4+Tab workspace back_and_forth
-bindsym Mod4+p workspace back_and_forth
-bindsym Control+Mod1+Tab workspace back_and_forth
-bindsym Mod4+Control+$left workspace prev
-bindsym Mod4+Control+$right workspace next
-bindsym Mod4+Control+Shift+$left move workspace to output left
-bindsym Mod4+Control+Shift+$right move workspace to output right
-
-# move focused container to workspace
-bindsym Mod4+Shift+1 move container to workspace number 1
-bindsym Mod4+Shift+2 move container to workspace number 2
-bindsym Mod4+Shift+3 move container to workspace number 3
-bindsym Mod4+Shift+4 move container to workspace number 4
-bindsym Mod4+Shift+5 move container to workspace number 5
-bindsym Mod4+Shift+6 move container to workspace number 6
-bindsym Mod4+Shift+7 move container to workspace number 7
-bindsym Mod4+Shift+8 move container to workspace number 8
-bindsym Mod4+Shift+9 move container to workspace number 9
-bindsym Mod4+Shift+0 move container to workspace number 10
-#+end_src
-
-Window border handling.
-
-#+begin_src conf
-bindsym Mod4+b border toggle
-# default_border normal
-default_floating_border normal
-default_border pixel 4
-smart_borders on
-#+end_src
-
-Output configuration for work laptop.
-
-#+begin_src conf
-set $work_monitor_left "Ancor Communications Inc ASUS PB278 E1LMTF061086"
-set $work_monitor_right "Ancor Communications Inc ASUS PB278 E3LMTF122568"
-
-set $home_monitor "Goldstar Company Ltd LG Ultra HD 0x0000EFE8"
-
-workspace 1 output $work_monitor_right
-workspace 2 output $work_monitor_right
-workspace 3 output $work_monitor_right
-workspace 4 output $work_monitor_left
-workspace 5 output $work_monitor_left
-workspace 7 output $work_monitor_left
-workspace 8 output $work_monitor_left
-
-output eDP-1 {
-    # scale 1.0
-    # disable
-    pos 4000,1000
-}
-
-output $work_monitor_left {
-    transform 270
-    pos 0,0
-}
-
-output $work_monitor_right {
-    pos 1440,220
-}
-#+end_src
-
-Set the background colour on all outputs.
-
-#+begin_src conf
-output * {
-    background #222222 solid_color
-}
-#+end_src
-
-A bit of laptop display management. I use laptops docked a lot of the time, and usually don't use the internal display when docked. So I want that display disabled when the laptop has external active displays and then is closed, and I want it enabled when opening the laptop.
-
-#+begin_src conf
-bindswitch --locked lid:off output eDP-1 enable
-bindswitch --locked lid:on exec ~/bin/dock-outputs.py
-#+end_src
-
-Global input device settings. I dvorak.
-
-#+begin_src conf
-input type:keyboard {
-    xkb_layout us
-    xkb_variant dvorak
-
-    repeat_delay 275
-    repeat_rate 40
-}
-#+end_src
-
-[[https://shop.keyboard.io/][Keyboard.io]] pointer settings.
-
-#+begin_src conf
-input "4617:8961:Keyboardio_Model_01_Mouse" {
-    pointer_accel 0.1
-    accel_profile adaptive
-    natural_scroll enabled
-    scroll_factor 1.5
-}
-#+end_src
-
-Thinkpad pointing device settings, covering older and newer devices.
-
-#+begin_src conf
-input "2:10:TPPS/2_IBM_TrackPoint" {
-    pointer_accel 0.5
-    natural_scroll enabled
-    scroll_factor 1.5
-    scroll_method on_button_down
-    scroll_button button2
-}
-
-input "1267:32:Elan_TrackPoint" {
-    pointer_accel 0.5
-    natural_scroll enabled
-    scroll_factor 1.5
-    scroll_method on_button_down
-    scroll_button button2
-}
-
-input "2:7:SynPS/2_Synaptics_TouchPad" {
-    pointer_accel 0.8
-    natural_scroll enabled
-    scroll_factor 1.7
-    tap enabled
-    tap_button_map lrm
-    dwt enabled
-    drag enabled
-    click_method clickfinger
-    scroll_method two_finger
-}
-
-input "1267:32:Elan_Touchpad" {
-    pointer_accel 0.8
-    natural_scroll enabled
-    scroll_factor 1.7
-    tap enabled
-    tap_button_map lrm
-    dwt enabled
-    drag enabled
-    click_method clickfinger
-    scroll_method two_finger
-}
-#+end_src
-
-Settings for the logitech mice I have.
-
-#+begin_src conf
-input "1133:16489:Logitech_MX_Master_2S" {
-    pointer_accel 0.8
-    natural_scroll enabled
-    scroll_factor 3.0
-}
-
-input "1133:16478:Logitech_M720_Triathlon" {
-    pointer_accel 0.8
-    natural_scroll enabled
-    scroll_factor 3.0
-}
-
-input "1133:4133:Logitech_M510" {
-    pointer_accel 0.8
-    natural_scroll enabled
-    scroll_factor 3.0
-}
-#+end_src
-
-Audio keybindings.
-
-#+begin_src conf
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-
-bindsym XF86AudioRaiseVolume exec --no-startup-id \
-    pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioLowerVolume exec --no-startup-id \
-    pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioMute exec --no-startup-id \
-    pactl set-sink-mute @DEFAULT_SINK@ toggle
-#+end_src
-
-Handle laptop display brightness.
-
-#+begin_src conf
-bindsym XF86MonBrightnessUp exec --no-startup-id ~/bin/brightness up
-bindsym XF86MonBrightnessDown exec --no-startup-id ~/bin/brightness down
-#+end_src
-
-"System" keybindings. Config reloads, exiting, locking, that kind of thing. Most of my WM keybindings are chains of keys, so here I hit one globally bound key (Mod4+w) which opens up the keys that are bound within that [[https://i3wm.org/docs/userguide.html#binding_modes][mode]].
-
-#+begin_src conf
-mode "system" {
-        # reload the configuration file
-        bindsym r reload, mode "default"
-
-        bindsym b exec "waybar", mode "default"
-        bindsym Shift+b exec "killall waybar && waybar", mode "default"
-
-        bindsym n exec --no-startup-id makoctl dismiss, mode "default"
-        bindsym Shift+n exec --no-startup-id makoctl dismiss --all, mode "default"
-
-        bindsym Shift+q exit, mode "default"
-
-        bindsym M output eDP-1 enable, mode "default"
-        bindsym D output eDP-1 disable, mode "default"
-
-        bindsym s exec --no-startup-id ~/bin/wl-screenshot, mode "default"
-
-        # Lock
-        bindsym l exec --no-startup-id swaylock -c 000000, mode "default"
-        # Suspend
-        bindsym Shift+s exec --no-startup-id \
-            swaylock -c 000000 && systemctl suspend, mode "default"
-
-        bindsym Escape mode "default"
-}
-bindsym Mod4+w mode "system"
-#+end_src
-
-Window resizing keybindings.
-
-#+begin_src conf
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym $left       resize shrink width 10 px or 3 ppt
-        bindsym $down       resize grow height 10 px or 3 ppt
-        bindsym $up         resize shrink height 10 px or 3 ppt
-        bindsym $right      resize grow width 10 px or 3 ppt
-
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-bindsym Mod4+l mode "resize"
-#+end_src
-
-App-related keybindings.
-
-#+begin_src conf
-mode "apps" {
-        bindsym s [class="Slack"] focus, mode "default"
-        bindsym e [class="Thunderbird"] focus, mode "default"
-        bindsym m [class=".*Google Play Music.*"] focus, mode "default"
-        bindsym t [title="^Signal"] focus, mode "default"
-        bindsym j [title=" - JIRA$"] focus, mode "default"
-        bindsym c [class="Emacs"] focus, mode "default"
-        bindsym f [class="Firefox"] focus, mode "default"
-
-        bindsym u [urgent=latest] focus, mode "default"
-
-        bindsym Escape mode "default"
-}
-bindsym Mod4+g mode "apps"
-#+end_src
-
-#+begin_src conf
-force_display_urgency_hint 1500 ms
-#+end_src
-
-Colour settings. [[https://i3wm.org/docs/userguide.html#_changing_colors][Like i3]].
-
-#+begin_src conf
-# client.<class> <border> <background> <text> <indicator> <child_border>
-client.focused #fe8019 #fe8019 #282828 #fe8019 #fe8019
-# client.focused #ebdbb2 #ebdbb2 #282828 #ebdbb2 #ebdbb2
-#client.focused_inactive #458588 #458588 #282828
-client.focused_inactive #7c6f64 #7c6f64 #282828 #7c6f64 #7c6f64
-client.unfocused #383838 #282828 #bdae93 #282828 #383838
-client.urgent #fabd2f #fabd2f #282828 #fabd2f #fabd2f
-#+end_src
-
-Startup commands. I also start a terminal on login, which is really just a leftover from testing and breaking my setup and finding it handy to have a terminal open when little else works.
-
-#+begin_src conf
-exec --no-startup-id redshift -l $(curl -s ipinfo.io | jq -j .loc | tr ',' ':') -m wayland
-exec --no-startup-id ~/bin/focus-opacity.py
-exec --no-startup-id waybar
-exec --no-startup-id mako
-exec --no-startup-id \
-    swayidle timeout 600 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    timeout 900 'swaylock -c 000000' \
-    before-sleep 'swaylock -c 000000'
-
-exec $terminal
-#+end_src
-
-* Waybar
-:PROPERTIES:
-:header-args: :tangle "litwaybar.conf" :mkdirp yes
-:END:
-
-#+begin_src conf :tangle no :noweb-ref waybar-sway
-"sway/workspaces": {
-     "disable-scroll": false,
-     "all-outputs": false,
-     "format": "{icon}{name}",
-     "format-icons": {
-//         "1": "",
-//         "2": "",
-//         "3": "",
-//         "4": "",
-//         "5": "",
-        "urgent": " ",
-        "focused": "",
-//         "default": ""
-        "default": ""
-    }
-},
-"sway/mode": {
-    "format": " {}"
-},
-"sway/window": {
-    "all-outputs": true,
-    "max-length": 120
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-clock
-"clock": {
-    "format": "{:%a %b %e  %H:%M}",
-    "format-alt": "{:%Y-%m-%d}"
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-tray
-"tray": {
-    // "icon-size": 21,
-    "spacing": 10
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-cpumem
-"cpu": {
-    "states": {
-        "warning": 70,
-        "critical": 95
-    },
-    "format": " {}%",
-    "format-warning": " {}%",
-    "format-critical": " {}%"
-},
-"memory": {
-    "states": {
-        //"normal": 30,
-        "warning": 40,
-        "critical": 85
-    },
-    "format": " {}%",
-    //"format-normal": "normal",
-    "format-warning": " w{}%",
-    "format-critical": " c{}%"
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-battery
-"battery": {
-    "states": {
-        "full": 100,
-        "good": 90,
-        "normal": 89,
-        "warning": 20,
-        "critical": 10
-    },
-    "format-normal": "{icon} {capacity}%",
-    "format-good": "",
-    "format-full": "",
-    "format-charging-normal": " {capacity}%",
-    "format-charging-good": "",
-    "format-charging-full": "",
-    "format-icons": ["", "", "", "", ""]
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-pulseaudio
-"pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-bluetooth": "{icon} {volume}%",
-    "format-muted": "",
-    "format-icons": {
-        "headphones": "",
-        "handsfree": "",
-        "headset": "",
-        "phone": "",
-        "portable": "",
-        "car": "",
-        "default": ["", ""]
-    },
-    "on-click": "pavucontrol"
-}
-#+end_src
-
-#+begin_src conf :tangle no :noweb-ref waybar-network
-"network#wireless": {
-    "interface": "wlp*",
-    "format-wifi": " {essid} ({signalStrength}%)",
-    "format-disconnected": "⚠ Disconnected",
-    "on-click": "nm-connection-editor"
-},
-"network#wired": {
-    "interface": "enp*",
-    "format-ethernet": " {ipaddr}",
-    "format-linked": "",
-    "format-disconnected": "",
-    "on-click": "nm-connection-editor"
-},
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 60,
-        "format-critical": "{temperatureC}°C {icon}",
-        "format": ""
-        //"format-icons": ["", "", ""]
-    },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{icon} {percent}%",
-        "format-icons": ["", ""]
-    }
-#+end_src
-
-#+begin_src conf :tangle ~/.config/waybar/config :noweb yes
-[{
-    "layer": "top",
-    "height": 26,
-    "modules-left": [
-        "sway/workspaces",
-        "sway/window"
-    ],
-    "modules-center": [
-        "sway/mode"
-    ],
-    "modules-right": [
-        "cpu",
-        "memory",
-        "battery",
-        "temperature",
-        "network#wired",
-        "network#wireless",
-        "idle_inhibitor",
-        "pulseaudio",
-        "clock",
-        "tray"
-    ],
-    <<waybar-sway>>,
-    <<waybar-clock>>,
-    <<waybar-tray>>,
-    <<waybar-pulseaudio>>,
-    <<waybar-cpumem>>,
-    <<waybar-battery>>,
-    <<waybar-network>>
-},
-{
-    "output": ["eDP-2"],
-    "layer": "top",
-    "height": 26,
-    "modules-left": [
-        "sway/workspaces",
-        "sway/mode",
-        "sway/window"
-    ],
-    "modules-center": [
-        "sway/mode"
-    ],
-    "modules-right": [
-        "cpu",
-        "memory",
-        "battery",
-        "network#wireless",
-        "backlight",
-        "pulseaudio",
-        "clock",
-        "tray"
-    ],
-    <<waybar-sway>>,
-    <<waybar-clock>>,
-    <<waybar-tray>>,
-    <<waybar-pulseaudio>>,
-    <<waybar-cpumem>>,
-    <<waybar-battery>>,
-    <<waybar-network>>
-}]
-#+end_src
-
-#+begin_src css :tangle ~/.config/waybar/style.css
-,* {
-    border: none;
-    border-radius: 0;
-    font-family: DejaVu Sans, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    min-height: 0;
-    color: #ebdbb2;
-}
-
-window#waybar {
-    /* background: rgba(43, 48, 59, 0.5); */
-    background: #282828;
-    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
-/*     color: #ebdbb2; */
-}
-
-#workspaces button {
-    padding: 0 4px;
-    /* background: transparent; */
-    background-color: #3c3836;
-    /* color: white; */
-    /* border-bottom: 3px solid transparent; */
-}
-
-#workspaces button.visible {
-    background-color: #928374;
-    color: #282828;
-}
-
-#workspaces button.visible label {
-    color: #282828;
-    font-weight: bold;
-}
-
-#workspaces button.focused {
-    background-color: #ebdbb2;
-    color: #282828;
-}
-
-#workspaces button.focused label {
-    color: #282828;
-    font-weight: bold;
-}
-
-#workspaces button.urgent {
-    background-color: #fabd2f;
-}
-
-#workspaces button.urgent label {
-    color: #282828;
-}
-
-#window {
-    padding: 0 10px;
-}
-
-#mode {
-    background: #b8bb26;
-    color: #282828;
-    font-weight: bold;
-}
-
-#clock, #battery, #battery.charging, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #idle_inhibitor, #backlight, #temperature-critical {
-    padding: 0 10px;
-    margin: 0 5px;
-}
-
-#temperature, #memory.normal, #cpu.normal, #battery.normal, #battery.full:not(.charging), #battery.good:not(.charging) {
-    padding: 0;
-    margin: 0;
-}
-
-#clock {
-    background-color: #3c3836;
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-}
-
-#battery.critical:not(.charging), #battery.warning:not(.charging) {
-    background: #f53c3c;
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-#battery.warning:not(.charging) {
-    background: #f1c40f;
-    color: black;
-}
-
-#cpu {
-    /* background: #2ecc71; */
-    /* color: #000000; */
-}
-
-#memory {
-    /* background: #9b59b6; */
-}
-
-#network.linked {
-    background: #f1c40f;
-}
-
-#network.disconnected {
-    background: #f53c3c;
-}
-
-#network {
-    /* background: #2980b9; */
-}
-
-#pulseaudio {
-    /* background: #f1c40f; */
-    /* color: black; */
-}
-
-#pulseaudio.muted {
-    /* background: #90b1b1; */
-    color: #f1c40f;
-    /* color: #2a5c45; */
-    border-bottom: 2px solid #f1c40f;
-}
-
-#custom-spotify {
-    background: #66cc99;
-    color: #2a5c45;
-}
-
-#tray {
-    /* background-color: #2980b9; */
-}
-#+end_src
-
 * Little bits
 ** Fade inactive windows
 
@@ -1001,11 +247,11 @@ set -g __fish_git_prompt_char_upstream_ahead "↑"
 set -g __fish_git_prompt_char_upstream_behind "↓"
 set -g __fish_git_prompt_char_upstream_prefix ""
 
-set -g __fish_git_prompt_char_stagedstate "● "
-set -g __fish_git_prompt_char_dirtystate "✚ "
+set -g __fish_git_prompt_char_stagedstate " ● "
+set -g __fish_git_prompt_char_dirtystate " ✚ "
 set -g __fish_git_prompt_char_untrackedfiles "…"
-set -g __fish_git_prompt_char_conflictedstate "✖ "
-set -g __fish_git_prompt_char_cleanstate "✔ "
+set -g __fish_git_prompt_char_conflictedstate " ✖ "
+set -g __fish_git_prompt_char_cleanstate " ✔ "
 
 set -g __fish_git_prompt_color_dirtystate yellow
 set -g __fish_git_prompt_color_stagedstate blue
@@ -1731,3 +977,763 @@ Startup commands.
 #+begin_src conf
 new-session -s main
 #+end_src
+
+* Old Config
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+Some configuration for tools that I don't really use any more and want out of the way, but want to keep around.
+** Sway
+:PROPERTIES:
+:header-args: :tangle ~/.config/sway/config :mkdirp yes
+:END:
+
+I use [[https://github.com/swaywm/sway][sway]].
+
+Set some of the basic options like font, terminal, etc.
+
+#+begin_src conf
+font pango:DejaVu Sans 10
+set $terminal termite
+floating_modifier Mod4
+#+end_src
+
+I'm a crazy dvorak user, and I like my movement keys on the home row right hand keys, so I set some variables to use later.
+
+#+begin_src conf
+set $left h
+set $down t
+set $up n
+set $right s
+#+end_src
+
+Terminal launching. I use a custom every-terminal-is-in-one-tmux-session setup. More on that elsewhere in this file. I still have a binding to launch a non-tmux terminal though.
+
+#+begin_src conf
+bindsym Mod4+c exec $terminal -e ~/bin/tmux-main-attach
+bindsym Mod4+Shift+c exec $terminal
+#+end_src
+
+App launching. Using rofi currently.
+
+#+begin_src conf
+bindsym Mod4+e exec --no-startup-id \
+    i3-dmenu-desktop --dmenu="rofi -dmenu -i -p 'run: '" --entry-type=name
+#+end_src
+
+Here we have keybindings that deal with windows.
+
+#+begin_src conf
+# kill focused window
+bindsym Mod4+k kill
+
+# change focus
+bindsym Mod4+$left focus left
+bindsym Mod4+$down focus down
+bindsym Mod4+$up focus up
+bindsym Mod4+$right focus right
+
+# move focused window
+bindsym Mod4+Shift+$left move left
+bindsym Mod4+Shift+$down move down
+bindsym Mod4+Shift+$up move up
+bindsym Mod4+Shift+$right move right
+
+# toggle tiling / floating
+bindsym Mod4+r floating toggle
+#+end_src
+
+And layout-related keybindings.
+
+#+begin_src conf
+# split in horizontal orientation
+bindsym Mod4+z split h
+
+# split in vertical orientation
+bindsym Mod4+v split v, layout stacking
+
+# enter fullscreen mode for the focused container
+bindsym Mod4+f exec ~/bin/fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+# bindsym Mod4+j layout stacking
+# bindsym Mod4+Shift+j layout tabbed
+# bindsym Mod4+x layout toggle split
+
+bindsym Mod4+space layout toggle all
+
+# focus the parent container
+bindsym Mod4+u focus parent
+
+# focus the child container
+bindsym Mod1+d focus child
+#+end_src
+
+Some special window handling rules.
+
+#+begin_src conf
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [app_id="zenity"] floating enable
+
+for_window [class="Firefox"] inhibit_idle fullscreen
+for_window [class="Chromium"] inhibit_idle fullscreen
+for_window [app_id="firefox"] inhibit_idle fullscreen
+for_window [app_id="chromium"] inhibit_idle fullscreen
+#+end_src
+
+Workspace keybindings.
+
+#+begin_src conf
+# switch to workspace
+bindsym Mod4+1 workspace number 1
+bindsym Mod4+2 workspace number 2
+bindsym Mod4+3 workspace number 3
+bindsym Mod4+4 workspace number 4
+bindsym Mod4+5 workspace number 5
+bindsym Mod4+6 workspace number 6
+bindsym Mod4+7 workspace number 7
+bindsym Mod4+8 workspace number 8
+bindsym Mod4+9 workspace number 9
+bindsym Mod4+0 workspace number 10
+
+bindsym Mod4+Tab workspace back_and_forth
+bindsym Mod4+p workspace back_and_forth
+bindsym Control+Mod1+Tab workspace back_and_forth
+bindsym Mod4+Control+$left workspace prev
+bindsym Mod4+Control+$right workspace next
+bindsym Mod4+Control+Shift+$left move workspace to output left
+bindsym Mod4+Control+Shift+$right move workspace to output right
+
+# move focused container to workspace
+bindsym Mod4+Shift+1 move container to workspace number 1
+bindsym Mod4+Shift+2 move container to workspace number 2
+bindsym Mod4+Shift+3 move container to workspace number 3
+bindsym Mod4+Shift+4 move container to workspace number 4
+bindsym Mod4+Shift+5 move container to workspace number 5
+bindsym Mod4+Shift+6 move container to workspace number 6
+bindsym Mod4+Shift+7 move container to workspace number 7
+bindsym Mod4+Shift+8 move container to workspace number 8
+bindsym Mod4+Shift+9 move container to workspace number 9
+bindsym Mod4+Shift+0 move container to workspace number 10
+#+end_src
+
+Window border handling.
+
+#+begin_src conf
+bindsym Mod4+b border toggle
+# default_border normal
+default_floating_border normal
+default_border pixel 4
+smart_borders on
+#+end_src
+
+Output configuration for work laptop.
+
+#+begin_src conf
+set $work_monitor_left "Ancor Communications Inc ASUS PB278 E1LMTF061086"
+set $work_monitor_right "Ancor Communications Inc ASUS PB278 E3LMTF122568"
+
+set $home_monitor "Goldstar Company Ltd LG Ultra HD 0x0000EFE8"
+
+workspace 1 output $work_monitor_right
+workspace 2 output $work_monitor_right
+workspace 3 output $work_monitor_right
+workspace 4 output $work_monitor_left
+workspace 5 output $work_monitor_left
+workspace 7 output $work_monitor_left
+workspace 8 output $work_monitor_left
+
+output eDP-1 {
+    # scale 1.0
+    # disable
+    pos 4000,1000
+}
+
+output $work_monitor_left {
+    transform 270
+    pos 0,0
+}
+
+output $work_monitor_right {
+    pos 1440,220
+}
+#+end_src
+
+Set the background colour on all outputs.
+
+#+begin_src conf
+output * {
+    background #222222 solid_color
+}
+#+end_src
+
+A bit of laptop display management. I use laptops docked a lot of the time, and usually don't use the internal display when docked. So I want that display disabled when the laptop has external active displays and then is closed, and I want it enabled when opening the laptop.
+
+#+begin_src conf
+bindswitch --locked lid:off output eDP-1 enable
+bindswitch --locked lid:on exec ~/bin/dock-outputs.py
+#+end_src
+
+Global input device settings. I dvorak.
+
+#+begin_src conf
+input type:keyboard {
+    xkb_layout us
+    xkb_variant dvorak
+
+    repeat_delay 275
+    repeat_rate 40
+}
+#+end_src
+
+[[https://shop.keyboard.io/][Keyboard.io]] pointer settings.
+
+#+begin_src conf
+input "4617:8961:Keyboardio_Model_01_Mouse" {
+    pointer_accel 0.1
+    accel_profile adaptive
+    natural_scroll enabled
+    scroll_factor 1.5
+}
+#+end_src
+
+Thinkpad pointing device settings, covering older and newer devices.
+
+#+begin_src conf
+input "2:10:TPPS/2_IBM_TrackPoint" {
+    pointer_accel 0.5
+    natural_scroll enabled
+    scroll_factor 1.5
+    scroll_method on_button_down
+    scroll_button button2
+}
+
+input "1267:32:Elan_TrackPoint" {
+    pointer_accel 0.5
+    natural_scroll enabled
+    scroll_factor 1.5
+    scroll_method on_button_down
+    scroll_button button2
+}
+
+input "2:7:SynPS/2_Synaptics_TouchPad" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 1.7
+    tap enabled
+    tap_button_map lrm
+    dwt enabled
+    drag enabled
+    click_method clickfinger
+    scroll_method two_finger
+}
+
+input "1267:32:Elan_Touchpad" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 1.7
+    tap enabled
+    tap_button_map lrm
+    dwt enabled
+    drag enabled
+    click_method clickfinger
+    scroll_method two_finger
+}
+#+end_src
+
+Settings for the logitech mice I have.
+
+#+begin_src conf
+input "1133:16489:Logitech_MX_Master_2S" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+
+input "1133:16478:Logitech_M720_Triathlon" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+
+input "1133:4133:Logitech_M510" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+#+end_src
+
+Audio keybindings.
+
+#+begin_src conf
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id \
+    pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl set-sink-mute @DEFAULT_SINK@ 0
+bindsym XF86AudioLowerVolume exec --no-startup-id \
+    pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ 0
+bindsym XF86AudioMute exec --no-startup-id \
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+#+end_src
+
+Handle laptop display brightness.
+
+#+begin_src conf
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/bin/brightness up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/bin/brightness down
+#+end_src
+
+"System" keybindings. Config reloads, exiting, locking, that kind of thing. Most of my WM keybindings are chains of keys, so here I hit one globally bound key (Mod4+w) which opens up the keys that are bound within that [[https://i3wm.org/docs/userguide.html#binding_modes][mode]].
+
+#+begin_src conf
+mode "system" {
+        # reload the configuration file
+        bindsym r reload, mode "default"
+
+        bindsym b exec "waybar", mode "default"
+        bindsym Shift+b exec "killall waybar && waybar", mode "default"
+
+        bindsym n exec --no-startup-id makoctl dismiss, mode "default"
+        bindsym Shift+n exec --no-startup-id makoctl dismiss --all, mode "default"
+
+        bindsym Shift+q exit, mode "default"
+
+        bindsym M output eDP-1 enable, mode "default"
+        bindsym D output eDP-1 disable, mode "default"
+
+        bindsym s exec --no-startup-id ~/bin/wl-screenshot, mode "default"
+
+        # Lock
+        bindsym l exec --no-startup-id swaylock -c 000000, mode "default"
+        # Suspend
+        bindsym Shift+s exec --no-startup-id \
+            swaylock -c 000000 && systemctl suspend, mode "default"
+
+        bindsym Escape mode "default"
+}
+bindsym Mod4+w mode "system"
+#+end_src
+
+Window resizing keybindings.
+
+#+begin_src conf
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym $left       resize shrink width 10 px or 3 ppt
+        bindsym $down       resize grow height 10 px or 3 ppt
+        bindsym $up         resize shrink height 10 px or 3 ppt
+        bindsym $right      resize grow width 10 px or 3 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym Mod4+l mode "resize"
+#+end_src
+
+App-related keybindings.
+
+#+begin_src conf
+mode "apps" {
+        bindsym s [class="Slack"] focus, mode "default"
+        bindsym e [class="Thunderbird"] focus, mode "default"
+        bindsym m [class=".*Google Play Music.*"] focus, mode "default"
+        bindsym t [title="^Signal"] focus, mode "default"
+        bindsym j [title=" - JIRA$"] focus, mode "default"
+        bindsym c [class="Emacs"] focus, mode "default"
+        bindsym f [class="Firefox"] focus, mode "default"
+
+        bindsym u [urgent=latest] focus, mode "default"
+
+        bindsym Escape mode "default"
+}
+bindsym Mod4+g mode "apps"
+#+end_src
+
+#+begin_src conf
+force_display_urgency_hint 1500 ms
+#+end_src
+
+Colour settings. [[https://i3wm.org/docs/userguide.html#_changing_colors][Like i3]].
+
+#+begin_src conf
+# client.<class> <border> <background> <text> <indicator> <child_border>
+client.focused #fe8019 #fe8019 #282828 #fe8019 #fe8019
+# client.focused #ebdbb2 #ebdbb2 #282828 #ebdbb2 #ebdbb2
+#client.focused_inactive #458588 #458588 #282828
+client.focused_inactive #7c6f64 #7c6f64 #282828 #7c6f64 #7c6f64
+client.unfocused #383838 #282828 #bdae93 #282828 #383838
+client.urgent #fabd2f #fabd2f #282828 #fabd2f #fabd2f
+#+end_src
+
+Startup commands. I also start a terminal on login, which is really just a leftover from testing and breaking my setup and finding it handy to have a terminal open when little else works.
+
+#+begin_src conf
+exec --no-startup-id redshift -l $(curl -s ipinfo.io | jq -j .loc | tr ',' ':') -m wayland
+exec --no-startup-id ~/bin/focus-opacity.py
+exec --no-startup-id waybar
+exec --no-startup-id mako
+exec --no-startup-id \
+    swayidle timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    timeout 900 'swaylock -c 000000' \
+    before-sleep 'swaylock -c 000000'
+
+exec $terminal
+#+end_src
+
+** Waybar
+:PROPERTIES:
+:header-args: :tangle "litwaybar.conf" :mkdirp yes
+:END:
+
+#+begin_src conf :tangle no :noweb-ref waybar-sway
+"sway/workspaces": {
+     "disable-scroll": false,
+     "all-outputs": false,
+     "format": "{icon}{name}",
+     "format-icons": {
+//         "1": "",
+//         "2": "",
+//         "3": "",
+//         "4": "",
+//         "5": "",
+        "urgent": " ",
+        "focused": "",
+//         "default": ""
+        "default": ""
+    }
+},
+"sway/mode": {
+    "format": " {}"
+},
+"sway/window": {
+    "all-outputs": true,
+    "max-length": 120
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-clock
+"clock": {
+    "format": "{:%a %b %e  %H:%M}",
+    "format-alt": "{:%Y-%m-%d}"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-tray
+"tray": {
+    // "icon-size": 21,
+    "spacing": 10
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-cpumem
+"cpu": {
+    "states": {
+        "warning": 70,
+        "critical": 95
+    },
+    "format": " {}%",
+    "format-warning": " {}%",
+    "format-critical": " {}%"
+},
+"memory": {
+    "states": {
+        //"normal": 30,
+        "warning": 40,
+        "critical": 85
+    },
+    "format": " {}%",
+    //"format-normal": "normal",
+    "format-warning": " w{}%",
+    "format-critical": " c{}%"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-battery
+"battery": {
+    "states": {
+        "full": 100,
+        "good": 90,
+        "normal": 89,
+        "warning": 20,
+        "critical": 10
+    },
+    "format-normal": "{icon} {capacity}%",
+    "format-good": "",
+    "format-full": "",
+    "format-charging-normal": " {capacity}%",
+    "format-charging-good": "",
+    "format-charging-full": "",
+    "format-icons": ["", "", "", "", ""]
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-pulseaudio
+"pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": "",
+    "format-icons": {
+        "headphones": "",
+        "handsfree": "",
+        "headset": "",
+        "phone": "",
+        "portable": "",
+        "car": "",
+        "default": ["", ""]
+    },
+    "on-click": "pavucontrol"
+}
+#+end_src
+
+#+begin_src conf :tangle no :noweb-ref waybar-network
+"network#wireless": {
+    "interface": "wlp*",
+    "format-wifi": " {essid} ({signalStrength}%)",
+    "format-disconnected": "⚠ Disconnected",
+    "on-click": "nm-connection-editor"
+},
+"network#wired": {
+    "interface": "enp*",
+    "format-ethernet": " {ipaddr}",
+    "format-linked": "",
+    "format-disconnected": "",
+    "on-click": "nm-connection-editor"
+},
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 60,
+        "format-critical": "{temperatureC}°C {icon}",
+        "format": ""
+        //"format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": ["", ""]
+    }
+#+end_src
+
+#+begin_src conf :tangle ~/.config/waybar/config :noweb yes
+[{
+    "layer": "top",
+    "height": 26,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/window"
+    ],
+    "modules-center": [
+        "sway/mode"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "battery",
+        "temperature",
+        "network#wired",
+        "network#wireless",
+        "idle_inhibitor",
+        "pulseaudio",
+        "clock",
+        "tray"
+    ],
+    <<waybar-sway>>,
+    <<waybar-clock>>,
+    <<waybar-tray>>,
+    <<waybar-pulseaudio>>,
+    <<waybar-cpumem>>,
+    <<waybar-battery>>,
+    <<waybar-network>>
+},
+{
+    "output": ["eDP-2"],
+    "layer": "top",
+    "height": 26,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/window"
+    ],
+    "modules-center": [
+        "sway/mode"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "battery",
+        "network#wireless",
+        "backlight",
+        "pulseaudio",
+        "clock",
+        "tray"
+    ],
+    <<waybar-sway>>,
+    <<waybar-clock>>,
+    <<waybar-tray>>,
+    <<waybar-pulseaudio>>,
+    <<waybar-cpumem>>,
+    <<waybar-battery>>,
+    <<waybar-network>>
+}]
+#+end_src
+
+#+begin_src css :tangle ~/.config/waybar/style.css
+,* {
+    border: none;
+    border-radius: 0;
+    font-family: DejaVu Sans, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    min-height: 0;
+    color: #ebdbb2;
+}
+
+window#waybar {
+    /* background: rgba(43, 48, 59, 0.5); */
+    background: #282828;
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+/*     color: #ebdbb2; */
+}
+
+#workspaces button {
+    padding: 0 4px;
+    /* background: transparent; */
+    background-color: #3c3836;
+    /* color: white; */
+    /* border-bottom: 3px solid transparent; */
+}
+
+#workspaces button.visible {
+    background-color: #928374;
+    color: #282828;
+}
+
+#workspaces button.visible label {
+    color: #282828;
+    font-weight: bold;
+}
+
+#workspaces button.focused {
+    background-color: #ebdbb2;
+    color: #282828;
+}
+
+#workspaces button.focused label {
+    color: #282828;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    background-color: #fabd2f;
+}
+
+#workspaces button.urgent label {
+    color: #282828;
+}
+
+#window {
+    padding: 0 10px;
+}
+
+#mode {
+    background: #b8bb26;
+    color: #282828;
+    font-weight: bold;
+}
+
+#clock, #battery, #battery.charging, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode, #idle_inhibitor, #backlight, #temperature-critical {
+    padding: 0 10px;
+    margin: 0 5px;
+}
+
+#temperature, #memory.normal, #cpu.normal, #battery.normal, #battery.full:not(.charging), #battery.good:not(.charging) {
+    padding: 0;
+    margin: 0;
+}
+
+#clock {
+    background-color: #3c3836;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
+}
+
+#battery.critical:not(.charging), #battery.warning:not(.charging) {
+    background: #f53c3c;
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#battery.warning:not(.charging) {
+    background: #f1c40f;
+    color: black;
+}
+
+#cpu {
+    /* background: #2ecc71; */
+    /* color: #000000; */
+}
+
+#memory {
+    /* background: #9b59b6; */
+}
+
+#network.linked {
+    background: #f1c40f;
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#network {
+    /* background: #2980b9; */
+}
+
+#pulseaudio {
+    /* background: #f1c40f; */
+    /* color: black; */
+}
+
+#pulseaudio.muted {
+    /* background: #90b1b1; */
+    color: #f1c40f;
+    /* color: #2a5c45; */
+    border-bottom: 2px solid #f1c40f;
+}
+
+#custom-spotify {
+    background: #66cc99;
+    color: #2a5c45;
+}
+
+#tray {
+    /* background-color: #2980b9; */
+}
+#+end_src
+
