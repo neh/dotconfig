@@ -261,6 +261,10 @@ set -g __fish_git_prompt_color_cleanstate green --bold
 #+end_src
 
 #+begin_src fish
+set PATH $HOME/bin $PATH
+#+end_src
+
+#+begin_src fish
 fish_vi_key_bindings 2> /dev/null
 #+end_src
 
