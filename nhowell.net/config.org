@@ -261,7 +261,9 @@ set -g __fish_git_prompt_color_cleanstate green --bold
 #+end_src
 
 #+begin_src fish
-set PATH $HOME/bin $PATH
+if not contains $HOME/bin $fish_user_paths
+    set -U fish_user_paths $fish_user_paths $HOME/bin
+end
 #+end_src
 
 #+begin_src fish
