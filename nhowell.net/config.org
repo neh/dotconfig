@@ -6,6 +6,165 @@
 #+email: nath@nhowell.net
 
 * Little bits
+** Dconf (Gnome settings)
+Gnome desktop and related settings are stored in dconf, which has a binary database format that is not conducive to version control. I tried a few ways to deal with this, none of which were especially good, and then this well-titled article popped up: [[https://anarc.at/blog/2020-03-02-moving-dconf-entries-to-git/][Moving dconf entries to git]]. I'm extremely grateful for this post and the resources it references: [[https://annex.debconf.org/debconf-share/debconf14/slides/josh-triplett-dconf-git-home/dconf.pdf][Josh Triplett's Debconf 14 talk]], and an accompanying [[https://joshtriplett.org/git/home][git repo]] (that's useful as a git clone URL, not a browser one). That post explains things pretty well, but I'm going to do my own version of it here, with the benefit of org mode and src blocks so I can tangle the files right into place. All of the scripts in this section originally came from Josh Triplett's git repo.
+
+A key point is that dconf doesn't /only/ use a binary database as a configuration source. It can also use text files when configured to do so. To point dconf at a specific configuration, you set the =DCONF_PROFILE= environment variable. I set this for both the zsh and fish shells.
+
+#+begin_src fish :noweb-ref fish_env
+set -gx DCONF_PROFILE $HOME/.config/dconf/profile
+#+end_src
+
+#+begin_src sh :noweb-ref zsh_env
+export DCONF_PROFILE=$HOME/.config/dconf/profile
+#+end_src
+
+And here's the config file that variable points at. The first line is just the default setting, and tells dconf to use =~/.config/dconf/user= as its binary database file. The second line tells dconf to /also/ use =~/.config/dconf/user.txt= as a configuration source. I'm not including that file here in this org file, but it is versioned in this repository.
+
+#+begin_src conf :tangle ~/.config/dconf/profile
+user-db:user
+service-db:keyfile/user
+#+end_src
+
+This next config file is used when editing settings that need to end up in the text file only. So if you override the original value of =DCONF_PROFILE= to point at this file and run, say, =dconf-editor=, any changed settings will end up in the text file.
+
+#+begin_src conf :tangle ~/.config/dconf/profile-edit
+service-db:keyfile/user
+#+end_src
+
+Here's a convenient little script to make that easier. Run something like =dconfe dconf-editor= to easily get changed settings into the =user.txt= file.
+
+#+begin_src sh :tangle ~/.local/bin/dconfe
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+DCONF_PROFILE="${DCONF_PROFILE}-edit" exec "$@"
+#+end_src
+
+Given a path in the dconf database (eg. =/org/gnome/desktop=), =dconfc= will extract any settings that are different from the default into the text file, then reset them in the binary database.
+
+#+begin_src sh :tangle ~/.local/bin/dconfc
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+set -e
+
+if [ "$#" -ne 1 ] || [ "${1#/}" = "$1" ]; then
+    echo "Usage: dconfc PATH" >&2
+    exit 1
+fi
+
+if [ "${1%/}" != "$1" ]; then
+    dconf dump "$1" | dconfe dconf load "$1"
+else
+    dconfe dconf write "$1" "$(dconf read "$1")"
+fi
+dconf reset -f "$1"
+#+end_src
+
+=dconfd= will list all the settings (and their values) that are not the same in the binary and text config files. Passing it a dconf path will limit it to subkeys of that path.
+
+#+begin_src python :tangle ~/.local/bin/dconfd :shebang #!/usr/bin/python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+import fnmatch, os, subprocess, sys
+
+def parse_ignore_patterns(l):
+    for p in l:
+        if p.startswith("#"):
+            continue
+        p = p.rstrip()
+        if not p:
+            continue
+        yield p
+
+def main(args):
+    if len(args) == 1:
+        root = "/"
+    elif len(args) == 2:
+        root = args[1]
+    else:
+        print("Usage: dconfd [PATH]", file=sys.stderr)
+        return 2
+
+    config_home = os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
+    try:
+        ignore_patterns = list(parse_ignore_patterns
+                               (open
+                                (os.path.join(config_home, "dconf/dconfd-ignore"))))
+    except IOError:
+        ignore_patterns = []
+    def ignored(name):
+        for p in ignore_patterns:
+            if fnmatch.fnmatch(name, p):
+                return True
+        return False
+
+    changed = False
+
+    if root.endswith("/"):
+        keys = set()
+        for prefix in [], ["dconfe"]:
+            keys |= set(key for key in subprocess.check_output(prefix + ["dconf-list-recursively", root]).decode('utf-8').split()
+                        if key and (prefix or not ignored(key)))
+        keys = sorted(keys)
+    else:
+        keys = [root]
+
+    for key in keys:
+        v1 = subprocess.check_output(["dconfe", "dconf", "read", key]).decode('utf-8').rstrip()
+        v2 = subprocess.check_output(["dconf", "read", key]).decode('utf-8').rstrip()
+        if v1 == v2:
+            continue
+        if not changed:
+            changed = True
+            print("--- service-db")
+            print("+++ user-db")
+        if v1:
+            print("- {} {}".format(key, v1))
+        if v2:
+            print("+ {} {}".format(key, v2))
+
+    if changed:
+        return 1
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+#+end_src
+
+#+begin_src sh :tangle ~/.local/bin/dconf-list-recursively
+#!/bin/sh
+# SPDX-License-Identifier: GPL-3.0-or-later
+l() {
+    dconf list "$1" | while read key ; do
+        if [ "${key%/}" != "$key" ] ; then
+            l "$1$key"
+        else
+            echo "$1$key"
+        fi
+    done
+}
+l "$1"
+#+end_src
+
+This file lists configuration paths to ignore when running =dconfd=. Not sure it's all that useful since other scripts like =dconfc= don't use it.
+
+#+begin_src text :tangle ~/.config/dconf/dconfd-ignore
+/ca/desrt/dconf-editor/*
+/org/gnome/Disks/*
+/org/gnome/Totem/*
+/org/gnome/baobab/*
+/org/gnome/calculator/*
+/org/gnome/charmap/*
+/org/gnome/cheese/*
+/org/gnome/control-center/*
+/org/gnome/eog/*
+/org/gnome/evince/*
+/org/gnome/evolution*
+/org/gnome/gedit/*
+/org/gnome/libgnomekbd/*
+/org/gnome/nm-applet/*
+/org/gnome/shell/extensions/paperwm/workspaces/*
+/org/gtk/settings/file-chooser/*
+#+end_src
+
 ** Fade inactive windows
 
 #+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
@@ -229,7 +388,7 @@ docker pull azuresdk/azure-cli-python:latest
 ** fish
 *** Main config
 :PROPERTIES:
-:header-args: :tangle ~/.config/fish/config.fish :mkdirp yes
+:header-args: :tangle ~/.config/fish/config.fish :mkdirp yes :noweb yes
 :END:
 
 #+begin_src fish
@@ -264,6 +423,10 @@ set -g __fish_git_prompt_color_cleanstate green --bold
 if not contains $HOME/bin $fish_user_paths
     set -U fish_user_paths $fish_user_paths $HOME/bin
 end
+#+end_src
+
+#+begin_src fish
+<<fish_env>>
 #+end_src
 
 #+begin_src fish

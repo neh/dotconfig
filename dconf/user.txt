@@ -1,0 +1,181 @@
+[org/gnome/desktop/interface]
+clock-format='24h'
+clock-show-weekday=true
+cursor-size=32
+cursor-theme='Adwaita'
+document-font-name='Inter 11'
+font-name='Inter 11'
+gtk-im-module='gtk-im-context-simple'
+gtk-theme='Adwaita-dark'
+icon-theme='Adwaita'
+monospace-font-name='Iosevka 12'
+scaling-factor=uint32 1
+show-battery-percentage=true
+text-scaling-factor=1.0
+toolkit-accessibility=false
+
+[org/gnome/desktop/wm/keybindings]
+always-on-top=@as []
+begin-move=@as []
+begin-resize=@as []
+close=@as []
+cycle-windows=@as []
+cycle-windows-backward=@as []
+lower=@as []
+maximize=@as []
+maximize-horizontally=@as []
+maximize-vertically=@as []
+minimize=@as []
+move-to-workspace-1=@as []
+move-to-workspace-2=@as []
+move-to-workspace-3=@as []
+move-to-workspace-4=@as []
+move-to-workspace-down=['<Shift><Super>Page_Down']
+move-to-workspace-up=['<Shift><Super>Page_Up']
+show-desktop=@as []
+switch-applications=@as []
+switch-applications-backward=@as []
+switch-input-source=@as []
+switch-input-source-backward=@as []
+switch-to-workspace-1=@as []
+switch-to-workspace-2=@as []
+switch-to-workspace-3=@as []
+switch-to-workspace-4=@as []
+switch-to-workspace-down=@as []
+switch-to-workspace-last=@as []
+switch-to-workspace-left=@as []
+switch-to-workspace-right=@as []
+switch-to-workspace-up=@as []
+toggle-fullscreen=@as []
+toggle-maximized=@as []
+unmaximize=@as []
+
+[org/gnome/shell/extensions/paperwm]
+has-installed-config-template=true
+vertical-margin=0
+window-gap=10
+
+[org/gnome/shell/extensions/paperwm/keybindings]
+close-window=['<Super>q']
+live-alt-tab=@as []
+live-alt-tab-backward=@as []
+move-down-workspace=@as []
+move-left=['<Shift><Super>h']
+move-previous-workspace=['<Super><Alt>apostrophe']
+move-previous-workspace-backward=@as []
+move-right=['<Shift><Super>s']
+move-up-workspace=@as []
+new-window=@as []
+previous-workspace=['<Super>t']
+previous-workspace-backward=['<Super>n']
+resize-h-dec=@as []
+resize-h-inc=@as []
+resize-w-dec=['<Primary><Super>h']
+resize-w-inc=['<Primary><Super>s']
+switch-down-workspace=['<Alt><Super>t']
+switch-first=@as []
+switch-last=@as []
+switch-next=['<Super>s']
+switch-previous=['<Super>h']
+switch-up-workspace=['<Alt><Super>n']
+take-window=['<Super>k']
+toggle-scratch=['<Shift><Super>y']
+toggle-scratch-layer=['<Super>y']
+toggle-scratch-window=['<Primary><Super>y']
+
+[org/gnome/shell/extensions/paperwm/workspaces/a8a51fa8-6dbf-4026-9309-55efc24d0a13]
+background=''
+color='rgb(46,52,54)'
+index=0
+name='main'
+
+[org/gnome/shell/extensions/paperwm/workspaces/23e803c1-8a29-4df0-9ede-212f7026ea76]
+background=''
+color='rgb(85,87,83)'
+index=1
+name='comm'
+
+[org/gnome/shell/extensions/paperwm/workspaces/92b95d91-9a7a-444f-a8c9-634076120755]
+index=2
+name='emacs'
+
+[org/gnome/shell/extensions/paperwm/workspaces/f6dbe0a3-2927-4793-a389-cad13ca5aa36]
+index=3
+name='kbd'
+
+[org/gnome/shell/extensions/paperwm/workspaces/fe18deac-202f-45a1-bb4b-77b4c15c0b16]
+index=4
+name='misc'
+
+[org/gnome/shell/extensions/paperwm/workspaces/75bc12b1-5a4f-41f4-a86e-9814e277d749]
+index=5
+name='setup'
+
+[org/gnome/shell/extensions/paperwm/workspaces]
+list=['a8a51fa8-6dbf-4026-9309-55efc24d0a13', '23e803c1-8a29-4df0-9ede-212f7026ea76', '92b95d91-9a7a-444f-a8c9-634076120755', 'f6dbe0a3-2927-4793-a389-cad13ca5aa36', '75bc12b1-5a4f-41f4-a86e-9814e277d749', 'fe18deac-202f-45a1-bb4b-77b4c15c0b16']
+
+[org/gnome/nautilus/preferences]
+click-policy='single'
+default-folder-viewer='list-view'
+show-delete-permanently=true
+
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=true
+night-light-schedule-automatic=true
+
+[org/gnome/settings-daemon/plugins/media-keys]
+next=['AudioNext']
+play=['AudioPlay']
+previous=['AudioPrev']
+volume-down=['AudioLowerVolume']
+volume-mute=['AudioMute']
+volume-up=['AudioRaiseVolume']
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=3600
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-timeout=1800
+sleep-inactive-battery-type='suspend'
+
+[org/gnome/shell/extensions/switcher]
+activate-after-ms=uint32 500
+activate-immediately=true
+font-size=uint32 20
+icon-size=uint32 20
+never-show-onboarding=true
+onboarding-1=uint32 1
+onboarding-2=uint32 1
+show-launcher=['<Super>e']
+workspace-indicator=true
+
+[org/gnome/desktop/input-sources]
+per-window=false
+sources=[('xkb', 'us+dvorak'), ('xkb', 'us')]
+xkb-options=['ctrl:nocaps', 'caps:none', 'lv3:ralt_switch']
+
+[org/gnome/desktop/notifications]
+show-in-lock-screen=false
+
+[org/gnome/desktop/peripherals/mouse]
+accel-profile='adaptive'
+natural-scroll=true
+speed=0.69999999999999996
+
+[org/gnome/desktop/peripherals/touchpad]
+speed=0.80000000000000004
+tap-to-click=true
+two-finger-scrolling-enabled=true
+
+[org/gnome/mutter]
+attach-modal-dialogs=false
+edge-tiling=false
+workspaces-only-on-primary=false
+
+[org/gnome/mutter/keybindings]
+toggle-tiled-left=@as []
+toggle-tiled-right=@as []
+
+[org/gnome/shell/keybindings]
+focus-active-notification=@as []
+toggle-application-view=@as []
+toggle-overview=@as []
