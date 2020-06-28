@@ -138,15 +138,16 @@ sleep-inactive-battery-timeout=1800
 sleep-inactive-battery-type='suspend'
 
 [org/gnome/shell/extensions/switcher]
-activate-after-ms=uint32 500
-activate-immediately=true
+activate-after-ms=uint32 0
+activate-immediately=false
 font-size=uint32 20
 icon-size=uint32 20
 never-show-onboarding=true
 onboarding-1=uint32 1
 onboarding-2=uint32 1
 show-launcher=['<Super>e']
-workspace-indicator=true
+workspace-indicator=false
+activate-by-key=uint32 0
 
 [org/gnome/desktop/input-sources]
 per-window=false
