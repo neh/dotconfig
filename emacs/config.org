@@ -1,0 +1,3254 @@
+#+property: header-args:emacs-lisp :tangle (concat (file-name-sans-extension (buffer-file-name)) ".el")
+#+property: header-args :mkdirp yes :comments no :results silent
+#+startup: showall inlineimages
+
+#+title: My Emacs config file
+#+author: Nathan Howell
+#+email: nath@nhowell.net
+
+This is my Emacs configuration file.
+
+This file is written in [[http://www.howardism.org/Technical/Emacs/literate-programming-tutorial.html][literate programming style]] using [[https://orgmode.org/][org-mode]]. This configuration was heavily influenced/started from [[http://zzamboni.org/post/my-emacs-configuration-with-commentary/][Diego Zamboni’s configuration]], as well as [[https://github.com/blaenk/dots/tree/master/emacs/.emacs.d][Jorge Israel Peña's]].
+
+This is a handy command I’ve been using to test as I move to a literate config. =C-c C-c= will launch a new emacs, using the tangled version of this config.
+#+begin_src shell :tangle no :results silent
+emacs -Q -l profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-file-name \"/home/nathan/.emacs.d/init.el\"))" -f profile-dotemacs
+#+end_src
+
+
+* Initialization
+:properties:
+:header-args:emacs-lisp: :tangle (concat user-emacs-directory "init.el")
+:end:
+
+Since this is a literate configuration, a small =init.el= file is needed to handle tangling and loading the rest of the configuration when necessary. That file gets created here, and the tangled result needs to be commited to the git repository whenever any changes are made to it here.
+
+Right up front, enable [[https://www.emacswiki.org/emacs/DynamicBindingVsLexicalBinding][lexical binding]].
+
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+#+end_src
+
+Next, we wrap the whole init file in a block that sets =file-name-handler-alist= to =nil= to prevent any special-filename parsing of files loaded from the init file (e.g. remote files loaded through tramp, etc.). Rather than having a block that closes this later, let's pull in the rest of the init file bits with noweb references.
+
+#+begin_src emacs-lisp :noweb yes
+(let ((file-name-handler-alist nil))
+  <<init-gc-init>>
+  <<init-straight>>
+  <<init-use-package>>
+  <<init-org>>
+  <<init-tangle>>
+  <<init-gc-setup>>)
+#+end_src
+
+We set =gc-cons-threshold= to its maximum value, to prevent any garbage collection from happening during load time. We also reset this value in the [[Epilogue][Epilogue]].
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-gc-init
+(setq gc-cons-threshold most-positive-fixnum)
+#+end_src
+
+I use [[https://github.com/raxod502/straight.el][straight.el]] instead of package.el.
+
+This setting makes the straight bootstrap /much/ faster. See the discussion [[https://github.com/raxod502/straight.el/issues/304][here]].
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
+(setq straight-check-for-modifications '(check-on-save))
+#+end_src
+
+And now bootstrap straight, using the snippet from the docs.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+#+end_src
+
+And then make [[https://github.com/jwiegley/use-package][use-package]] use straight, and install use-package using straight:
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-use-package
+(setq straight-use-package-by-default t)
+(straight-use-package 'use-package)
+(setq use-package-verbose nil
+      ;; use-package-always-defer t
+      )
+#+end_src
+
+Load =org-mode= using straight. This needs to happen early, or emacs will load and use its bundled version of =org-mode=, which is just too old.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-org
+(use-package org
+  :demand t)
+#+end_src
+
+Here's where the rest of this file gets tangled and loaded, but only if it's newer than the existing tangled file. Tangling is slow (at least it is when you start using no-web references...), so we don't want to do it for no good reason.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-tangle
+(let ((orgfile (concat user-emacs-directory "config.org"))
+      (elfile (concat user-emacs-directory "config.el")))
+  (when (or (not (file-exists-p elfile))
+            (file-newer-than-file-p orgfile elfile))
+    (org-babel-tangle-file orgfile elfile))
+  (load-file elfile))
+#+end_src
+
+Then reset the value of =gc-cons-threshold=, not to its original value; we still leave it much larger than default so that GCs don't happen so often and impact performance. We also tweak =gc-cons-percentage= and set an idle timer to run =garbage-collect= whenever emacs is idle for 5 seconds.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-gc-setup
+(setq gc-cons-threshold (* 250 1000 1000)
+      gc-cons-percentage 0.5)
+
+(defvar neh/gc-idle-timer nil)
+(unless (timerp neh/gc-idle-timer)
+  (setq neh/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect)))
+#+end_src
+
+* Performance optimization
+
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+#+end_src
+
+Lately I've been playing with optimizing my Emacs load time. I have found a couple of useful resources, including:
+
+- [[https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/][Two easy little known steps to speed up Emacs start up time]]
+- [[https://blog.d46.us/advanced-emacs-startup/][Advanced Techniques for Reducing Emacs Startup Time]]
+
+Based on these, I have added the code below.
+
+First, a hook that reports how long and how many garbage collections the startup took. Use a hook so the message doesn't get clobbered by other messages.
+
+#+begin_src emacs-lisp
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+#+end_src
+
+Set up ESUP for startup profiling.
+
+#+begin_src emacs-lisp
+(use-package esup
+  :commands (esup))
+#+end_src
+
+* Package management
+
+This =use-package= extension allows declaring dependencies on system commands.
+
+#+begin_src emacs-lisp
+(use-package use-package-ensure-system-package)
+#+end_src
+
+* Base settings
+
+Load any host-specific configuration. Anything set here will just get overridden by deferred package loads so the way I’m dealing with that is to set vars here with different (=neh/…=) names, then set the real vars conditionally in package configurations elsewhere.
+
+#+begin_src emacs-lisp
+(setq neh/local-conf-file (expand-file-name
+                           (concat system-name ".el")
+                           user-emacs-directory))
+(when (file-readable-p neh/local-conf-file)
+  (load-file neh/local-conf-file))
+#+end_src
+
+Show a message when garbage collecting, just for some awareness.
+
+#+begin_src emacs-lisp
+(setq garbage-collection-messages nil)
+#+end_src
+
+Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a clean start.
+
+#+begin_src emacs-lisp
+(setq inhibit-splash-screen t
+      inhibit-startup-message t
+      initial-scratch-message nil
+      inhibit-startup-echo-area-message t)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+
+Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother. Trying out =pixel-scroll-mode=.
+
+#+begin_src emacs-lisp
+(setq-default mouse-wheel-scroll-amount '(2 ((shift) . 1)) ;; one line at a time
+              mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
+              mouse-wheel-follow-mouse 't ;; scroll window under mouse
+              scroll-step 1 ;; keyboard scroll one line at a time
+              scroll-margin 3
+              hscroll-step 3
+              hscroll-margin 3
+              scroll-preserve-screen-position 'always
+              scroll-up-aggressively 0.01
+              scroll-down-aggressively 0.01
+              scroll-conservatively 101) ;; Don't jump around when scrolling
+#+end_src
+
+And let’s try out the new single-line-horizontal-scroll option in emacs 26.
+
+#+begin_src emacs-lisp
+(setq-default auto-hscroll-mode 'current-line)
+#+end_src
+
+Set the window titles. Nothing fancy, just the buffer name.
+
+#+begin_src emacs-lisp
+(setq frame-title-format "%b" ;; focused window title format
+      icon-title-format "%b") ;; unfocused window title format
+#+end_src
+
+Set my preferred font and size, taking display DPI into account. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]]. I will probably revisit and incorporate more of what’s there later, but for now this will do. I’ll have to test this with different screens and moving frames between them (particularly, the =set-frame-font= args may need adjustment). Also, a hook for a frame moving to a different screen would be useful.
+
+#+begin_src emacs-lisp
+(defun frame-monitor-mm ()
+  "Return the size of the current monitor in mm."
+  (alist-get 'mm-size (frame-monitor-attributes)))
+
+(defun frame-monitor-pixels ()
+  "Return the geometry of the current monitor in pixels."
+  (alist-get 'geometry (frame-monitor-attributes)))
+
+(defun monitor-dpi ()
+  "Return the DPI of the current monitor."
+  (let* ((mm (frame-monitor-mm))
+         (mm-width (car mm))
+         (pixels (frame-monitor-pixels))
+         (pixel-width (nth 2 pixels)))
+    (/ pixel-width (/ mm-width 25.4))))
+
+(defun neh/set-frame-options (frame)
+  "Set font options for a FRAME based on the DPI."
+  (let ((myfont "Iosevka")
+        (mysize (if (> (monitor-dpi) 160)
+                    20
+                  10.5)))
+    (set-frame-font (format "%s-%f" myfont mysize) t t)
+    (set-face-attribute 'default nil :font (format "%s-%f" myfont mysize))))
+
+;; (neh/set-frame-options nil)
+;; (add-hook 'after-make-frame-functions #'neh/set-frame-options)
+#+end_src
+
+I don’t really use the customization system in Emacs (yet?) but let’s at least make it use a file that isn’t the main config.
+
+#+begin_src emacs-lisp
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'no-error)
+#+end_src
+
+All UTF-8, all the time.
+
+#+begin_src emacs-lisp
+(setq coding-system-for-read 'utf-8
+      coding-system-for-write 'utf-8)
+#+end_src
+
+Don’t use tabs when indenting.
+
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+end_src
+
+More options. I’m not sure where to put some things in this file yet. Here are some.
+
+#+begin_src emacs-lisp
+(setq sentence-end-double-space nil)
+(setq ring-bell-function 'ignore)
+(setq enable-recursive-minibuffers t)
+(global-subword-mode 1)
+#+end_src
+
+Don’t warn me when I do these potentially confusing narrowing operations.
+
+#+begin_src emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
+#+end_src
+
+Set some backup file options.
+
+#+begin_src emacs-lisp
+(setq make-backup-files nil
+      delete-old-versions t
+      backup-directory-alist
+      `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+#+end_src
+
+I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager, and apparently ~$SSH_AUTH_SOCK~ doesn’t get set (maybe just for xwayland apps?). So we workaround. I already set a fixed link to the real socket for tmux usage, I can reuse it for this.
+
+#+begin_src emacs-lisp
+(when (string= (getenv "SSH_AUTH_SOCK") nil)
+  (setenv "SSH_AUTH_SOCK" (format "/tmp/ssh-agent-%s-tmux" (getenv "USER"))))
+#+end_src
+
+Some text fill options.
+
+#+begin_src emacs-lisp
+(setq-default fill-column 100)
+(add-to-list 'default-frame-alist `(width  . ,fill-column))
+(setq comment-auto-fill-only-comments t)
+#+end_src
+
+I view man pages in emacs sometimes, and want a fixed width for them.
+
+#+begin_src emacs-lisp
+(setq Man-width fill-column
+      Man-notify-method 'pushy
+      woman-fill-column fill-column)
+#+end_src
+
+How to make display buffer names.
+
+#+begin_src emacs-lisp
+(setq uniquify-buffer-name-style 'forward)
+#+end_src
+
+Some git/vc options.
+
+#+begin_src emacs-lisp
+(setq auto-revert-check-vc-info t
+      vc-follow-symlinks t)
+#+end_src
+
+When pasting (yanking) into emacs, paste at the point, not where I click (I like to paste with the middle mouse button, xorg-style).
+
+#+begin_src emacs-lisp
+(setq mouse-yank-at-point t)
+#+end_src
+
+* Keybindings
+
+[[https://github.com/noctuid/general.el][General.el]] handles keybinding management.
+
+#+begin_src emacs-lisp
+(use-package general
+  :demand t
+
+  :config
+  (general-create-definer
+    neh/leader-keys
+    :keymaps 'override
+    :states '(emacs normal visual motion insert)
+    :non-normal-prefix "C-SPC"
+    :prefix "SPC")
+
+  (general-override-mode)
+
+  (general-define-key
+   :keymaps 'override
+   :states '(emacs normal insert)
+   "C-M-t" 'scroll-other-window
+   "C-M-n" 'scroll-other-window-down
+
+   "<C-mouse-5>" '(lambda () (interactive) (neh/adjust-text-height -5))
+   "<C-mouse-4>" '(lambda () (interactive) (neh/adjust-text-height 5))
+   "C-_" '(lambda () (interactive) (neh/adjust-text-height -7))
+   "C-+" '(lambda () (interactive) (neh/adjust-text-height 7))
+   "C-)" '(lambda () (interactive) (neh/adjust-text-height 0)))
+
+  (neh/leader-keys
+    "<SPC>" '(save-buffer :which-key "save")
+
+    "b" '(:ignore t :which-key "buffer")
+
+    "cc" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
+
+    "f" '(:ignore t :which-key "formatting")
+    "fa" '(auto-fill-mode :which-key "auto fill")
+    "fi" '(indent-region :which-key "indent region")
+    "fp" '(fill-paragraph :which-key "paragraph")
+    "fr" '(fill-region :which-key "fill region")
+    "ft" '(toggle-truncate-lines :which-key "truncate lines")
+    ;; "ff" '(lambda () (interactive) (make-frame `((width . ,(+ fill-column 3)))))
+    ;; "ff" '(lambda () (interactive) (set-frame-parameter (selected-frame) 'width fill-column))
+    "ff" '(lambda () (interactive) (set-frame-parameter (selected-frame) 'width (+ fill-column 2)))
+
+    "g" '(:ignore t :which-key "git")
+
+    "h" '(:ignore t :which-key "help")
+
+    "hl" '(highlight-lines-matching-regexp :which-key "highlight line")
+    "hr" '(highlight-regexp :which-key "highlight regexp")
+    "hu" '(unhighlight-regexp :which-key "unhighlight regexp")
+
+    "i" '(:ignore t :which-key "insert")
+    "ip" '(clipboard-yank :which-key "paste from clipboard")
+
+    "n" '(:ignore t :which-key "narrow")
+    "nd" '(narrow-to-defun :which-key "narrow to defun")
+    "np" '(narrow-to-page :which-key "narrow to page")
+    "nr" '(narrow-to-region :which-key "narrow to region")
+    "nw" '(widen :which-key "widen")
+
+    "o" '(:ignore t :which-key "open")
+    ;; "oe" '(mode-line-other-buffer :which-key "previous buffer")
+    ;; "oo" '(persp-switch-to-buffer :which-key "switch buffer")
+    ;; "ov" '(persp-switch :which-key "switch perspective")
+
+    "Q" #'bury-buffer
+
+    "s" '(:ignore t :which-key "search")
+
+    "r" '(:ignore t :which-key "read")
+
+    "v" '(:ignore t :which-key "view")
+
+    "xb" '(eval-buffer :which-key "eval buffer")
+    "xe" '(eval-expression :which-key "eval expression")
+    "xr" '(eval-region :which-key "eval region")
+    "xs" '(eval-last-sexp :which-key "eval sexp")))
+#+end_src
+
+Which-key shows a handy popup for available keybindings at any given time.
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :demand t
+  :config
+  (which-key-setup-side-window-bottom)
+  (setq which-key-idle-secondary-delay 0.25)
+  (which-key-mode))
+#+end_src
+
+Key chords are interesting, and I’m not sure I’ll keep them yet. Doing vim-style bindings with leaders is maybe just as good?
+
+#+begin_src emacs-lisp
+(use-package key-chord
+  :demand t)
+
+(use-package use-package-chords
+  :after key-chord
+  :demand t
+  :config
+  (key-chord-mode 1))
+#+end_src
+
+* Base2
+
+Not sure where to put everything yet, so this section is a grab bag of stuff that needs package management (straight) to be in place.
+
+#+begin_src emacs-lisp
+(use-package color
+  :demand t)
+
+(use-package saveplace
+  :demand t
+  :config
+  (save-place-mode t))
+
+(use-package eldoc
+  :straight nil
+  :init
+  (setq eldoc-echo-area-use-multiline-p nil))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode t))
+
+(use-package paren
+  :init
+  (setq show-paren-delay 0
+        show-paren-style 'parenthesis)
+  :config
+  (show-paren-mode 1))
+
+(use-package whitespace
+  :commands (whitespace-mode)
+  :general
+  (neh/leader-keys
+    "vw" '(whitespace-mode :which-key "whitespace"))
+  :init
+  (setq whitespace-line-column 80
+        whitespace-style '(face trailing tabs lines-tail)))
+
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
+
+(use-package helpful
+  :after (counsel)
+  :init
+  (setq helpful-max-buffers 5
+        counsel-describe-function-function #'helpful-callable
+        counsel-describe-variable-function #'helpful-variable)
+  :general
+  (neh/leader-keys
+    "h." '(helpful-at-point :which-key "point help")
+    "hf" '(helpful-callable :which-key "function help")
+    "hk" '(helpful-key :which-key "key help")
+    "hv" '(helpful-variable :which-key "variable help")))
+#+end_src
+
+Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :commands (exec-path-from-shell-initialize)
+  :init
+  (setq exec-path-from-shell-arguments '("-l"))
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+#+end_src
+
+* Text mode
+
+General settings when in text editing modes.
+
+#+begin_src emacs-lisp
+(use-package simple
+  :straight nil
+  :hook ((text-mode prog-mode) . visual-line-mode)
+  :general
+  (neh/leader-keys
+    "fv" '(visual-line-mode :which-key "visual line mode")))
+
+(use-package visual-fill-column
+  :hook (visual-line-mode . visual-fill-column-mode)
+  :general
+  (neh/leader-keys
+    "fc" '(visual-fill-column-mode :which-key "visual fill column"))
+
+  :custom
+  (split-window-preferred-function #'visual-fill-column-split-window-sensibly)
+
+  :config
+  (advice-add 'text-scale-adjust :after
+              #'visual-fill-column-adjust))
+#+end_src
+
+I’ll put olivetti mode here since I think it’s mainly a text mode thing rather than for programming, but who knows.
+
+#+begin_src emacs-lisp
+(use-package olivetti
+  :commands (olivetti-mode)
+  :config
+  (setq-default olivetti-body-width fill-column))
+#+end_src
+
+And let’s try out writeroom mode.
+
+#+begin_src emacs-lisp
+(use-package writeroom-mode
+  :commands (writeroom-mode
+             global-writeroom-mode)
+  :init
+  (setq writeroom-width fill-column
+        writeroom-extra-line-spacing 0
+        writeroom-border-width 40)
+  :config
+  (add-to-list 'writeroom-global-effects 'writeroom-set-internal-border-width))
+#+end_src
+
+* Prog mode
+
+General settings for programming modes.
+
+#+begin_src emacs-lisp
+(defun my-prog-mode-hook ()
+  "Set line-numbers settings for 'prog-mode'."
+  ;; (setq display-line-numbers 'relative)
+  (add-hook 'prog-mode-hook #'my-prog-mode-hook)
+  (add-hook 'yaml-mode-hook #'my-prog-mode-hook))
+#+end_src
+
+* Pretty it up
+
+#+begin_src emacs-lisp
+(setq neh/dark-theme 'modus-vivendi
+      neh/light-theme 'modus-operandi)
+
+(use-package modus-operandi-theme
+  :config
+  (setq modus-operandi-theme-distinct-org-blocks t
+        modus-operandi-theme-bold-constructs t
+        modus-operandi-theme-slanted-constructs t)
+  (load-theme neh/light-theme t nil))
+(use-package modus-vivendi-theme
+  :config
+  (setq modus-vivendi-theme-distinct-org-blocks t
+        modus-vivendi-theme-bold-constructs t
+        modus-vivendi-theme-slanted-constructs t)
+  (load-theme neh/dark-theme t t))
+
+(use-package gruvbox-theme
+  :disabled
+  :config
+  (setq neh/dark-mode t)
+  (load-theme neh/dark-theme t))
+
+(use-package poet-theme
+  :disabled
+  :config
+  (load-theme 'poet t))
+#+end_src
+
+But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller modeline font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
+
+#+begin_src emacs-lisp
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+(defadvice load-theme (after run-after-load-theme-hook activate)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+
+(add-hook 'after-load-theme-hook #'neh/theme-tweaks)
+(add-hook 'after-init-hook #'neh/theme-tweaks)
+#+end_src
+
+Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
+
+#+begin_src emacs-lisp
+(defadvice load-theme (before theme-dont-propagate activate)
+  (mapc #'disable-theme custom-enabled-themes))
+#+end_src
+
+Set my default preferred text size.
+
+#+begin_src emacs-lisp
+(setq neh/default-text-size 118)
+(when (not (boundp 'neh/current-text-size))
+  (setq neh/current-text-size neh/default-text-size))
+#+end_src
+
+Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =neh/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
+
+#+begin_src emacs-lisp
+(defun neh/adjust-text-height (adjustment)
+  (interactive)
+
+  (if (= adjustment 0)
+      (setq neh/current-text-size neh/default-text-size)
+    (setq neh/current-text-size (+ neh/current-text-size adjustment)))
+  (neh/theme-tweaks)
+  (visual-fill-column-adjust))
+#+end_src
+
+And here’s the function where I collect my tweaks to the theme and set up fonts.
+
+#+begin_src emacs-lisp
+(defun neh/theme-tweaks ()
+  (interactive)
+
+  (let* ((variable-tuple (cond
+                          ((x-list-fonts "Inter")
+                           `(:font "Inter"
+                             :height ,(round (* neh/current-text-size 1.01))))
+                          ((x-list-fonts "Noto Sans")
+                           `(:font "Noto Sans"
+                             :height ,(round (* neh/current-text-size 1.01))))
+                          ((x-list-fonts "DejaVu Sans")
+                           `(:font "DejaVu Sans"
+                             :height ,(round (* neh/current-text-size 0.945))))
+                          ((x-family-fonts "Sans Serif")
+                           `(:family "Sans Serif"))
+                          (nil (warn "Cannot find a variable width font."))))
+         (fixed-tuple (cond
+                       ((x-list-fonts "Iosevka")
+                        `(:font "Iosevka"
+                          :height ,neh/current-text-size))
+                       ((x-family-fonts "Monospace")
+                        '(:family "Monospace"))
+                       (nil (warn "Cannot find a fixed width font.")))))
+
+    (custom-theme-set-faces
+     'user
+     `(default ((t (,@fixed-tuple))))
+     `(fixed-pitch ((t (,@fixed-tuple))))
+     `(variable-pitch ((t (,@variable-tuple))))))
+
+  (set-face-italic 'font-lock-comment-face t)
+
+  (set-face-foreground 'org-hide (face-background 'default))
+
+  ;; (set-face-attribute 'mode-line nil :height 1.0)
+  ;; (set-face-attribute 'mode-line-inactive nil :height 1.0)
+
+  ;; (set-face-attribute 'org-todo nil
+  ;;                     :foreground (color-complement-hex
+  ;;                                  (face-attribute 'default :background))
+  ;;                     :background (color-lighten-name
+  ;;                                  (face-attribute 'default :background) 10))
+
+  ;; (set-face-attribute 'ivy-org nil
+  ;;                     :inherit 'fixed-pitch
+  ;;                     :weight 'bold
+  ;;                     :foreground (face-attribute 'org-level-1 :foreground))
+
+  (save-current-buffer
+    (mapc (lambda (b)
+            (set-buffer b)
+            (when (equal major-mode 'org-mode)
+              (font-lock-fontify-buffer)))
+          (buffer-list)))
+
+  (neh/enable-scroll-highlight)
+
+  ;; (set-face-attribute 'org-block-begin-line nil :height 0.85 :slant 'italic)
+  ;; (set-face-attribute 'org-block-end-line nil :height 0.85 :slant 'italic)
+  )
+#+end_src
+
+* Modeline
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-init)
+
+  :custom-face
+  (doom-modeline-evil-emacs-state
+   ((t (:background "DarkMagenta" :foreground "#ffd700"))))
+  (doom-modeline-evil-insert-state
+   ((t (:background "#ffd700" :foreground "#000000"))))
+  (doom-modeline-evil-motion-state
+   ((t (:background "SteelBlue" :foreground "#ffffff"))))
+  (doom-modeline-evil-normal-state
+   ((t (:background "ForestGreen" :foreground "#ffffff"))))
+  (doom-modeline-evil-operator-state
+   ((t (:background "SteelBlue" :foreground "#ffffff"))))
+  (doom-modeline-evil-visual-state
+   ((t (:background "#fe8019" :foreground "#000000"))))
+  (doom-modeline-evil-replace-state
+   ((t (:background "red4" :foreground "#ffffff"))))
+
+  :config
+  (setq-default doom-modeline-column-zero-based nil)
+  (setq doom-modeline-height 20
+        doom-modeline-bar-width 1
+        doom-modeline-buffer-file-name-style 'truncate-except-project)
+  (column-number-mode t))
+#+end_src
+
+* Eeeeevil
+
+I come from vim, so evil is a necessity.
+
+#+begin_src emacs-lisp :noweb yes
+(use-package evil
+  :demand t
+  :after general
+  :init
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-move-cursor-back t
+        evil-vsplit-window-right t)
+
+  :general
+  <<evil-general>>
+
+  :config
+  (evil-mode 1)
+  <<evil-config>>
+
+  (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
+
+  (use-package evil-surround
+    :config
+    (global-evil-surround-mode t))
+
+  (use-package evil-indent-plus
+    :config
+    (evil-indent-plus-default-bindings))
+
+  (use-package evil-textobj-line)
+  (use-package evil-textobj-syntax)
+  (use-package evil-ex-fasd))
+#+end_src
+
+I'm one of those strange people that not only uses a dvorak keyboard layout and vim-style navigation, but also moves =hjkl= to =htns=, because I like the physical location. In practice, I don't have to adjust /that/ many other keys for this to work. Here I set up the basic navigation keys and make related adjustments.
+
+#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
+(general-define-key
+ :states '(normal visual)
+ "h" 'evil-backward-char
+ "t" 'evil-next-visual-line
+ "n" 'evil-previous-visual-line
+ "s" 'evil-forward-char
+
+ "l" 'evil-search-next
+ "L" 'evil-search-previous
+ "S" 'evil-window-bottom
+
+ "N" 'evil-narrow-indirect)
+#+end_src
+
+I like using =control+direction= for window navigation. Yes, I'm unbinding =C-h=. I put help functions elsewhere.
+
+#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
+(general-define-key
+ :keymaps 'override
+ :states '(normal emacs)
+ "C-h" nil
+ "C-t" nil
+ "C-n" nil
+ "C-s" nil
+ "C-e" nil
+
+ "C-h" 'evil-window-left
+ "C-t" 'evil-window-down
+ "C-n" 'evil-window-up
+ "C-s" 'evil-window-right)
+#+end_src
+
+And here are just general evil-related bindings.
+
+#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
+(neh/leader-keys
+  "q" '(kill-current-buffer :which-key "delete buffer"))
+#+end_src
+
+Put some whitespace around the evil state modeline labels just so they look better.
+
+#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
+(setq evil-normal-state-tag   (propertize " N ")
+      evil-emacs-state-tag    (propertize " E ")
+      evil-insert-state-tag   (propertize " I ")
+      evil-replace-state-tag  (propertize " R ")
+      evil-motion-state-tag   (propertize " M ")
+      evil-visual-state-tag   (propertize " V ")
+      evil-operator-state-tag (propertize " O "))
+#+end_src
+
+So many searches leave the cursor at the bottom of the window, and I want to see more context. So this recenters the cursor when jumping to a search result. I've been using swiper a lot more though, so I'm not sure how much I care about this any more (at least in this context).
+
+#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
+(general-add-advice (list #'evil-search-next
+                          #'evil-search-previous)
+                    :after #'recenter)
+#+end_src
+
+This defines an evil operator I can use to highlight some text and quickly get an indirect buffer narrowed to that text.
+
+#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
+(evil-define-operator evil-narrow-indirect (beg end type)
+  "Indirectly narrow the region from BEG to END."
+  (interactive "<R>")
+  (evil-normal-state)
+  (narrow-to-region-indirect beg end))
+#+end_src
+
+Evil-collection helps with setting up evil-friendly bindings all over the place, including the handy key translation feature I use here for my crazy =hjkl =-> =htns= ways.
+
+#+begin_src emacs-lisp
+(use-package evil-collection
+  :after evil
+  :init
+  (defun neh/evil-key-translations (_mode mode-keymaps &rest _rest)
+    (evil-collection-translate-key 'normal mode-keymaps
+      "t" "j"
+      "n" "k"
+      "s" "l"))
+
+  (setq evil-collection-outline-bind-tab-p nil
+        evil-collection-company-use-tng nil)
+
+  :config
+  (evil-collection-init)
+  (add-hook 'evil-collection-setup-hook  #'neh/evil-key-translations))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package evil-owl
+  :commands (evil-owl-mode)
+  :config
+  (setq evil-owl-extra-posframe-args '(:internal-border-width 2
+                                       :internal-border-color "grey")
+        evil-owl-idle-delay 0.5))
+#+end_src
+
+* Navigation?
+
+#+begin_src emacs-lisp
+(use-package ivy
+  :hook (after-init . ivy-mode)
+
+  :custom-face
+  ;; this doesn't seem to work: https://github.com/jwiegley/use-package/issues/696
+  ;; doing it in neh/theme-tweaks for now instead.
+  (ivy-org ((t `(:inherit fixed-pitch
+                 :weight bold
+                 :foreground ,(face-attribute 'org-level-1 :foreground)))))
+
+  :init
+  (defun reloading (cmd)
+    (lambda (x)
+      (funcall cmd x)
+      (ivy--reset-state ivy-last)))
+
+  (defun given-file (cmd prompt) ; needs lexical-binding
+    (lambda (source)
+      (let ((target
+             (let ((enable-recursive-minibuffers t))
+               (read-file-name
+                (format "%s %s to:" prompt source)))))
+        (funcall cmd source target 1))))
+
+  (defun confirm-delete-file (x)
+    (dired-delete-file x 'confirm-each-subdirectory))
+
+  (defun neh-open-file-in-vsplit (f)
+    (evil-window-vsplit fill-column f)
+    (balance-windows))
+
+  (defun neh-open-file-in-frame (f)
+    (find-file-other-frame f))
+
+  (defun ivy-with-thing-at-point (cmd)
+    (let* ((ivy-initial-inputs-alist
+            (list
+             (cons cmd (ivy-thing-at-point)))))
+      (funcall cmd)))
+
+  (defun ivy-display-function-window (text)
+    (let ((buffer (get-buffer-create "*ivy-candidate-window*"))
+          (str (with-current-buffer (get-buffer-create " *Minibuf-1*")
+                 (let ((point (point))
+                       (string (concat (buffer-string) "  " text)))
+                   (ivy-add-face-text-property
+                    (- point 1) point 'ivy-cursor string t)
+                   string))))
+      (with-current-buffer buffer
+        (let ((inhibit-read-only t))
+          (erase-buffer)
+          (insert str)))
+      (with-ivy-window
+        (display-buffer
+         buffer
+         `((display-buffer-reuse-window
+            display-buffer-below-selected)
+           (window-height . ,(1+ (ivy--height (ivy-state-caller ivy-last)))))))))
+
+  :general
+  (neh/leader-keys
+    "U" '(ivy-switch-buffer :which-key "switch buffer")
+    "oo" '(ivy-switch-buffer :which-key "switch buffer")
+    "xa" '(ivy-resume :which-key "ivy resume"))
+
+  (general-define-key
+   :keymaps 'ivy-minibuffer-map
+   "<escape>" 'keyboard-escape-quit
+   "C-t" 'ivy-next-line
+   "C-n" 'ivy-previous-line
+   "C-M-t" 'ivy-next-line-and-call
+   "C-M-n" 'ivy-previous-line-and-call
+   "C-b" 'ivy-scroll-down-command
+   "C-f" 'ivy-scroll-up-command
+   "C-d" 'ivy-call)
+
+  (general-define-key
+   :keymaps 'counsel-find-file-map
+   "TAB" 'ivy-alt-done
+   "C-s" 'neh-open-file-in-vsplit)
+
+  (general-define-key
+   :keymaps 'ivy-occur-mode-map
+   "t" 'ivy-occur-next-line
+   "n" 'ivy-occur-previous-line
+   "RET" 'ivy-occur-press
+   "a" 'ivy-occur-read-action
+   "c" 'ivy-occur-toggle-calling
+   "C-f" 'evil-scroll-page-down
+   "C-b" 'evil-scroll-page-up)
+
+  :config
+  (ivy-add-actions
+   t
+   '(("f" neh-open-file-in-frame "other frame")))
+  (ivy-add-actions
+   t
+   '(("|" neh-open-file-in-vsplit "vsplit")))
+  ;; this adds the action, but switching to other buffers tries to open a buffer relative to the
+  ;; current dir/project, which doesn't exist
+  (ivy-add-actions
+   'ivy-switch-buffer
+   '(("f" display-buffer-other-frame "other frame")))
+
+  ;; (add-to-list 'ivy-display-functions-alist '(t . ivy-display-function-window))
+
+  (setq ivy-use-virtual-buffers t
+        ivy-dynamic-exhibit-delay-ms 250
+        ivy-count-format "%d/%d "
+        ivy-format-function #'ivy-format-function-arrow
+        ivy-extra-directories nil
+        ivy-height 15
+        ivy-use-selectable-prompt t
+        ivy-re-builders-alist '((t . ivy--regex))
+        ivy-initial-inputs-alist nil))
+
+(use-package ivy-posframe
+  :commands (ivy-posframe-mode))
+
+(use-package prescient
+  :demand t
+  :config
+  (prescient-persist-mode t))
+
+(use-package ivy-prescient
+  :hook (ivy-mode . ivy-prescient-mode)
+
+  :config
+  ;; Prescient sorting didn't apply to some counsel-projectile commands without this.
+  ;; (add-to-list 'ivy-prescient-sort-commands 'counsel-projectile)
+  ;; (add-to-list 'ivy-prescient-sort-commands 'counsel-projectile-find-file)
+  )
+
+(use-package ivy-rich
+  :hook (ivy-mode . ivy-rich-mode))
+
+(use-package company-prescient
+  :hook (company-mode . company-prescient-mode))
+
+(use-package counsel
+  :hook (after-init . counsel-mode)
+
+  :general
+  (neh/leader-keys
+    "e" '(counsel-M-x :which-key "M-x")
+
+    "ha" '(counsel-apropos :which-key "apropos")
+
+    "oa" '(counsel-linux-app :which-key "app")
+    "of" '(counsel-find-file :which-key "open file")
+
+    "s/" '(swiper-thing-at-point :which-key "search for this")
+    "sa" '(swiper-all :which-key "search all buffers")
+    "sf" '(counsel-rg :which-key "search files")
+    "sg" '(counsel-git-grep :which-key "search files in git")
+    "sh" '(swiper-isearch :which-key "search buffer")
+    "/" '(swiper-isearch :which-key "search buffer")
+    "so" '(counsel-org-goto-all :which-key "search org")
+    "st" '(counsel-semantic-or-imenu :which-key "search tags"))
+
+  (general-def
+    :states '(normal)
+    "g/" #'neh/counsel-switch-to-dired-buffer
+    "g!" #'neh/counsel-switch-to-eshell-buffer)
+
+  :init
+  (setq counsel-ag-base-command "ag --nocolor --nogroup --ignore-case %s"
+        counsel-grep-base-command "grep -inE '%s' %s")
+
+  (defun swiper-thing-at-point ()
+    (interactive)
+    (ivy-with-thing-at-point #'swiper))
+
+  :config
+  (defun neh/counsel-switch-to-eshell-buffer ()
+    "Switch to an eshell buffer, or create one."
+    (interactive)
+    (ivy-read "Eshell buffer: " (counsel--buffers-with-mode #'eshell-mode)
+              :action #'ivy--switch-buffer-action
+              :caller 'neh/counsel-switch-to-eshell-buffer))
+
+  (defun neh/counsel-switch-to-dired-buffer ()
+    "Switch to an dired buffer, or create one."
+    (interactive)
+    (ivy-read "Dired buffer: " (counsel--buffers-with-mode #'dired-mode)
+              :action #'ivy--switch-buffer-action
+              :caller 'neh/counsel-switch-to-dired-buffer))
+
+  ;; These don't work on a fresh load, but seem to start working at some
+  ;; point. Strange.
+  ;; (ivy-add-actions
+  ;;  'counsel-find-file
+  ;;  `(("c" ,(given-file #'copy-file "Copy") "copy")
+  ;;    ;; ("d" ,(reloading #'confirm-delete-file) "delete")
+  ;;    ("f" neh-open-file-in-frame "frame")
+  ;;    ("s" neh-open-file-in-vsplit "vsplit")
+  ;; ("m" ,(reloading (given-file #'rename-file "Move")) "move")))
+  )
+#+end_src
+
+Avy is a really handy way to jump around your visible buffer contents. One aspect that doesn’t seem to really be documented is the avy-actions mechanism. It lets you do things other than just jump to the point you select. So you can hit the key for whichever avy function you like, then, /before/ making your selection, press the key associated with an avy-action function to do that thing instead. This way, you can easily copy a word from elsewhere on your screen and paste it at your cursor with avy, no cursor movement needed at all. Also, =avy-copy-line= is a useful standalone function. I find it useful particularly when working in Terraform files, as lines need to be duplicated fairly often there.
+
+#+begin_src emacs-lisp
+(use-package avy
+  :general
+  (general-define-key
+   :states '(normal visual)
+   :prefix "j"
+   "j" '(avy-goto-char-2 :which-key "char(2)")
+   "c" '(avy-goto-char-timer :which-key "char")
+   "h" '(avy-org-goto-heading-timer :which-key "org heading")
+   "l" '(avy-goto-line :which-key "line"))
+
+  (neh/leader-keys
+    "cl" 'avy-copy-line)
+
+  :custom
+  (avy-dispatch-alist '((?y . avy-action-copy)
+                        (?m . avy-action-teleport)
+                        (?c . (lambda (pt)
+                                (avy-action-copy pt)
+                                (if (evil-insert-state-p)
+                                    (progn (evil-paste-before 1)
+                                           (evil-forward-char))
+                                  (evil-paste-after 1))))
+                        (?k . avy-action-kill-move)
+                        (?K . avy-action-kill-stay)
+                        (?M . avy-action-mark)))
+
+  :init
+  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s)
+        avy-line-insert-style 'below))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package frog-menu
+  :custom
+  (frog-menu-avy-keys (append (string-to-list "aoeuidhtns")
+                              (string-to-list "',.pyfgcrl")
+                              (string-to-list ";qjkxbwvz"))))
+
+(use-package frog-jump-buffer
+  :commands (frog-jump-buffer))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package nswbuff
+  :commands (nswbuff-switch-to-previous-buffer
+             nswbuff-switch-to-next-buffer)
+
+  :general
+  (general-def
+    :keymaps 'override
+    :states '(emacs normal insert)
+    "<C-tab>" 'nswbuff-switch-to-previous-buffer
+    "C-S-<iso-lefttab>" 'nswbuff-switch-to-next-buffer)
+
+  :init
+  (defun neh/nswbuff-switch-to-previous-buffer ()
+    (interactive)
+    ;; (let (nswbuff-buffer-list-function '(lambda () (nreverse (nswbuff-buffer-list))))
+    (let (nswbuff-buffer-list-function #'nswbuff-buffer-list)
+      (message nswbuff-buffer-list-function)
+      (nswbuff-switch-to-previous-buffer)))
+
+  (setq nswbuff-display-intermediate-buffers t
+        nswbuff-exclude-buffer-regexps '("^ "
+                                         "^\*.*\*"
+                                         "^magit.*:.+")
+        nswbuff-include-buffer-regexps '("^*Org Src")
+        nswbuff-start-with-current-centered t
+        nswbuff-buffer-list-function '(lambda ()
+                                        (interactive)
+                                        (if (projectile-project-p)
+                                            (nswbuff-projectile-buffer-list)
+                                          (buffer-list)))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ibuffer
+  :straight nil
+  :hook ((ibuffer . (lambda ()
+                      (ibuffer-projectile-set-filter-groups)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic)))))
+  :init
+  (defun neh/ibuffer-magit ()
+    "Open `magit-status' for the current buffer."
+    (interactive)
+    (let ((buf (ibuffer-current-buffer t)))
+      (magit-status (cdr (ibuffer-projectile-root buf)))))
+
+  (setq ibuffer-formats
+        '((mark modified read-only locked " "
+                (name 18 18 :left :elide)
+                " "
+                (size 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " " project-relative-file)
+          (mark " "
+                (name 16 -1)
+                " " filename))))
+
+(use-package ibuffer-projectile )
+#+end_src
+
+#+begin_src emacs-lisp
+;; (defun my-View-scroll-half-page-forward-other-window ()
+;;   (interactive)
+;;   (with-selected-window (next-window)
+;;     (call-interactively 'View-scroll-half-page-forward)))
+
+;; (defun my-View-scroll-half-page-backward-other-window ()
+;;   (interactive)
+;;   (with-selected-window (next-window)
+;;     (call-interactively 'View-scroll-half-page-backward)))
+
+(defface neh-highlight
+  '((default :inherit default))
+  "Face for highlighting based on theme.")
+
+;; (let ((bg (face-attribute 'default :background)))
+;;   (if (< (color-distance bg "black") (color-distance bg "white"))
+;;       (set-face-attribute 'neh-highlight nil :background (color-lighten-name bg 20))
+;;     (set-face-attribute 'neh-highlight nil :background (color-darken-name bg 20))))
+
+(set-face-attribute 'neh-highlight nil :background "SpringGreen4")
+
+(defvar neh/scroll-up-functions '(evil-scroll-up
+                                  evil-scroll-page-up))
+(defvar neh/scroll-down-functions '(evil-scroll-down
+                                    evil-scroll-page-down))
+
+;; TODO scroll highlight interferes with hydras
+
+(defun neh/enable-scroll-highlight ()
+  (interactive)
+  (general-add-advice neh/scroll-up-functions
+                      :around #'my-indicate-scroll-backward)
+  (general-add-advice neh/scroll-down-functions
+                      :around #'my-indicate-scroll-forward))
+
+(defun neh/disable-scroll-highlight ()
+  (interactive)
+  (general-remove-advice neh/scroll-up-functions
+                         #'my-indicate-scroll-backward)
+  (general-remove-advice neh/scroll-down-functions
+                         #'my-indicate-scroll-forward))
+
+(defun my-indicate-scroll-get-line (pos)
+  (save-excursion
+    (goto-char pos)
+    (string-to-number (format-mode-line "%l"))))
+
+(defun my-indicate-scroll (linep f args)
+  (let ((linen (my-indicate-scroll-get-line linep))
+        (pulse-delay 0.06))
+    (save-excursion
+      (goto-line linen)
+      (pulse-momentary-highlight-one-line (point) 'neh-highlight))
+    (sit-for 0.1)
+    (apply f args)))
+
+(defun my-indicate-scroll-forward (f &rest args)
+  (my-indicate-scroll (1- (window-end)) f args))
+
+(defun my-indicate-scroll-backward (f &rest args)
+  (my-indicate-scroll (window-start) f args))
+#+end_src
+
+#+begin_src emacs-lisp
+;; from https://with-emacs.com/posts/editing/show-matching-lines-when-parentheses-go-off-screen/
+
+;; we will call `blink-matching-open` ourselves...
+(remove-hook 'post-self-insert-hook
+             #'blink-paren-post-self-insert-function)
+;; this still needs to be set for `blink-matching-open` to work
+(setq blink-matching-paren 'show)
+
+(let ((ov nil)) ; keep track of the overlay
+  (advice-add
+   #'show-paren-function
+   :after
+    (defun show-paren--off-screen+ (&rest _args)
+      "Display matching line for off-screen paren."
+      (when (overlayp ov)
+        (delete-overlay ov))
+      ;; check if it's appropriate to show match info,
+      ;; see `blink-paren-post-self-insert-function'
+      (when (and (overlay-buffer show-paren--overlay)
+                 (not (or cursor-in-echo-area
+                          executing-kbd-macro
+                          noninteractive
+                          (minibufferp)
+                          this-command))
+                 (and (not (bobp))
+                      (memq (char-syntax (char-before)) '(?\) ?\$)))
+                 (= 1 (logand 1 (- (point)
+                                   (save-excursion
+                                     (forward-char -1)
+                                     (skip-syntax-backward "/\\")
+                                     (point))))))
+        ;; rebind `minibuffer-message' called by
+        ;; `blink-matching-open' to handle the overlay display
+        (cl-letf (((symbol-function #'minibuffer-message)
+                   (lambda (msg &rest args)
+                     (let ((msg (apply #'format-message msg args)))
+                       (setq ov (display-line-overlay+
+                                 (window-start) msg ))))))
+          (blink-matching-open))))))
+
+(defun display-line-overlay+ (pos str &optional face)
+  "Display line at POS as STR with FACE.
+
+FACE defaults to inheriting from default and highlight."
+  (let ((ol (save-excursion
+              (goto-char pos)
+              (make-overlay (line-beginning-position)
+                            (line-end-position)))))
+    (overlay-put ol 'display str)
+    (overlay-put ol 'face
+                 (or face '(:inherit default :inherit highlight)))
+    ol))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package eyebrowse
+  :commands (eyebrowse-mode))
+#+end_src
+
+* Snippets
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :hook (org-mode . yas-minor-mode)
+  :init
+  (setq yas-snippet-dirs `(,(concat user-emacs-directory "snippets"))))
+#+end_src
+
+* Projectile
+
+#+begin_src emacs-lisp
+(use-package projectile
+  :init
+  (setq projectile-completion-system 'ivy))
+
+(use-package counsel-projectile
+  :hook (counsel-mode . counsel-projectile-mode)
+
+  :general
+  (neh/leader-keys
+    "oh" '(counsel-projectile :which-key "open file/buffer in project")
+    "u" '(counsel-projectile :which-key "switch project buffer/file")
+    "op" '(counsel-projectile-switch-project :which-key "switch project")
+    "s." '(neh-search-thing-at-point :which-key "search for thing at point")
+    "sp" '(counsel-projectile-rg :which-key "search project"))
+
+  :init
+  (setq counsel-projectile-sort-files t)
+
+  (defun counsel-projectile-rg-with-thing-at-point ()
+    (interactive)
+    (let ((counsel-projectile-rg-initial-input '(ivy-thing-at-point)))
+      (counsel-projectile-rg)))
+
+  (defun neh-search-thing-at-point ()
+    (interactive)
+    (if (projectile-project-p)
+        (counsel-projectile-rg-with-thing-at-point)
+      (ivy-with-thing-at-point #'counsel-rg)))
+
+  :config
+  ;; Set the default switch project action to find files so that paths are included in the search
+  ;; list
+  (counsel-projectile-modify-action
+   'counsel-projectile-switch-project-action
+   '((default counsel-projectile-switch-project-action-find-file)))
+
+  (ivy-add-actions
+   'counsel-projectile-find-file
+   `(("c" ,(given-file #'copy-file "Copy") "copy")
+     ("d" ,(reloading #'confirm-delete-file) "delete")
+     ("m" ,(reloading (given-file #'rename-file "Move")) "move")
+     ("b" counsel-find-file-cd-bookmark-action "cd bookmark"))))
+#+end_src
+
+* Company
+
+Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company. What. The =prog-mode= hook works though. Or just load it in =:config=.
+
+#+begin_src emacs-lisp
+(use-package company
+  :commands (global-company-mode)
+  :hook ((after-init . global-company-mode)
+         (evil-collection-setup . (lambda (&rest a)
+                                    (evil-define-key 'insert 'company-search-map
+                                      (kbd "C-t") 'company-select-next)
+                                    (evil-define-key 'insert 'company-search-map
+                                      (kbd "C-n") 'company-select-previous))))
+  ;; :init
+  ;; (add-hook 'after-init-hook 'global-company-mode)
+  ;; :config
+  ;; (evil-define-key 'insert 'company-search-map
+  ;;   (kbd "C-t") 'company-select-next)
+  ;; (evil-define-key 'insert 'company-search-map
+  ;;   (kbd "C-n") 'company-select-previous)
+  )
+
+(use-package company-terraform
+  :after company
+  :hook (terraform-mode . company-terraform-init))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode)
+  :init
+  (setq company-box-enable-icon nil)
+  ;; (add-to-list 'company-box-frame-parameters
+  ;; '(font . "-CYEL-Iosevka-normal-normal-normal-*-14-*-*-*-d-0-iso10646-1"))
+  ;; (add-to-list 'company-box-frame-parameters
+  ;; '(font-parameter . "-CYEL-Iosevka-normal-normal-normal-*-14-*-*-*-d-0-iso10646-1"))
+  )
+
+(use-package company-quickhelp
+  :hook (company-mode . company-quickhelp-mode)
+  :general
+  (:keymaps 'company-active-map
+   "C-m" 'company-quickhelp-manual-begin))
+
+(use-package company-ansible
+  :commands (company-ansible)
+  :config
+  (add-to-list 'company-backends 'company-ansible))
+#+end_src
+
+* Git
+
+I find that diff-hl does a better job of showing diff information than git-gutter does. I’d like to use =diff-hl-flydiff-mode=, but it caused issues, which I can’t remember well enough to document now. Will revisit later.
+
+#+begin_src emacs-lisp
+(use-package diff-hl
+  :hook ((after-init . global-diff-hl-mode)
+         (global-diff-hl-mode . diff-hl-flydiff-mode)
+         (dired-mode . diff-hl-dired-mode))
+  :init
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  :config
+  (set-face-attribute 'diff-hl-change nil :foreground "#222222" :background "#ffd700")
+  (set-face-attribute 'diff-hl-insert nil :foreground "dark green" :background "ForestGreen")
+  (set-face-attribute 'diff-hl-delete nil :foreground "dark red" :background "red4"))
+#+end_src
+
+Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing things with diffs. So I have it active for navigation and staging actions. It’s disabled in org mode because I had issues with it before. Now that my config is in org though, it would be handy to have back. Another TODO.
+
+#+begin_src emacs-lisp
+(use-package git-gutter
+  :hook (prog-mode . git-gutter-mode)
+  :general
+  (general-define-key
+   :states '(normal visual)
+   "gp" 'git-gutter:previous-hunk
+   "gn" 'git-gutter:next-hunk
+   "gs" 'git-gutter:popup-hunk
+   "gS" 'git-gutter:stage-hunk
+   "gU" 'git-gutter:revert-hunk)
+
+  :init
+  (setq git-gutter:disabled-modes '(org-mode))
+  (global-git-gutter-mode -1)
+
+  :config
+  (advice-add 'git-gutter:previous-hunk :after #'neh/after-jump)
+  (advice-add 'git-gutter:next-hunk :after #'neh/after-jump)
+
+  (setq git-gutter:added-sign ""
+        git-gutter:deleted-sign ""
+        git-gutter:modified-sign ""
+        git-gutter:ask-p nil)
+  (set-face-foreground 'git-gutter:modified "DeepSkyBlue2")
+  (set-face-foreground 'git-gutter:added "ForestGreen")
+  (set-face-foreground 'git-gutter:deleted "red4")
+  )
+#+end_src
+
+Of course, the great magit.
+
+#+begin_src emacs-lisp
+(straight-use-package 'magit)
+(use-package magit
+  :straight nil
+  :hook
+  (git-commit-mode . evil-insert-state)
+
+  :general
+  (general-define-key
+   :keymaps 'magit-mode-map
+   "C-b" 'evil-scroll-page-up
+   "C-f" 'evil-scroll-page-down
+   "M-h" 'magit-section-up
+   "M-s" 'magit-section-goto-successor
+   "M-t" 'magit-section-forward-sibling
+   "M-n" 'magit-section-backward-sibling
+   "t" 'evil-next-visual-line
+   "n" 'evil-previous-visual-line)
+
+  (general-define-key
+   :keymaps 'magit-diff-mode-map
+   "/" 'evil-search-forward
+   "l" 'evil-search-next
+   "L" 'evil-search-previous)
+
+  (neh/leader-keys
+    "gf" '(magit-file-dispatch :which-key "file")
+    "gg" '(magit-dispatch :which-key "menu")
+    "gs" '(magit-status :which-key "status"))
+
+  :init
+  (setq magit-diff-refine-hunk t)
+
+  :config
+  ;; (magit-define-popup-action 'magit-file-popup
+  ;;   ?R "Rename file" 'magit-file-rename)
+  ;; (magit-define-popup-action 'magit-file-popup
+  ;;   ?K "Delete file" 'magit-file-delete)
+  ;; (magit-define-popup-action 'magit-file-popup
+  ;;   ?U "Untrack file" 'magit-file-untrack)
+  ;; (magit-define-popup-action 'magit-file-popup
+  ;;   ?C "Checkout file" 'magit-file-checkout)
+
+  (setq magit-completing-read-function 'ivy-completing-read))
+#+end_src
+
+“Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
+
+#+begin_src emacs-lisp
+(use-package forge
+  :after markdown-mode
+  :init
+  (use-package closql)
+  (use-package ghub))
+#+end_src
+
+Handy package to browse to git repo web interfaces.
+#+begin_src emacs-lisp
+(use-package git-link
+  :commands (git-link
+             git-link-commit
+             git-link-homepage)
+  :general
+  (neh/leader-keys
+    "gB" 'git-link
+    "gC" 'git-link-commit
+    "gH" 'git-link-homepage)
+  :init
+  (setq git-link-open-in-browser t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package git-timemachine
+  :commands (git-timemachine
+             git-timemachine-toggle))
+#+end_src
+
+* Org
+
+My org config is pretty long, so I've broken it up for easier reading and explanation. The main structure of it is here, with the details following.
+
+#+begin_src emacs-lisp :noweb yes
+(use-package org
+  :hook (
+         <<org-hooks>>)
+
+  :general
+  <<org-keys>>
+
+  :custom
+  <<org-custom>>
+
+  :init
+  <<org-init>>
+  (defun neh/config-tangle ()
+    (interactive)
+    (let ((gc-cons-threshold most-positive-fixnum))
+      (org-babel-tangle)))
+
+  ;; Original version stolen from https://emacs.stackexchange.com/questions/23870/org-babel-result-to-a-separate-buffer
+  (defun neh/babel-to-buffer ()
+    "A function to efficiently feed babel code block result to a separate buffer"
+    (interactive)
+    (let ((revert-without-query '(".*"))
+          (myframe (selected-frame)))
+      (org-babel-open-src-block-result)
+      (org-babel-remove-result)
+      (sleep-for 0.1)
+      (select-frame-set-input-focus myframe)))
+
+  (defun neh/babel-to-buffer-from-narrow ()
+    (interactive)
+    ;; (org-src-do-key-sequence-at-code-block "<SPC>o!")
+    (org-src-do-at-code-block '(neh/babel-to-buffer))
+    )
+
+  ;; (defface org-inprogress
+  ;;   '((default :inherit org-todo))
+  ;;   "Face for INPROGRESS org tasks")
+  ;; (defface org-waiting
+  ;;   '((default :inherit org-todo))
+  ;;   "Face for WAITING org tasks")
+
+  (let* ((headline      `(:inherit variable-pitch :weight bold))
+         (done          `(:inherit variable-pitch :weight normal :foreground "#7c6f64")))
+
+    (custom-theme-set-faces
+     'user
+     `(org-ellipsis ((t (:inherit variable-pitch :underline nil))))
+     `(org-tag ((t (,@done :underline nil :height 0.7))))
+
+     `(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+     `(org-code ((t (:inherit fixed-pitch))))
+     `(org-table ((t (:inherit fixed-pitch))))
+     `(org-verbatim ((t (:inherit fixed-pitch))))
+     `(org-block ((t (:inherit fixed-pitch))))
+
+     `(org-level-8 ((t (,@headline :height 1.0))))
+     `(org-level-7 ((t (,@headline :height 1.0))))
+     `(org-level-6 ((t (,@headline :height 1.0))))
+     `(org-level-5 ((t (,@headline :height 1.0))))
+     `(org-level-4 ((t (,@headline :height 1.0))))
+     `(org-level-3 ((t (,@headline :height 1.0))))
+     `(org-level-2 ((t (,@headline :height 1.0))))
+     `(org-level-1 ((t (,@headline :weight normal :height 1.4))))
+
+     ;; `(org-todo ((t (,@headline
+     ;;                 :weight bold
+     ;;                 :foreground ,(color-complement-hex
+     ;;                               (face-attribute 'default :background))))))
+     ;; `(org-inprogress ((t (,@headline
+     ;;                       :weight bold
+     ;;                       :foreground "#eeeeee"
+     ;;                       :background "DarkGreen"))))
+     ;; `(org-waiting ((t (,@headline
+     ;;                    :weight bold
+     ;;                    :foreground "#222222"
+     ;;                    :background "gold2"))))
+     `(org-done ((t (,@done :strike-through t))))
+     `(org-archived ((t (,@done :strike-through t))))
+     `(org-headline-done ((t (,@done))))
+
+     `(org-document-title ((t (,@headline :height 1.3 :underline nil))))))
+
+  ;; (setq org-todo-keyword-faces
+  ;;       '(("TODO" . org-todo)
+  ;;         ("INPROGRESS" . org-inprogress)
+  ;;         ("WAITING" . org-waiting)))
+
+  (defmacro my-org-in-calendar (command)
+    (let ((name (intern (format "my-org-in-calendar-%s" command))))
+      `(progn
+         (defun ,name ()
+           (interactive)
+           (org-eval-in-calendar '(call-interactively #',command)))
+         #',name)))
+
+  (general-def org-read-date-minibuffer-local-map
+    "n" (my-org-in-calendar calendar-backward-day)
+    "t" (my-org-in-calendar calendar-forward-day)
+    "h" (my-org-in-calendar calendar-backward-week)
+    "s" (my-org-in-calendar calendar-forward-week)
+    "N" (my-org-in-calendar calendar-backward-month)
+    "T" (my-org-in-calendar calendar-forward-month)
+    "H" (my-org-in-calendar calendar-backward-year)
+    "S" (my-org-in-calendar calendar-forward-year))
+
+  :config
+  <<org-config>>
+  ;; from https://twitter.com/jay_f0xtr0t/status/982353141386461188
+  ;; could be better; will currently keep adding to =org-emphasis-regexp-components=
+  (setcar (nthcdr 1 org-emphasis-regexp-components)
+          (concat (nth 1 org-emphasis-regexp-components) "s"))
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+  (setq org-todo-keywords '((sequence "TODO(t)"
+                                      "DOING(i!)"
+                                      "WAITING(w@/!)"
+                                      "|"
+                                      "DONE(d!)"
+                                      "CANCELED(c@)")))
+
+  (setq org-startup-indented t
+        org-ellipsis " …"
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-hide-emphasis-markers t
+        org-pretty-entities t
+        org-cycle-separator-lines 2
+        org-M-RET-may-split-line '((default . nil))
+        org-indirect-buffer-display 'current-window
+        org-use-sub-superscripts nil)
+
+  (setq org-confirm-babel-evaluate nil
+        org-src-fontify-natively t
+        org-src-window-setup 'current-window
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t)
+
+  (setq org-plantuml-jar-path "~/bin/plantuml.jar")
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)
+     (sql . t)
+     (plantuml . t)
+     (css . t)
+     (python . t)
+     (emacs-lisp . t))))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(use-package org-journal
+  :after org
+  :init
+  (setq org-journal-dir "~/org/journal/"
+        org-journal-date-format "%A, %x"
+        org-journal-file-type "weekly"))
+#+end_src
+
+Add plantuml for nice text-based diagram generation. I’ll mainly use this in org mode files, generating inline diagrams from src blocks.
+
+#+begin_src emacs-lisp
+(use-package plantuml-mode
+  :after org
+  :commands (plantuml-mode)
+  :mode (("\\.plantuml\\'" . plantuml-mode))
+  :init
+  (setq plantuml-jar-path "~/bin/plantuml.jar")
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package evil-org
+  :after evil
+  :hook ((org-mode . evil-org-mode)
+         (evil-org-mode . (lambda ()
+                            (evil-org-set-key-theme))))
+
+  :config
+  (setq evil-org-movement-bindings '((up . "n")
+                                     (down . "t")
+                                     (left . "h")
+                                     (right . "s")))
+
+  (add-to-list 'evil-org-key-theme 'shift))
+#+end_src
+
+Make org-mode prettier.
+
+#+begin_src emacs-lisp
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :init
+  (setq org-superstar-headline-bullets-list '(" ")
+        org-superstar-special-todo-items t
+        org-superstar-todo-bullet-alist '(("TODO" . 9744)
+                                          ("DOING" . 9654)
+                                          ("DONE" . 9745)
+                                          ("CANCELED" . 9746))))
+#+end_src
+
+Org export.
+
+#+begin_src emacs-lisp
+(use-package ox-pandoc
+  :ensure-system-package (pandoc
+                          pdflatex
+                          mktexfmt))
+
+(use-package ox-odt
+  :straight nil
+  :ensure-system-package zip)
+
+(use-package ox-slack
+  :commands (org-slack-export-as-slack
+             org-slack-export-to-slack
+             org-slack-export-to-clipboard-as-slack))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-pomodoro
+  :commands (org-pomodoro))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-tanglesync
+  :disabled
+  :hook ((org-mode . org-tanglesync-mode)
+         ((prog-mode text-mode) . org-tanglesync-watch-mode))
+  :custom
+  (org-tanglesync-watch-files '("config.org"))
+  :general
+  (general-define-key
+   :keymaps 'org-mode-map
+    "C-c M-i" 'org-tanglesync-process-buffer-interactive
+    "C-c M-a" 'org-tanglesync-process-buffer-automatic))
+#+end_src
+
+** Options
+
+When using =C-c C-t=, allow todo state selection using single letters instead of cycling through choices.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-use-fast-todo-selection t "Enable fast todo state selection")
+#+end_src
+
+Org file locations.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-directory "~/org")
+(org-default-notes-file (if (boundp 'neh/org-default-notes-file)
+                            neh/org-default-notes-file
+                          "~/org/incoming.org"))
+(org-agenda-files '("~/org/"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-refile-targets '((org-agenda-files :maxlevel . 3)))
+(org-refile-allow-creating-parent-nodes 'confirm)
+(org-refile-use-outline-path 'file)
+(org-outline-path-complete-in-steps nil)
+(org-reverse-note-order t)
+(org-tags-column 0)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-capture-templates
+ (quote (("t" "todo" entry
+          (file+headline "" "Incoming")
+          "* TODO %?"
+          :prepend t)
+         ("n" "note" entry
+          (file+headline "" "Incoming")
+          "* %?"
+          :prepend t)
+         ("l" "link" entry
+          (file+headline "" "Incoming")
+          "* [[%x][%?]] %^g"
+          :prepend t)
+         ("j" "journal" entry
+          (file+olp+datetree
+           (lambda ()
+             (concat org-agenda-files "/journal.org")))
+          "* %?"))))
+#+end_src
+
+This setting should make edits around special characters and collapsed outlines better. I haven't tested the various settings out yet, so this is just the first one to try.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-catch-invisible-edits 'show-and-error)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+#+end_src
+
+** Hooks
+
+I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which, you know, indents subheadings, and =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-mode . org-indent-mode)
+(org-mode . variable-pitch-mode)
+#+end_src
+
+I want to go straight into =evil-insert-states= in some modes so I can just start typing.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-capture-mode . evil-insert-state)
+(org-log-buffer-setup . evil-insert-state)
+#+end_src
+
+I auto-tangle org files on save. Tangling this file is getting slow though, so I'm attempting things to make it faster.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+;; (org-mode . (lambda () (add-hook 'after-save-hook 'neh/config-tangle
+;;                                  'run-at-end 'only-in-org-mode)))
+#+end_src
+
+I use plantuml to generate various images, and this makes sure that generated images are redisplayed after re-processing diagram source code in a block.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-babel-after-execute . org-redisplay-inline-images)
+#+end_src
+
+Flycheck gives way too many errors when editing src blocks in their own buffer. I should probably look into re-enabling useful parts of it though.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-src-mode . disable-flycheck-in-org-src-block)
+#+end_src
+
+** Keybindings
+
+General purpose org keybindings.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(neh/leader-keys
+  "nb" '(org-narrow-to-block :which-key "narrow to block")
+  "ne" '(org-narrow-to-element :which-key "narrow to element")
+  "ns" '(org-narrow-to-subtree :which-key "narrow to subtree")
+
+  "oc" 'org-capture
+  "C" 'org-capture
+  "oC" '(lambda () (interactive) (find-file org-default-notes-file))
+  "og" '(org-agenda :which-key "agenda")
+  "o." '(org-open-at-point :which-key "follow link"))
+#+end_src
+
+Add a binding for =org-open-at-point=. I need to look into whether this is worth it, and the differences between this and =browse-url-at-point=.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(general-def
+  :keymaps 'org-mode-map
+  :states '(normal emacs)
+  :prefix  "g"
+  "." 'org-open-at-point)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(general-def
+  :keymaps 'org-mode-map
+  :states '(normal emacs)
+  "<RET>" 'neh/org-ret
+  "ze" 'outline-show-branches)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(general-def
+  :keymaps 'org-src-mode-map
+  "C-c C-c" #'org-edit-src-exit)
+#+end_src
+
+Quick heading movement and task item state changes. I'm getting into the habit of using =C-c C-t= for task statuses though, so we'll see if this stays in.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(general-def
+  :keymaps 'org-mode-map
+  :states '(normal)
+  "H" 'org-shiftleft
+  "T" 'org-shiftdown
+  "N" 'org-shiftup
+  "S" 'org-shiftright)
+#+end_src
+
+** Org-roam
+
+#+begin_src emacs-lisp
+(use-package org-roam
+  :hook
+  (after-init . org-roam-mode)
+
+  :custom
+  (org-roam-directory "~/org/roam")
+
+  :general
+  (general-define-key
+   :keymaps 'org-roam-mode-map
+   :states '(normal insert)
+   :non-normal-prefix "C-SPC"
+   :prefix "SPC"
+    "nl" #'org-roam
+    "no" #'org-roam-find-file
+    "nG" #'org-roam-show-graph)
+
+  (general-define-key
+   :keymaps 'org-mode-map
+   :states '(normal insert visual)
+   :non-normal-prefix "C-SPC"
+   :prefix "SPC"
+    "ni" #'org-roam-insert))
+
+(use-package company-org-roam
+  :config
+  (push 'company-org-roam company-backends))
+
+(use-package org-download
+  :after org
+  :hook (dired-mode . org-download-enable)
+  :general
+  (neh/leader-keys
+    :keymaps 'org-mode-map
+    "nS" #'org-download-screenshot
+    "nD" #'org-download-yank))
+
+(use-package deft
+  :commands (deft))
+#+end_src
+
+* Shackle
+
+Let’s try to get some window behaviour under control.
+
+#+begin_src emacs-lisp
+(use-package shackle
+  :hook (after-init . shackle-mode)
+  :init
+  (setq shackle-rules
+        '((magit-diff-mode :align 'below :size 0.8))))
+#+end_src
+
+* Shells
+
+#+begin_src emacs-lisp
+(use-package eshell
+  :ensure nil
+  :custom
+  (eshell-scroll-to-bottom-on-input 'this)
+  (eshell-error-if-no-glob t)
+  (eshell-hist-ignoredups t)
+  (eshell-save-history-on-exit t)
+  (eshell-destroy-buffer-when-process-dies t)
+  (eshell-banner-message "")
+
+  :hook (eshell-mode . neh/eshell-mode-hook)
+
+  :init
+  (defun neh/eshell-mode-hook ()
+    (add-to-list 'eshell-visual-commands "htop")
+    (add-to-list 'eshell-visual-commands "tail")
+    (add-to-list 'eshell-visual-commands "ssh")
+
+    (add-to-list 'eshell-modules-list 'eshell-tramp)
+
+    (general-def
+      :keymaps 'eshell-mode-map
+      :states '(insert)
+      "C-r" #'counsel-esh-history
+      "M-n" #'eshell-previous-input
+      "M-t" #'eshell-next-input)
+
+    (general-def
+      :keymaps 'eshell-mode-map
+      :states '(normal)
+      "M-n" #'eshell-previous-prompt
+      "M-t" #'eshell-next-prompt)
+
+    (eshell/alias "ll" "ls -l")
+    (eshell/alias "la" "ls -al")
+    (eshell/alias "ff" "find-file $1"))
+
+  (defun eshell-here ()
+    "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+    (interactive)
+    (let* ((parent (if (buffer-file-name)
+                       (file-name-directory (buffer-file-name))
+                     default-directory))
+           (height (/ (window-total-height) 3))
+           (name   (car (last (split-string parent "/" t)))))
+      (split-window-vertically (- height))
+      (other-window 1)
+      (eshell "new")
+      (rename-buffer (concat "*eshell: " name "*"))
+
+      (insert (concat "ls"))
+      (eshell-send-input)))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package eshell-prompt-extras
+  :init
+  (defun epe-theme-neh ()
+    ""
+    (setq eshell-prompt-regexp "^[^#\n]*[#]* ")
+
+    (concat
+     "\n"
+     (if (epe-remote-p)
+         (progn
+           (concat
+            (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+            (epe-colorize-with-face (epe-remote-user) 'epe-neh-user-face)
+            (epe-colorize-with-face "@" 'epe-neh-delimiter-face)
+            (epe-colorize-with-face (epe-remote-host) 'epe-neh-host-face)
+            ""))
+       (progn
+         (when (not (string= user-login-name "nathan"))
+           (concat
+            (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+            (epe-colorize-with-face (user-login-name) 'epe-neh-user-face)
+            (epe-colorize-with-face (system-name) 'epe-neh-host-face)
+            " "))))
+
+     (concat
+      (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+      (epe-colorize-with-face (concat (eshell/pwd)) 'epe-dir-face)
+      " "
+
+      (when (epe-git-p)
+        (concat
+         (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+         (epe-colorize-with-face " " 'epe-git-face)
+         (epe-colorize-with-face
+          (concat (epe-git-branch)
+                  (epe-git-dirty)
+                  (epe-git-untracked)
+                  (let ((unpushed (epe-git-unpushed-number)))
+                    (unless (= unpushed 0)
+                      (concat ":" (number-to-string unpushed)))))
+          'epe-git-face)))
+
+      (epe-colorize-with-face  "\n" 'epe-neh-delimiter-face))
+
+     (when (> 0 eshell-last-command-status)
+       (epe-colorize-with-face eshell-last-command-status 'epe-symbol-face))
+
+     (when (and epe-show-python-info (bound-and-true-p venv-current-name))
+       (epe-colorize-with-face (concat "(" venv-current-name ") ") 'epe-venv-face))
+
+     ;; (when (and epe-terraform (bound-and-true-p terraform-workspace))
+     ;;   (epe-colorize-with-face (concat "(" terraform-workspace ") ") 'epe-terraform-face))
+
+     (epe-colorize-with-face "" 'epe-symbol-face)
+     (epe-colorize-with-face (if (= (user-uid) 0) "#" "") 'epe-sudo-symbol-face)
+
+     " "))
+
+  :custom-face
+  (epe-neh-delimiter-face ((t (:inherit 'shadow))))
+  (epe-neh-user-face ((t (:inherit 'default))))
+  (epe-neh-host-face ((t (:inherit 'default))))
+
+  :custom
+  (epe-show-python-info t)
+  (epe-git-dirty-char "*")
+  (epe-git-untracked-char "?")
+  (epe-git-detached-HEAD-char "D:")
+  (epe-path-style 'fish)
+  (eshell-prompt-function 'epe-theme-neh))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package aweshell
+  :straight (aweshell
+             :type git
+             :host github
+             :repo "manateelazycat/aweshell")
+
+  :commands (aweshell-new
+             aweshell-next
+             aweshell-prev
+             aweshell-toggle
+             aweshell-clear-buffer
+             aweshell-sudo-toggle
+             aweshell-switch-buffer))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package sane-term
+  :commands (sane-term
+             sane-term-create)
+  :custom
+  (sane-term-shell-command "/usr/bin/zsh"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package fish-mode)
+#+end_src
+
+* Dired
+
+#+begin_src emacs-lisp
+(use-package dired
+  :straight nil
+  :hook (dired-mode . dired-hide-details-mode)
+  :commands (dired-jump
+             dired-mode)
+
+  :general
+  (general-define-key
+    :keymaps 'dired-mode-map
+    :states '(normal)
+    "t" nil)
+
+  (neh/leader-keys
+    "^" 'dired-jump
+    "od" 'dired-jump)
+
+  :init
+  (setq dired-listing-switches "-alhv"
+        dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-single
+  :after dired
+  :commands (dired-single-buffer
+             dired-single-buffer-mouse
+             dired-single-up-directory)
+  :general
+  (general-define-key
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "<return>" 'dired-single-buffer
+   "^" 'dired-single-up-directory))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-sidebar
+  :disabled t
+  :general
+  (neh/leader-keys
+    "ot" 'dired-sidebar-toggle-sidebar)
+
+  :init
+  (setq dired-sidebar-theme 'nerd))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-k
+  :disabled t
+  :hook ((dired-initial-position-hook . dired-k)
+         (dired-after-readin-hook . dired-k-no-revert))
+  :init
+  (setq dired-k-human-readable t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-git-info
+  :commands (dired-git-info-mode)
+  :general
+  (general-define-key
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "}" 'dired-git-info-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-subtree
+  :after dired
+  :demand
+  :hook (after-load-theme . neh/set-dired-subtree-background)
+
+  :general
+  (general-define-key
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "<tab>" 'dired-subtree-toggle)
+
+  :init
+  (defun neh/dark-p ()
+    (let ((bg (face-background 'default)))
+      (if (>= (color-distance "black" bg)
+              (color-distance "white" bg))
+          nil
+        t)))
+
+  (defun neh/set-dired-subtree-background ()
+    (let* ((bg (face-background 'default))
+           (lighten-or-darken (if (neh/dark-p)
+                                  #'color-lighten-name
+                                #'color-darken-name))
+           (even (funcall lighten-or-darken bg 6))
+           (odd (funcall lighten-or-darken bg 3)))
+      (set-face-attribute 'dired-subtree-depth-1-face nil :background odd)
+      (set-face-attribute 'dired-subtree-depth-2-face nil :background even)
+      (set-face-attribute 'dired-subtree-depth-3-face nil :background odd)
+      (set-face-attribute 'dired-subtree-depth-4-face nil :background even)
+      (set-face-attribute 'dired-subtree-depth-5-face nil :background odd)
+      (set-face-attribute 'dired-subtree-depth-6-face nil :background even)))
+
+  :config
+  (neh/set-dired-subtree-background))
+#+end_src
+
+This seems useful, especially in combination with =dired-subtree=, as then it's active in the buffer as you view subtrees.
+
+#+begin_src emacs-lisp
+(use-package dired-collapse
+  :hook (dired-mode . dired-collapse-mode))
+#+end_src
+
+Handy live filtering of dired buffers.
+
+#+begin_src emacs-lisp
+(use-package dired-narrow
+  :commands (dired-narrow
+             dired-narrow-regexp
+             dired-narrow-fuzzy))
+#+end_src
+
+Nice dired filtering, plus it replaces =dired-omit-mode=.
+
+#+begin_src emacs-lisp
+(use-package dired-filter
+  :hook ((dired-mode . dired-filter-mode)
+         (dired-filter-mode . dired-filter-by-dot-files))
+
+  :general
+  (general-define-key
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "{" '(lambda () (interactive) (counsel-M-x "dired-filter-by-"))
+   ")" 'dired-filter-pop))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-du
+  :commands (dired-du-mode))
+#+end_src
+
+* Imenu
+
+#+begin_src emacs-lisp
+(use-package imenu-list
+  :general
+  (neh/leader-keys
+    "os" '(imenu-list-smart-toggle :which-key "code structure"))
+
+  :init
+  (setq imenu-list-focus-after-activation t))
+
+(use-package imenu-anywhere
+  :after ivy
+  :general
+  (neh/leader-keys
+    "sT" '(ivy-imenu-anywhere :which-key "imenu anywhere")))
+#+end_src
+
+* Hydra
+
+#+begin_src emacs-lisp :noweb yes
+(use-package posframe
+  :commands (posframe-show)
+  :config
+  (defun posframe-poshandler-frame-bottom-center (info)
+    "Posframe's position handler.
+
+    Get a position which let posframe stay onto its parent-frame's
+    bottom center.  The structure of INFO can be found
+    in docstring of `posframe-show'."
+    (cons (/ (- (plist-get info :parent-frame-width)
+                (plist-get info :posframe-width))
+             2)
+          (- 0
+             (plist-get info :mode-line-height)
+             (plist-get info :minibuffer-height))))
+
+  (defun posframe-poshandler-window-bottom-center (info)
+    "Posframe's position handler.
+
+    Get a position which let posframe stay onto current window's
+    center.  The structure of INFO can be found in docstring
+    of `posframe-show'."
+    (let* ((window-left (plist-get info :parent-window-left))
+           (window-top (plist-get info :parent-window-top))
+           (window-width (plist-get info :parent-window-width))
+           (window-height (plist-get info :parent-window-height))
+           (mode-line-height (plist-get info :mode-line-height))
+           (posframe-width (plist-get info :posframe-width))
+           (posframe-height (plist-get info :posframe-height)))
+      (cons (+ window-left (/ (- window-width posframe-width) 2))
+            (- (+ window-top window-height) (+ posframe-height mode-line-height 15))))))
+#+end_src
+
+#+begin_src emacs-lisp :noweb yes
+(use-package hydra
+  :general
+  (neh/leader-keys
+    "rc" '(hydra-codereading/body :which-key "changes")
+    "rg" '(hydra-git-gutter/body :which-key "changes")
+    "ro" '(hydra-org/body :which-key "org")
+    "rr" '(hydra-reading/body :which-key "plain text"))
+
+  :init
+  (setq hydra-hint-display-type 'lv
+        hydra--work-around-dedicated nil)
+  (setq hydra-posframe-show-params '(:internal-border-width 10
+                                     :internal-border-color "grey21"
+                                     ;; :min-height 15
+                                     :poshandler posframe-poshandler-point-bottom-left-corner))
+
+  :config
+  <<hydra-hydras>>
+
+  (use-package hydra-posframe
+    :disabled
+    :straight (hydra-posframe
+               :type git
+               :host github
+               :repo "Ladicle/hydra-posframe")
+
+    :commands (hydra-posframe-enable)
+
+    :config
+    (setq hydra-posframe-show-params '(:internal-border-width 2
+                                       :internal-border-color "green"
+                                       ;; :min-height 15
+                                       :poshandler posframe-poshandler-point-bottom-left-corner))
+
+    (hydra-posframe-enable))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ivy-hydra
+  :config
+  (defhydra hydra-ivy (:hint nil
+                       :color pink)
+    "
+      ^ ^ ^ ^ ^ ^ | ^Call^  | ^Cancel^ | ^Options^ | Action _r_/_c_/_a_: %-14s(ivy-action-name)
+      ^-^-^-^-^-^-+----^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
+      ^ ^ _n_ ^ ^ | occ_u_r | _i_nsert | _C_: calling %-5s(if ivy-calling \"on\" \"off\") Case-_F_old: %-10`ivy-case-fold-search
+      _h_ ^+^ _s_ | _d_one  | ^ ^      | _m_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _T_runcate: %-11`truncate-lines
+      ^ ^ _t_ ^ ^ | _g_o    | ^ ^      | _<_/_>_: shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^ _D_efinition of this menu
+      "
+    ;; arrows
+    ("h" ivy-beginning-of-buffer)
+    ("t" ivy-next-line)
+    ("n" ivy-previous-line)
+    ("s" ivy-end-of-buffer)
+    ;; actions
+    ("<ESC>" keyboard-escape-quit :exit t)
+    ("C-g" keyboard-escape-quit :exit t)
+    ("q" keyboard-escape-quit :exit t)
+    ("i" nil)
+    ("C-o" nil)
+    ;; ("f" ivy-alt-done :exit nil)
+    ("C-j" ivy-alt-done :exit nil)
+    ("d" ivy-done :exit t)
+    ("g" ivy-call)
+    ("S" (ivy-exit-with-action
+          (lambda (f) (evil-window-vsplit 80 f)
+            (balance-windows)))
+     :exit t)
+    ("C-m" ivy-done :exit t)
+    ("C" ivy-toggle-calling)
+    ("m" ivy-toggle-fuzzy)
+    (">" ivy-minibuffer-grow)
+    ("<" ivy-minibuffer-shrink)
+    ("r" ivy-prev-action)
+    ("c" ivy-next-action)
+    ("a" ivy-read-action)
+    ("T" (setq truncate-lines (not truncate-lines)))
+    ("F" ivy-toggle-case-fold)
+    ("u" ivy-occur :exit t)
+    ("D" (ivy-exit-with-action
+          (lambda (_) (find-function 'hydra-ivy/body)))
+     :exit t)))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
+(defhydra hydra-reading (:color red
+                         :hint nil)
+  "
+  _N_ pg up         _gg_ go to top        _zt_ line to top
+  _n_ ½ pg up       _G_  go to bottom     _zz_ line to center
+  _t_ ½ pg dn       ^ ^                   _zb_ line to bottom
+  _T_ pg dn
+
+"
+  ("n" (evil-scroll-up 0))
+  ("t" (evil-scroll-down 0))
+  ("T" (scroll-up))
+  ("N" (scroll-down))
+
+  ("gg" evil-goto-first-line)
+  ("G" evil-goto-line)
+
+  ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
+  ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
+  ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
+
+  ("+" (neh/adjust-text-height 7) "bigger")
+  ("-" (neh/adjust-text-height -7) "smaller")
+  ("0" (neh/adjust-text-height 0) "reset")
+  ("q" nil "quit"))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
+(defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1))
+  "Browse/stage/revert git hunks"
+  ("n" (progn (git-gutter:previous-hunk 1)
+              (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
+  ("t" (progn (git-gutter:next-hunk 1)
+              (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
+  ("H" (progn (goto-char (point-min))
+              (git-gutter:next-hunk 1)) "first hunk")
+  ("S" (progn (goto-char (point-min))
+              (git-gutter:previous-hunk 1)) "last hunk")
+  ("c" magit-commit "commit" :exit t)
+  ("s" git-gutter:stage-hunk "stage hunk")
+  ("k" git-gutter:revert-hunk "revert hunk")
+  ("q" nil "quit" :color blue))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
+(defhydra hydra-org (:color red :columns 3)
+  "Org Mode Movements"
+  ("t" outline-next-visible-heading "next heading")
+  ("n" outline-previous-visible-heading "prev heading")
+  ("T" org-forward-heading-same-level "next heading at same level")
+  ("N" org-backward-heading-same-level "prev heading at same level")
+  ("H" outline-up-heading "up heading")
+  ("<tab>" org-cycle "cycle")
+  ("g" org-goto "goto" :exit t)
+  ("q" nil "quit" :color blue))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
+;; from https://github.com/abo-abo/hydra/wiki/straight.el
+(defhydra hydra-straight-helper (:hint nil)
+  "
+  _c_heck all       |_f_etch all     |_m_erge all      |_n_ormalize all   |p_u_sh all
+  _C_heck package   |_F_etch package |_M_erge package  |_N_ormlize package|p_U_sh package
+  ----------------^^+--------------^^+---------------^^+----------------^^+------------||_q_uit||
+  _r_ebuild all     |_p_ull all      |_v_ersions freeze|_w_atcher start   |_g_et recipe
+  _R_ebuild package |_P_ull package  |_V_ersions thaw  |_W_atcher quit    |prun_e_ build"
+  ("c" straight-check-all)
+  ("C" straight-check-package)
+  ("r" straight-rebuild-all)
+  ("R" straight-rebuild-package)
+  ("f" straight-fetch-all)
+  ("F" straight-fetch-package)
+  ("p" straight-pull-all)
+  ("P" straight-pull-package)
+  ("m" straight-merge-all)
+  ("M" straight-merge-package)
+  ("n" straight-normalize-all)
+  ("N" straight-normalize-package)
+  ("u" straight-push-all)
+  ("U" straight-push-package)
+  ("v" straight-freeze-versions)
+  ("V" straight-thaw-versions)
+  ("w" straight-watcher-start)
+  ("W" straight-watcher-quit)
+  ("g" straight-get-recipe)
+  ("e" straight-prune-build)
+  ("q" nil))
+#+end_src
+
+=Pretty-hydra= comes from the =major-mode-hydra= package, but I’m using it separately to define various hydras as I begin to use them more. Each hydra is broken out below.
+
+#+begin_src emacs-lisp :noweb yes
+(use-package pretty-hydra
+  :after hydra
+  :commands (pretty-hydra-define)
+  :general
+  (neh/leader-keys
+    "G" 'hydra-git/body
+    "rR" 'neh/reading/body)
+  :config
+  <<pretty-hydras>>
+  )
+#+end_src
+
+Working on a =git= hydra to replace all or most of my usual git keybinds. This is an experiment to see whether I want to use a lot more hydras.
+
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
+(pretty-hydra-define hydra-git (:hint nil
+                                :quit-key "q"
+                                :body-pre (git-gutter-mode 1))
+
+  ("go" (("gg" (progn (goto-char (point-min))
+                      (git-gutter:next-hunk 1)) "first hunk")
+         ("n" (progn (git-gutter:previous-hunk 1)
+                     (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
+         ("t" (progn (git-gutter:next-hunk 1)
+                     (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
+         ("G" (progn (goto-char (point-min))
+                     (git-gutter:previous-hunk 1)) "last hunk"))
+
+   "do" (("s" git-gutter:stage-hunk "stage")
+         ("k" git-gutter:revert-hunk "revert hunk")
+         ("c" magit-commit "commit" :exit t)
+         ("P" magit-push "push" :exit t))
+
+   "see" (("S" magit-status "status" :exit t)
+          ("l" magit-log-buffer-file "log" :exit t)
+          ("L" magit-log "log (menu)" :exit t))
+   ))
+#+end_src
+
+Another work-in-progress hydra, this one for a general reading/browsing set of commands. Not sure exactly what it will be yet.
+
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
+(pretty-hydra-define neh/reading (:hint nil
+                                  :foreign-keys warn
+                                  :quit-key "q")
+  ("move up/down" (("N" scroll-down "pg up")
+                   ("n" (evil-scroll-up 0) "1/2 pg up")
+                   ("t" (evil-scroll-down 0) "1/2 pg dn")
+                   ("T" scroll-up "pg down"))
+
+   "current line" (("H" (evil-scroll-line-to-top (line-number-at-pos)) "to top")
+                   ("Z" (evil-scroll-line-to-center (line-number-at-pos)) "to center")
+                   ("S" (evil-scroll-line-to-bottom (line-number-at-pos)) "to bottom"))
+
+   "text size" (("+" (neh/adjust-text-height 7) "bigger")
+                ("-" (neh/adjust-text-height -7) "smaller")
+                ("0" (neh/adjust-text-height 0) "reset"))
+   ))
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
+(defun neh/toggle-dark-mode ()
+  (interactive)
+  (if (member neh/light-theme custom-enabled-themes)
+      (progn (setq neh/dark-mode t)
+             (load-theme neh/dark-theme t))
+    (setq neh/dark-mode nil)
+    (load-theme neh/light-theme t)))
+
+(pretty-hydra-define neh/toggles
+  (:color amaranth
+   :quit-key ("q" "<escape>")
+   :title "  Options")
+
+  ("Formatting"
+   (("v" global-visual-line-mode "visual lines" :toggle t)
+    ("w" whitespace-mode "whitespace" :toggle t)
+    ("f" visual-fill-column-mode "visual fill" :toggle t)
+    ("c" rainbow-mode "colours" :toggle t)
+    ("t" toggle-truncate-lines "truncate lines" :toggle truncate-lines)
+    ("d" rainbow-delimiters-mode "delimiters" :toggle t))
+   "UI"
+   (("l" global-hl-line-mode "highlight line" :toggle t)
+    ("k" neh/toggle-dark-mode "dark mode" :toggle neh/dark-mode :exit t)
+    ("D" auto-dim-other-buffers-mode "dimmer" :toggle t)
+    ("O" olivetti-mode "olivetti" :toggle t)
+    ("W" writeroom-mode "writeroom" :toggle t)
+    ("+" (neh/adjust-text-height 7) "bigger text")
+    ("-" (neh/adjust-text-height -7) "smaller text")
+    ("0" (neh/adjust-text-height 0) "reset text size"))))
+
+(pretty-hydra-define neh/movement
+  (:color amaranth :quit-key ("q" "<escape>") :title "  Movement")
+  ("Move Buffer"
+   (("H" buf-move-left "left")
+    ("T" buf-move-down "down")
+    ("N" buf-move-up "up")
+    ("S" buf-move-right "right"))
+   "Move to Window"
+   (("h" windmove-left "left")
+    ("t" windmove-down "down")
+    ("n" windmove-up "up")
+    ("s" windmove-right "right"))
+   "Split Window"
+   (("|" evil-window-vsplit "vertical")
+    ("-" evil-window-split "horizontal")
+    ("=" balance-windows "balance")
+    ("o" delete-other-windows "delete others"))
+   "Move Window"
+   (("M-h" evil-window-move-far-left "far left")
+    ("M-t" evil-window-move-very-bottom "bottom")
+    ("M-n" evil-window-move-very-top "top")
+    ("M-s" evil-window-move-far-right "far right"))
+   "Close"
+   (("x" bury-buffer "bury buffer")
+    ("X" kill-current-buffer "delete buffer")
+    ("c" evil-window-delete "close window"))
+   ))
+
+(neh/leader-keys
+  "," #'neh/toggles/body
+  "'" #'neh/movement/body)
+#+end_src
+
+Not using this one yet, but will allow associating a hydra to any major mode to provide common commands.
+
+#+begin_src emacs-lisp
+(use-package major-mode-hydra
+  :general
+  (neh/leader-keys
+    "." #'major-mode-hydra)
+
+  :init
+  (setq major-mode-hydra-title-generator
+        '(lambda (mode)
+           (s-concat (s-repeat 1 " ")
+                     (all-the-icons-icon-for-mode mode :v-adjust 0.05)
+                     " "
+                     (symbol-name mode)
+                     " commands")))
+
+  :config
+  (major-mode-hydra-define emacs-lisp-mode
+    (:color amaranth :quit-key ("q" "<escape>"))
+    ("Eval"
+     (("b" eval-buffer "buffer" :exit t)
+      ("e" eval-defun "defun")
+      ("r" eval-region "region"))
+     "REPL"
+     (("I" ielm "ielm"))
+     "Doc"
+     (("d" describe-foo-at-point "thing-at-pt")
+      ("f" describe-function "function")
+      ("v" describe-variable "variable"))))
+  )
+#+end_src
+
+* Reading and Note-taking
+
+First, set up =pdf-tools= for nice PDF handling.
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :magic ("%PDF" . pdf-view-mode)
+  :hook (pdf-view-mode . (lambda () (blink-cursor-mode -1)))
+  :init
+  (setq-default pdf-view-display-size 'fit-page))
+#+end_src
+
+PDF link handling in =org-mode=.
+
+#+begin_src emacs-lisp
+(use-package org-pdftools
+  :hook (org-load . org-pdftools-setup-link))
+#+end_src
+
+Add =nov.el= for =epub=s.
+
+#+begin_src emacs-lisp 
+(use-package nov
+  :mode (("\\.epub\\'" . nov-mode)))
+#+end_src
+
+Try out =org-noter=.
+
+#+begin_src emacs-lisp
+(use-package org-noter
+  :commands (org-noter)
+  :config
+  (org-noter-set-auto-save-last-location t))
+#+end_src
+
+* Misc packages
+
+#+begin_src emacs-lisp
+(use-package frames-only-mode
+  :commands (frames-only-mode)
+  :init
+  (frames-only-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hl-line-mode
+  :straight nil
+  :commands (hl-line-mode
+             global-hl-line-mode))
+  ;; :hook (after-init . global-hl-line-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package auto-dim-other-buffers
+  :commands (auto-dim-other-buffers-mode)
+  :init
+  (auto-dim-other-buffers-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package buffer-move
+  :commands (buf-move-left
+             buf-move-down
+             buf-move-up
+             buf-move-right))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package edit-indirect
+  :commands (edit-indirect-region))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dumb-jump
+  :commands (dumb-jump-go
+             dumb-jump-go-other-window)
+  :general
+  (general-def
+    :states 'normal
+    :prefix "j"
+    "d" 'dumb-jump-go)
+  :init
+  (setq dumb-jump-selector 'ivy
+        dumb-jump-prefer-searcher 'rg))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package deadgrep
+  :init
+  (defun neh/deadgrep-context-adjust (amount)
+    (let* ((old-before (or (car deadgrep--context) 0))
+           (old-after (or (cdr deadgrep--context) 0))
+           (before (+ old-before amount))
+           (after (+ old-after amount)))
+
+      (setq-local deadgrep--context (cons (if (< before 0) 0 before)
+                                          (if (< after 0) 0 after)))
+      (deadgrep-restart)))
+
+  :general
+  (neh/leader-keys
+    "sr" #'deadgrep)
+
+  (general-define-key
+   :keymaps 'deadgrep-mode-map
+   :states '(emacs normal)
+   "+" (lambda ()
+         (interactive)
+         (neh/deadgrep-context-adjust 2))
+   "-" (lambda ()
+         (interactive)
+         (neh/deadgrep-context-adjust -2))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package image-mode
+  :straight nil
+  :hook (image-mode . (lambda () (blink-cursor-mode -1))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package restart-emacs
+  :commands (restart-emacs))
+#+end_src
+
+#+begin_src emacs-lisp
+;; The auto-decrypt-encrypt hook complains about the password-file var not being set, even though
+;; the manual encrypt/decrypt functions work just fine.
+(use-package ansible
+  :commands (ansible ansible-auto-decrypt-encrypt)
+  :hook ((yaml-mode . ansible)
+         (ansible . ansible-auto-decrypt-encrypt))
+  :init
+  (setq ansible-vault-password-file "~/freshgrade/vaultpass"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :general
+  (neh/leader-keys
+    "vd" '(rainbow-delimiters-mode :which-key "delimiters"))
+
+  :config
+  (set-face-attribute 'rainbow-delimiters-unmatched-face nil :height 1.0 :inherit 'error)
+  (set-face-attribute 'rainbow-delimiters-depth-1-face nil :height 1.0)
+  (set-face-attribute 'rainbow-delimiters-depth-2-face nil :height 1.1)
+  (set-face-attribute 'rainbow-delimiters-depth-3-face nil :height 1.2)
+  (set-face-attribute 'rainbow-delimiters-depth-4-face nil :height 1.3)
+  (set-face-attribute 'rainbow-delimiters-depth-5-face nil :height 1.4)
+  (set-face-attribute 'rainbow-delimiters-depth-6-face nil :height 1.5)
+  (set-face-attribute 'rainbow-delimiters-depth-7-face nil :height 1.6)
+  (set-face-attribute 'rainbow-delimiters-depth-8-face nil :height 1.7)
+  (set-face-attribute 'rainbow-delimiters-depth-9-face nil :height 1.8))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package wgrep
+  :commands ivy-wgrep-change-to-wgrep-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package elec-pair
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode)
+  :custom
+  (electric-pair-skip-whitespace nil))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package executable
+  :ensure nil
+  :hook (after-save . executable-make-buffer-file-executable-if-script-p))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package quick-peek
+  :commands (quick-peek-show
+             quick-peek-hide
+             quick-peek-overlay-contents
+             quick-peek-overlay-ensure-at))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :hook (prog-mode . flycheck-mode)
+  :custom (flycheck-check-syntax-automatically '(save mode-enabled)))
+
+(use-package flycheck-inline
+  :hook (flycheck-mode . turn-on-flycheck-inline)
+  :init
+  (setq flycheck-inline-display-function
+        '(lambda (msg pos)
+           (let* ((ov (quick-peek-overlay-ensure-at pos))
+                  (contents (quick-peek-overlay-contents ov)))
+             (setf (quick-peek-overlay-contents ov)
+                   (concat contents (when contents "\n") msg))
+             (quick-peek-update ov)))
+        flycheck-inline-clear-function #'quick-peek-hide))
+
+(use-package flycheck-posframe
+  :disabled
+  :hook (flycheck-mode . flycheck-posframe-mode)
+  :config
+  (set-face-attribute 'flycheck-posframe-warning-face nil
+                      :height 1.1 :foreground "#111111" :background "#ffd700" :inherit 'warning)
+  (set-face-attribute 'flycheck-posframe-error-face nil
+                      :height 1.1 :foreground "#eeeeee" :background "#b22222" :inherit 'error))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package typo
+  ;; :hook (text-mode . typo-mode)
+  :commands (typo-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :general
+  (neh/leader-keys
+    "vc" '(rainbow-mode :which-key "colours")))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package symbol-overlay
+  :general
+  (general-def
+    :keymaps 'symbol-overlay-map
+    "i" nil
+    "n" nil
+    "p" nil
+    "t" nil
+    "s" nil
+    "h" nil
+
+    "?" 'symbol-overlay-map-help
+
+    "S" 'symbol-overlay-toggle-in-scope
+
+    "M-n" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
+    "M-t" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
+    "M-N" '(lambda () (interactive) (symbol-overlay-switch-backward) (recenter))
+    "M-T" '(lambda () (interactive) (symbol-overlay-switch-forward) (recenter))
+
+    "c" 'symbol-overlay-put
+    "C" 'symbol-overlay-remove-all)
+
+  (neh/leader-keys
+    "hs" '(symbol-overlay-put :which-key "highlight symbol")
+    "hn" '(symbol-overlay-switch-backward :which-key "previous highlighted symbol")
+    "ht" '(symbol-overlay-switch-forward :which-key "next highlighted symbol")
+    "hc" '(symbol-overlay-remove-all :which-key "clear highlighted symbols")
+    "hM" '(symbol-overlay-mode :which-key "symbol overlay mode")))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package aggressive-indent
+  :disabled
+  :hook (emacs-lisp-mode . aggressive-indent-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package direnv
+  :hook (after-init . direnv-mode)
+  :config
+  (setq direnv-always-show-summary nil))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package jinja2-mode
+  :mode (("\\.j2\\'" . jinja2-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package clojure-mode
+  :mode (("\\.clj\\'" . clojure-mode)))
+
+(use-package cider
+  :commands (cider
+             cider-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my-evil-indent-setup ()
+  "Set evil-shift-width to the relevant language indent level (but yaml only, so far)."
+  (setq evil-shift-width yaml-indent-offset))
+
+(use-package yaml-mode
+  :gfhook #'my-evil-indent-setup
+  :commands yaml-mode
+  :mode (("\\(host\\|group\\)_vars.*" . yaml-mode)
+         ("\\.*cloud-\\(init\\|config\\).*" . yaml-mode)
+         ("\\.yml|yaml\\'" . yaml-mode))
+  :hook ((yaml-mode . (lambda () (typo-mode -1)))
+         (jinja2-mode . (lambda () (typo-mode -1)))
+         (yaml-mode . git-gutter-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package json-mode
+  :mode (("\\.json\\'" . json-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package scad-mode
+  :mode (("\\.scad__'" . scad-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package expand-region
+  :general
+  (general-define-key
+   :states 'visual
+   "v" 'er/expand-region
+   "V" 'er/contract-region))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package markdown-mode
+  :commands (markdown-mode)
+  :mode ("\\.md'" . markdown-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lua-mode
+  :mode ("\\.lua\\'" . lua-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun neh/python-mode-hook ()
+  "My python mode settings."
+  (add-to-list 'company-backends 'company-jedi)
+  (setq-local fill-column 80)
+  (setq-local python-shell-interpreter "python3"
+              org-babel-python-command "python3"
+              elpy-rpc-ython-command "python3"))
+(use-package elpy
+  :commands elpy-enable
+  :init
+  (with-eval-after-load 'python (elpy-enable)))
+
+(use-package company-jedi
+  :after company
+  :hook (python-mode . neh/python-mode-hook))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :mode ("\\.rs\\'" . rust-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hcl-mode
+  :commands hcl-mode)
+
+(use-package terraform-mode
+  :mode ("\\.tf|tfvars\\'" . terraform-mode)
+  :hook ((terraform-mode . terraform-format-on-save-mode)
+         (terraform-mode . yas-minor-mode-on)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package groovy-mode
+  :mode ("Jenkinsfile\\'" . groovy-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package go-mode
+  :mode "\\.go\\'")
+
+(use-package go-eldoc
+  :commands go-eldoc-setup
+  :hook (go-mode . go-eldoc-setup))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package csv-mode
+  :mode "\\.csv\\'")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package elf-mode
+  :commands elf-mode
+  :magic ("ELF" . elf-mode))
+#+end_src
+
+* Misc functions
+
+This function gives me a quicker way to edit src blocks in org mode, as well as making indirect buffer cloning a bit /less/ accessible (only on headings), since I do it relatively infrequently and have actually been ending up in indirect buffers a bit /too/ easily. I just bind this to =enter= in org mode.
+
+#+begin_src emacs-lisp
+(defun neh/org-ret ()
+  "Take different actions on RET in org mode."
+  (interactive)
+  (cond ((org-at-heading-p) (org-tree-to-indirect-buffer))
+        ((org-in-src-block-p) (org-edit-src-code))))
+#+end_src
+
+I wanted a way to move org items to the top of their own level, and found one [[https://emacs.stackexchange.com/questions/43651/moving-a-subtree-to-the-top-or-bottom-of-its-parent][on stackoverflow]]. I inverted its behaviour to move to the top by default, and to the bottom with a prefix arg.
+
+#+begin_src emacs-lisp
+(defun JK-org-move-to-extreme (down)
+  "Move current org subtree to the start of its parent.
+With prefix arg move subtree to the end of its parent."
+  (interactive "P")
+  (condition-case err
+      (while t
+        (funcall (if down
+                     'org-move-subtree-down
+                   'org-move-subtree-up)))
+    (user-error
+     (let ((err-msg (cadr err)))
+       (unless (string-match "Cannot move past superior level or buffer limit" err-msg)
+         (signal 'user-error (list err-msg)))))))
+#+end_src
+
+Ending up at the bottom of the window and not being able see enough context when jumping around is annoying, so I have this to help deal with that by recentering after jumps.
+
+#+begin_src emacs-lisp
+(defun neh/after-jump (&optional arg)
+  "Position text sanely after jumping. ARG is unused but apparently necessary."
+  (evil-scroll-line-to-center (line-number-at-pos)))
+#+end_src
+
+Attaching this next one to =org-src-mode= will disable the annoying flycheck warnings that are really only relevant to complete files.
+
+#+begin_src emacs-lisp
+(defun disable-flycheck-in-org-src-block ()
+  (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun narrow-to-region-indirect (start end)
+  "Restrict editing in this buffer to the current region (from START to END), indirectly."
+  (interactive "r")
+  (deactivate-mark)
+  (let ((buf (clone-indirect-buffer nil nil)))
+    (with-current-buffer buf
+      (narrow-to-region start end))
+    (switch-to-buffer buf)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun shorten-directory (dir max-length)
+  "Show up to MAX-LENGTH characters of a directory name DIR."
+  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
+        (output ""))
+    (when (and path (equal "" (car path)))
+      (setq path (cdr path)))
+    (while (and path (< (length output) (- max-length 4)))
+      (setq output (concat (car path) "/" output))
+      (setq path (cdr path)))
+    (when path
+      (setq output (concat "…/" output)))
+    output))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun comment-or-uncomment-region-or-line ()
+  "Comments or uncomments the region or the current line if there's no active region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+        (setq beg (region-beginning) end (region-end))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (comment-or-uncomment-region beg end)))
+#+end_src
+
+#+begin_src emacs-lisp
+;; https://github.com/noctuid/general.el#use-package-keyword
+;; https://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
+;; https://github.com/Fuco1/.emacs.d/blob/af82072196564fa57726bdbabf97f1d35c43b7f7/site-lisp/redef.el#L20-L94
+(defun Fuco1/lisp-indent-function (indent-point state)
+  "This function is the normal value of the variable `lisp-indent-function'.
+  The function `calculate-lisp-indent' calls this to determine
+  if the arguments of a Lisp function call should be indented specially.
+
+  INDENT-POINT is the position at which the line being indented begins.
+  Point is located at the point to indent under (for default indentation);
+  STATE is the `parse-partial-sexp' state for that position.
+
+  If the current line is in a call to a Lisp function that has a non-nil
+  property `lisp-indent-function' (or the deprecated `lisp-indent-hook'),
+  it specifies how to indent.  The property value can be:
+
+  ,* `defun', meaning indent `defun'-style
+    \(this is also the case if there is no property and the function
+    has a name that begins with \"def\", and three or more arguments);
+
+  ,* an integer N, meaning indent the first N arguments specially
+    (like ordinary function arguments), and then indent any further
+    arguments like a body;
+
+  ,* a function to call that returns the indentation (or nil).
+    `lisp-indent-function' calls this function with the same two arguments
+    that it itself received.
+
+  This function returns either the indentation to use, or nil if the
+  Lisp function does not specify a special indentation."
+  (let ((normal-indent (current-column))
+        (orig-point (point)))
+    (goto-char (1+ (elt state 1)))
+    (parse-partial-sexp (point) calculate-lisp-indent-last-sexp 0 t)
+    (cond
+     ;; car of form doesn't seem to be a symbol, or is a keyword
+     ((and (elt state 2)
+           (or (not (looking-at "\\sw\\|\\s_"))
+               (looking-at ":")))
+      (if (not (> (save-excursion (forward-line 1) (point))
+                  calculate-lisp-indent-last-sexp))
+          (progn (goto-char calculate-lisp-indent-last-sexp)
+                 (beginning-of-line)
+                 (parse-partial-sexp (point)
+                                     calculate-lisp-indent-last-sexp 0 t)))
+      ;; Indent under the list or under the first sexp on the same
+      ;; line as calculate-lisp-indent-last-sexp.  Note that first
+      ;; thing on that line has to be complete sexp since we are
+      ;; inside the innermost containing sexp.
+      (backward-prefix-chars)
+      (current-column))
+     ((and (save-excursion
+             (goto-char indent-point)
+             (skip-syntax-forward " ")
+             (not (looking-at ":")))
+           (save-excursion
+             (goto-char orig-point)
+             (looking-at ":")))
+      (save-excursion
+        (goto-char (+ 2 (elt state 1)))
+        (current-column)))
+     (t
+      (let ((function (buffer-substring (point)
+                                        (progn (forward-sexp 1) (point))))
+            method)
+        (setq method (or (function-get (intern-soft function)
+                                       'lisp-indent-function)
+                         (get (intern-soft function) 'lisp-indent-hook)))
+        (cond ((or (eq method 'defun)
+                   (and (null method)
+                        (> (length function) 3)
+                        (string-match "\\`def" function)))
+               (lisp-indent-defform state indent-point))
+              ((integerp method)
+               (lisp-indent-specform method state
+                                     indent-point normal-indent))
+              (method
+               (funcall method indent-point state))))))))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
+#+end_src
+
+#+begin_src emacs-lisp
+;; from https://stackoverflow.com/questions/47327066/how-to-open-an-indirect-buffer-in-a-new-frame-in-a-single-call-in-emacs
+(defun clone-indirect-buffer-other-frame (newname display-flag &optional norecord)
+  "Like `clone-indirect-buffer' but display in another frame."
+  (interactive
+   (progn
+     (if (get major-mode 'no-clone-indirect)
+         (error "Cannot indirectly clone a buffer in %s mode" mode-name))
+     (list (if current-prefix-arg
+               (read-buffer "Name of indirect buffer: " (current-buffer)))
+           t)))
+  ;; (let ((pop-up-windows t))
+  (let ((pop-up-frames t)) ; <==========
+    (clone-indirect-buffer newname display-flag norecord)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun org-tree-to-indirect-buffer-other-frame ()
+  (interactive
+   (let ((org-indirect-buffer-display 'new-frame))
+     (org-tree-to-indirect-buffer))))
+#+end_src
