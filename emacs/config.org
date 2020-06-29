@@ -727,7 +727,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   :config
   (setq-default doom-modeline-column-zero-based nil)
-  (setq doom-modeline-height 20
+  (setq doom-modeline-height 34
         doom-modeline-bar-width 1
         doom-modeline-buffer-file-name-style 'truncate-except-project)
   (column-number-mode t))
