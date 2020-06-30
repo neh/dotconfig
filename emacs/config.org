@@ -492,6 +492,12 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
     "hf" '(helpful-callable :which-key "function help")
     "hk" '(helpful-key :which-key "key help")
     "hv" '(helpful-variable :which-key "variable help")))
+
+(use-package autorevert
+  :demand t
+  :straight nil
+  :config
+  (global-auto-revert-mode 1))
 #+end_src
 
 Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
