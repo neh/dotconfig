@@ -2718,6 +2718,21 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package scratch
+  :commands (scratch))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package link-hint
+  :general
+  (neh/leader-keys
+    :states '(normal)
+    :prefix "SPC"
+    :non-normal-prefix "C-SPC"
+    "F" #'link-hint-open-link))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package frames-only-mode
   :commands (frames-only-mode)
   :init
