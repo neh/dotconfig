@@ -2153,7 +2153,8 @@ directory to make multiple eshell windows easier."
 #+begin_src emacs-lisp
 (use-package dired
   :straight nil
-  :hook (dired-mode . dired-hide-details-mode)
+  :hook ((dired-mode . dired-hide-details-mode)
+         (dired-mode . auto-revert-mode))
   :commands (dired-jump
              dired-mode)
 
