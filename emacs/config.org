@@ -1956,11 +1956,42 @@ Quick heading movement and task item state changes. I'm getting into the habit o
    :states '(normal insert visual)
    :non-normal-prefix "C-SPC"
    :prefix "SPC"
-    "ni" #'org-roam-insert))
+    "ni" #'org-roam-insert)
+
+  :init
+  (setq org-roam-capture-templates
+        '(("p" "project" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_tags: project\n\n"
+           :unnarrowed t)
+          ("l" "literature" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
+           :unnarrowed t)
+          ("d" "default" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t))))
 
 (use-package company-org-roam
   :config
   (push 'company-org-roam company-backends))
+
+(use-package org-roam-server
+  :commands (org-roam-server-mode)
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8081
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
 
 (use-package org-download
   :after org
