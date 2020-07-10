@@ -911,7 +911,9 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
     (balance-windows))
 
   (defun neh-open-file-in-frame (f)
-    (find-file-other-frame f))
+    (if (stringp f)
+        (find-file-other-frame f)
+      (find-file-other-frame (plist-get (cdr f) :path))))
 
   (defun ivy-with-thing-at-point (cmd)
     (let* ((ivy-initial-inputs-alist
