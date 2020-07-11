@@ -1842,7 +1842,10 @@ This setting should make edits around special characters and collapsed outlines 
 (org-catch-invisible-edits 'show-and-error)
 #+end_src
 
+Just always show images; I always want them.
+
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-startup-with-inline-images t)
 #+end_src
 
 ** Hooks
