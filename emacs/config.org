@@ -910,6 +910,10 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
     (evil-window-vsplit fill-column f)
     (balance-windows))
 
+  (defun neh-ivy-open-in-frame ()
+    (interactive)
+    (ivy-exit-with-action #'neh-open-file-in-frame))
+
   (defun neh-open-file-in-frame (f)
     (if (stringp f)
         (find-file-other-frame f)
@@ -955,7 +959,8 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
    "C-M-n" 'ivy-previous-line-and-call
    "C-b" 'ivy-scroll-down-command
    "C-f" 'ivy-scroll-up-command
-   "C-d" 'ivy-call)
+   "C-d" 'ivy-call
+   "<C-return>" #'neh-ivy-open-in-frame)
 
   (general-define-key
    :keymaps 'counsel-find-file-map
