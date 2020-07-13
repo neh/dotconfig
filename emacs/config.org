@@ -2773,6 +2773,13 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package frames-only-mode
   :commands (frames-only-mode)
+  :custom
+  (frames-only-mode-use-window-functions '(calendar
+                                           report-emacs-bug
+                                           checkdoc-show-diagnostics
+                                           checkdoc
+                                           company-capf
+                                           org-compile-file))
   :init
   (frames-only-mode t))
 #+end_src
