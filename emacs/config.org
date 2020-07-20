@@ -1971,7 +1971,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
     "ni" #'org-roam-insert)
 
   :init
-  (setq org-roam-tag-sources '(prop last-directory)
+  (setq org-roam-list-files-commands '(rg find)
+        org-roam-tag-sources '(prop last-directory)
         org-roam-capture-templates
         '(("p" "project" plain #'org-roam-capture--get-point
            "%?"
