@@ -2215,6 +2215,9 @@ directory to make multiple eshell windows easier."
 
   :init
   (setq dired-listing-switches "-alhv"
+        dired-recursive-copies 'always
+        dired-deletion-confirmer 'y-or-n-p
+        dired-dwim-target t
         dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
 #+end_src
 
