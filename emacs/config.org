@@ -1972,7 +1972,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 
   :init
   (setq org-roam-list-files-commands '(rg find)
-        org-roam-tag-sources '(prop last-directory)
+        org-roam-buffer-window-parameters '((no-other-window . t))
+        org-roam-tag-sources '(prop all-directories)
         org-roam-capture-templates
         '(("p" "project" plain #'org-roam-capture--get-point
            "%?"
