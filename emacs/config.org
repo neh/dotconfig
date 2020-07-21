@@ -3081,18 +3081,13 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (defun neh/python-mode-hook ()
   "My python mode settings."
-  (add-to-list 'company-backends 'company-jedi)
   (setq-local fill-column 80)
   (setq-local python-shell-interpreter "python3"
               org-babel-python-command "python3"
-              elpy-rpc-ython-command "python3"))
-(use-package elpy
-  :commands elpy-enable
-  :init
-  (with-eval-after-load 'python (elpy-enable)))
+              elpy-rpc-python-command "python3"))
 
-(use-package company-jedi
-  :after company
+(use-package python-mode
+  :straight nil
   :hook (python-mode . neh/python-mode-hook))
 #+end_src
 
