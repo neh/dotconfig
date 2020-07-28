@@ -1410,12 +1410,6 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
   ;; '(font-parameter . "-CYEL-Iosevka-normal-normal-normal-*-14-*-*-*-d-0-iso10646-1"))
   )
 
-(use-package company-quickhelp
-  :hook (company-mode . company-quickhelp-mode)
-  :general
-  (:keymaps 'company-active-map
-   "C-m" 'company-quickhelp-manual-begin))
-
 (use-package company-ansible
   :commands (company-ansible)
   :config
