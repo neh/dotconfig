@@ -2845,9 +2845,18 @@ Try out =org-noter=.
                                           (if (< after 0) 0 after)))
       (deadgrep-restart)))
 
+  (defun neh/return-default-dir ()
+    default-directory)
+
+  (defun neh/deadgrep-here ()
+    (interactive)
+    (let ((deadgrep-project-root-function #'neh/return-default-dir))
+      (deadgrep (deadgrep--read-search-term))))
+
   :general
   (neh/leader-keys
-    "sr" #'deadgrep)
+    "sr" #'deadgrep
+    "sR" #'neh/deadgrep-here)
 
   (general-define-key
    :keymaps 'deadgrep-mode-map
