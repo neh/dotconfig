@@ -1965,7 +1965,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
     "ni" #'org-roam-insert)
 
   :init
-  (setq org-roam-list-files-commands '(rg find)
+  (setq org-roam-db-location (concat org-roam-directory "/" (system-name) "-org-roam.db")
+        org-roam-list-files-commands '(rg find)
         org-roam-buffer-window-parameters '((no-other-window . t))
         org-roam-tag-sources '(prop all-directories)
         org-roam-capture-templates
