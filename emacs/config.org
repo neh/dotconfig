@@ -1011,6 +1011,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   ;; (add-to-list 'ivy-display-functions-alist '(t . ivy-display-function-window))
 
   (setq ivy-use-virtual-buffers t
+        ivy-read-action-function #'ivy-hydra-read-action
         ivy-dynamic-exhibit-delay-ms 250
         ivy-count-format "%d/%d "
         ivy-format-function #'ivy-format-function-arrow
