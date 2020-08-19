@@ -2847,14 +2847,15 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package dumb-jump
-  :commands (dumb-jump-go
-             dumb-jump-go-other-window)
+  :commands (xref-find-definitions
+             xref-find-definitions-other-window)
   :general
   (general-def
     :states 'normal
     :prefix "j"
-    "d" 'dumb-jump-go)
+    "d" #'xref-find-definitions)
   :init
+  (add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t)
   (setq dumb-jump-selector 'ivy
         dumb-jump-prefer-searcher 'rg))
 #+end_src
