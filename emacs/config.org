@@ -207,17 +207,7 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 Set the window titles. Nothing fancy, just the buffer name.
 
 #+begin_src emacs-lisp
-(setq frame-title-format
-      '(""
-        (:eval
-         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-             (replace-regexp-in-string ".*/[0-9]*-?" "🢔 " buffer-file-name)
-           "%b"))
-        (:eval
-         (let ((project-name (projectile-project-name)))
-           (unless (string= "-" project-name)
-             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name)))))
-
+(setq frame-title-format "%b"
       icon-title-format "%b") ;; unfocused window title format
 #+end_src
 
@@ -1350,7 +1340,19 @@ FACE defaults to inheriting from default and highlight."
 #+begin_src emacs-lisp
 (use-package projectile
   :init
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+
+  :config
+  (setq frame-title-format
+        '(""
+          (:eval
+           (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+               (replace-regexp-in-string ".*/[0-9]*-?" "🢔 " buffer-file-name)
+             "%b"))
+          (:eval
+           (let ((project-name (projectile-project-name)))
+             (unless (string= "-" project-name)
+               (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name)))))))
 
 (use-package counsel-projectile
   :hook (counsel-mode . counsel-projectile-mode)
