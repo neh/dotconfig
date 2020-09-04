@@ -581,6 +581,7 @@ General settings for programming modes.
 (use-package modus-operandi-theme
   :config
   (setq modus-operandi-theme-org-blocks 'greyscale
+        modus-operandi-theme-diffs 'desaturated
         modus-operandi-theme-bold-constructs t
         modus-operandi-theme-slanted-constructs t)
   (load-theme neh/light-theme t nil))
