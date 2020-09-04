@@ -1731,7 +1731,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   :after org
   :init
   (setq org-journal-dir "~/org/journal/"
-        org-journal-enable-encryption t
+        org-journal-enable-encryption nil
         org-journal-date-format "%A, %x"
         org-journal-file-type 'weekly))
 #+end_src
