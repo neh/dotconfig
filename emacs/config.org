@@ -1566,6 +1566,13 @@ Handy package to browse to git repo web interfaces.
              git-timemachine-toggle))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package abridge-diff
+  :after magit
+  :init
+  (abridge-diff-mode 1))
+#+end_src
+
 * Org
 
 My org config is pretty long, so I've broken it up for easier reading and explanation. The main structure of it is here, with the details following.
