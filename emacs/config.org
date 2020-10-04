@@ -1131,17 +1131,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package frog-menu
-  :custom
-  (frog-menu-avy-keys (append (string-to-list "aoeuidhtns")
-                              (string-to-list "',.pyfgcrl")
-                              (string-to-list ";qjkxbwvz"))))
-
-(use-package frog-jump-buffer
-  :commands (frog-jump-buffer))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package nswbuff
   :commands (nswbuff-switch-to-previous-buffer
              nswbuff-switch-to-next-buffer)
@@ -1812,11 +1801,6 @@ Org export.
   :commands (org-slack-export-as-slack
              org-slack-export-to-slack
              org-slack-export-to-clipboard-as-slack))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package org-pomodoro
-  :commands (org-pomodoro))
 #+end_src
 
 #+begin_src emacs-lisp
