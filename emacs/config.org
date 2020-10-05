@@ -1766,7 +1766,7 @@ Make org-mode prettier.
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
   :init
-  (setq org-superstar-headline-bullets-list '(" ")
+  (setq org-superstar-headline-bullets-list '(" " "‣" " " "●" "⦿" 10040 10047 9675)
         org-superstar-special-todo-items t
         org-superstar-todo-bullet-alist '(("TODO" . 9744)
                                           ("DOING" . 9654)
