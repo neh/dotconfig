@@ -1929,6 +1929,7 @@ General purpose org keybindings.
   "o." '(org-open-at-point :which-key "follow link")
 
   "ve" '(neh/toggle-local-emphasis-markers :which-key "emphasis")
+  "vi" '(org-toggle-inline-images :which-key "images")
   "vl" '(org-toggle-link-display :which-key "links"))
 #+end_src
 
