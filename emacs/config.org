@@ -841,9 +841,9 @@ Put some whitespace around the evil state modeline labels just so they look bett
 So many searches leave the cursor at the bottom of the window, and I want to see more context. So this recenters the cursor when jumping to a search result. I've been using swiper a lot more though, so I'm not sure how much I care about this any more (at least in this context).
 
 #+begin_src emacs-lisp :noweb-ref evil-config :tangle no
-(general-add-advice (list #'evil-search-next
-                          #'evil-search-previous)
-                    :after #'recenter)
+;; (general-add-advice (list #'evil-search-next
+;;                           #'evil-search-previous)
+;;                     :after #'recenter)
 #+end_src
 
 This defines an evil operator I can use to highlight some text and quickly get an indirect buffer narrowed to that text.
