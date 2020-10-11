@@ -2372,7 +2372,9 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
 #+begin_src emacs-lisp
 (use-package dired-du
-  :commands (dired-du-mode))
+  :commands (dired-du-mode)
+  :custom
+  (dired-du-size-format t))
 #+end_src
 
 * Imenu
