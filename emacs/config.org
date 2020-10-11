@@ -2247,6 +2247,21 @@ directory to make multiple eshell windows easier."
         dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
 #+end_src
 
+#+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
+(major-mode-hydra-define dired-mode
+  (:color amaranth :quit-key ("q" "<escape>"))
+  ("Show"
+   (("d" dired-hide-details-mode "hide details" :toggle t)
+    ("g" dired-git-info-mode "git info" :toggle t)
+    ("u" dired-du-mode "usage" :toggle t)
+    )
+   "Filter"
+   (("p" dired-filter-pop "pop")
+    ("a" (lambda () (interactive) (counsel-M-x "dired-filter-by-")) "add")
+    ("n" dired-narrow-fuzzy "fuzzy narrow")
+    ("r" revert-buffer "revert"))))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package dired-single
   :after dired
@@ -2283,12 +2298,7 @@ directory to make multiple eshell windows easier."
 
 #+begin_src emacs-lisp
 (use-package dired-git-info
-  :commands (dired-git-info-mode)
-  :general
-  (general-define-key
-   :states 'normal
-   :keymaps 'dired-mode-map
-   "}" 'dired-git-info-mode))
+  :commands (dired-git-info-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2724,7 +2734,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 
 Not using this one yet, but will allow associating a hydra to any major mode to provide common commands.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
 (use-package major-mode-hydra
   :general
   (neh/leader-keys
@@ -2752,6 +2762,7 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
      (("d" describe-foo-at-point "thing-at-pt")
       ("f" describe-function "function")
       ("v" describe-variable "variable"))))
+  <<major-mode-hydras>>
   )
 #+end_src
 
