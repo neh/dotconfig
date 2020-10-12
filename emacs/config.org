@@ -614,7 +614,9 @@ But I like some things to be set no matter the theme. For example, I always like
   (run-hooks 'after-load-theme-hook))
 
 (add-hook 'after-load-theme-hook #'neh/theme-tweaks)
-(add-hook 'after-init-hook #'neh/theme-tweaks)
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'neh/theme-tweaks)
+  (add-hook 'after-init-hook #'neh/theme-tweaks))
 #+end_src
 
 Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
