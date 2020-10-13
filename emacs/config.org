@@ -3006,7 +3006,13 @@ Try out =org-noter=.
             (setf (quick-peek-overlay-contents ov)
                   (concat contents (when contents "\n") msg))
             (quick-peek-update ov)))
-        flycheck-inline-clear-function #'quick-peek-hide))
+        flycheck-inline-clear-function #'quick-peek-hide)
+  :config
+  (set-face-attribute 'flycheck-inline-warning nil
+                      :height 1.1 :foreground "#111111" :background "#ffd700" :inherit 'warning)
+  (set-face-attribute 'flycheck-inline-error nil
+                      :height 1.1 :foreground "#eeeeee" :background "#b22222" :inherit 'error)
+  )
 
 (use-package flycheck-posframe
   :disabled
