@@ -313,6 +313,10 @@ I view man pages in emacs sometimes, and want a fixed width for them.
       woman-fill-column fill-column)
 #+end_src
 
+#+begin_src emacs-lisp
+(setq-default line-spacing 0.1)
+#+end_src
+
 How to make display buffer names.
 
 #+begin_src emacs-lisp
