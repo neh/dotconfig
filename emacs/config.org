@@ -1593,6 +1593,8 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (let ((gc-cons-threshold most-positive-fixnum))
       (org-babel-tangle)))
 
+  (add-to-list 'org-modules 'org-protocol)
+
   ;; Original version stolen from https://emacs.stackexchange.com/questions/23870/org-babel-result-to-a-separate-buffer
   (defun neh/babel-to-buffer ()
     "A function to efficiently feed babel code block result to a separate buffer"
@@ -1867,6 +1869,15 @@ Org file locations.
           (file+headline "" "Incoming")
           "* [[%x][%?]] %^g"
           :prepend t)
+         ("w" "Web site"
+          entry (file+headline "" "Incoming")
+          "* %a\n%U\n%i%?"
+          :jump-to-captured t
+          :prepend t)
+         ("x" "test template"
+          entry (file+headline "" "Incoming")
+          "* %^{Title}\n\n  Source: %u, %c\n\n  %i"
+          :empty-lines 1)
          ("j" "journal" entry
           (file+olp+datetree
            (lambda ()
@@ -1976,6 +1987,14 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   "T" 'org-shiftdown
   "N" 'org-shiftup
   "S" 'org-shiftright)
+#+end_src
+
+** Org-capture
+
+#+begin_src emacs-lisp
+(use-package org-protocol
+  :straight nil
+  :after org)
 #+end_src
 
 ** Org-roam
