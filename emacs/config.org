@@ -3008,11 +3008,15 @@ Try out =org-noter=.
             (quick-peek-update ov)))
         flycheck-inline-clear-function #'quick-peek-hide)
   :config
+  (set-face-attribute 'flycheck-inline-info nil
+                      :height 1.0 :foreground "#000000" :background "#87ceeb" :inherit 'info
+                      :box '(:line-width 3 :color "#87ceeb"))
   (set-face-attribute 'flycheck-inline-warning nil
-                      :height 1.1 :foreground "#111111" :background "#ffd700" :inherit 'warning)
+                      :height 1.0 :foreground "#000000" :background "#ffd700" :inherit 'warning
+                      :box '(:line-width 3 :color "#ffd700"))
   (set-face-attribute 'flycheck-inline-error nil
-                      :height 1.1 :foreground "#eeeeee" :background "#b22222" :inherit 'error)
-  )
+                      :height 1.0 :foreground "#ffffff" :background "#b22222" :inherit 'error
+                      :box '(:line-width 3 :color "#b22222")))
 
 (use-package flycheck-posframe
   :disabled
