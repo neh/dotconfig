@@ -1966,39 +1966,43 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :commands (doct))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no :noweb-ref org-init
-(setq org-capture-templates
-      (doct '(("todo"
-               :keys "t"
-               :file ""
-               :headline "Incoming"
-               :template "* TODO %?"
-               :prepend t)
-              ("note"
-               :keys "n"
-               :file ""
-               :headline "Incoming"
-               :template "* %?"
-               :prepend t)
-              ("link"
-               :keys "l"
-               :file ""
-               :headline "Incoming"
-               :template "* [[%x][%?]] %^g"
-               :prepend t)
-              ("web"
-               :keys "w"
-               :file ""
-               :headline "Incoming"
-               :template "* %a\n%U\n%i%?"
-               :prepend t)
-              ("test"
-               :keys "x"
-               :file ""
-               :headline "Incoming"
-               :template "* %^{Title}\n\n  Source: %u, %c\n\n  %i"
-               :prepend t)
-              )))
+#+begin_src emacs-lisp
+(use-package org-capture
+  :straight nil
+  :after org
+  :custom
+  (org-capture-templates
+   (doct '(("todo"
+            :keys "t"
+            :file ""
+            :headline "Incoming"
+            :template "* TODO %?"
+            :prepend t)
+           ("note"
+            :keys "n"
+            :file ""
+            :headline "Incoming"
+            :template "* %?"
+            :prepend t)
+           ("link"
+            :keys "l"
+            :file ""
+            :headline "Incoming"
+            :template "* [[%x][%?]] %^g"
+            :prepend t)
+           ("web"
+            :keys "w"
+            :file ""
+            :headline "Incoming"
+            :template ("* %a" "%U" "%i%?")
+            :prepend t)
+           ("test"
+            :keys "x"
+            :file ""
+            :headline "Incoming"
+            :template ("* %:url" "Source: %u, %c" "%i%?")
+            :prepend t)
+           ))))
 #+end_src
 
 #+begin_src emacs-lisp
