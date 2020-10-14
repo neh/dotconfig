@@ -1855,36 +1855,6 @@ Org file locations.
 (org-tags-column 0)
 #+end_src
 
-#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
-(org-capture-templates
- (quote (("t" "todo" entry
-          (file+headline "" "Incoming")
-          "* TODO %?"
-          :prepend t)
-         ("n" "note" entry
-          (file+headline "" "Incoming")
-          "* %?"
-          :prepend t)
-         ("l" "link" entry
-          (file+headline "" "Incoming")
-          "* [[%x][%?]] %^g"
-          :prepend t)
-         ("w" "Web site"
-          entry (file+headline "" "Incoming")
-          "* %a\n%U\n%i%?"
-          ;; :jump-to-captured t
-          :prepend t)
-         ("x" "test template"
-          entry (file+headline "" "Incoming")
-          "* %^{Title}\n\n  Source: %u, %c\n\n  %i"
-          :empty-lines 1)
-         ("j" "journal" entry
-          (file+olp+datetree
-           (lambda ()
-             (concat org-agenda-files "/journal.org")))
-          "* %?"))))
-#+end_src
-
 This setting should make edits around special characters and collapsed outlines better. I haven't tested the various settings out yet, so this is just the first one to try.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
@@ -1989,7 +1959,37 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   "S" 'org-shiftright)
 #+end_src
 
-** Org-protocol
+** Org Capture
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-init
+(setq org-capture-templates
+ (quote (("t" "todo" entry
+          (file+headline "" "Incoming")
+          "* TODO %?"
+          :prepend t)
+         ("n" "note" entry
+          (file+headline "" "Incoming")
+          "* %?"
+          :prepend t)
+         ("l" "link" entry
+          (file+headline "" "Incoming")
+          "* [[%x][%?]] %^g"
+          :prepend t)
+         ("w" "Web site"
+          entry (file+headline "" "Incoming")
+          "* %a\n%U\n%i%?"
+          ;; :jump-to-captured t
+          :prepend t)
+         ("x" "test template"
+          entry (file+headline "" "Incoming")
+          "* %^{Title}\n\n  Source: %u, %c\n\n  %i"
+          :empty-lines 1)
+         ("j" "journal" entry
+          (file+olp+datetree
+           (lambda ()
+             (concat org-agenda-files "/journal.org")))
+          "* %?"))))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package org-protocol
