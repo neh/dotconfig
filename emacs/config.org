@@ -1872,7 +1872,7 @@ Org file locations.
          ("w" "Web site"
           entry (file+headline "" "Incoming")
           "* %a\n%U\n%i%?"
-          :jump-to-captured t
+          ;; :jump-to-captured t
           :prepend t)
          ("x" "test template"
           entry (file+headline "" "Incoming")
@@ -1989,12 +1989,24 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   "S" 'org-shiftright)
 #+end_src
 
-** Org-capture
+** Org-protocol
 
 #+begin_src emacs-lisp
 (use-package org-protocol
   :straight nil
-  :after org)
+  :after org
+  :hook ((org-capture-mode . neh/full-frame-capture))
+  :init
+  (defadvice org-capture-finalize
+      (after delete-capture-frame activate)
+    "Advise capture-finalize to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (defun neh/full-frame-capture ()
+    (if (string= (frame-parameter nil 'name) "capture")
+        (delete-other-windows)))
+  )
 #+end_src
 
 ** Org-roam
