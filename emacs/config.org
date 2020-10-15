@@ -2023,6 +2023,56 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   )
 #+end_src
 
+We need a little desktop integration for =org-protocol=, linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
+
+#+begin_src conf :tangle ~/.config/systemd/user/emacs-server.service :mkdirp yes
+[Unit]
+Description=Emacs (server)
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/emacs --fg-daemon --chdir %h
+# ExecStart=/usr/bin/emacs --fg-daemon
+ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+Environment=SSH_AUTH_SOCK=%t/keyring/ssh
+# Environment=SSH_AUTH_SOCK=%t/keyring/ssh XDG_RUNTIME_DIR=/run/user/%U EMACS_SOCKET_NAME=/run/user/%U/emacs/server
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+#+end_src
+
+And an ~emacsclient~ .desktop file to integrate it into the gnome desktop.
+
+#+begin_src conf :tangle ~/.local/share/applications/emacsclient.desktop :mkdirp yes
+[Desktop Entry]
+Name=Emacs (client)
+GenericName=Text Editor
+Comment=Edit text
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+# Exec=/usr/bin/emacsclient -c %F
+Exec=/usr/bin/emacsclient --create-frame --alternate-editor="emacs" %F
+Icon=emacs
+Type=Application
+Terminal=false
+Categories=Development;TextEditor;Utility;
+StartupWMClass=Emacs
+Keywords=Text;Editor;
+#+end_src
+
+Then a handler for =org-protocol:= URLs so that browsers can open them with ~emacsclient~.
+
+#+begin_src conf :tangle ~/.local/share/applications/org-protocol.desktop :mkdirp yes
+[Desktop Entry]
+Name=org-protocol
+Exec=emacsclient -c -F '(quote (name . "capture"))' %u
+Type=Application
+Terminal=false
+Categories=System;
+MimeType=x-scheme-handler/org-protocol;
+#+end_src
+
 ** Org-roam
 
 #+begin_src emacs-lisp
