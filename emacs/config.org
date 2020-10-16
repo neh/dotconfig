@@ -1879,7 +1879,6 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
 I want to go straight into =evil-insert-states= in some modes so I can just start typing.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-(org-capture-mode . evil-insert-state)
 (org-log-buffer-setup . evil-insert-state)
 #+end_src
 
@@ -1912,8 +1911,6 @@ General purpose org keybindings.
   "ne" '(org-narrow-to-element :which-key "narrow to element")
   "ns" '(org-narrow-to-subtree :which-key "narrow to subtree")
 
-  "oc" 'org-capture
-  "C" 'org-capture
   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
   "og" '(org-agenda :which-key "agenda")
   "o." '(org-open-at-point :which-key "follow link")
@@ -2008,7 +2005,14 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :headline "Incoming"
             :template ("* %:url" "Source: %u, %c" "%i%?")
             :prepend t)
-           ))))
+           )))
+
+  :hook ((org-capture-mode . evil-insert-state))
+
+  :general
+  (neh/leader-keys
+    "oc" 'org-capture
+    "C" 'org-capture))
 #+end_src
 
 #+begin_src emacs-lisp
