@@ -1843,7 +1843,6 @@ Org file locations.
 (org-default-notes-file (if (boundp 'neh/org-default-notes-file)
                             neh/org-default-notes-file
                           "~/org/incoming.org"))
-(org-agenda-files '("~/org/"))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
@@ -1912,7 +1911,6 @@ General purpose org keybindings.
   "ns" '(org-narrow-to-subtree :which-key "narrow to subtree")
 
   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
-  "og" '(org-agenda :which-key "agenda")
   "o." '(org-open-at-point :which-key "follow link")
 
   "ve" '(neh/toggle-local-emphasis-markers :which-key "emphasis")
@@ -1954,6 +1952,26 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   "T" 'org-shiftdown
   "N" 'org-shiftup
   "S" 'org-shiftright)
+#+end_src
+
+** Org agenda
+
+#+begin_src emacs-lisp
+(use-package org-agenda
+  :straight nil
+  :custom
+  (org-agenda-files '("~/org/"))
+  (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
+                                 ((agenda "")
+                                  (alltodo "")))
+                                ("w" "Work"
+                                 ((agenda "")
+                                  (tags-todo "work")))))
+
+  :general
+  (neh/leader-keys
+    "a" '(org-agenda :which-key "agenda")
+    "og" '(org-agenda :which-key "agenda")))
 #+end_src
 
 ** Org Capture
