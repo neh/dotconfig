@@ -1964,9 +1964,14 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
                                  ((agenda "")
                                   (alltodo "")))
+                                ("p" "Personal"
+                                 ((agenda "" )
+                                  (tags-todo "-work"))
+                                 ((org-agenda-tag-filter-preset '("-work"))))
                                 ("w" "Work"
                                  ((agenda "")
-                                  (tags-todo "work")))))
+                                  (tags-todo "+work"))
+                                 ((org-agenda-tag-filter-preset '("+work"))))))
 
   :general
   (neh/leader-keys
