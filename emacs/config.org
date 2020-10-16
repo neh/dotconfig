@@ -2347,7 +2347,7 @@ directory to make multiple eshell windows easier."
     "od" 'dired-jump)
 
   :init
-  (setq dired-listing-switches "-alhv"
+  (setq dired-listing-switches "-alhv --group-directories-first"
         dired-recursive-copies 'always
         dired-deletion-confirmer 'y-or-n-p
         dired-dwim-target t
