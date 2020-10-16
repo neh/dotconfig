@@ -2036,6 +2036,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :general
   (neh/leader-keys
     "oc" 'org-capture
+    "k" 'org-capture
     "C" 'org-capture))
 #+end_src
 
