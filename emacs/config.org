@@ -1630,7 +1630,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (custom-theme-set-faces
      'user
      `(org-ellipsis ((t (:inherit variable-pitch :underline nil))))
-     `(org-tag ((t (,@done :underline nil :height 0.7))))
+     `(org-tag ((t (,@done :underline nil :height 0.85))))
 
      `(org-indent ((t (:inherit (org-hide fixed-pitch)))))
      `(org-code ((t (:inherit fixed-pitch))))
