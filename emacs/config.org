@@ -1984,6 +1984,12 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :headline "Incoming"
             :template "* %?"
             :prepend t)
+           ("meeting"
+            :keys "m"
+            :file (lambda () (concat org-directory "/meetings.org"))
+            :headline "Current"
+            :template ("* %?" "%^T")
+            :prepend nil)
            ("link"
             :keys "l"
             :file ""
