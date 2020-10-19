@@ -2003,7 +2003,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :keys "n"
             :file ""
             :headline "Incoming"
-            :template "* %?"
+            :template ("* %?" "%U")
             :prepend t)
            ("meeting"
             :keys "m"
