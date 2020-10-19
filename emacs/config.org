@@ -1741,7 +1741,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (setq org-journal-dir "~/org/journal/"
         org-journal-enable-encryption nil
         org-journal-date-format "%A, %x"
-        org-journal-file-type 'weekly))
+        org-journal-file-type 'daily))
 #+end_src
 
 Add plantuml for nice text-based diagram generation. I’ll mainly use this in org mode files, generating inline diagrams from src blocks.
