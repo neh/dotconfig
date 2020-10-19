@@ -1625,12 +1625,13 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   ;;   "Face for WAITING org tasks")
 
   (let* ((headline      `(:inherit variable-pitch :weight bold))
-         (done          `(:inherit variable-pitch :weight normal :foreground "#7c6f64")))
+         ;; (done          `(:inherit fixed-pitch :weight normal :foreground "#7c6f64"))
+         )
 
     (custom-theme-set-faces
      'user
      `(org-ellipsis ((t (:inherit variable-pitch :underline nil))))
-     `(org-tag ((t (,@done :underline nil :height 0.85))))
+     `(org-tag ((t (:inherit default :underline nil :height 0.85))))
 
      `(org-indent ((t (:inherit (org-hide fixed-pitch)))))
      `(org-code ((t (:inherit fixed-pitch))))
@@ -1659,9 +1660,9 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      ;;                    :weight bold
      ;;                    :foreground "#222222"
      ;;                    :background "gold2"))))
-     `(org-done ((t (,@done :strike-through t))))
-     `(org-archived ((t (,@done :strike-through t))))
-     `(org-headline-done ((t (,@done))))
+     ;; `(org-done ((t (,@done :strike-through t))))
+     ;; `(org-archived ((t (,@done :strike-through t))))
+     ;; `(org-headline-done ((t (,@done))))
 
      `(org-document-title ((t (,@headline :height 1.3 :underline nil))))))
 
