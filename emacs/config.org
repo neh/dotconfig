@@ -1970,9 +1970,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                                   (tags-todo "-work"))
                                  ((org-agenda-tag-filter-preset '("-work"))))
                                 ("w" "Work"
-                                 ((agenda "" ((org-agenda-span 1)))
-                                  (tags-todo "+work")
-                                  (agenda ""))
+                                 ((agenda "")
+                                  (tags-todo "-archive +work"))
                                  ((org-agenda-tag-filter-preset '("+work"))))))
 
   :general
