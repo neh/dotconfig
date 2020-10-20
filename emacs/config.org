@@ -1963,11 +1963,12 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :custom
   (org-agenda-files '("~/org/"))
   (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
-                                 ((agenda "")
-                                  (alltodo "")))
+                                 ((agenda "-archive")
+                                  (alltodo ""))
+                                 ((org-agenda-tag-filter-preset '("-archive"))))
                                 ("p" "Personal"
                                  ((agenda "" )
-                                  (tags-todo "-work"))
+                                  (tags-todo "-archive -work"))
                                  ((org-agenda-tag-filter-preset '("-work"))))
                                 ("w" "Work"
                                  ((agenda "")
