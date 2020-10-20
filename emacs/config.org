@@ -2390,6 +2390,7 @@ directory to make multiple eshell windows easier."
    (("d" dired-hide-details-mode "hide details" :toggle t)
     ("g" dired-git-info-mode "git info" :toggle t)
     ("u" dired-du-mode "usage" :toggle t)
+    ("c" dired-collapse-mode "collapse" :toggle t)
     )
    "Filter"
    (("p" dired-filter-pop "pop")
