@@ -433,6 +433,10 @@ end
 fish_vi_key_bindings 2> /dev/null
 #+end_src
 
+#+begin_src fish
+eval (direnv hook fish)
+#+end_src
+
 *** Aliases
 #+begin_src fish :tangle ~/.config/fish/functions/ec.fish
 function ec --description 'emacsclient'
