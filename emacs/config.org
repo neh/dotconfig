@@ -1617,6 +1617,11 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (setq-local org-hide-emphasis-markers (if org-hide-emphasis-markers nil t))
     (font-lock-fontify-buffer))
 
+  (defun org-id-complete-link (&optional arg)
+    "Create an id: link using completion"
+    (concat "id:"
+            (org-id-get-with-outline-path-completion)))
+
   ;; (defface org-inprogress
   ;;   '((default :inherit org-todo))
   ;;   "Face for INPROGRESS org tasks")
@@ -1696,6 +1701,9 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (setcar (nthcdr 1 org-emphasis-regexp-components)
           (concat (nth 1 org-emphasis-regexp-components) "s"))
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+  (org-link-set-parameters "id"
+                           :complete 'org-id-complete-link)
 
   (setq org-todo-keywords '((sequence "TODO(t)"
                                       "DOING(i!)"
