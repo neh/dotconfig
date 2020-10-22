@@ -1517,6 +1517,9 @@ Of course, the great magit.
     "gg" '(magit-dispatch :which-key "menu")
     "gs" '(magit-status :which-key "status"))
 
+  :custom
+  (magit-commit-show-diff t)
+
   :init
   (setq magit-diff-refine-hunk t)
 
