@@ -1989,7 +1989,14 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :general
   (neh/leader-keys
     "a" '(org-agenda :which-key "agenda")
-    "og" '(org-agenda :which-key "agenda")))
+    "og" '(org-agenda :which-key "agenda"))
+
+  :init
+  (defun neh/agenda-current-window ()
+    (interactive)
+    (let ((org-agenda-window-setup 'only-window))
+      (org-agenda)
+      (delete-other-windows))))
 #+end_src
 
 ** Org Capture
