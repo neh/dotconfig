@@ -2050,20 +2050,14 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :prepend t)
            )))
 
-  :hook ((org-capture-mode . evil-insert-state))
+  :hook ((org-capture-mode . evil-insert-state)
+         (org-capture-mode . neh/full-frame-capture))
 
   :general
   (neh/leader-keys
     "oc" 'org-capture
-    "k" 'org-capture
-    "C" 'org-capture))
-#+end_src
+    "k" 'org-capture)
 
-#+begin_src emacs-lisp
-(use-package org-protocol
-  :straight nil
-  :after org
-  :hook ((org-capture-mode . neh/full-frame-capture))
   :init
   (defadvice org-capture-finalize
       (after delete-capture-frame activate)
@@ -2073,8 +2067,13 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 
   (defun neh/full-frame-capture ()
     (if (string= (frame-parameter nil 'name) "capture")
-        (delete-other-windows)))
-  )
+        (delete-other-windows))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-protocol
+  :straight nil
+  :after org)
 #+end_src
 
 We need a little desktop integration for =org-protocol=, linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
