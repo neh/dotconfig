@@ -1986,6 +1986,9 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                                   (tags-todo "-archive +work"))
                                  ((org-agenda-tag-filter-preset '("+work"))))))
 
+  (org-agenda-skip-deadline-if-done t)
+  (org-agenda-skip-scheduled-if-done t)
+
   :general
   (neh/leader-keys
     "a" '(org-agenda :which-key "agenda")
