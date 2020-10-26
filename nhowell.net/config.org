@@ -34,16 +34,14 @@ service-db:keyfile/user
 
 Here's a convenient little script to make that easier. Run something like =dconfe dconf-editor= to easily get changed settings into the =user.txt= file.
 
-#+begin_src sh :tangle ~/.local/bin/dconfe
-#!/bin/sh
+#+begin_src sh :tangle ~/.local/bin/dconfe :shebang #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 DCONF_PROFILE="${DCONF_PROFILE}-edit" exec "$@"
 #+end_src
 
 Given a path in the dconf database (eg. =/org/gnome/desktop=), =dconfc= will extract any settings that are different from the default into the text file, then reset them in the binary database.
 
-#+begin_src sh :tangle ~/.local/bin/dconfc
-#!/bin/sh
+#+begin_src sh :tangle ~/.local/bin/dconfc :shebang #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 set -e
 
@@ -129,8 +127,7 @@ if __name__ == "__main__":
     sys.exit(main(sys.argv))
 #+end_src
 
-#+begin_src sh :tangle ~/.local/bin/dconf-list-recursively
-#!/bin/sh
+#+begin_src sh :tangle ~/.local/bin/dconf-list-recursively :shebang #!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 l() {
     dconf list "$1" | while read key ; do
