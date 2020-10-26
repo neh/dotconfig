@@ -426,6 +426,12 @@ end
 #+end_src
 
 #+begin_src fish
+if not contains $HOME/.local/bin $fish_user_paths
+    set -U fish_user_paths $fish_user_paths $HOME/.local/bin
+end
+#+end_src
+
+#+begin_src fish
 <<fish_env>>
 #+end_src
 
