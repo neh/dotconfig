@@ -379,9 +379,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "fp" '(fill-paragraph :which-key "paragraph")
     "fr" '(fill-region :which-key "fill region")
     "ft" '(toggle-truncate-lines :which-key "truncate lines")
-    ;; "ff" '(lambda () (interactive) (make-frame `((width . ,(+ fill-column 3)))))
-    ;; "ff" '(lambda () (interactive) (set-frame-parameter (selected-frame) 'width fill-column))
-    "ff" '(lambda () (interactive) (set-frame-parameter (selected-frame) 'width (+ fill-column 2)))
+    "ff" '(lambda () (interactive) (set-frame-width nil fill-column))
 
     "g" '(:ignore t :which-key "git")
 
@@ -2847,6 +2845,20 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     (setq neh/dark-mode nil)
     (load-theme neh/light-theme t)))
 
+(defun neh/set-frame-width (multiple)
+  "Sets frame width to MULTIPLE of FILL-COLUMN."
+  (interactive)
+  (message "%s %i" "setting frame width to " (+ (* multiple fill-column) 2))
+  (set-frame-parameter
+   nil
+   'width
+   (* multiple fill-column))
+  ;; (modify-frame-parameters
+  ;;  nil
+  ;;  '((width . (+ (* multiple fill-column) 2))))
+  (message "%s %i" "frame width is " (frame-parameter nil 'width))
+  (message "%s %i" "fill-column is " fill-column))
+
 (pretty-hydra-define neh/toggles
   (:color amaranth
    :quit-key ("q" "<escape>")
@@ -2867,7 +2879,12 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("W" writeroom-mode "writeroom" :toggle t)
     ("+" (neh/adjust-text-height 7) "bigger text")
     ("-" (neh/adjust-text-height -7) "smaller text")
-    ("0" (neh/adjust-text-height 0) "reset text size"))))
+    ("0" (neh/adjust-text-height 0) "reset text size"))
+   "Window"
+   (("1" (neh/set-frame-width 1) "single width")
+    ;; ("z" (neh/set-frame-width 2) "double width")
+    ("2" (set-frame-width nil (* fill-column 2)) "double width")
+    ("3" (neh/set-frame-width 3) "triple width"))))
 
 (pretty-hydra-define neh/movement
   (:color amaranth :quit-key ("q" "<escape>") :title "  Movement")
