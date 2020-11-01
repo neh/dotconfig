@@ -443,7 +443,7 @@ eval (direnv hook fish)
 *** Aliases
 #+begin_src fish :tangle ~/.config/fish/functions/ec.fish
 function ec --description 'emacsclient'
-    command emacsclient --alternate-editor="emacs" --сreate-frame $argv
+    command emacsclient --create-frame --alternate-editor="emacs" $argv
 end
 #+end_src
 
