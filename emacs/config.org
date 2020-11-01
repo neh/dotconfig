@@ -1787,6 +1787,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :config
   (require 'evil-org-agenda)
 
+  ;; This is just a copy/paste/modify of the default evil-org-agenda-set-keys function
   (defun neh/evil-org-agenda-set-keys ()
     "Set motion state keys for `org-agenda'."
     (evil-set-initial-state 'org-agenda-mode 'motion)
@@ -1814,8 +1815,8 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
       "gn" 'org-agenda-previous-item
       (kbd "C-t") 'org-agenda-next-item
       (kbd "C-n") 'org-agenda-previous-item
-      (kbd "[") 'org-agenda-earlier
-      (kbd "]") 'org-agenda-later
+      (kbd "C-h") 'org-agenda-earlier
+      (kbd "C-s") 'org-agenda-later
 
       ;; manipulation
       ;; We follow standard org-mode bindings (not org-agenda bindings):
@@ -1912,9 +1913,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
       "+" 'org-agenda-manipulate-query-add
       "-" 'org-agenda-manipulate-query-subtract))
 
-  (neh/evil-org-agenda-set-keys)
-  ;; (evil-org-agenda-set-keys)
-  )
+  (neh/evil-org-agenda-set-keys))
 #+end_src
 
 Make org-mode prettier.
