@@ -2154,7 +2154,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :prepend t)
            ("meeting"
             :keys "m"
-            :file (lambda () (concat org-directory "/meetings.org"))
+            :file ""
             :headline "Current"
             :template ("* %?" "%^T")
             :prepend nil)
