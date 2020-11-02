@@ -1404,15 +1404,7 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
                                     (evil-define-key 'insert 'company-search-map
                                       (kbd "C-t") 'company-select-next)
                                     (evil-define-key 'insert 'company-search-map
-                                      (kbd "C-n") 'company-select-previous))))
-  ;; :init
-  ;; (add-hook 'after-init-hook 'global-company-mode)
-  ;; :config
-  ;; (evil-define-key 'insert 'company-search-map
-  ;;   (kbd "C-t") 'company-select-next)
-  ;; (evil-define-key 'insert 'company-search-map
-  ;;   (kbd "C-n") 'company-select-previous)
-  )
+                                      (kbd "C-n") 'company-select-previous)))))
 
 (use-package company-terraform
   :after company
@@ -1421,13 +1413,8 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
 (use-package company-box
   :after company
   :hook (company-mode . company-box-mode)
-  :init
-  (setq company-box-enable-icon nil)
-  ;; (add-to-list 'company-box-frame-parameters
-  ;; '(font . "-CYEL-Iosevka-normal-normal-normal-*-14-*-*-*-d-0-iso10646-1"))
-  ;; (add-to-list 'company-box-frame-parameters
-  ;; '(font-parameter . "-CYEL-Iosevka-normal-normal-normal-*-14-*-*-*-d-0-iso10646-1"))
-  )
+  :custom
+  (company-box-enable-icon nil))
 
 (use-package company-ansible
   :commands (company-ansible)
