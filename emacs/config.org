@@ -1909,6 +1909,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
       "P" 'org-agenda-show-the-flagging-note
 
       ;; 'org-save-all-org-buffers ; Original binding "C-x C-s"
+      "sa" 'org-save-all-org-buffers
 
       ;; Others
       "+" 'org-agenda-manipulate-query-add
