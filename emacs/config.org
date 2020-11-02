@@ -970,7 +970,6 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   (general-define-key
    :keymaps 'ivy-minibuffer-map
-   "<escape>" 'keyboard-escape-quit
    "C-t" 'ivy-next-line
    "C-n" 'ivy-previous-line
    "C-M-t" 'ivy-next-line-and-call
