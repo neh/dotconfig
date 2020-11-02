@@ -1760,7 +1760,8 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :after (evil org)
   :hook ((org-mode . evil-org-mode)
          (evil-org-mode . (lambda ()
-                            (evil-org-set-key-theme))))
+                            (evil-org-set-key-theme)))
+         (org-agenda-mode . neh/evil-org-agenda-set-keys))
 
   :custom
   (evil-org-movement-bindings '((up . "n")
@@ -1902,9 +1903,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
 
       ;; Others
       "+" 'org-agenda-manipulate-query-add
-      "-" 'org-agenda-manipulate-query-subtract))
-
-  (neh/evil-org-agenda-set-keys))
+      "-" 'org-agenda-manipulate-query-subtract)))
 #+end_src
 
 Make org-mode prettier.
