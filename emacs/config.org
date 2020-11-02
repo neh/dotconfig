@@ -1482,6 +1482,10 @@ Of course, the great magit.
   :hook
   (git-commit-mode . evil-insert-state)
 
+  :custom
+  (magit-commit-show-diff t)
+  (magit-diff-refine-hunk t)
+
   :general
   (general-define-key
    :keymaps 'magit-mode-map
@@ -1503,25 +1507,7 @@ Of course, the great magit.
   (neh/leader-keys
     "gf" '(magit-file-dispatch :which-key "file")
     "gg" '(magit-dispatch :which-key "menu")
-    "gs" '(magit-status :which-key "status"))
-
-  :custom
-  (magit-commit-show-diff t)
-
-  :init
-  (setq magit-diff-refine-hunk t)
-
-  :config
-  ;; (magit-define-popup-action 'magit-file-popup
-  ;;   ?R "Rename file" 'magit-file-rename)
-  ;; (magit-define-popup-action 'magit-file-popup
-  ;;   ?K "Delete file" 'magit-file-delete)
-  ;; (magit-define-popup-action 'magit-file-popup
-  ;;   ?U "Untrack file" 'magit-file-untrack)
-  ;; (magit-define-popup-action 'magit-file-popup
-  ;;   ?C "Checkout file" 'magit-file-checkout)
-
-  (setq magit-completing-read-function 'ivy-completing-read))
+    "gs" '(magit-status :which-key "status")))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
@@ -3141,7 +3127,10 @@ Try out =org-noter=.
                                            company-capf
                                            org-compile-file))
   :init
-  (frames-only-mode t))
+  (frames-only-mode t)
+  :config
+  ;; this mode sets this to nil, which seems no longer necessary
+  (setq magit-commit-show-diff t))
 #+end_src
 
 #+begin_src emacs-lisp
