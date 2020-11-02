@@ -1024,17 +1024,18 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
 (use-package prescient
   :demand t
+  :custom
+  (prescient-history-length 180)
+  (prescient-filter-method '(literal
+                             regexy
+                             initialism
+                             prefix))
   :config
   (prescient-persist-mode t))
 
 (use-package ivy-prescient
-  :hook (ivy-mode . ivy-prescient-mode)
-
-  :config
-  ;; Prescient sorting didn't apply to some counsel-projectile commands without this.
-  ;; (add-to-list 'ivy-prescient-sort-commands 'counsel-projectile)
-  ;; (add-to-list 'ivy-prescient-sort-commands 'counsel-projectile-find-file)
-  )
+  :after (counsel)
+  :hook (ivy-mode . ivy-prescient-mode))
 
 (use-package ivy-rich
   :hook (ivy-mode . ivy-rich-mode))
