@@ -2112,6 +2112,21 @@ Quick heading movement and task item state changes. I'm getting into the habit o
       (delete-other-windows))))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-super-agenda
+  :after (org org-agenda)
+  :hook (org-agenda-mode . org-super-agenda-mode)
+  :custom
+  (org-super-agenda-groups '(
+                             (:name "Doing"
+                              :todo "DOING")
+                             (:name "Next"
+                              :and (:todo "TODO" :priority "A"))
+                             (:name "Waiting"
+                              :todo "WAITING")
+                             )))
+#+end_src
+
 ** Org Capture
 
 #+begin_src emacs-lisp
