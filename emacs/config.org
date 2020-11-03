@@ -2256,6 +2256,7 @@ MimeType=x-scheme-handler/org-protocol;
 
   :custom
   (org-roam-directory "~/org/roam")
+  (org-roam-completion-everywhere t)
 
   :general
   (general-define-key
