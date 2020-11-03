@@ -3452,6 +3452,45 @@ Try out =org-noter=.
 (use-package python-mode
   :straight nil
   :hook (python-mode . neh/python-mode-hook))
+
+(use-package elpy
+  :commands (elpy-enable)
+  :init
+  (with-eval-after-load 'python (elpy-enable)))
+
+(use-package company-jedi
+  :after company
+  :commands (company-jedi)
+  :config
+  (add-to-list 'company-backends 'company-jedi))
+
+;; (use-package lsp-mode
+;;   :commands (lsp-mode
+;;              lsp)
+;;   :hook ((lsp-mode . lsp-enable-which-key-integration)
+;;          (go-mode . lsp)))
+
+;; (use-package lsp-pyright
+;;   :disabled
+;;   :hook (python-mode . (lambda ()
+;;                           (require 'lsp-pyright)
+;;                           (lsp))))
+
+;; (use-package lsp-python-ms
+;;   :disabled
+;;   :init (setq lsp-python-ms-auto-install-server t)
+;;   :hook (python-mode . (lambda ()
+;;                          (require 'lsp-python-ms)
+;;                          (lsp))))
+
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode
+;;   :custom
+;;   (lsp-ui-doc-max-width 90)
+;;   (lsp-ui-doc-position 'top))
+
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-workspace-symbol)
 #+end_src
 
 #+begin_src emacs-lisp
