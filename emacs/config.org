@@ -1909,12 +1909,29 @@ Make org-mode prettier.
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links). Maybe look at [[https://github.com/stardiviner/org-link-beautify][org-link-beautify]] if I need more.
 
 #+begin_src emacs-lisp
-(defface neh/org-link
-  '((t (:inherit org-link :slant italic)))
-  "A neh-style link.")
+(use-package org-link-beautify
+  :hook (org-mode . org-link-beautify-mode))
 
-(org-link-set-parameters "http" :face 'neh/org-link)
-(org-link-set-parameters "https" :face 'neh/org-link)
+
+;; defface won't update an existing face, it has to be done like this:
+;; (face-spec-set
+;;  'neh/org-link
+;;  '((t :inherit org-link
+;;       :weight normal
+;;       :slant italic
+;;       ))
+;;  'face-defface-spec
+;;  )
+
+;; (defface neh/org-link
+;;   '((t (:inherit org-link :slant italic)))
+;;   "A neh-style link.")
+
+;; (org-link-set-parameters "http" :face 'neh/org-link)
+;; (org-link-set-parameters "https" :face 'neh/org-link)
+
+;; (org-link-set-parameters "http" :face 'org-link)
+;; (org-link-set-parameters "https" :face 'org-link)
 #+end_src
 
 Org export.
