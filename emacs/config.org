@@ -2375,8 +2375,15 @@ MimeType=x-scheme-handler/org-protocol;
 
 #+begin_src emacs-lisp
 (use-package org-roam
+  :if (> (length (directory-files org-directory nil "\\.org$")) 0)
+
   :hook
   (after-init . org-roam-mode)
+
+  :commands (org-roam-mode
+             org-roam
+             org-roam-find-file
+             org-roam-insert)
 
   :custom
   (org-roam-directory "~/org/roam")
