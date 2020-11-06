@@ -3023,6 +3023,27 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   )
 #+end_src
 
+Browser/link handling hydra.
+
+#+begin_src emacs-lisp
+(pretty-hydra-define hydra-browse (:hint nil
+                                   :quit-key "q")
+
+  ("browse" (("f" (lambda ()
+                    (interactive)
+                    (let ((browse-url-browser-function 'browse-url-firefox))
+                      (browse-url-at-point))) " firefox" :exit t)
+             ("c" (lambda ()
+                    (interactive)
+                    (let ((browse-url-browser-function 'browse-url-chromium))
+                      (browse-url-at-point))) " chromium" :exit t)
+             ("d" (lambda ()
+                    (interactive)
+                    (let ((browse-url-browser-function 'browse-url-default-browser))
+                      (browse-url-at-point))) " default" :exit t))
+   ))
+#+end_src
+
 Working on a =git= hydra to replace all or most of my usual git keybinds. This is an experiment to see whether I want to use a lot more hydras.
 
 #+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
