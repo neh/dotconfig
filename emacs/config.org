@@ -2117,6 +2117,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   (org-agenda-todo-ignore-scheduled 'future)
   (org-agenda-tags-todo-honor-ignore-options t)
 
+  (org-agenda-format-date "%A, %B %-d, %Y")
+
   :general
   (neh/leader-keys
     "a" '(org-agenda :which-key "agenda")
@@ -2135,14 +2137,103 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :after (org org-agenda)
   :hook (org-agenda-mode . org-super-agenda-mode)
   :custom
-  (org-super-agenda-groups '(
-                             (:name "Doing"
-                              :todo "DOING")
-                             (:name "Next"
-                              :and (:todo "TODO" :priority "A"))
-                             (:name "Waiting"
-                              :todo "WAITING")
-                             )))
+  (org-super-agenda-header-properties '(face org-level-1 org-agenda-structural-header t))
+  (org-super-agenda-date-format "%A, %B %d, %Y")
+
+  (org-agenda-custom-commands
+   '(("n" "Agenda and all TODOs"
+      ((agenda "-archive")
+       (alltodo ""))
+      ((org-agenda-tag-filter-preset '("-archive"))))
+     ("p" "Personal"
+      ((agenda "")
+       (tags-todo "-archive&-work&+TODO=\"DOING\""
+                  ((org-agenda-overriding-header "Doing")))
+       (tags-todo "-archive&-work&+TODO=\"WAITING\""
+                  ((org-agenda-overriding-header "Waiting")))
+       (tags-todo "-archive&-work&+TODO=\"TODO\""
+                  ((org-agenda-overriding-header "Todo")))
+       )
+      ((org-agenda-tag-filter-preset '("-work"))))
+     ("x" "Test"
+      ((agenda "" (
+                   (org-super-agenda-groups
+                    '(
+                      (:name " Schedule"
+                       :time-grid t)
+                      (:name " Today"
+                       ;; :auto-todo t
+                       :deadline today
+                       ;; :scheduled nil
+                       :todo ("DOING")
+                       ;; :and (:todo "TODO" :priority "A")
+                       )
+                      ;; (:name "Next"
+                      ;;  :and (:todo "TODO" :priority "A")
+                      ;;  )
+                      (:name "Projects"
+                       :todo nil
+                       :children todo
+                       :scheduled today
+                       ;; :auto-parent t
+                       )
+                      ))))
+       (tags-todo "-archive +work" ((org-super-agenda-groups
+                                     '((:name "Doing"
+                                        ;; :auto-parent t
+                                        ;; :scheduled today
+                                        :todo "DOING"
+                                        ;; :and (:todo "DOING" :scheduled nil)
+                                        )
+                      (:name "Next"
+                       :and (:todo "TODO" :priority "A"))
+                      (:name "Projects"
+                       :todo nil
+                       :children todo
+                       ;; :scheduled today
+                       ;; :auto-parent t
+                       )
+                                       )))))
+      ((org-agenda-files '("~/org/work-tveon.org"))
+       ))
+     ("m" "Active meeting notes"
+      (
+       ;; (agenda "")
+       (todo "")
+       )
+      ((org-agenda-files '("~/org/work-tveon.org"))))
+     ("w" "Work"
+      ((agenda "")
+       ;; (todo "")
+       (tags-todo "-archive&+work&+TODO=\"DOING\""
+                  ((org-agenda-overriding-header "Doing")))
+       (tags-todo "-archive&+work&+TODO=\"WAITING\""
+                  ((org-agenda-overriding-header "Waiting")))
+       (tags-todo "-archive&+work&+TODO=\"TODO\""
+                  ((org-agenda-overriding-header "Todo")))
+       )
+      (
+       ;; (org-agenda-tag-filter-preset '("-archive" "+work"))
+       (org-agenda-files '("~/org/work-tveon.org"))))))
+
+   ;; (org-super-agenda-groups '(
+   ;;                            (:name "Today"
+   ;;                             :time-grid t)
+   ;;                            (:name "now"
+   ;;                             :deadline today
+   ;;                             :scheduled today)
+   ;;                            (:name "Doing"
+   ;;                             :todo "DOING")
+   ;;                            (:name "Next"
+   ;;                             ;; :auto-parent t
+   ;;                             :and (:todo "TODO" :priority "A"))
+   ;;                            (:name "Projects"
+   ;;                             :children 'todo)
+   ;;                            (:name "Waiting"
+   ;;                             ;; :auto-parent t
+   ;;                             :todo "WAITING")
+   ;;                            ))
+                             )
 #+end_src
 
 ** Org Capture
