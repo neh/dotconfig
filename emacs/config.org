@@ -1910,6 +1910,7 @@ A basic start at making different kinds of links look usefully different (eg. it
 
 #+begin_src emacs-lisp
 (use-package org-link-beautify
+  :disabled t
   :hook (org-mode . org-link-beautify-mode))
 
 
@@ -1923,12 +1924,12 @@ A basic start at making different kinds of links look usefully different (eg. it
 ;;  'face-defface-spec
 ;;  )
 
-;; (defface neh/org-link
-;;   '((t (:inherit org-link :slant italic)))
-;;   "A neh-style link.")
+(defface neh/org-link
+  '((t (:inherit org-link :slant italic)))
+  "A neh-style link.")
 
-;; (org-link-set-parameters "http" :face 'neh/org-link)
-;; (org-link-set-parameters "https" :face 'neh/org-link)
+(org-link-set-parameters "http" :face 'neh/org-link)
+(org-link-set-parameters "https" :face 'neh/org-link)
 
 ;; (org-link-set-parameters "http" :face 'org-link)
 ;; (org-link-set-parameters "https" :face 'org-link)
