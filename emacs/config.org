@@ -1874,8 +1874,11 @@ Make org-mode prettier.
   (setq org-superstar-headline-bullets-list '(" " "‣" " " " " " " 10040 10047 9675)
         org-superstar-special-todo-items t
         org-superstar-todo-bullet-alist '(("TODO" . 9744)
+                                          ("NEXT" . 9744)
+                                          ("INTERRUPT" . 9888)
                                           ("DOING" . 9881)
                                           ("WAITING" . 8987)
+                                          ("TESTING" . 8987)
                                           ("DONE" . 9745)
                                           ("CANCELED" . 9746))))
 #+end_src
@@ -2163,45 +2166,33 @@ Quick heading movement and task item state changes. I'm getting into the habit o
        )
       ((org-agenda-tag-filter-preset '("-work"))))
      ("x" "Test"
-      ((agenda "" (
+      (;;(agenda "" nil)
+       (agenda "" (
                    (org-super-agenda-groups
                     '(
-                      (:name " Schedule"
-                       :time-grid t)
-                      (:name " Today"
-                       ;; :auto-todo t
-                       :deadline today
-                       ;; :scheduled nil
-                       :todo ("DOING")
-                       ;; :and (:todo "TODO" :priority "A")
-                       )
-                      ;; (:name "Next"
-                      ;;  :and (:todo "TODO" :priority "A")
-                      ;;  )
-                      (:name "Projects"
-                       :todo nil
-                       :children todo
-                       :scheduled today
-                       ;; :auto-parent t
+                      (:name " Schedule"
+                       :scheduled t
+                       :deadline t
+                       :time-grid t
                        )
                       ))))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     '((:name "Doing"
-                                        ;; :auto-parent t
-                                        ;; :scheduled today
-                                        :todo "DOING"
-                                        ;; :and (:todo "DOING" :scheduled nil)
-                                        )
+                                     '(
+                      (:name "Interruptions"
+                       :todo "INTERRUPT")
+                      (:name "Doing"
+                       :todo "DOING")
                       (:name "Next"
-                       :and (:todo "TODO" :priority "A"))
-                      (:name "Projects"
-                       :todo nil
-                       :children todo
-                       ;; :scheduled today
-                       ;; :auto-parent t
-                       )
+                       :todo "NEXT")
+                      ;; (:name "Projects"
+                      ;;  :todo nil
+                      ;;  :children todo
+                      ;;  ;; :scheduled today
+                      ;;  ;; :auto-parent t
+                      ;;  )
                                        )))))
       ((org-agenda-files '("~/org/work-tveon.org"))
+       (org-agenda-span 'day)
        ))
      ("m" "Active meeting notes"
       (
