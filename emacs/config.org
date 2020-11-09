@@ -2203,16 +2203,20 @@ Quick heading movement and task item state changes. I'm getting into the habit o
      ("w" "Work"
       ((agenda "")
        ;; (todo "")
+       (tags-todo "-archive&+work&+TODO=\"INTERRUPT\""
+                  ((org-agenda-overriding-header "Interruptions")))
        (tags-todo "-archive&+work&+TODO=\"DOING\""
                   ((org-agenda-overriding-header "Doing")))
-       (tags-todo "-archive&+work&+TODO=\"WAITING\""
-                  ((org-agenda-overriding-header "Waiting")))
-       (tags-todo "-archive&+work&+TODO=\"TODO\""
-                  ((org-agenda-overriding-header "Todo")))
+       (tags-todo "-archive&work&(/!WAITING|TESTING)"
+                  ((org-agenda-overriding-header "Waiting/Testing")))
+       (tags-todo "-archive&+work&+TODO=\"NEXT\""
+                  ((org-agenda-overriding-header "Next")))
        )
       (
        ;; (org-agenda-tag-filter-preset '("-archive" "+work"))
-       (org-agenda-files '("~/org/work-tveon.org"))))))
+       (org-agenda-files '("~/org/work-tveon.org"))
+       (org-agenda-span 'day))
+      )))
 
    ;; (org-super-agenda-groups '(
    ;;                            (:name "Today"
