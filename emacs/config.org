@@ -1681,9 +1681,12 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (org-link-set-parameters "id"
                            :complete 'org-id-complete-link)
 
-  (setq org-todo-keywords '((sequence "TODO(t)"
+  (setq org-todo-keywords '((sequence "TODO(t!)"
+                                      "NEXT(n!)"
                                       "DOING(i!)"
+                                      "INTERRUPT(p!)"
                                       "WAITING(w@/!)"
+                                      "TESTING(s@/!)"
                                       "|"
                                       "DONE(d!)"
                                       "CANCELED(c@)")))
@@ -2100,23 +2103,24 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :straight nil
   :custom
   (org-agenda-files '("~/org/"))
-  (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
-                                 ((agenda "-archive")
-                                  (alltodo ""))
-                                 ((org-agenda-tag-filter-preset '("-archive"))))
-                                ("p" "Personal"
-                                 ((agenda "" )
-                                  (tags-todo "-archive -work"))
-                                 ((org-agenda-tag-filter-preset '("-work"))))
-                                ("w" "Work"
-                                 ((agenda "")
-                                  (tags-todo "-archive +work"))
-                                 ((org-agenda-tag-filter-preset '("+work"))))))
+  ;; (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
+  ;;                                ((agenda "-archive")
+  ;;                                 (alltodo ""))
+  ;;                                ((org-agenda-tag-filter-preset '("-archive"))))
+  ;;                               ("p" "Personal"
+  ;;                                ((agenda "" )
+  ;;                                 (tags-todo "-archive -work"))
+  ;;                                ((org-agenda-tag-filter-preset '("-work"))))
+  ;;                               ("w" "Work"
+  ;;                                ((agenda "")
+  ;;                                 (tags-todo "-archive +work"))
+  ;;                                ((org-agenda-tag-filter-preset '("+work"))))))
 
   (org-agenda-skip-deadline-if-done t)
   (org-agenda-skip-scheduled-if-done t)
   (org-agenda-todo-ignore-scheduled 'future)
   (org-agenda-tags-todo-honor-ignore-options t)
+  (org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
 
   (org-agenda-format-date "%A, %B %-d, %Y")
 
