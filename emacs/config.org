@@ -2155,6 +2155,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
       ((agenda "-archive")
        (alltodo ""))
       ((org-agenda-tag-filter-preset '("-archive"))))
+
      ("p" "Personal"
       ((agenda "")
        (tags-todo "-archive&-work&+TODO=\"DOING\""
@@ -2165,44 +2166,29 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                   ((org-agenda-overriding-header "Todo")))
        )
       ((org-agenda-tag-filter-preset '("-work"))))
+
      ("x" "Test"
-      (;;(agenda "" nil)
-       (agenda "" (
-                   (org-super-agenda-groups
-                    '(
-                      (:name " Schedule"
-                       :scheduled t
-                       :deadline t
+      ((agenda "" ((org-super-agenda-groups
+                    '((:name " Schedule"
                        :time-grid t
-                       )
-                      ))))
+                       :deadline t
+                       :scheduled t
+                       )))))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     '(
-                      (:name "Interruptions"
-                       :todo "INTERRUPT")
-                      (:name "Doing"
-                       :todo "DOING")
-                      (:name "Next"
-                       :todo "NEXT")
-                      ;; (:name "Projects"
-                      ;;  :todo nil
-                      ;;  :children todo
-                      ;;  ;; :scheduled today
-                      ;;  ;; :auto-parent t
-                      ;;  )
-                                       )))))
+                                     '((:name " Interruptions"
+                                        :todo "INTERRUPT")
+                                       (:name " Doing"
+                                        :todo "DOING")
+                                       (:name " Waiting/Testing"
+                                        :todo ("WAITING" "TESTING"))
+                                       (:name " Next"
+                                        :todo "NEXT")
+                                       (:discard (:anything t)))))))
       ((org-agenda-files '("~/org/work-tveon.org"))
-       (org-agenda-span 'day)
-       ))
-     ("m" "Active meeting notes"
-      (
-       ;; (agenda "")
-       (todo "")
-       )
-      ((org-agenda-files '("~/org/work-tveon.org"))))
+       (org-agenda-span 'day)))
+
      ("w" "Work"
       ((agenda "")
-       ;; (todo "")
        (tags-todo "-archive&+work&+TODO=\"INTERRUPT\""
                   ((org-agenda-overriding-header "Interruptions")))
        (tags-todo "-archive&+work&+TODO=\"DOING\""
@@ -2212,11 +2198,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
        (tags-todo "-archive&+work&+TODO=\"NEXT\""
                   ((org-agenda-overriding-header "Next")))
        )
-      (
-       ;; (org-agenda-tag-filter-preset '("-archive" "+work"))
-       (org-agenda-files '("~/org/work-tveon.org"))
-       (org-agenda-span 'day))
-      )))
+      ((org-agenda-files '("~/org/work-tveon.org"))
+       (org-agenda-span 'day)))))
 
    ;; (org-super-agenda-groups '(
    ;;                            (:name "Today"
