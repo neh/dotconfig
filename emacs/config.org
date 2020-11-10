@@ -2157,17 +2157,25 @@ Quick heading movement and task item state changes. I'm getting into the habit o
       ((org-agenda-tag-filter-preset '("-archive"))))
 
      ("p" "Personal"
-      ((agenda "")
-       (tags-todo "-archive&-work&+TODO=\"DOING\""
-                  ((org-agenda-overriding-header "Doing")))
-       (tags-todo "-archive&-work&+TODO=\"WAITING\""
-                  ((org-agenda-overriding-header "Waiting")))
-       (tags-todo "-archive&-work&+TODO=\"TODO\""
-                  ((org-agenda-overriding-header "Todo")))
-       )
-      ((org-agenda-tag-filter-preset '("-work"))))
+      ((agenda "" ((org-super-agenda-groups
+                    '((:name " Schedule"
+                       :time-grid t
+                       :deadline t
+                       :scheduled t
+                       )))))
+       (tags-todo "-archive -work" ((org-super-agenda-groups
+                                     '((:name " Doing"
+                                        :todo "DOING")
+                                       (:name " Waiting/Testing"
+                                        :todo ("WAITING" "TESTING"))
+                                       (:name " Next"
+                                        :todo "NEXT")
+                                       (:discard (:anything t)))))))
+      ((org-agenda-files '("~/org"))
+       (org-agenda-span 'day)
+       (org-agenda-tag-filter-preset '("-work"))))
 
-     ("x" "Test"
+     ("w" "Work"
       ((agenda "" ((org-super-agenda-groups
                     '((:name " Schedule"
                        :time-grid t
@@ -2187,19 +2195,20 @@ Quick heading movement and task item state changes. I'm getting into the habit o
       ((org-agenda-files '("~/org/work-tveon.org"))
        (org-agenda-span 'day)))
 
-     ("w" "Work"
-      ((agenda "")
-       (tags-todo "-archive&+work&+TODO=\"INTERRUPT\""
-                  ((org-agenda-overriding-header "Interruptions")))
-       (tags-todo "-archive&+work&+TODO=\"DOING\""
-                  ((org-agenda-overriding-header "Doing")))
-       (tags-todo "-archive&work&(/!WAITING|TESTING)"
-                  ((org-agenda-overriding-header "Waiting/Testing")))
-       (tags-todo "-archive&+work&+TODO=\"NEXT\""
-                  ((org-agenda-overriding-header "Next")))
-       )
-      ((org-agenda-files '("~/org/work-tveon.org"))
-       (org-agenda-span 'day)))))
+     ;; ("w" "Work"
+     ;;  ((agenda "")
+     ;;   (tags-todo "-archive&+work&+TODO=\"INTERRUPT\""
+     ;;              ((org-agenda-overriding-header "Interruptions")))
+     ;;   (tags-todo "-archive&+work&+TODO=\"DOING\""
+     ;;              ((org-agenda-overriding-header "Doing")))
+     ;;   (tags-todo "-archive&work&(/!WAITING|TESTING)"
+     ;;              ((org-agenda-overriding-header "Waiting/Testing")))
+     ;;   (tags-todo "-archive&+work&+TODO=\"NEXT\""
+     ;;              ((org-agenda-overriding-header "Next")))
+     ;;   )
+     ;;  ((org-agenda-files '("~/org/work-tveon.org"))
+     ;;   (org-agenda-span 'day)))
+     ))
 
    ;; (org-super-agenda-groups '(
    ;;                            (:name "Today"
