@@ -2240,18 +2240,24 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :headline "Incoming"
             :template "* TODO %?"
             :prepend t)
+           ("interruption"
+            :keys "i"
+            :file ""
+            :headline "Incoming"
+            :template "* INTERRUPT %?"
+            :prepend t)
            ("note"
             :keys "n"
             :file ""
             :headline "Incoming"
-            :template ("* %?" "%U")
+            :template ("* %?" "%T")
             :prepend t)
-           ("meeting"
-            :keys "m"
-            :file ""
-            :headline "Current"
-            :template ("* %?" "%^T")
-            :prepend nil)
+           ;; ("meeting"
+           ;;  :keys "m"
+           ;;  :file ""
+           ;;  :headline "Current"
+           ;;  :template ("* %?" "%^T")
+           ;;  :prepend nil)
            ("link"
             :keys "l"
             :file ""
