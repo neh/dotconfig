@@ -2175,7 +2175,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                        :scheduled t
                        )))))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     '((:name " Interruptions"
+                                     '((:name " Interruptions"
                                         :todo "INTERRUPT")
                                        (:name " Doing"
                                         :todo "DOING")
