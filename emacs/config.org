@@ -2621,6 +2621,9 @@ directory to make multiple eshell windows easier."
   :commands (dired-jump
              dired-mode)
 
+  :custom
+  (dired-create-destination-dirs 'ask)
+
   :general
   (general-define-key
     :keymaps 'dired-mode-map
