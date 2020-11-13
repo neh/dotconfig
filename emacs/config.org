@@ -900,12 +900,22 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 (use-package ivy
   :hook (after-init . ivy-mode)
 
-  :custom-face
+  ;; :custom-face
   ;; this doesn't seem to work: https://github.com/jwiegley/use-package/issues/696
   ;; doing it in neh/theme-tweaks for now instead.
-  (ivy-org ((t `(:inherit fixed-pitch
-                 :weight bold
-                 :foreground ,(face-attribute 'org-level-1 :foreground)))))
+  ;; (ivy-org ((t `(:inherit fixed-pitch
+  ;;                :weight bold
+  ;;                :foreground ,(face-attribute 'org-level-1 :foreground)))))
+
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-read-action-function #'ivy-hydra-read-action)
+  (ivy-dynamic-exhibit-delay-ms 250)
+  (ivy-count-format "%d/%d ")
+  (ivy-extra-directories nil)
+  (ivy-height 15)
+  (ivy-use-selectable-prompt t)
+  ;; (ivy-initial-inputs-alist nil)
 
   :init
   (defun reloading (cmd)
@@ -995,12 +1005,12 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
    "C-b" 'evil-scroll-page-up)
 
   :config
-  (ivy-add-actions
-   t
-   '(("f" neh-open-file-in-frame "other frame")))
-  (ivy-add-actions
-   t
-   '(("|" neh-open-file-in-vsplit "vsplit")))
+  ;; (ivy-add-actions
+  ;;  t
+  ;;  '(("f" neh-open-file-in-frame "other frame")))
+  ;; (ivy-add-actions
+  ;;  t
+  ;;  '(("|" neh-open-file-in-vsplit "vsplit")))
   ;; this adds the action, but switching to other buffers tries to open a buffer relative to the
   ;; current dir/project, which doesn't exist
   (ivy-add-actions
@@ -1009,16 +1019,10 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   ;; (add-to-list 'ivy-display-functions-alist '(t . ivy-display-function-window))
 
-  (setq ivy-use-virtual-buffers t
-        ivy-read-action-function #'ivy-hydra-read-action
-        ivy-dynamic-exhibit-delay-ms 250
-        ivy-count-format "%d/%d "
-        ivy-format-function #'ivy-format-function-arrow
-        ivy-extra-directories nil
-        ivy-height 15
-        ivy-use-selectable-prompt t
-        ivy-re-builders-alist '((t . ivy--regex))
-        ivy-initial-inputs-alist nil))
+  ;; (setq ivy-format-function #'ivy-format-function-arrow)
+  ;; (setq ivy-re-builders-alist '((t . ivy--regex)))
+)
+
 
 (use-package ivy-posframe
   :commands (ivy-posframe-mode))
@@ -1070,10 +1074,11 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
     "g/" #'neh/counsel-switch-to-dired-buffer
     "g!" #'neh/counsel-switch-to-eshell-buffer)
 
-  :init
-  (setq counsel-ag-base-command "ag --nocolor --nogroup --ignore-case %s"
-        counsel-grep-base-command "grep -inE '%s' %s")
+  :custom
+  (counsel-ag-base-command "ag --nocolor --nogroup --ignore-case %s")
+  (counsel-grep-base-command "grep -inE '%s' %s")
 
+  :init
   (defun swiper-thing-at-point ()
     (interactive)
     (ivy-with-thing-at-point #'swiper))
@@ -1371,7 +1376,7 @@ FACE defaults to inheriting from default and highlight."
     "oh" '(counsel-projectile :which-key "open file/buffer in project")
     "u" '(counsel-projectile :which-key "switch project buffer/file")
     "op" '(counsel-projectile-switch-project :which-key "switch project")
-    "s." '(neh-search-thing-at-point :which-key "search for thing at point")
+    "s." '(neh/search-thing-at-point :which-key "search for thing at point")
     "sp" '(counsel-projectile-rg :which-key "search project"))
 
   :custom
@@ -1384,25 +1389,20 @@ FACE defaults to inheriting from default and highlight."
     (let ((counsel-projectile-rg-initial-input '(ivy-thing-at-point)))
       (counsel-projectile-rg)))
 
-  (defun neh-search-thing-at-point ()
+  (defun neh/search-thing-at-point ()
     (interactive)
     (if (projectile-project-p)
         (counsel-projectile-rg-with-thing-at-point)
       (ivy-with-thing-at-point #'counsel-rg)))
 
-  :config
+  ;; :config
   ;; Set the default switch project action to find files so that paths are included in the search
   ;; list
-  (counsel-projectile-modify-action
-   'counsel-projectile-switch-project-action
-   '((default counsel-projectile-switch-project-action-find-file)))
+  ;; (counsel-projectile-modify-action
+  ;;  'counsel-projectile-switch-project-action
+  ;;  '((default counsel-projectile-switch-project-action-find-file)))
 
-  (ivy-add-actions
-   'counsel-projectile-find-file
-   `(("c" ,(given-file #'copy-file "Copy") "copy")
-     ("d" ,(reloading #'confirm-delete-file) "delete")
-     ("m" ,(reloading (given-file #'rename-file "Move")) "move")
-     ("b" counsel-find-file-cd-bookmark-action "cd bookmark"))))
+  )
 #+end_src
 
 * Company
