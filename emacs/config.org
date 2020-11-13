@@ -1348,8 +1348,8 @@ FACE defaults to inheriting from default and highlight."
 
 #+begin_src emacs-lisp
 (use-package projectile
-  :init
-  (setq projectile-completion-system 'ivy)
+  :custom
+  (projectile-completion-system 'ivy)
 
   :config
   (setq frame-title-format
@@ -1374,9 +1374,11 @@ FACE defaults to inheriting from default and highlight."
     "s." '(neh-search-thing-at-point :which-key "search for thing at point")
     "sp" '(counsel-projectile-rg :which-key "search project"))
 
-  :init
-  (setq counsel-projectile-sort-files t)
+  :custom
+  (counsel-projectile-sort-files t)
+  (counsel-projectile-preview-buffers t)
 
+  :init
   (defun counsel-projectile-rg-with-thing-at-point ()
     (interactive)
     (let ((counsel-projectile-rg-initial-input '(ivy-thing-at-point)))
