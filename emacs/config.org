@@ -169,39 +169,45 @@ Show a message when garbage collecting, just for some awareness.
 (setq garbage-collection-messages nil)
 #+end_src
 
+#+begin_src emacs-lisp :noweb yes
+(use-package emacs
+  :custom
+  <<emacs-custom>>)
+#+end_src
+
 Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a clean start.
 
-#+begin_src emacs-lisp
-(setq inhibit-splash-screen t
-      inhibit-startup-message t
-      initial-scratch-message nil
-      inhibit-startup-echo-area-message t)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(inhibit-splash-screen t)
+(inhibit-startup-message t)
+(initial-scratch-message nil)
+(inhibit-startup-echo-area-message t)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(menu-bar-mode nil)
+(tool-bar-mode nil)
+(scroll-bar-mode nil)
 #+end_src
 
 Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother. Trying out =pixel-scroll-mode=.
 
-#+begin_src emacs-lisp
-(setq-default mouse-wheel-scroll-amount '(2 ((shift) . 1)) ;; one line at a time
-              mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
-              mouse-wheel-follow-mouse 't ;; scroll window under mouse
-              scroll-step 1 ;; keyboard scroll one line at a time
-              scroll-margin 3
-              hscroll-step 3
-              hscroll-margin 3
-              scroll-preserve-screen-position 'always
-              scroll-up-aggressively 0.01
-              scroll-down-aggressively 0.01
-              scroll-conservatively 101) ;; Don't jump around when scrolling
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(mouse-wheel-scroll-amount '(2 ((shift) . 1)))
+(mouse-wheel-progressive-speed nil)
+(mouse-wheel-follow-mouse 't)
+(scroll-step 1)
+(scroll-margin 3)
+(hscroll-step 3)
+(hscroll-margin 3)
+(scroll-preserve-screen-position 'always)
+(scroll-up-aggressively 0.01)
+(scroll-down-aggressively 0.01)
+(scroll-conservatively 101)
 #+end_src
 
 And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 
-#+begin_src emacs-lisp
-(setq-default auto-hscroll-mode 'current-line)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(auto-hscroll-mode 'current-line)
 #+end_src
 
 Set the window titles. Nothing fancy, just the buffer name.
@@ -259,17 +265,17 @@ All UTF-8, all the time.
 
 Don’t use tabs when indenting.
 
-#+begin_src emacs-lisp
-(setq-default indent-tabs-mode nil)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(indent-tabs-mode nil)
 #+end_src
 
 More options. I’m not sure where to put some things in this file yet. Here are some.
 
-#+begin_src emacs-lisp
-(setq sentence-end-double-space nil)
-(setq ring-bell-function 'ignore)
-(setq enable-recursive-minibuffers t)
-(global-subword-mode 1)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(sentence-end-double-space nil)
+(ring-bell-function 'ignore)
+(enable-recursive-minibuffers t)
+(global-subword-mode t)
 #+end_src
 
 Don’t warn me when I do these potentially confusing narrowing operations.
@@ -281,13 +287,11 @@ Don’t warn me when I do these potentially confusing narrowing operations.
 
 Set some backup file options.
 
-#+begin_src emacs-lisp
-(setq make-backup-files nil
-      delete-old-versions t
-      backup-directory-alist
-      `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(make-backup-files nil)
+(delete-old-versions t)
+(backup-directory-alist `((".*" . ,temporary-file-directory)))
+(auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 #+end_src
 
 I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager, and apparently ~$SSH_AUTH_SOCK~ doesn’t get set (maybe just for xwayland apps?). So we workaround. I already set a fixed link to the real socket for tmux usage, I can reuse it for this.
@@ -299,10 +303,10 @@ I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager,
 
 Some text fill options.
 
-#+begin_src emacs-lisp
-(setq-default fill-column 100)
-(add-to-list 'default-frame-alist `(width  . ,fill-column))
-(setq comment-auto-fill-only-comments t)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(fill-column 100)
+(default-frame-alist '((width  . 100)))
+(comment-auto-fill-only-comments t)
 #+end_src
 
 I view man pages in emacs sometimes, and want a fixed width for them.
@@ -313,27 +317,27 @@ I view man pages in emacs sometimes, and want a fixed width for them.
       woman-fill-column fill-column)
 #+end_src
 
-#+begin_src emacs-lisp
-(setq-default line-spacing 0.1)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(line-spacing 0.1)
 #+end_src
 
 How to make display buffer names.
 
-#+begin_src emacs-lisp
-(setq uniquify-buffer-name-style 'forward)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(uniquify-buffer-name-style 'forward)
 #+end_src
 
 Some git/vc options.
 
-#+begin_src emacs-lisp
-(setq auto-revert-check-vc-info t
-      vc-follow-symlinks t)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(auto-revert-check-vc-info t)
+(vc-follow-symlinks t)
 #+end_src
 
 When pasting (yanking) into emacs, paste at the point, not where I click (I like to paste with the middle mouse button, xorg-style).
 
-#+begin_src emacs-lisp
-(setq mouse-yank-at-point t)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(mouse-yank-at-point t)
 #+end_src
 
 * Keybindings
