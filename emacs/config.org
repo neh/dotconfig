@@ -163,11 +163,7 @@ Load any host-specific configuration. Anything set here will just get overridden
   (load-file neh/local-conf-file))
 #+end_src
 
-Show a message when garbage collecting, just for some awareness.
-
-#+begin_src emacs-lisp
-(setq garbage-collection-messages nil)
-#+end_src
+Collect all the global, non-package-specific settings here.
 
 #+begin_src emacs-lisp :noweb yes
 (use-package emacs
@@ -188,7 +184,7 @@ Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a
 (scroll-bar-mode nil)
 #+end_src
 
-Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother. Trying out =pixel-scroll-mode=.
+Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
 (mouse-wheel-scroll-amount '(2 ((shift) . 1)))
@@ -249,11 +245,10 @@ Set my preferred font and size, taking display DPI into account. Bits and pieces
 ;; (add-hook 'after-make-frame-functions #'neh/set-frame-options)
 #+end_src
 
-I don’t really use the customization system in Emacs (yet?) but let’s at least make it use a file that isn’t the main config.
+I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, and I don't want customized settings accumulating in a file where they can be forgotten about and trip me up later. This seems like a sane way to use the customization system to me, so we'll see.
 
-#+begin_src emacs-lisp
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file 'no-error)
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(custom-file null-device)
 #+end_src
 
 All UTF-8, all the time.
@@ -312,9 +307,16 @@ Some text fill options.
 I view man pages in emacs sometimes, and want a fixed width for them.
 
 #+begin_src emacs-lisp
-(setq Man-width fill-column
-      Man-notify-method 'pushy
-      woman-fill-column fill-column)
+(use-package man
+  :straight nil
+  :custom
+  (Man-width fill-column)
+  (Man-notify-method 'newframe))
+
+(use-package woman
+  :straight nil
+  :custom
+  (woman-fill-column fill-column))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
@@ -426,9 +428,10 @@ Which-key shows a handy popup for available keybindings at any given time.
 #+begin_src emacs-lisp
 (use-package which-key
   :demand t
+  :custom
+  (which-key-idle-secondary-delay 0.25)
   :config
   (which-key-setup-side-window-bottom)
-  (setq which-key-idle-secondary-delay 0.25)
   (which-key-mode))
 #+end_src
 
@@ -460,17 +463,17 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 (use-package eldoc
   :straight nil
-  :init
-  (setq eldoc-echo-area-use-multiline-p nil))
+  :custom
+  (eldoc-echo-area-use-multiline-p nil))
 
 (use-package undo-tree
   :config
   (global-undo-tree-mode t))
 
 (use-package paren
-  :init
-  (setq show-paren-delay 0
-        show-paren-style 'parenthesis)
+  :custom
+  (show-paren-delay 0)
+  (show-paren-style 'parenthesis)
   :config
   (show-paren-mode 1))
 
@@ -479,19 +482,19 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :general
   (neh/leader-keys
     "vw" '(whitespace-mode :which-key "whitespace"))
-  :init
-  (setq whitespace-line-column 80
-        whitespace-style '(face trailing tabs lines-tail)))
+  :custom
+  (whitespace-line-column 80)
+  (whitespace-style '(face trailing tabs lines-tail)))
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
 
 (use-package helpful
   :after (counsel)
-  :init
-  (setq helpful-max-buffers 5
-        counsel-describe-function-function #'helpful-callable
-        counsel-describe-variable-function #'helpful-variable)
+  :custom
+  (helpful-max-buffers 5)
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
   :general
   (neh/leader-keys
     "h." '(helpful-at-point :which-key "point help")
@@ -512,11 +515,9 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
-  :commands (exec-path-from-shell-initialize)
-  :init
-  (setq exec-path-from-shell-arguments '("-l"))
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  :hook (after-init . exec-path-from-shell-initialize)
+  :custom
+  (exec-path-from-shell-arguments '("-l")))
 #+end_src
 
 * Text mode
@@ -550,8 +551,8 @@ I’ll put olivetti mode here since I think it’s mainly a text mode thing rath
 #+begin_src emacs-lisp
 (use-package olivetti
   :commands (olivetti-mode)
-  :config
-  (setq-default olivetti-body-width fill-column))
+  :custom
+  (olivetti-body-width fill-column))
 #+end_src
 
 And let’s try out writeroom mode.
@@ -560,10 +561,10 @@ And let’s try out writeroom mode.
 (use-package writeroom-mode
   :commands (writeroom-mode
              global-writeroom-mode)
-  :init
-  (setq writeroom-width fill-column
-        writeroom-extra-line-spacing 0
-        writeroom-border-width 40)
+  :custom
+  (writeroom-width fill-column)
+  (writeroom-extra-line-spacing 0)
+  (writeroom-border-width 40)
   :config
   (add-to-list 'writeroom-global-effects 'writeroom-set-internal-border-width))
 #+end_src
@@ -587,17 +588,20 @@ General settings for programming modes.
       neh/light-theme 'modus-operandi)
 
 (use-package modus-operandi-theme
+  :custom
+  (modus-operandi-theme-org-blocks 'greyscale)
+  (modus-operandi-theme-diffs 'desaturated)
+  (modus-operandi-theme-bold-constructs t)
+  (modus-operandi-theme-slanted-constructs t)
   :config
-  (setq modus-operandi-theme-org-blocks 'greyscale
-        modus-operandi-theme-diffs 'desaturated
-        modus-operandi-theme-bold-constructs t
-        modus-operandi-theme-slanted-constructs t)
   (load-theme neh/light-theme t nil))
+
 (use-package modus-vivendi-theme
+  :custom
+  (modus-vivendi-theme-org-blocks 'greyscale)
+  (modus-vivendi-theme-bold-constructs t)
+  (modus-vivendi-theme-slanted-constructs t)
   :config
-  (setq modus-vivendi-theme-org-blocks 'greyscale
-        modus-vivendi-theme-bold-constructs t
-        modus-vivendi-theme-slanted-constructs t)
   (load-theme neh/dark-theme t t))
 
 (use-package gruvbox-theme
@@ -698,17 +702,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; (set-face-attribute 'mode-line nil :height 1.0)
   ;; (set-face-attribute 'mode-line-inactive nil :height 1.0)
 
-  ;; (set-face-attribute 'org-todo nil
-  ;;                     :foreground (color-complement-hex
-  ;;                                  (face-attribute 'default :background))
-  ;;                     :background (color-lighten-name
-  ;;                                  (face-attribute 'default :background) 10))
-
-  ;; (set-face-attribute 'ivy-org nil
-  ;;                     :inherit 'fixed-pitch
-  ;;                     :weight 'bold
-  ;;                     :foreground (face-attribute 'org-level-1 :foreground))
-
   (save-current-buffer
     (mapc (lambda (b)
             (set-buffer b)
@@ -717,9 +710,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
           (buffer-list)))
 
   (neh/enable-scroll-highlight)
-
-  ;; (set-face-attribute 'org-block-begin-line nil :height 0.85 :slant 'italic)
-  ;; (set-face-attribute 'org-block-end-line nil :height 0.85 :slant 'italic)
   )
 #+end_src
 
@@ -746,6 +736,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (doom-modeline-evil-replace-state
    ((t (:background "red4" :foreground "#ffffff"))))
 
+  :custom
+  (doom-modeline-height 34)
+  (doom-modeline-bar-width 1)
+  (doom-modeline-buffer-file-name-style 'truncate-except-project)
+  (column-number-mode t)
+
   :init
   (defun doom-modeline-conditional-buffer-encoding ()
     "We expect the encoding to be LF UTF-8, so only show the modeline when this is not the case"
@@ -754,11 +750,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                             (eq buffer-file-coding-system 'utf-8)))))
 
   :config
-  (setq-default doom-modeline-column-zero-based nil)
-  (setq doom-modeline-height 34
-        doom-modeline-bar-width 1
-        doom-modeline-buffer-file-name-style 'truncate-except-project)
-  (column-number-mode t))
+  (setq-default doom-modeline-column-zero-based nil))
 #+end_src
 
 * Eeeeevil
@@ -769,11 +761,14 @@ I come from vim, so evil is a necessity.
 (use-package evil
   :demand t
   :after general
+
+  :custom
+  (evil-move-cursor-back t)
+  (evil-vsplit-window-right t)
+
   :init
   (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-move-cursor-back t
-        evil-vsplit-window-right t)
+        evil-want-keybinding nil)
 
   :general
   <<evil-general>>
@@ -874,15 +869,17 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 #+begin_src emacs-lisp
 (use-package evil-collection
   :after evil
+
+  :custom
+  (evil-collection-outline-bind-tab-p nil)
+  (evil-collection-company-use-tng nil)
+
   :init
   (defun neh/evil-key-translations (_mode mode-keymaps &rest _rest)
     (evil-collection-translate-key 'normal mode-keymaps
       "t" "j"
       "n" "k"
       "s" "l"))
-
-  (setq evil-collection-outline-bind-tab-p nil
-        evil-collection-company-use-tng nil)
 
   :config
   (evil-collection-init)
@@ -892,10 +889,10 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 #+begin_src emacs-lisp
 (use-package evil-owl
   :commands (evil-owl-mode)
-  :config
-  (setq evil-owl-extra-posframe-args '(:internal-border-width 2
-                                       :internal-border-color "grey")
-        evil-owl-idle-delay 0.5))
+  :custom
+  (evil-owl-extra-posframe-args '(:internal-border-width 2
+                                  :internal-border-color "grey"))
+  (evil-owl-idle-delay 0.5))
 #+end_src
 
 * Navigation?
