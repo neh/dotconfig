@@ -106,7 +106,7 @@
  ("modus-themes" . "de1e2559b329edf03d3c8c9f3f150653246a602c")
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
  ("nov.el" . "23e5d9c4c63e3a7dc08110a8dfcbb97a1186a37f")
- ("nswbuff" . "7c45ca183077d48c512ac4f205949f8bfc60a232")
+ ("nswbuff" . "83203facc27c57307123b7eaffd2bd0a9d344f92")
  ("olivetti" . "b76a020aedb57a6a7d0ae61cde13434f5c802a44")
  ("openscad" . "b416aa21fa531b88400ad38df237e25a00e83414")
  ("org" . "ce02d52bc4809a8591f242cb2391b36be85b898c")
