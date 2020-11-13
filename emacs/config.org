@@ -1141,6 +1141,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package nswbuff
+  :after (projectile)
   :commands (nswbuff-switch-to-previous-buffer
              nswbuff-switch-to-next-buffer)
 
@@ -1151,54 +1152,63 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
     "<C-tab>" 'nswbuff-switch-to-previous-buffer
     "C-S-<iso-lefttab>" 'nswbuff-switch-to-next-buffer)
 
-  :init
-  (defun neh/nswbuff-switch-to-previous-buffer ()
-    (interactive)
-    ;; (let (nswbuff-buffer-list-function '(lambda () (nreverse (nswbuff-buffer-list))))
-    (let (nswbuff-buffer-list-function #'nswbuff-buffer-list)
-      (message nswbuff-buffer-list-function)
-      (nswbuff-switch-to-previous-buffer)))
+  :custom
+  (nswbuff-buffer-list-function #'nswbuff-projectile-buffer-list)
+  (nswbuff-status-window-layout 'scroll)
+  (nswbuff-display-intermediate-buffers t)
+  (nswbuff-recent-buffers-first t)
+  (nswbuff-exclude-buffer-regexps '("^ "
+                                    "^\*.*\*"
+                                    "^magit.*:.+"))
+  (nswbuff-include-buffer-regexps '("^*Org Src"))
 
-  (setq nswbuff-display-intermediate-buffers t
-        nswbuff-exclude-buffer-regexps '("^ "
-                                         "^\*.*\*"
-                                         "^magit.*:.+")
-        nswbuff-include-buffer-regexps '("^*Org Src")
-        nswbuff-start-with-current-centered t
-        nswbuff-buffer-list-function '(lambda ()
-                                        (interactive)
-                                        (if (projectile-project-p)
-                                            (nswbuff-projectile-buffer-list)
-                                          (buffer-list)))))
+  ;; (nswbuff-start-with-current-centered t)
+
+  ;; :init
+  ;; (defun neh/nswbuff-switch-to-previous-buffer ()
+  ;;   (interactive)
+  ;;   ;; (let (nswbuff-buffer-list-function '(lambda () (nreverse (nswbuff-buffer-list))))
+  ;;   (let (nswbuff-buffer-list-function #'nswbuff-buffer-list)
+  ;;     (message nswbuff-buffer-list-function)
+  ;;     (nswbuff-switch-to-previous-buffer)))
+
+        ;; nswbuff-buffer-list-function '(lambda ()
+        ;;                                 (interactive)
+        ;;                                 (if (projectile-project-p)
+        ;;                                     (nswbuff-projectile-buffer-list)
+        ;;                                   (buffer-list)))
+        )
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package ibuffer
   :straight nil
+  :custom
+  (ibuffer-formats
+   '((mark modified read-only locked " "
+           (name 18 18 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " " project-relative-file)
+     (mark " "
+           (name 16 -1)
+           " " filename))))
+
+(use-package ibuffer-projectile
+  :commands (ibuffer-projectile-set-filter-groups)
   :hook ((ibuffer . (lambda ()
                       (ibuffer-projectile-set-filter-groups)
-                      (unless (eq ibuffer-sorting-mode 'alphabetic)
-                        (ibuffer-do-sort-by-alphabetic)))))
+                      ;; (unless (eq ibuffer-sorting-mode 'alphabetic)
+                      ;;   (ibuffer-do-sort-by-alphabetic))
+                      )))
   :init
   (defun neh/ibuffer-magit ()
     "Open `magit-status' for the current buffer."
     (interactive)
     (let ((buf (ibuffer-current-buffer t)))
-      (magit-status (cdr (ibuffer-projectile-root buf)))))
-
-  (setq ibuffer-formats
-        '((mark modified read-only locked " "
-                (name 18 18 :left :elide)
-                " "
-                (size 9 -1 :right)
-                " "
-                (mode 16 16 :left :elide)
-                " " project-relative-file)
-          (mark " "
-                (name 16 -1)
-                " " filename))))
-
-(use-package ibuffer-projectile )
+      (magit-status (cdr (ibuffer-projectile-root buf))))))
 #+end_src
 
 #+begin_src emacs-lisp
