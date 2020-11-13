@@ -1032,7 +1032,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :custom
   (prescient-history-length 180)
   (prescient-filter-method '(literal
-                             regexy
+                             regexp
                              initialism
                              prefix))
   :config
