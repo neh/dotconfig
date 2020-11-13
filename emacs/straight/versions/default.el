@@ -145,7 +145,7 @@
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
  ("straight.el" . "f6663b1de0fb5d9c64528e4f7f8bb914f49bb6d2")
- ("swiper" . "e58bfc162a2df5b67a820d0311c313d3db522073")
+ ("swiper" . "6a22192f11a4aa0d43692bf685fd9b9d75911d00")
  ("symbol-overlay" . "39f772b531117edba596e7a1210b3dbb87d56adb")
  ("system-packages" . "92c58d98bc7282df9fd6f24436a105f5f518cde9")
  ("tablist" . "faab7a035ef2258cc4ea2182f67e3aedab7e2af9")
