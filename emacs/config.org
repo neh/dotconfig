@@ -1140,9 +1140,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                         (?K . avy-action-kill-stay)
                         (?M . avy-action-mark)))
 
-  :init
-  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s)
-        avy-line-insert-style 'below))
+  (avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
+  (avy-line-insert-style 'below))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1337,8 +1336,6 @@ FACE defaults to inheriting from default and highlight."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package eyebrowse
-  :commands (eyebrowse-mode))
 #+end_src
 
 * Snippets
@@ -1346,8 +1343,8 @@ FACE defaults to inheriting from default and highlight."
 #+begin_src emacs-lisp
 (use-package yasnippet
   :hook (org-mode . yas-minor-mode)
-  :init
-  (setq yas-snippet-dirs `(,(concat user-emacs-directory "snippets"))))
+  :custom
+  (yas-snippet-dirs `(,(concat user-emacs-directory "snippets"))))
 #+end_src
 
 * Projectile
@@ -1447,10 +1444,10 @@ I find that diff-hl does a better job of showing diff information than git-gutte
          (dired-mode . diff-hl-dired-mode))
   :init
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-  :config
-  (set-face-attribute 'diff-hl-change nil :foreground "#222222" :background "#ffd700")
-  (set-face-attribute 'diff-hl-insert nil :foreground "dark green" :background "ForestGreen")
-  (set-face-attribute 'diff-hl-delete nil :foreground "dark red" :background "red4"))
+  :custom-face
+  (diff-hl-change ((t (:foreground "#222222" :background "#ffd700"))))
+  (diff-hl-insert ((t (:foreground "dark green" :background "ForestGreen"))))
+  (diff-hl-delete ((t (:foreground "dark red" :background "red4")))))
 #+end_src
 
 Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing things with diffs. So I have it active for navigation and staging actions. It’s disabled in org mode because I had issues with it before. Now that my config is in org though, it would be handy to have back. Another TODO.
@@ -1467,22 +1464,25 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
    "gS" 'git-gutter:stage-hunk
    "gU" 'git-gutter:revert-hunk)
 
+  :custom-face
+  (git-gutter:modified ((t (:foreground "DeepSkyBlue2"))))
+  (git-gutter:added ((t (:foreground "ForestGreen"))))
+  (git-gutter:deleted ((t (:foreground "red4"))))
+
+  :custom
+  (git-gutter:disabled-modes '(org-mode))
+
+  (git-gutter:added-sign "")
+  (git-gutter:deleted-sign "")
+  (git-gutter:modified-sign "")
+  (git-gutter:ask-p nil)
+
   :init
-  (setq git-gutter:disabled-modes '(org-mode))
   (global-git-gutter-mode -1)
 
   :config
   (advice-add 'git-gutter:previous-hunk :after #'neh/after-jump)
-  (advice-add 'git-gutter:next-hunk :after #'neh/after-jump)
-
-  (setq git-gutter:added-sign ""
-        git-gutter:deleted-sign ""
-        git-gutter:modified-sign ""
-        git-gutter:ask-p nil)
-  (set-face-foreground 'git-gutter:modified "DeepSkyBlue2")
-  (set-face-foreground 'git-gutter:added "ForestGreen")
-  (set-face-foreground 'git-gutter:deleted "red4")
-  )
+  (advice-add 'git-gutter:next-hunk :after #'neh/after-jump))
 #+end_src
 
 Of course, the great magit.
@@ -1543,8 +1543,8 @@ Handy package to browse to git repo web interfaces.
     "gB" 'git-link
     "gC" 'git-link-commit
     "gH" 'git-link-homepage)
-  :init
-  (setq git-link-open-in-browser t))
+  :custom
+  (git-link-open-in-browser t))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1708,11 +1708,11 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 #+begin_src emacs-lisp
 (use-package org-journal
   :after org
-  :init
-  (setq org-journal-dir "~/org/journal/"
-        org-journal-enable-encryption nil
-        org-journal-date-format "%A, %x"
-        org-journal-file-type 'daily))
+  :custom
+  (org-journal-dir "~/org/journal/")
+  (org-journal-enable-encryption nil)
+  (org-journal-date-format "%A, %x")
+  (org-journal-file-type 'daily))
 #+end_src
 
 Add plantuml for nice text-based diagram generation. I’ll mainly use this in org mode files, generating inline diagrams from src blocks.
@@ -1722,8 +1722,9 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :after org
   :commands (plantuml-mode)
   :mode (("\\.plantuml\\'" . plantuml-mode))
+  :custom
+  (plantuml-jar-path "~/bin/plantuml.jar")
   :init
-  (setq plantuml-jar-path "~/bin/plantuml.jar")
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
 #+end_src
 
@@ -1883,27 +1884,22 @@ Make org-mode prettier.
 #+begin_src emacs-lisp
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
-  :init
-  (setq org-superstar-headline-bullets-list '(" " "‣" " " " " " " 10040 10047 9675)
-        org-superstar-special-todo-items t
-        org-superstar-todo-bullet-alist '(("TODO" . 9744)
-                                          ("NEXT" . 9744)
-                                          ("INTERRUPT" . 9888)
-                                          ("DOING" . 9881)
-                                          ("WAITING" . 8987)
-                                          ("TESTING" . 8987)
-                                          ("DONE" . 9745)
-                                          ("CANCELED" . 9746))))
+  :custom
+  (org-superstar-headline-bullets-list '(" " "‣" " " " " " " 10040 10047 9675))
+  (org-superstar-special-todo-items t)
+  (org-superstar-todo-bullet-alist '(("TODO" . 9744)
+                                     ("NEXT" . 9744)
+                                     ("INTERRUPT" . 9888)
+                                     ("DOING" . 9881)
+                                     ("WAITING" . 8987)
+                                     ("TESTING" . 8987)
+                                     ("DONE" . 9745)
+                                     ("CANCELED" . 9746))))
 #+end_src
 
-A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links). Maybe look at [[https://github.com/stardiviner/org-link-beautify][org-link-beautify]] if I need more.
+A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
 
 #+begin_src emacs-lisp
-(use-package org-link-beautify
-  :disabled t
-  :hook (org-mode . org-link-beautify-mode))
-
-
 ;; defface won't update an existing face, it has to be done like this:
 ;; (face-spec-set
 ;;  'neh/org-link
@@ -2401,6 +2397,25 @@ MimeType=x-scheme-handler/org-protocol;
   :custom
   (org-roam-directory "~/org/roam")
   (org-roam-completion-everywhere t)
+  (org-roam-list-files-commands '(rg find))
+  (org-roam-buffer-window-parameters '((no-other-window . t)))
+  (org-roam-tag-sources '(prop all-directories))
+  (org-roam-capture-templates
+   '(("p" "project" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_tags: project\n\n"
+      :unnarrowed t)
+     ("l" "literature" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
+      :unnarrowed t)
+     ("d" "default" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n"
+      :unnarrowed t)))
 
   :general
   (general-define-key
@@ -2408,50 +2423,29 @@ MimeType=x-scheme-handler/org-protocol;
    :states '(normal insert)
    :non-normal-prefix "C-SPC"
    :prefix "SPC"
-    "nl" #'org-roam
-    "no" #'org-roam-find-file
-    "nG" #'org-roam-show-graph)
+   "nl" #'org-roam
+   "no" #'org-roam-find-file
+   "nG" #'org-roam-show-graph)
 
   (general-define-key
    :keymaps 'org-mode-map
    :states '(normal insert visual)
    :non-normal-prefix "C-SPC"
    :prefix "SPC"
-    "ni" #'org-roam-insert)
-
-  :init
-  (setq org-roam-list-files-commands '(rg find)
-        org-roam-buffer-window-parameters '((no-other-window . t))
-        org-roam-tag-sources '(prop all-directories)
-        org-roam-capture-templates
-        '(("p" "project" plain #'org-roam-capture--get-point
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_tags: project\n\n"
-           :unnarrowed t)
-          ("l" "literature" plain #'org-roam-capture--get-point
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
-           :unnarrowed t)
-          ("d" "default" plain #'org-roam-capture--get-point
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n"
-           :unnarrowed t))))
+   "ni" #'org-roam-insert))
 
 (use-package org-roam-server
   :commands (org-roam-server-mode)
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8081
-        org-roam-server-export-inline-images t
-        org-roam-server-authenticate nil
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
+  :custom
+  (org-roam-server-host "127.0.0.1")
+  (org-roam-server-port 8081)
+  (org-roam-server-export-inline-images t)
+  (org-roam-server-authenticate nil)
+  (org-roam-server-network-poll t)
+  (org-roam-server-network-arrows nil)
+  (org-roam-server-network-label-truncate t)
+  (org-roam-server-network-label-truncate-length 60)
+  (org-roam-server-network-label-wrap-length 20))
 
 (use-package org-download
   :after org
@@ -2473,9 +2467,9 @@ Let’s try to get some window behaviour under control.
 #+begin_src emacs-lisp
 (use-package shackle
   :hook (after-init . shackle-mode)
-  :init
-  (setq shackle-rules
-        '((magit-diff-mode :align 'below :size 0.8))))
+  :custom
+  (shackle-rules
+   '((magit-diff-mode :align 'below :size 0.8))))
 #+end_src
 
 * Shells
@@ -2651,6 +2645,9 @@ directory to make multiple eshell windows easier."
 
   :custom
   (dired-create-destination-dirs 'ask)
+  (dired-listing-switches "-alhv --group-directories-first")
+  (dired-recursive-copies 'always)
+  (dired-dwim-target t)
 
   :general
   (general-define-key
@@ -2663,10 +2660,7 @@ directory to make multiple eshell windows easier."
     "od" 'dired-jump)
 
   :init
-  (setq dired-listing-switches "-alhv --group-directories-first"
-        dired-recursive-copies 'always
-        dired-deletion-confirmer 'y-or-n-p
-        dired-dwim-target t
+  (setq dired-deletion-confirmer 'y-or-n-p
         dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
 #+end_src
 
@@ -2698,17 +2692,6 @@ directory to make multiple eshell windows easier."
    :keymaps 'dired-mode-map
    "<return>" 'dired-single-buffer
    "^" 'dired-single-up-directory))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package dired-sidebar
-  :disabled t
-  :general
-  (neh/leader-keys
-    "ot" 'dired-sidebar-toggle-sidebar)
-
-  :init
-  (setq dired-sidebar-theme 'nerd))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2752,12 +2735,12 @@ directory to make multiple eshell windows easier."
                                 #'color-darken-name))
            (even (funcall lighten-or-darken bg 6))
            (odd (funcall lighten-or-darken bg 3)))
-      (set-face-attribute 'dired-subtree-depth-1-face nil :background odd)
-      (set-face-attribute 'dired-subtree-depth-2-face nil :background even)
-      (set-face-attribute 'dired-subtree-depth-3-face nil :background odd)
-      (set-face-attribute 'dired-subtree-depth-4-face nil :background even)
-      (set-face-attribute 'dired-subtree-depth-5-face nil :background odd)
-      (set-face-attribute 'dired-subtree-depth-6-face nil :background even)))
+      (set-face-attribute 'dired-subtree-depth-1-face nil :background odd :extend t)
+      (set-face-attribute 'dired-subtree-depth-2-face nil :background even :extend t)
+      (set-face-attribute 'dired-subtree-depth-3-face nil :background odd :extend t)
+      (set-face-attribute 'dired-subtree-depth-4-face nil :background even :extend t)
+      (set-face-attribute 'dired-subtree-depth-5-face nil :background odd :extend t)
+      (set-face-attribute 'dired-subtree-depth-6-face nil :background even :extend t)))
 
   :config
   (neh/set-dired-subtree-background))
@@ -2809,8 +2792,8 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   (neh/leader-keys
     "os" '(imenu-list-smart-toggle :which-key "code structure"))
 
-  :init
-  (setq imenu-list-focus-after-activation t))
+  :custom
+  (imenu-list-focus-after-activation t))
 
 (use-package imenu-anywhere
   :after ivy
@@ -2864,9 +2847,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
     "ro" '(hydra-org/body :which-key "org")
     "rr" '(hydra-reading/body :which-key "plain text"))
 
+  :custom
+  (hydra-hint-display-type 'lv)
+
   :init
-  (setq hydra-hint-display-type 'lv
-        hydra--work-around-dedicated nil)
+  (setq hydra--work-around-dedicated nil)
   (setq hydra-posframe-show-params '(:internal-border-width 10
                                      :internal-border-color "grey21"
                                      ;; :min-height 15
@@ -3206,14 +3191,14 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
   (neh/leader-keys
     "." #'major-mode-hydra)
 
-  :init
-  (setq major-mode-hydra-title-generator
-        '(lambda (mode)
-           (s-concat (s-repeat 1 " ")
-                     (all-the-icons-icon-for-mode mode :v-adjust 0.05)
-                     " "
-                     (symbol-name mode)
-                     " commands")))
+  :custom
+  (major-mode-hydra-title-generator
+   '(lambda (mode)
+      (s-concat (s-repeat 1 " ")
+                (all-the-icons-icon-for-mode mode :v-adjust 0.05)
+                " "
+                (symbol-name mode)
+                " commands")))
 
   :config
   (major-mode-hydra-define emacs-lisp-mode
@@ -3240,8 +3225,8 @@ First, set up =pdf-tools= for nice PDF handling.
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
   :hook (pdf-view-mode . (lambda () (blink-cursor-mode -1)))
-  :init
-  (setq-default pdf-view-display-size 'fit-page))
+  :custom
+  (pdf-view-display-size 'fit-page))
 #+end_src
 
 PDF link handling in =org-mode=.
@@ -3340,9 +3325,9 @@ Try out =org-noter=.
     :states 'normal
     :prefix "j"
     "d" #'xref-find-definitions)
-  :init
-  (setq dumb-jump-selector 'ivy
-        dumb-jump-prefer-searcher 'rg)
+  :custom
+  (dumb-jump-selector 'ivy)
+  (dumb-jump-prefer-searcher 'rg)
   :config
   (add-to-list 'xref-backend-functions #'dumb-jump-xref-activate t))
 #+end_src
@@ -3402,8 +3387,8 @@ Try out =org-noter=.
   :commands (ansible ansible-auto-decrypt-encrypt)
   :hook ((yaml-mode . ansible)
          (ansible . ansible-auto-decrypt-encrypt))
-  :init
-  (setq ansible-vault-password-file "~/freshgrade/vaultpass"))
+  :custom
+  (ansible-vault-password-file ""))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3412,17 +3397,17 @@ Try out =org-noter=.
   (neh/leader-keys
     "vd" '(rainbow-delimiters-mode :which-key "delimiters"))
 
-  :config
-  (set-face-attribute 'rainbow-delimiters-unmatched-face nil :height 1.0 :inherit 'error)
-  (set-face-attribute 'rainbow-delimiters-depth-1-face nil :height 1.0)
-  (set-face-attribute 'rainbow-delimiters-depth-2-face nil :height 1.1)
-  (set-face-attribute 'rainbow-delimiters-depth-3-face nil :height 1.2)
-  (set-face-attribute 'rainbow-delimiters-depth-4-face nil :height 1.3)
-  (set-face-attribute 'rainbow-delimiters-depth-5-face nil :height 1.4)
-  (set-face-attribute 'rainbow-delimiters-depth-6-face nil :height 1.5)
-  (set-face-attribute 'rainbow-delimiters-depth-7-face nil :height 1.6)
-  (set-face-attribute 'rainbow-delimiters-depth-8-face nil :height 1.7)
-  (set-face-attribute 'rainbow-delimiters-depth-9-face nil :height 1.8))
+  :custom-face
+  (rainbow-delimiters-unmatched-face ((t (:height 1.0 :inherit 'error))))
+  (rainbow-delimiters-depth-1-face ((t (:height 1.0))))
+  (rainbow-delimiters-depth-2-face ((t (:height 1.1))))
+  (rainbow-delimiters-depth-3-face ((t (:height 1.2))))
+  (rainbow-delimiters-depth-4-face ((t (:height 1.3))))
+  (rainbow-delimiters-depth-5-face ((t (:height 1.4))))
+  (rainbow-delimiters-depth-6-face ((t (:height 1.5))))
+  (rainbow-delimiters-depth-7-face ((t (:height 1.6))))
+  (rainbow-delimiters-depth-8-face ((t (:height 1.7))))
+  (rainbow-delimiters-depth-9-face ((t (:height 1.8)))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3459,6 +3444,7 @@ Try out =org-noter=.
 
 (use-package flycheck-inline
   :hook (flycheck-mode . turn-on-flycheck-inline)
+
   :init
   (setq flycheck-inline-display-function
         (lambda (msg pos err)
@@ -3468,16 +3454,20 @@ Try out =org-noter=.
                   (concat contents (when contents "\n") msg))
             (quick-peek-update ov)))
         flycheck-inline-clear-function #'quick-peek-hide)
-  :config
-  (set-face-attribute 'flycheck-inline-info nil
-                      :height 1.0 :foreground "#000000" :background "#87ceeb" :inherit 'info
-                      :box '(:line-width 3 :color "#87ceeb"))
-  (set-face-attribute 'flycheck-inline-warning nil
-                      :height 1.0 :foreground "#000000" :background "#ffd700" :inherit 'warning
-                      :box '(:line-width 3 :color "#ffd700"))
-  (set-face-attribute 'flycheck-inline-error nil
-                      :height 1.0 :foreground "#ffffff" :background "#b22222" :inherit 'error
-                      :box '(:line-width 3 :color "#b22222")))
+
+  :custom-face
+  (flycheck-inline-info ((t (:height 1.0
+                             :foreground "#000000" :background "#87ceeb"
+                             :inherit 'info
+                             :box (:line-width 3 :color "#87ceeb")))))
+  (flycheck-inline-warning ((t (:height 1.0
+                                :foreground "#000000" :background "#ffd700"
+                                :inherit 'warning
+                                :box (:line-width 3 :color "#ffd700")))))
+  (flycheck-inline-error ((t (:height 1.0
+                              :foreground "#ffffff" :background "#b22222"
+                              :inherit 'error
+                              :box (:line-width 3 :color "#b22222"))))))
 
 (use-package flycheck-posframe
   :disabled
@@ -3543,8 +3533,8 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package direnv
   :hook (after-init . direnv-mode)
-  :config
-  (setq direnv-always-show-summary nil))
+  :custom
+  (direnv-always-show-summary nil))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3612,19 +3602,21 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (defun neh/python-mode-hook ()
   "My python mode settings."
-  (setq-local fill-column 80)
-  (setq-local python-shell-interpreter "python3"
-              org-babel-python-command "python3"
-              elpy-rpc-python-command "python3"))
+  (setq-local fill-column 80))
 
 (use-package python-mode
   :straight nil
-  :hook (python-mode . neh/python-mode-hook))
+  :hook (python-mode . neh/python-mode-hook)
+  :custom
+  (python-shell-interpreter "python3")
+  (org-babel-python-command "python3"))
 
 (use-package elpy
   :commands (elpy-enable)
   :init
-  (with-eval-after-load 'python (elpy-enable)))
+  (with-eval-after-load 'python (elpy-enable))
+  :custom
+  (elpy-rpc-python-command "python3"))
 
 (use-package company-jedi
   :after company
