@@ -1720,13 +1720,19 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
 
 #+begin_src emacs-lisp
 (use-package plantuml-mode
-  :after org
   :commands (plantuml-mode)
   :mode (("\\.plantuml\\'" . plantuml-mode))
   :custom
+  (plantuml-default-exec-mode 'jar)
   (plantuml-jar-path "~/bin/plantuml.jar")
-  :init
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
+  (plantuml-java-args '("-Djava.awt.headless=true" "-jar")))
+  ;; (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+
+(use-package ob-plantuml
+  :straight nil
+  :custom
+  (org-plantuml-exec-mode 'jar)
+  (org-plantuml-jar-path "~/bin/plantuml.jar"))
 #+end_src
 
 #+begin_src emacs-lisp
