@@ -1078,6 +1078,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :custom
   (counsel-ag-base-command "ag --nocolor --nogroup --ignore-case %s")
   (counsel-grep-base-command "grep -inE '%s' %s")
+  (counsel-org-goto-all--outline-path-prefix 'buffer-name)
 
   :init
   (defun swiper-thing-at-point ()
