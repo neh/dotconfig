@@ -2712,7 +2712,7 @@ directory to make multiple eshell windows easier."
 #+begin_src emacs-lisp
 (use-package dired-subtree
   :after dired
-  :demand
+  :commands (dired-subtree-toggle)
   :hook (after-load-theme . neh/set-dired-subtree-background)
 
   :general
