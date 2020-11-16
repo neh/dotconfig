@@ -182,6 +182,8 @@ Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a
 (menu-bar-mode nil)
 (tool-bar-mode nil)
 (scroll-bar-mode nil)
+(default-frame-alist '((vertical-scroll-bars . nil)))
+(initial-frame-alist '((vertical-scroll-bars . nil)))
 #+end_src
 
 Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
@@ -709,6 +711,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
               (font-lock-fontify-buffer)))
           (buffer-list)))
 
+  (set-scroll-bar-mode nil)
   (neh/enable-scroll-highlight)
   )
 #+end_src
