@@ -479,6 +479,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (evil-undo-system 'undo-fu))
 
+(use-package undo-fu-session
+  :hook (after-init . global-undo-fu-session-mode)
+  :custom
+  (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
+
 (use-package paren
   :custom
   (show-paren-delay 0)
