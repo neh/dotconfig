@@ -469,8 +469,15 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (eldoc-echo-area-use-multiline-p nil))
 
 (use-package undo-tree
+  :disabled t
   :config
   (global-undo-tree-mode t))
+
+(use-package undo-fu
+  :after (evil)
+  :defer 0.5
+  :custom
+  (evil-undo-system 'undo-fu))
 
 (use-package paren
   :custom
