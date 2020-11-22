@@ -1363,6 +1363,13 @@ FACE defaults to inheriting from default and highlight."
                                       (:weight ultra-bold))))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package bufler
+  :commands (bufler
+             bufler-mode
+             bufler-switch-buffer
+             bufler-list
+             bufler-workspace-frame-set))
 #+end_src
 
 * Snippets

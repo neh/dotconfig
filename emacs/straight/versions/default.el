@@ -8,6 +8,7 @@
  ("avy" . "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
  ("aweshell" . "31004ddfdf5b6f9dae0708e799a54ec592298840")
  ("buffer-move" . "cb517ecf8409b5fdcda472d7190c6021f0c49751")
+ ("bufler.el" . "455890f01d715a1dc9dabc053bf769b182042f61")
  ("cider" . "df2fd7113a451ea586577c3ac276e1f786c23f60")
  ("clojure-mode" . "75c28897c7e91aa130c71c076aa2a6ce2e02da8f")
  ("closql" . "c864c1fadfea4a05fff29cb60891b7a32ac88c78")
