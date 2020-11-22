@@ -85,6 +85,7 @@
  ("goto-chg" . "2af612153bc9f5bed135d25abe62f46ddaa9027f")
  ("groovy-emacs-modes" . "26da902d1158c0312628d57578109be54eca2415")
  ("helpful" . "584ecc887bb92133119f93a6716cdf7af0b51dca")
+ ("highlight-parentheses.el" . "e18f2c2b240d7586ff7ffdc2881079e2dd8944ca")
  ("ht.el" . "fff8c43f0e03d5b98deb9f988522b839ce2ca253")
  ("hydra" . "112e689f75b59398d8eca79ac6562dca12b8a959")
  ("ibuffer-projectile" . "ecbe482804a217b1471593f6c7a8b3d64f3cdc47")
