@@ -2213,6 +2213,12 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                        :deadline t
                        :scheduled t
                        )))))
+       (search "*" ((org-super-agenda-groups
+                     '((:name "Inbox"
+                        :file-path "~/org/incoming.org"
+                        :discard (:heading-regexp ".*Incoming")
+                        :tag "refile")
+                       (:discard (:anything t))))))
        (tags-todo "-archive -work" ((org-super-agenda-groups
                                      '((:name " Doing"
                                         :todo "DOING")
