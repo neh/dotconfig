@@ -696,6 +696,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
                            `(:family "Sans Serif"))
                           (nil (warn "Cannot find a variable width font."))))
          (fixed-tuple (cond
+                       ((x-list-fonts "Iosevka Slab")
+                        `(:font "Iosevka Slab"
+                          :height ,(round (* neh/current-text-size 1.0))))
                        ((x-list-fonts "Iosevka")
                         `(:font "Iosevka"
                           :height ,(round (* neh/current-text-size 1.0))))
