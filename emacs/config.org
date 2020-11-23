@@ -3345,11 +3345,22 @@ Try out =org-noter=.
                                            checkdoc
                                            company-capf
                                            org-compile-file))
+
+  (frames-only-mode-configuration-variables
+   '((pop-up-frames graphic-only)
+     (mouse-autoselect-window nil)
+     (focus-follows-mouse nil)
+     (frame-auto-hide-function delete-frame)
+     (org-agenda-window-setup other-frame)
+     (org-src-window-setup other-frame)
+     (ediff-window-setup-function ediff-setup-windows-plain)
+     (ido-default-buffer-method selected-window)
+     (magit-commit-show-diff t)
+     (magit-bury-buffer-function delete-frame)
+     (flycheck-display-errors-function frames-only-mode-flycheck-display-errors)))
+
   :init
-  (frames-only-mode t)
-  :config
-  ;; this mode sets this to nil, which seems no longer necessary
-  (setq magit-commit-show-diff t))
+  (frames-only-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
