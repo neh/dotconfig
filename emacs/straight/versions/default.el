@@ -119,7 +119,7 @@
  ("org-pdftools" . "3c2b9a413eb841c781cfb49d8c343bf07aa0ad1f")
  ("org-roam" . "48ef3fee1104822df86e1bad3ff26d6cfb74fc04")
  ("org-roam-server" . "fde2636d794f020ed5810fa38fe57a264932f661")
- ("org-super-agenda" . "3264255989021b8563ea42b5d26acbc2a024f14d")
+ ("org-super-agenda" . "ac7f2ef05c161b10390141b6863b431dc9360edc")
  ("org-superstar-mode" . "7f83636db215bf5a10edbfdf11d12a132864a914")
  ("ox-gfm" . "99f93011b069e02b37c9660b8fcb45dab086a07f")
  ("ox-pandoc" . "aa37dc7e94213d4ebedb85c384c1ba35007da18e")
