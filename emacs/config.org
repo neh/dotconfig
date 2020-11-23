@@ -2233,19 +2233,29 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 
      ("w" "Work"
       ((agenda "" ((org-super-agenda-groups
-                    '((:name " Schedule"
+                    `((:name ,(format "%s  Schedule"
+                                      (all-the-icons-faicon "clock-o"
+                                                            :v-adjust -0.04))
                        :time-grid t
                        :deadline t
                        :scheduled t
                        )))))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     '((:name " Interruptions"
+                                     `((:name ,(format "%s  Interruptions"
+                                                       (all-the-icons-faicon "bomb"
+                                                                             :v-adjust 0.06))
                                         :todo "INTERRUPT")
-                                       (:name " Doing"
+                                       (:name ,(format "%s  Doing"
+                                                       (all-the-icons-faicon "cogs"
+                                                                             :v-adjust 0.00))
                                         :todo "DOING")
-                                       (:name " Waiting/Testing"
+                                       (:name ,(format "%s  Waiting/Testing"
+                                                       (all-the-icons-faicon "repeat"
+                                                                             :v-adjust 0.00))
                                         :todo ("WAITING" "TESTING"))
-                                       (:name " Next"
+                                       (:name ,(format "%s  Next"
+                                                       (all-the-icons-faicon "list"
+                                                                             :v-adjust -0.06))
                                         :todo "NEXT")
                                        (:discard (:anything t)))))))
       ((org-agenda-files '("~/org/work-tveon.org"))
@@ -3173,7 +3183,9 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 (pretty-hydra-define neh/toggles
   (:color amaranth
    :quit-key ("q" "<escape>")
-   :title "  Options")
+   :title (format " %s Options"
+                  (all-the-icons-faicon "sliders"
+                                        :v-adjust 0.02)))
 
   ("Formatting"
    (("v" global-visual-line-mode "visual lines" :toggle t)
@@ -3198,7 +3210,11 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("3" (neh/set-frame-width 3) "triple width"))))
 
 (pretty-hydra-define neh/movement
-  (:color amaranth :quit-key ("q" "<escape>") :title "  Movement")
+  (:color amaranth
+   :quit-key ("q" "<escape>")
+   :title (format " %s Movement"
+                  (all-the-icons-faicon "arrows"
+                                        :v-adjust 0.02)))
   ("Move Buffer"
    (("H" buf-move-left "left")
     ("T" buf-move-down "down")
