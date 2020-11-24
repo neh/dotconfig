@@ -2328,7 +2328,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
             :keys "t"
             :file ""
             :headline "Incoming"
-            :template "* TODO %?"
+            :template ("* TODO %?" "%U")
             :prepend t)
            ("interruption"
             :keys "i"
