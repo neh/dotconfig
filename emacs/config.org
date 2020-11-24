@@ -1405,8 +1405,10 @@ FACE defaults to inheriting from default and highlight."
   (setq frame-title-format
         '(""
           (:eval
-           (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-               (replace-regexp-in-string ".*/[0-9]*-?" "🢔 " buffer-file-name)
+           (if (and (boundp 'org-roam-directory)
+                    (s-contains-p (expand-file-name org-roam-directory)
+                                  (file-name-directory buffer-file-name)))
+               (replace-regexp-in-string ".*/[0-9]*-?" "✎ " buffer-file-name)
              "%b"))
           (:eval
            (let ((project-name (projectile-project-name)))
