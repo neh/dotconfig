@@ -2456,69 +2456,75 @@ MimeType=x-scheme-handler/org-protocol;
 ** Org-roam
 
 #+begin_src emacs-lisp
-(use-package org-roam
-  :if (> (length (directory-files org-directory nil "\\.org$")) 0)
+(defun neh/load-org-packages ()
+  (use-package org-roam
+    :commands (org-roam-mode
+               org-roam
+               org-roam-find-file
+               org-roam-insert)
 
-  :hook
-  (after-init . org-roam-mode)
+    :custom
+    (org-roam-directory "~/org/roam")
+    (org-roam-completion-everywhere t)
+    (org-roam-list-files-commands '(rg find))
+    (org-roam-buffer-window-parameters '((no-other-window . t)))
+    (org-roam-tag-sources '(prop all-directories))
+    (org-roam-capture-templates
+     '(("p" "project" plain #'org-roam-capture--get-point
+        "%?"
+        :file-name "%<%Y%m%d%H%M%S>-${slug}"
+        :head "#+title: ${title}\n#+roam_tags: project\n\n"
+        :unnarrowed t)
+       ("l" "literature" plain #'org-roam-capture--get-point
+        "%?"
+        :file-name "%<%Y%m%d%H%M%S>-${slug}"
+        :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
+        :unnarrowed t)
+       ("d" "default" plain #'org-roam-capture--get-point
+        "%?"
+        :file-name "%<%Y%m%d%H%M%S>-${slug}"
+        :head "#+title: ${title}\n"
+        :unnarrowed t)))
 
-  :commands (org-roam-mode
-             org-roam
-             org-roam-find-file
-             org-roam-insert)
+    :general
+    (general-define-key
+     :keymaps 'org-roam-mode-map
+     :states '(normal insert)
+     :non-normal-prefix "C-SPC"
+     :prefix "SPC"
+     "nl" #'org-roam
+     "no" #'org-roam-find-file
+     "nG" #'org-roam-show-graph)
 
-  :custom
-  (org-roam-directory "~/org/roam")
-  (org-roam-completion-everywhere t)
-  (org-roam-list-files-commands '(rg find))
-  (org-roam-buffer-window-parameters '((no-other-window . t)))
-  (org-roam-tag-sources '(prop all-directories))
-  (org-roam-capture-templates
-   '(("p" "project" plain #'org-roam-capture--get-point
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: project\n\n"
-      :unnarrowed t)
-     ("l" "literature" plain #'org-roam-capture--get-point
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
-      :unnarrowed t)
-     ("d" "default" plain #'org-roam-capture--get-point
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n"
-      :unnarrowed t)))
+    (general-define-key
+     :keymaps 'org-mode-map
+     :states '(normal insert visual)
+     :non-normal-prefix "C-SPC"
+     :prefix "SPC"
+     "ni" #'org-roam-insert))
 
-  :general
-  (general-define-key
-   :keymaps 'org-roam-mode-map
-   :states '(normal insert)
-   :non-normal-prefix "C-SPC"
-   :prefix "SPC"
-   "nl" #'org-roam
-   "no" #'org-roam-find-file
-   "nG" #'org-roam-show-graph)
+  (use-package org-roam-server
+    :commands (org-roam-server-mode)
+    :custom
+    (org-roam-server-host "127.0.0.1")
+    (org-roam-server-port 8081)
+    (org-roam-server-export-inline-images t)
+    (org-roam-server-authenticate nil)
+    (org-roam-server-network-poll t)
+    (org-roam-server-network-arrows nil)
+    (org-roam-server-network-label-truncate t)
+    (org-roam-server-network-label-truncate-length 60)
+    (org-roam-server-network-label-wrap-length 20))
 
-  (general-define-key
-   :keymaps 'org-mode-map
-   :states '(normal insert visual)
-   :non-normal-prefix "C-SPC"
-   :prefix "SPC"
-   "ni" #'org-roam-insert))
+  (cancel-function-timers #'neh/check-org-files)
+  (org-roam-mode 1))
 
-(use-package org-roam-server
-  :commands (org-roam-server-mode)
-  :custom
-  (org-roam-server-host "127.0.0.1")
-  (org-roam-server-port 8081)
-  (org-roam-server-export-inline-images t)
-  (org-roam-server-authenticate nil)
-  (org-roam-server-network-poll t)
-  (org-roam-server-network-arrows nil)
-  (org-roam-server-network-label-truncate t)
-  (org-roam-server-network-label-truncate-length 60)
-  (org-roam-server-network-label-wrap-length 20))
+(defun neh/check-org-files ()
+  (if (> (length (directory-files org-directory nil "\\.org$")) 0)
+      (neh/load-org-packages)))
+
+(run-with-timer 0 5 #'neh/check-org-files)
+
 
 (use-package org-download
   :after org
