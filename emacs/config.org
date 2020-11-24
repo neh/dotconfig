@@ -1405,7 +1405,8 @@ FACE defaults to inheriting from default and highlight."
   (setq frame-title-format
         '(""
           (:eval
-           (if (and (boundp 'org-roam-directory)
+           (if (and (bound-and-true-p org-roam-directory)
+                    (bound-and-true-p buffer-file-name)
                     (s-contains-p (expand-file-name org-roam-directory)
                                   (file-name-directory buffer-file-name)))
                (replace-regexp-in-string ".*/[0-9]*-?" "✎ " buffer-file-name)
