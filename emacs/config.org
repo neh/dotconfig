@@ -1368,7 +1368,7 @@ FACE defaults to inheriting from default and highlight."
 (use-package highlight-parentheses
   :commands (highlight-parentheses-mode)
   :custom
-  (highlight-parentheses-colors '("OrangeRed" "IndianRed1" "IndianRed3" "IndianRed4"))
+  (highlight-parentheses-colors '("red2" "DarkOrange1" "goldenrod2" "IndianRed4"))
   ;; (highlight-parentheses-background-colors '())
   (highlight-parentheses-attributes '((:weight ultra-bold)
                                       (:weight ultra-bold)
