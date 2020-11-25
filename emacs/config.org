@@ -2565,6 +2565,15 @@ Org-mode properties drawer already, keep the headline and don’t insert
   :commands (deft))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-ql
+  :commands (org-ql-select
+             org-ql-search
+             org-ql-view
+             org-ql-view-recent-items
+             org-ql-sparse-tree))
+#+end_src
+
 * Shackle
 
 Let’s try to get some window behaviour under control.
