@@ -280,6 +280,7 @@ Don’t warn me when I do these potentially confusing narrowing operations.
 #+begin_src emacs-lisp
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+(put 'list-timers 'disabled nil)
 #+end_src
 
 Set some backup file options.
