@@ -2257,6 +2257,9 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                        :deadline t
                        :scheduled t
                        )))))
+       (org-ql-block '(and (outline-path-segment "Meeting Notes")
+                           (ts-active))
+                     ((org-ql-block-header "Notes To Process")))
        (tags-todo "-archive +work" ((org-super-agenda-groups
                                      `((:name ,(format "%s  Interruptions"
                                                        (all-the-icons-faicon "bomb"
