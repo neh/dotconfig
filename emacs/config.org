@@ -2564,7 +2564,9 @@ Org-mode properties drawer already, keep the headline and don’t insert
   (neh/leader-keys
     :keymaps 'org-mode-map
     "nS" #'org-download-screenshot
-    "nD" #'org-download-yank))
+    "nD" #'org-download-yank)
+  :custom
+  (org-download-image-dir "./images"))
 #+end_src
 
 #+begin_src emacs-lisp
