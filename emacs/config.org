@@ -1634,7 +1634,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
       (org-babel-tangle)))
 
   (add-to-list 'org-modules 'org-protocol)
-  (add-to-list 'org-modules 'org-habits)
+  (add-to-list 'org-modules 'org-habit)
 
   ;; Original version stolen from https://emacs.stackexchange.com/questions/23870/org-babel-result-to-a-separate-buffer
   (defun neh/babel-to-buffer ()
