@@ -253,6 +253,14 @@ I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, a
 (custom-file null-device)
 #+end_src
 
+Since I force there to be no file to store custom settings in, I get prompted for things like variables in ~.dir-locals.el~ files every time they are read (as emacs can't record my answers for the next time). So I whitelist the variables and values here that I don't want to be prompted for. I'm not sure this is the /right/ way to handle this, maybe I should have a custom file just for things like this and commit it to git so I can keep it controlled. The main reason I ditched the custom file was because it ended up having a bunch of forgotten settings hanging around affecting things, which having it in git would alleviate.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(safe-local-variable-values '((auto-revert-use-notify)
+                              (epa-file-encrypt-to . "C113BA91EAF8B45B6B84BDCBB600587C4549248A")
+                              (org-download-image-dir)))
+#+end_src
+
 All UTF-8, all the time.
 
 #+begin_src emacs-lisp
