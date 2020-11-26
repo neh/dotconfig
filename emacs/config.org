@@ -2554,8 +2554,9 @@ Org-mode properties drawer already, keep the headline and don’t insert
       (neh/load-org-packages)))
 
 (run-with-timer 0 5 #'neh/check-org-files)
+#+end_src
 
-
+#+begin_src emacs-lisp
 (use-package org-download
   :after org
   :hook (dired-mode . org-download-enable)
@@ -2564,7 +2565,9 @@ Org-mode properties drawer already, keep the headline and don’t insert
     :keymaps 'org-mode-map
     "nS" #'org-download-screenshot
     "nD" #'org-download-yank))
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package deft
   :commands (deft))
 #+end_src
