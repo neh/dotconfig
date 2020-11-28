@@ -18,6 +18,7 @@
  ("company-mode" . "dd925936f7c0bf00319c81e8caea1b3db63bb8b5")
  ("counsel-projectile" . "06b03c1080d3ccc3fa9b9c41b1ccbcf13f058e4b")
  ("csv-mode" . "635337407c44c1c3e9f7052afda7e27cf8a05c14")
+ ("ctrlf" . "5acefdc9a6f8e35febf6f71b6a34a0d4fc499269")
  ("dash.el" . "0f238a9a466879ee96e5db0482019453718f342d")
  ("deadgrep" . "baa352b982bded5fbca1ec9c14fec20e78b2089b")
  ("deft" . "fca9ea05ef4fdac825e2ad3921baa7042f6b82c8")

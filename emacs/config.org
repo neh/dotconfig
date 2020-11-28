@@ -3739,6 +3739,27 @@ Try out =org-noter=.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package ctrlf
+  :commands (ctrlf-mode
+             ctrlf-forward-literal
+             ctrlf-backward-literal
+             ctrlf-forward-regexp
+             ctrlf-backward-regexp
+             ctrlf-forward-symbol
+             ctrlf-forward-symbol-at-point)
+  :custom
+  (ctrlf-auto-recenter t)
+  (ctrlf-mode-bindings '(("C-," . ctrlf-forward-literal)
+                         ("C-'" . ctrlf-backward-literal)
+                         ("C-<" . ctrlf-forward-regexp)
+                         ("C-\"" . ctrlf-backward-regexp)
+                         ("M-s _" . ctrlf-forward-symbol)
+                         ("M-s ." . ctrlf-forward-symbol-at-point)))
+  :init
+  (ctrlf-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package expand-region
   :general
   (general-define-key
