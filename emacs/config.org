@@ -1051,11 +1051,17 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   ;; (setq ivy-format-function #'ivy-format-function-arrow)
   ;; (setq ivy-re-builders-alist '((t . ivy--regex)))
 )
+#+end_src
 
-
+#+begin_src emacs-lisp
 (use-package ivy-posframe
   :commands (ivy-posframe-mode))
 
+(use-package ivy-rich
+  :hook (ivy-mode . ivy-rich-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package prescient
   :demand t
   :custom
@@ -1071,12 +1077,11 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :after (counsel)
   :hook (ivy-mode . ivy-prescient-mode))
 
-(use-package ivy-rich
-  :hook (ivy-mode . ivy-rich-mode))
-
 (use-package company-prescient
   :hook (company-mode . company-prescient-mode))
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package swiper
   :after (ivy)
   :custom
@@ -1093,7 +1098,9 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   (defun swiper-thing-at-point ()
     (interactive)
     (ivy-with-thing-at-point #'swiper)))
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package counsel
   :hook (after-init . counsel-mode)
 
