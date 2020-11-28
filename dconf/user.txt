@@ -53,7 +53,7 @@ unmaximize=@as []
 [org/gnome/shell/extensions/paperwm]
 has-installed-config-template=true
 vertical-margin=0
-window-gap=10
+window-gap=15
 
 [org/gnome/shell/extensions/paperwm/keybindings]
 close-window=['<Super>q']
