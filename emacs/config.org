@@ -1660,6 +1660,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   (add-to-list 'org-modules 'org-protocol)
   (add-to-list 'org-modules 'org-habit)
+  (add-to-list 'org-modules 'org-id)
 
   ;; Original version stolen from https://emacs.stackexchange.com/questions/23870/org-babel-result-to-a-separate-buffer
   (defun neh/babel-to-buffer ()
@@ -1790,6 +1791,13 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (org-journal-enable-encryption nil)
   (org-journal-date-format "%A, %x")
   (org-journal-file-type 'daily))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-id
+  :straight nil
+  :custom
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
 Add plantuml for nice text-based diagram generation. I’ll mainly use this in org mode files, generating inline diagrams from src blocks.
