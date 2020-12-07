@@ -477,11 +477,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (eldoc-echo-area-use-multiline-p nil))
 
-(use-package undo-tree
-  :disabled t
-  :config
-  (global-undo-tree-mode t))
-
 (use-package undo-fu
   :after (evil)
   :defer 0.5
@@ -2605,11 +2600,6 @@ Org-mode properties drawer already, keep the headline and don’t insert
     "nD" #'org-download-yank)
   :custom
   (org-download-image-dir "./images"))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package deft
-  :commands (deft))
 #+end_src
 
 #+begin_src emacs-lisp
