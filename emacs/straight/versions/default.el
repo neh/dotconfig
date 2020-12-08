@@ -21,7 +21,6 @@
  ("ctrlf" . "5acefdc9a6f8e35febf6f71b6a34a0d4fc499269")
  ("dash.el" . "0f238a9a466879ee96e5db0482019453718f342d")
  ("deadgrep" . "baa352b982bded5fbca1ec9c14fec20e78b2089b")
- ("deft" . "fca9ea05ef4fdac825e2ad3921baa7042f6b82c8")
  ("diff-hl" . "2281a89a3ddc6616073da6f190dda08d23b18ba6")
  ("dired-du" . "d6571317673ba44566ba411d26b7af74e3139ff7")
  ("dired-git-info" . "b47f2b0c3a6cb9b7a62a4ee2605a492e512d40a9")
