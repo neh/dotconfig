@@ -605,22 +605,14 @@ General settings for programming modes.
 (setq neh/dark-theme 'modus-vivendi
       neh/light-theme 'modus-operandi)
 
-(use-package modus-operandi-theme
+(use-package modus-themes
   :custom
-  (modus-operandi-theme-org-blocks 'greyscale)
-  (modus-operandi-theme-diffs 'desaturated)
-  (modus-operandi-theme-bold-constructs t)
-  (modus-operandi-theme-slanted-constructs t)
+  (modus-themes-org-blocks 'greyscale)
+  (modus-themes-diffs 'desaturated)
+  (modus-themes-bold-constructs t)
+  (modus-themes-slanted-constructs t)
   :config
-  (load-theme neh/light-theme t nil))
-
-(use-package modus-vivendi-theme
-  :custom
-  (modus-vivendi-theme-org-blocks 'greyscale)
-  (modus-vivendi-theme-bold-constructs t)
-  (modus-vivendi-theme-slanted-constructs t)
-  :config
-  (load-theme neh/dark-theme t t))
+  (modus-themes-load-operandi))
 
 (use-package gruvbox-theme
   :disabled
