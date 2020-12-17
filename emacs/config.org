@@ -3847,7 +3847,12 @@ Try out =org-noter=.
 (use-package terraform-mode
   :mode ("\\.tf|tfvars\\'" . terraform-mode)
   :hook ((terraform-mode . terraform-format-on-save-mode)
-         (terraform-mode . yas-minor-mode-on)))
+         (terraform-mode . yas-minor-mode-on))
+  :custom-face
+  (terraform--resource-type-face
+   ((t (:inherit 'font-lock-constant-face))))
+  (terraform--resource-name-face
+   ((t (:inherit 'font-lock-variable-name-face)))))
 #+end_src
 
 #+begin_src emacs-lisp
