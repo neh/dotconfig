@@ -2517,20 +2517,16 @@ MimeType=x-scheme-handler/org-protocol;
         :unnarrowed t)))
 
     :general
-    (general-define-key
+    (neh/leader-keys
+     "no" #'org-roam-find-file)
+
+    (neh/leader-keys
      :keymaps 'org-roam-mode-map
-     :states '(normal insert)
-     :non-normal-prefix "C-SPC"
-     :prefix "SPC"
      "nl" #'org-roam
-     "no" #'org-roam-find-file
      "nG" #'org-roam-show-graph)
 
-    (general-define-key
+    (neh/leader-keys
      :keymaps 'org-mode-map
-     :states '(normal insert visual)
-     :non-normal-prefix "C-SPC"
-     :prefix "SPC"
       "ni" #'org-roam-insert)
 
     :init
