@@ -49,20 +49,29 @@ switch-to-workspace-up=@as []
 toggle-fullscreen=@as []
 toggle-maximized=@as []
 unmaximize=@as []
+cycle-group=@as []
+cycle-group-backward=@as []
+move-to-monitor-down=@as []
+move-to-monitor-left=@as []
+move-to-monitor-right=@as []
+move-to-monitor-up=@as []
+move-to-workspace-last=@as []
+panel-run-dialog=[]
 
 [org/gnome/shell/extensions/paperwm]
 has-installed-config-template=true
 vertical-margin=0
 window-gap=15
+use-default-background=true
 
 [org/gnome/shell/extensions/paperwm/keybindings]
 close-window=['<Super>q']
-live-alt-tab=@as []
-live-alt-tab-backward=@as []
+live-alt-tab=['<Super>j']
+live-alt-tab-backward=['<Shift><Super>j']
 move-down-workspace=@as []
 move-left=['<Shift><Super>h']
-move-previous-workspace=['<Super><Alt>apostrophe']
-move-previous-workspace-backward=@as []
+move-previous-workspace=['<Shift><Super>t']
+move-previous-workspace-backward=['<Shift><Super>n']
 move-right=['<Shift><Super>s']
 move-up-workspace=@as []
 new-window=@as []
@@ -70,49 +79,31 @@ previous-workspace=['<Super>t']
 previous-workspace-backward=['<Super>n']
 resize-h-dec=@as []
 resize-h-inc=@as []
-resize-w-dec=['<Primary><Super>h']
-resize-w-inc=['<Primary><Super>s']
-switch-down-workspace=['<Alt><Super>t']
+resize-w-dec=['<Control><Super>h']
+resize-w-inc=['<Control><Super>s']
+switch-down-workspace=['<Super>Page_Down']
 switch-first=@as []
 switch-last=@as []
 switch-next=['<Super>s']
 switch-previous=['<Super>h']
-switch-up-workspace=['<Alt><Super>n']
+switch-up-workspace=['<Super>Page_Up']
 take-window=['<Super>k']
 toggle-scratch=['<Shift><Super>y']
 toggle-scratch-layer=['<Super>y']
 toggle-scratch-window=['<Primary><Super>y']
 
-[org/gnome/shell/extensions/paperwm/workspaces/a8a51fa8-6dbf-4026-9309-55efc24d0a13]
-background=''
-color='rgb(46,52,54)'
-index=0
-name='main'
-
-[org/gnome/shell/extensions/paperwm/workspaces/23e803c1-8a29-4df0-9ede-212f7026ea76]
-background=''
-color='rgb(85,87,83)'
-index=1
-name='comm'
-
-[org/gnome/shell/extensions/paperwm/workspaces/92b95d91-9a7a-444f-a8c9-634076120755]
-index=2
-name='emacs'
-
-[org/gnome/shell/extensions/paperwm/workspaces/f6dbe0a3-2927-4793-a389-cad13ca5aa36]
-index=3
-name='kbd'
-
-[org/gnome/shell/extensions/paperwm/workspaces/fe18deac-202f-45a1-bb4b-77b4c15c0b16]
-index=4
-name='misc'
-
-[org/gnome/shell/extensions/paperwm/workspaces/75bc12b1-5a4f-41f4-a86e-9814e277d749]
-index=5
-name='setup'
-
-[org/gnome/shell/extensions/paperwm/workspaces]
-list=['a8a51fa8-6dbf-4026-9309-55efc24d0a13', '23e803c1-8a29-4df0-9ede-212f7026ea76', '92b95d91-9a7a-444f-a8c9-634076120755', 'f6dbe0a3-2927-4793-a389-cad13ca5aa36', '75bc12b1-5a4f-41f4-a86e-9814e277d749', 'fe18deac-202f-45a1-bb4b-77b4c15c0b16']
+move-down=@as []
+move-monitor-above=@as []
+move-monitor-below=@as []
+move-monitor-left=['<Super>bar']
+move-monitor-right=['<Super>KP_Add']
+move-up=@as []
+switch-left=['<Super>Left']
+switch-monitor-above=@as []
+switch-monitor-below=@as []
+switch-monitor-left=['<Super>7']
+switch-monitor-right=['<Super>0']
+switch-right=['<Super>Right']
 
 [org/gnome/nautilus/preferences]
 click-policy='single'
@@ -180,3 +171,13 @@ toggle-tiled-right=@as []
 focus-active-notification=@as []
 toggle-application-view=@as []
 toggle-overview=@as []
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Super>a'
+command="emacsclient -c -e '(neh/agenda-current-window)'"
+name='Agenda'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Super>period'
+command="emacsclient -c -F '(quote (name . \"capture\"))' -e '(org-capture)'"
+name='Capture'
