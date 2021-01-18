@@ -390,6 +390,8 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
     "cc" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
 
+    "e" '(execute-extended-command :which-key "run a command")
+
     "f" '(:ignore t :which-key "formatting")
     "fa" '(auto-fill-mode :which-key "auto fill")
     "fi" '(indent-region :which-key "indent region")
