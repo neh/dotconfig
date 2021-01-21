@@ -916,7 +916,9 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :custom
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
-  (marginalia-mode t))
+  (marginalia-mode t)
+  (advice-add #'marginalia-cycle :after
+              (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
 
 (use-package embark
   ;; :commands (embark-act
@@ -960,6 +962,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 (use-package embark-consult)
 
 (use-package icomplete-vertical
+  :disabled t
   :demand t
   :custom
   (read-file-name-completion-ignore-case t)
@@ -980,8 +983,27 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   (icomplete-mode t)
   (icomplete-vertical-mode t))
 
+(use-package selectrum
+  :demand t
+
+  :custom
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (completion-ignore-case t)
+  (selectrum-refine-candidates-function #'orderless-filter)
+  (selectrum-highlight-candidates-function #'orderless-highlight-matches)
+
+  :general
+  (:keymaps 'selectrum-minibuffer-map
+   "C-t" #'selectrum-next-candidate
+   "C-n" #'selectrum-previous-candidate
+   "C-w" #'evil-delete-backward-word
+   )
+
+  :config
+  (selectrum-mode t))
+
 (use-package orderless
-  :after icomplete-vertical
   :init
   (defun literal-if-equals (pattern _index _total)
     (when (string-suffix-p "=" pattern)
