@@ -16,7 +16,7 @@
  ("company-box" . "be37a9a30dc112ab172af21af694e2cb04a74f85")
  ("company-jedi" . "4775b659564f1d57bc68c88c9faabf44c9fe4e4d")
  ("company-mode" . "dccd04b7fb658d366c2081b6ce7ddcd208ce7ae0")
- ("consult" . "cfc628f4fcf57d2ac2d5478b76611e7b4ce49e2f")
+ ("consult" . "aa47b1a6e95ee9b6429f21e41f25244b970a83ad")
  ("csv-mode" . "80930bc0d8c7228cd8706c2c989bdd3a3667fbeb")
  ("dash.el" . "b1bc1bfe1c454e16b611139c6248fc77c30afd10")
  ("deadgrep" . "baa352b982bded5fbca1ec9c14fec20e78b2089b")
