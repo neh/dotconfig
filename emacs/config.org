@@ -86,6 +86,7 @@ Load =org-mode= using straight. This needs to happen early, or emacs will load a
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
 (use-package org
+  :ensure org-plus-contrib
   :demand t)
 #+end_src
 
@@ -1493,6 +1494,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
 #+begin_src emacs-lisp :noweb yes
 (use-package org
+  :ensure org-plus-contrib
   :hook (
          <<org-hooks>>)
 
