@@ -153,6 +153,7 @@
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("spinner" . "61f59fab44d22cd5add61a1baf3f0b88a5d829d7")
  ("straight.el" . "2d407bccd9378f1d5218f8ba2ae85c6be73fbaf1")
+ ("sudo-edit" . "a7ae1713bb659988bb1465a13b837fbc2d699504")
  ("symbol-overlay" . "39f772b531117edba596e7a1210b3dbb87d56adb")
  ("system-packages" . "92c58d98bc7282df9fd6f24436a105f5f518cde9")
  ("tablist" . "faab7a035ef2258cc4ea2182f67e3aedab7e2af9")

@@ -3213,6 +3213,18 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package sudo-edit
+  :after embark
+  :commands (sudo-edit
+             sudo-edit-find-file)
+  :general
+  (:keymaps 'embark-file-map
+   "s" #'sudo-edit-find-file)
+  (:keymaps 'embark-become-file+buffer-map
+   "s" #'sudo-edit-find-file))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package scratch
   :commands (scratch))
 #+end_src
