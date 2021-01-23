@@ -961,28 +961,6 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
 (use-package embark-consult)
 
-(use-package icomplete-vertical
-  :disabled t
-  :demand t
-  :custom
-  (read-file-name-completion-ignore-case t)
-  (read-buffer-completion-ignore-case t)
-  (completion-ignore-case t)
-
-  :general
-  (:keymaps 'icomplete-minibuffer-map
-   "RET" #'icomplete-force-complete-and-exit
-   "TAB" #'icomplete-force-complete
-   "<down>" #'icomplete-forward-completions
-   "C-t" #'icomplete-forward-completions
-   "<up>" #'icomplete-backward-completions
-   "C-n" #'icomplete-backward-completions
-   "C-v" #'icomplete-vertical-toggle)
-
-  :config
-  (icomplete-mode t)
-  (icomplete-vertical-mode t))
-
 (use-package selectrum
   :demand t
 
