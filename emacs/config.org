@@ -2649,7 +2649,7 @@ directory to make multiple eshell windows easier."
 
   :custom
   (dired-create-destination-dirs 'ask)
-  (dired-listing-switches "-alhv --group-directories-first")
+  (dired-listing-switches "-alhv")
   (dired-recursive-copies 'always)
   (dired-dwim-target t)
 
