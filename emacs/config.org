@@ -2668,6 +2668,14 @@ directory to make multiple eshell windows easier."
         dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package ls-lisp
+  :straight nil
+  :custom
+  (ls-lisp-ignore-case t)
+  (ls-lisp-use-insert-directory-program nil))
+#+end_src
+
 #+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
 (major-mode-hydra-define dired-mode
   (:color amaranth :quit-key ("q" "<escape>"))
