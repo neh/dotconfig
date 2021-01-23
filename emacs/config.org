@@ -3262,7 +3262,7 @@ Try out =org-noter=.
      (ediff-window-setup-function ediff-setup-windows-plain)
      (ido-default-buffer-method selected-window)
      (magit-commit-show-diff t)
-     (magit-bury-buffer-function magit-restore-window-configuration)
+     (magit-bury-buffer-function frames-only-mode-magit-bury-buffer-function)
      ;; (magit-bury-buffer-function delete-frame)
      (flycheck-display-errors-function frames-only-mode-flycheck-display-errors)))
 
