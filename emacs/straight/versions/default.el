@@ -135,6 +135,7 @@
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("popup-el" . "13364d7674535db225789b03da766746734a4f28")
  ("posframe" . "e1552c82dffaadc5e7de09a44880a498197ffbee")
+ ("prescient.el" . "b12f8b06d591bf14bb641ccf321d6750f459a02c")
  ("projectile" . "3b213900c8f12d3711a7790c6620d4b9dfc38ea0")
  ("pyvenv" . "d6844d5beeb5f8093d98091a2931f38dd891476b")
  ("queue" . "52206c0f78afc0dfb9a287cb928c1e725103336d")
