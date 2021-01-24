@@ -2667,6 +2667,11 @@ directory to make multiple eshell windows easier."
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package ls-lisp
   :straight nil
   :custom
