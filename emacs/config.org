@@ -955,6 +955,8 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
     "/" '(consult-line :which-key "search lines"))
   (:keymaps 'embark-buffer-map
    "F" #'consult-buffer-other-frame)
+  (:keymaps 'embark-file-map
+   "X" #'consult-file-externally)
   :config
   (setq consult-project-root-function #'projectile-project-root))
 
