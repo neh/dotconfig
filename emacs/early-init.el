@@ -24,11 +24,12 @@
     :ensure org-plus-contrib
     :demand t)
   (let ((orgfile (concat user-emacs-directory "config.org"))
-        (elfile (concat user-emacs-directory "config.el")))
+        (elfile (concat user-emacs-directory "init.el"))
+        (earlyfile (concat user-emacs-directory "early-init.el")))
     (when (or (not (file-exists-p elfile))
-              (file-newer-than-file-p orgfile elfile))
-      (org-babel-tangle-file orgfile elfile))
-    (load-file elfile))
+              (file-newer-than-file-p orgfile elfile)
+              (file-newer-than-file-p orgfile earlyfile))
+      (org-babel-tangle-file orgfile)))
   (setq gc-cons-threshold (* 250 1000 1000)
         gc-cons-percentage 0.5)
   

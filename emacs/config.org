@@ -1,4 +1,4 @@
-#+property: header-args:emacs-lisp :tangle (concat (file-name-sans-extension (buffer-file-name)) ".el")
+#+property: header-args:emacs-lisp :tangle (concat user-emacs-directory "init.el")
 #+property: header-args :mkdirp yes :comments no :results silent
 #+startup: showall inlineimages
 
@@ -18,7 +18,7 @@ emacs -Q -l profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-f
 
 * Initialization
 :properties:
-:header-args:emacs-lisp: :tangle (concat user-emacs-directory "init.el")
+:header-args:emacs-lisp: :tangle (concat user-emacs-directory "early-init.el")
 :end:
 
 Since this is a literate configuration, a small =init.el= file is needed to handle tangling and loading the rest of the configuration when necessary. That file gets created here, and the tangled result needs to be commited to the git repository whenever any changes are made to it here.
@@ -94,11 +94,12 @@ Here's where the rest of this file gets tangled and loaded, but only if it's new
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-tangle
 (let ((orgfile (concat user-emacs-directory "config.org"))
-      (elfile (concat user-emacs-directory "config.el")))
+      (elfile (concat user-emacs-directory "init.el"))
+      (earlyfile (concat user-emacs-directory "early-init.el")))
   (when (or (not (file-exists-p elfile))
-            (file-newer-than-file-p orgfile elfile))
-    (org-babel-tangle-file orgfile elfile))
-  (load-file elfile))
+            (file-newer-than-file-p orgfile elfile)
+            (file-newer-than-file-p orgfile earlyfile))
+    (org-babel-tangle-file orgfile)))
 #+end_src
 
 Then reset the value of =gc-cons-threshold=, not to its original value; we still leave it much larger than default so that GCs don't happen so often and impact performance. We also tweak =gc-cons-percentage= and set an idle timer to run =garbage-collect= whenever emacs is idle for 5 seconds.
