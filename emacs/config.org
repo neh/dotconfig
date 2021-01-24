@@ -923,13 +923,11 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
 (use-package embark
   ;; :commands (embark-act
-  ;;            embark-act-noexit
   ;;            embark-become)
   :demand t
   :general
   ("C-e" #'embark-act)
-  ("C-," #'embark-act
-   "C-." #'embark-act-noexit)
+  ("C-," #'embark-act)
   (:keymaps 'embark-file-map
    "F" #'find-file-other-frame)
   (:keymaps 'embark-symbol-map
