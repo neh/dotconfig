@@ -23,7 +23,7 @@
   (use-package org
     :ensure org-plus-contrib
     :demand t)
-  (let ((orgfile (concat user-emacs-directory "config.org"))
+  (let ((orgfile (concat user-emacs-directory "emacs.org"))
         (elfile (concat user-emacs-directory "init.el"))
         (earlyfile (concat user-emacs-directory "early-init.el")))
     (when (or (not (file-exists-p elfile))
