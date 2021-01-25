@@ -889,6 +889,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :custom
   (evil-collection-outline-bind-tab-p nil)
   (evil-collection-company-use-tng nil)
+  (evil-collection-setup-minibuffer t)
 
   :init
   (defun neh/evil-key-translations (_mode mode-keymaps &rest _rest)
