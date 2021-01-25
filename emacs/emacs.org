@@ -726,7 +726,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
           (buffer-list)))
 
   (set-scroll-bar-mode nil)
-  (neh/enable-scroll-highlight)
+  ;; (neh/enable-scroll-highlight)
   )
 #+end_src
 
@@ -1213,6 +1213,17 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 (defun my-indicate-scroll-backward (f &rest args)
   (my-indicate-scroll (window-start) f args))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package scrollkeeper
+  :custom
+  (scrollkeeper-scroll-distance 0.85)
+  :general
+  ([remap evil-scroll-up] #'scrollkeeper-up)
+  ([remap evil-scroll-down] #'scrollkeeper-down)
+  ([remap evil-scroll-page-up] #'scrollkeeper-up)
+  ([remap evil-scroll-page-down] #'scrollkeeper-down))
 #+end_src
 
 #+begin_src emacs-lisp
