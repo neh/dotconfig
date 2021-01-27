@@ -388,54 +388,53 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (neh/leader-keys
     "<SPC>" '(save-buffer :which-key "save")
 
-    "b" '(:ignore t :which-key "buffer")
-
     "cc" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
-
     "e" '(execute-extended-command :which-key "run a command")
-
-    "f" '(:ignore t :which-key "formatting")
-    "fa" '(auto-fill-mode :which-key "auto fill")
-    "fi" '(indent-region :which-key "indent region")
-    "fp" '(fill-paragraph :which-key "paragraph")
-    "fr" '(fill-region :which-key "fill region")
-    "ft" '(toggle-truncate-lines :which-key "truncate lines")
-    "ff" '(lambda () (interactive) (set-frame-width nil fill-column))
-
-    "g" '(:ignore t :which-key "git")
-
-    "h" '(:ignore t :which-key "help")
-
-    "hl" '(highlight-lines-matching-regexp :which-key "highlight line")
-    "hr" '(highlight-regexp :which-key "highlight regexp")
-    "hu" '(unhighlight-regexp :which-key "unhighlight regexp")
-
-    "i" '(:ignore t :which-key "insert")
-    "ip" '(clipboard-yank :which-key "paste from clipboard")
-
-    "n" '(:ignore t :which-key "narrow")
-    "nd" '(narrow-to-defun :which-key "narrow to defun")
-    "np" '(narrow-to-page :which-key "narrow to page")
-    "nr" '(narrow-to-region :which-key "narrow to region")
-    "nw" '(widen :which-key "widen")
-
-    "o" '(:ignore t :which-key "open")
-    ;; "oe" '(mode-line-other-buffer :which-key "previous buffer")
-    ;; "oo" '(persp-switch-to-buffer :which-key "switch buffer")
-    ;; "ov" '(persp-switch :which-key "switch perspective")
-
     "Q" #'bury-buffer
 
-    "s" '(:ignore t :which-key "search")
-
+    "b" '(:ignore t :which-key "buffer")
+    "f" '(:ignore t :which-key "formatting")
+    "g" '(:ignore t :which-key "git")
+    "h" '(:ignore t :which-key "help")
+    "i" '(:ignore t :which-key "insert")
+    "n" '(:ignore t :which-key "narrow")
+    "o" '(:ignore t :which-key "open")
     "r" '(:ignore t :which-key "read")
-
+    "s" '(:ignore t :which-key "search")
     "v" '(:ignore t :which-key "view")
 
-    "xb" '(eval-buffer :which-key "eval buffer")
-    "xe" '(eval-expression :which-key "eval expression")
-    "xr" '(eval-region :which-key "eval region")
-    "xs" '(eval-last-sexp :which-key "eval sexp")))
+    "ip" '(clipboard-yank :which-key "paste from clipboard")
+    )
+
+  (neh/leader-keys
+    :infix "f"
+    "a" '(auto-fill-mode :which-key "auto fill")
+    "i" '(indent-region :which-key "indent region")
+    "p" '(fill-paragraph :which-key "paragraph")
+    "r" '(fill-region :which-key "fill region")
+    "t" '(toggle-truncate-lines :which-key "truncate lines")
+    "f" '(lambda () (interactive) (set-frame-width nil fill-column)))
+
+  (neh/leader-keys
+    :infix "h"
+    "l" '(highlight-lines-matching-regexp :which-key "highlight line")
+    "r" '(highlight-regexp :which-key "highlight regexp")
+    "u" '(unhighlight-regexp :which-key "unhighlight regexp"))
+
+  (neh/leader-keys
+    :infix "n"
+    "d" '(narrow-to-defun :which-key "narrow to defun")
+    "p" '(narrow-to-page :which-key "narrow to page")
+    "r" '(narrow-to-region :which-key "narrow to region")
+    "w" '(widen :which-key "widen"))
+
+  (neh/leader-keys
+    :infix "x"
+    "b" '(eval-buffer :which-key "eval buffer")
+    "e" '(eval-expression :which-key "eval expression")
+    "r" '(eval-region :which-key "eval region")
+    "s" '(eval-last-sexp :which-key "eval sexp"))
+  )
 #+end_src
 
 Which-key shows a handy popup for available keybindings at any given time.
