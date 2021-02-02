@@ -914,56 +914,13 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
 * Navigation?
 
+I used ivy and friends for a quite a while here, mostly because helm didn't really make sense to me when I started using emacs, and ivy did. So I quickly got a configuration together that worked for me, and enjoyed using ivy, swiper, counsel etc. but I never really put a lot of effort into understanding what I had. Occasionally I would rework some part of it, but I mostly left it alone.
+
+I was interested when the "new tools" like selectrum, and orderless, and then consult, marginalia, and embark started showing up and looked like a nice composable, understandable set of functionality I could assemble the way I wanted to. So that's what I have here now.
+
+Let's start with selectrum, as it's the interface to most of the rest here. I tried icomplete-vertical for a few days first, and then tried selectrum and liked it more.
+
 #+begin_src emacs-lisp
-(use-package marginalia
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (marginalia-mode t)
-  (advice-add #'marginalia-cycle :after
-              (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
-
-(use-package embark
-  ;; :commands (embark-act
-  ;;            embark-become)
-  :demand t
-  :general
-  ("C-e" #'embark-act)
-  ("C-," #'embark-act)
-  (:keymaps 'embark-file-map
-   "F" #'find-file-other-frame)
-  (:keymaps 'embark-symbol-map
-   "g" #'consult-ripgrep)
-  :config
-  (setq embark-action-indicator
-        (lambda (map)
-          (which-key--show-keymap "Embark" map nil nil 'no-paging)
-          #'which-key--hide-popup-ignore-command)
-        embark-become-indicator embark-action-indicator)
-  )
-
-(use-package consult
-  :init
-  (fset 'multi-occur #'consult-multi-occur)
-  :general
-  (neh/leader-keys
-    "oo" '(consult-buffer :which-key "switch buffer/recent")
-    "of" '(find-file :which-key "file")
-    "ha" '(consult-apropos :which-key "apropos")
-    "sf" '(consult-ripgrep :which-key "rg")
-    "sg" '(consult-git-grep :which-key "rg")
-    "so" '(consult-outline :which-key "outline")
-    "st" '(consult-imenu :which-key "imenu")
-    "/" '(consult-line :which-key "search lines"))
-  (:keymaps 'embark-buffer-map
-   "F" #'consult-buffer-other-frame)
-  (:keymaps 'embark-file-map
-   "X" #'consult-file-externally)
-  :config
-  (setq consult-project-root-function #'projectile-project-root))
-
-(use-package embark-consult)
-
 (use-package selectrum
   :demand t
 
@@ -981,7 +938,11 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   :config
   (selectrum-mode t))
+#+end_src
 
+Faster narrowing of a list of candidates matters, and orderless is a nice straightforward way to get it.
+
+#+begin_src emacs-lisp
 (use-package orderless
   :demand t
 
@@ -1015,6 +976,8 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
                                  without-if-bang)))
 #+end_src
 
+As nice (and customizable) as orderless is, I missed what I was getting from prescient when I was using ivy. Taking recency into account makes a big difference to me in finding what I want in a list of candidates.
+
 #+begin_src emacs-lisp
 (use-package selectrum-prescient
   :demand t
@@ -1034,6 +997,67 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   :hook (company-mode . company-prescient-mode)
   :custom
   (company-prescient-sort-length-enable nil))
+#+end_src
+
+There's plenty of useful extra information that can be attached to each candidate in a list, and marginalia does a great job with it.
+
+#+begin_src emacs-lisp
+(use-package marginalia
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode t)
+  (advice-add #'marginalia-cycle :after
+              (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
+#+end_src
+
+One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in selectrum, or pretty much anywhere in emacs.
+
+#+begin_src emacs-lisp
+(use-package embark
+  ;; :commands (embark-act
+  ;;            embark-become)
+  :demand t
+  :general
+  ("C-e" #'embark-act)
+  ("C-," #'embark-act)
+  (:keymaps 'embark-file-map
+   "F" #'find-file-other-frame)
+  (:keymaps 'embark-symbol-map
+   "g" #'consult-ripgrep)
+  :config
+  (setq embark-action-indicator
+        (lambda (map)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator)
+  )
+#+end_src
+
+Consult takes over for a lot of what counsel did, as well as swiper.
+
+#+begin_src emacs-lisp
+(use-package consult
+  :init
+  (fset 'multi-occur #'consult-multi-occur)
+  :general
+  (neh/leader-keys
+    "oo" '(consult-buffer :which-key "switch buffer/recent")
+    "of" '(find-file :which-key "file")
+    "ha" '(consult-apropos :which-key "apropos")
+    "sf" '(consult-ripgrep :which-key "rg")
+    "sg" '(consult-git-grep :which-key "rg")
+    "so" '(consult-outline :which-key "outline")
+    "st" '(consult-imenu :which-key "imenu")
+    "/" '(consult-line :which-key "search lines"))
+  (:keymaps 'embark-buffer-map
+   "F" #'consult-buffer-other-frame)
+  (:keymaps 'embark-file-map
+   "X" #'consult-file-externally)
+  :config
+  (setq consult-project-root-function #'projectile-project-root))
+
+(use-package embark-consult)
 #+end_src
 
 Avy is a really handy way to jump around your visible buffer contents. One aspect that doesn’t seem to really be documented is the avy-actions mechanism. It lets you do things other than just jump to the point you select. So you can hit the key for whichever avy function you like, then, /before/ making your selection, press the key associated with an avy-action function to do that thing instead. This way, you can easily copy a word from elsewhere on your screen and paste it at your cursor with avy, no cursor movement needed at all. Also, =avy-copy-line= is a useful standalone function. I find it useful particularly when working in Terraform files, as lines need to be duplicated fairly often there.
