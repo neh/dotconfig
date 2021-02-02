@@ -388,11 +388,11 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (neh/leader-keys
     "<SPC>" '(save-buffer :which-key "save")
 
-    "cc" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
     "e" '(execute-extended-command :which-key "run a command")
     "Q" #'bury-buffer
 
     "b" '(:ignore t :which-key "buffer")
+    "c" '(:ignore t :which-key "c?")
     "f" '(:ignore t :which-key "formatting")
     "g" '(:ignore t :which-key "git")
     "h" '(:ignore t :which-key "help")
@@ -405,6 +405,11 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
     "ip" '(clipboard-yank :which-key "paste from clipboard")
     )
+
+  (neh/leader-keys
+    :infix "c"
+    "c" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
+    "q" '(quick-calc :which-key "quick-calc"))
 
   (neh/leader-keys
     :infix "f"
