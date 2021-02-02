@@ -936,6 +936,7 @@ Let's start with selectrum, as it's the interface to most of the rest here. I tr
 
   :general
   (:keymaps 'selectrum-minibuffer-map
+   :states '(insert normal)
    "C-t" #'selectrum-next-candidate
    "C-n" #'selectrum-previous-candidate
    "C-w" #'evil-delete-backward-word
