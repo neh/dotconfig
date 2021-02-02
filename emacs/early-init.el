@@ -22,7 +22,9 @@
         )
   (use-package org
     :ensure org-plus-contrib
-    :demand t)
+    :demand t
+    :config
+    (setq custom-enabled-themes '()))
   (let ((orgfile (concat user-emacs-directory "emacs.org"))
         (elfile (concat user-emacs-directory "init.el"))
         (earlyfile (concat user-emacs-directory "early-init.el")))

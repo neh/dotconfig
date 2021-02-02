@@ -87,7 +87,9 @@ Load =org-mode= using straight. This needs to happen early, or emacs will load a
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
 (use-package org
   :ensure org-plus-contrib
-  :demand t)
+  :demand t
+  :config
+  (setq custom-enabled-themes '()))
 #+end_src
 
 Here's where the rest of this file gets tangled and loaded, but only if it's newer than the existing tangled file. Tangling is slow (at least it is when you start using no-web references...), so we don't want to do it for no good reason.
