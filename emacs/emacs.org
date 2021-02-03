@@ -1421,6 +1421,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  (advice-add 'vc-refresh-state :after #'diff-hl-update)
   :custom-face
   (diff-hl-change ((t (:foreground "#222222" :background "#ffd700"))))
   (diff-hl-insert ((t (:foreground "dark green" :background "ForestGreen"))))
