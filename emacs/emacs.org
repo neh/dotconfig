@@ -623,7 +623,12 @@ General settings for programming modes.
   :config
   (modus-themes-load-operandi))
 
-(use-package gruvbox-theme)
+(use-package gruvbox-theme
+  :custom-face
+  (org-block-begin-line ((t (:inherit fixed-pitch
+                             :slant italic))))
+  (org-block-end-line ((t (:inherit fixed-pitch
+                           :slant italic)))))
 
 (use-package poet-theme)
 #+end_src
