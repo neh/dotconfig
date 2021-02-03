@@ -623,16 +623,9 @@ General settings for programming modes.
   :config
   (modus-themes-load-operandi))
 
-(use-package gruvbox-theme
-  :disabled
-  :config
-  (setq neh/dark-mode t)
-  (load-theme neh/dark-theme t))
+(use-package gruvbox-theme)
 
-(use-package poet-theme
-  :disabled
-  :config
-  (load-theme 'poet t))
+(use-package poet-theme)
 #+end_src
 
 But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller modeline font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
