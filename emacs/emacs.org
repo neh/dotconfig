@@ -1419,6 +1419,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
          (global-diff-hl-mode . diff-hl-flydiff-mode)
          (dired-mode . diff-hl-dired-mode))
   :init
+  (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   :custom-face
   (diff-hl-change ((t (:foreground "#222222" :background "#ffd700"))))
