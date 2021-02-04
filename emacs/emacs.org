@@ -611,17 +611,15 @@ General settings for programming modes.
 * Pretty it up
 
 #+begin_src emacs-lisp
-(setq neh/dark-theme 'modus-vivendi
-      neh/light-theme 'modus-operandi)
+(setq neh/dark-theme 'gruvbox-dark-hard
+      neh/light-theme 'gruvbox-light-hard)
 
 (use-package modus-themes
   :custom
   (modus-themes-org-blocks 'greyscale)
   (modus-themes-diffs 'desaturated)
   (modus-themes-bold-constructs t)
-  (modus-themes-slanted-constructs t)
-  :config
-  (modus-themes-load-operandi))
+  (modus-themes-slanted-constructs t))
 
 (use-package gruvbox-theme
   :custom-face
@@ -631,6 +629,8 @@ General settings for programming modes.
                            :slant italic)))))
 
 (use-package poet-theme)
+
+(load-theme neh/light-theme t)
 #+end_src
 
 But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller modeline font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
