@@ -1467,6 +1467,64 @@ for pid in $(pgrep termite); do
 done
 #+end_src
 
+** Tilix
+
+#+begin_src json :tangle ~/.config/tilix/schemes/gruvbox-light-hard.json :mkdirp yes
+{
+    "name": "Gruvbox Light Hard",
+    "comment": "Gruvbox Light Scheme (hard contrast)",
+    "use-theme-colors": false,
+    "foreground-color": "#282828",
+    "background-color": "#f9f5d7",
+    "palette": [
+        "#f9f5d7",
+        "#cc241d",
+        "#98971a",
+        "#d79921",
+        "#458588",
+        "#b16286",
+        "#689d6a",
+        "#665c54",
+        "#a89984",
+        "#9d0006",
+        "#79740e",
+        "#b57614",
+        "#076678",
+        "#8f3f71",
+        "#427b58",
+        "#3c3836"
+    ]
+}
+#+end_src
+
+#+begin_src json :tangle ~/.config/tilix/schemes/gruvbox-dark-hard.json :mkdirp yes
+{
+    "name": "Gruvbox Dark Hard",
+    "comment": "Gruvbox Dark Scheme (hard contrast)",
+    "use-theme-colors": false,
+    "foreground-color": "#ebdbb2",
+    "background-color": "#1d2021",
+    "palette": [
+        "#1d2021",
+        "#cc241d",
+        "#98971a",
+        "#d79921",
+        "#458588",
+        "#b16286",
+        "#689d6a",
+        "#bdae93",
+        "#7c6f64",
+        "#fb4934",
+        "#b8bb26",
+        "#fabd2f",
+        "#83a598",
+        "#d3869b",
+        "#8ec07c",
+        "#ebdbb2"
+    ]
+}
+#+end_src
+
 ** tmux
 :properties:
 :header-args: :tangle ~/.tmux.conf
