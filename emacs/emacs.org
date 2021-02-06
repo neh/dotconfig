@@ -2158,6 +2158,10 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 (use-package org-super-agenda
   :after (org org-agenda)
   :hook (org-agenda-mode . org-super-agenda-mode)
+  :general
+  (:keymaps 'org-super-agenda-header-map
+   "n" nil
+   "t" nil)
   :custom
   (org-super-agenda-header-properties '(face org-level-1 org-agenda-structural-header t))
   (org-super-agenda-date-format "%A, %B %d, %Y")
