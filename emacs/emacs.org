@@ -2140,6 +2140,9 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                         ""))
 
   :general
+  (:keymaps 'org-mode-map
+   "C-'" nil
+   "C-," nil)
   (neh/leader-keys
     "a" '(org-agenda :which-key "agenda")
     "og" '(org-agenda :which-key "agenda"))
