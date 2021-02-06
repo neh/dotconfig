@@ -61,7 +61,7 @@ panel-run-dialog=[]
 [org/gnome/shell/extensions/paperwm]
 has-installed-config-template=true
 vertical-margin=0
-window-gap=15
+window-gap=18
 use-default-background=true
 
 [org/gnome/shell/extensions/paperwm/keybindings]
