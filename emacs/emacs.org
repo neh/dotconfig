@@ -1031,6 +1031,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    "F" #'find-file-other-frame)
   (:keymaps 'embark-symbol-map
    "g" #'consult-ripgrep)
+  (:keymaps 'embark-url-map
+   "." #'hydra-browse/body)
   :config
   (setq embark-action-indicator
         (lambda (map)
