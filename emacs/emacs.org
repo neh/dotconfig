@@ -1025,7 +1025,6 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   ;;            embark-become)
   :demand t
   :general
-  ("C-e" #'embark-act)
   ("C-," #'embark-act)
   (:keymaps 'embark-file-map
    "F" #'find-file-other-frame)
