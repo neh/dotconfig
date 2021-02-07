@@ -77,6 +77,7 @@
  ("forge" . "b7ed932fdd40d7443fb13a1206d15cfa9f6f2b52")
  ("frame-local" . "7ee1106c3bcd4022f48421f8cb1ef4f995da816e")
  ("frames-only-mode" . "d3f6647c484656ddabdac5d18546599a03823cd4")
+ ("gcode-mode.el" . "a1e2c6cbf4e364991ab2209d5cd5a3b698d459d9")
  ("general.el" . "a0b17d207badf462311b2eef7c065b884462cb7c")
  ("ghub" . "5fae5e31586a11a2025168030e0eb3876502611c")
  ("git-gutter" . "f2c07b7308b23d862c576656c15ee5ce00c0ad93")

@@ -3644,6 +3644,11 @@ Try out =org-noter=.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package gcode-mode
+  :mode (("\\.gcode__'" . gcode-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package ctrlf
   :disabled
   :commands (ctrlf-mode
