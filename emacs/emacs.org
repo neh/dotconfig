@@ -1053,7 +1053,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "of" '(find-file :which-key "file")
     "ha" '(consult-apropos :which-key "apropos")
     "sf" '(consult-ripgrep :which-key "rg")
-    "sg" '(consult-git-grep :which-key "rg")
+    "sg" '(consult-git-grep :which-key "git-grep")
     "so" '(consult-outline :which-key "outline")
     "st" '(consult-imenu :which-key "imenu")
     "/" '(consult-line :which-key "search lines"))
