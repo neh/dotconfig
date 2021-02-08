@@ -3809,7 +3809,14 @@ Try out =org-noter=.
   (terraform--resource-type-face
    ((t (:inherit 'font-lock-constant-face))))
   (terraform--resource-name-face
-   ((t (:inherit 'font-lock-variable-name-face)))))
+   ((t (:inherit 'font-lock-variable-name-face))))
+  :config
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(terraform-error
+                 "^[[:blank:]]+on \\([^[:blank:]]+\\) line \\([[:digit:]]+\\)"
+                 1 2))
+  (add-to-list 'compilation-error-regexp-alist
+               'terraform-error))
 #+end_src
 
 #+begin_src emacs-lisp
