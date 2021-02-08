@@ -424,6 +424,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   (neh/leader-keys
     :infix "h"
+    "m" '(describe-mode :which-key "describe mode")
     "l" '(highlight-lines-matching-regexp :which-key "highlight line")
     "r" '(highlight-regexp :which-key "highlight regexp")
     "u" '(unhighlight-regexp :which-key "unhighlight regexp"))
