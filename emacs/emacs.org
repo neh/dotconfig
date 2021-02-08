@@ -3316,8 +3316,11 @@ Try out =org-noter=.
 (use-package run-command
   :commands (run-command)
   :custom
-  (run-command-recipes '(run-command-recipe-nehtest))
+  (run-command-recipes '(run-command-recipe-nehtest
+                         run-command-recipe-terraform-plan
+                         run-command-recipe-terraform-apply))
   (run-command-run-method 'compile)
+
   :init
   (defun run-command-recipe-nehtest ()
     (list
@@ -3325,9 +3328,19 @@ Try out =org-noter=.
            :command-name "listem"
            :command-line "ls -la --color")))
 
-  ;; (defun run-command-recipe-terraform ()
-  ;;   (list
-  ;;    (when )))
+  (defun run-command-recipe-terraform-plan ()
+    (list
+     (when (equal major-mode 'terraform-mode)
+       (list :display "Plan"
+             :command-name "terraform-plan"
+             :command-line "terraform plan"))))
+
+  (defun run-command-recipe-terraform-apply ()
+    (list
+     (when (equal major-mode 'terraform-mode)
+       (list :display "Apply"
+             :command-name "terraform-apply"
+             :command-line "terraform apply"))))
   )
 #+end_src
 
