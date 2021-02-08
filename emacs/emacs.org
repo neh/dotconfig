@@ -1388,6 +1388,11 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
 (use-package company
   :commands (global-company-mode)
   :hook ((after-init . global-company-mode))
+  :custom
+  (company-idle-delay nil)
+  :general
+  (:states '(insert)
+   "C-." #'company-complete)
   :config
   (with-eval-after-load 'evil
     (with-eval-after-load 'company
