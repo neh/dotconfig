@@ -3299,6 +3299,39 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package compile
+  :straight nil
+  :custom
+  (compilation-scroll-output 'first-error)
+  )
+
+(use-package xterm-color
+  :custom
+  (compilation-environment '("TERM=xterm-256color"))
+  :config
+  (defun my/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
+
+(use-package run-command
+  :commands (run-command)
+  :custom
+  (run-command-recipes '(run-command-recipe-nehtest))
+  (run-command-run-method 'compile)
+  :init
+  (defun run-command-recipe-nehtest ()
+    (list
+     (list :display "Just list files"
+           :command-name "listem"
+           :command-line "ls -la --color")))
+
+  ;; (defun run-command-recipe-terraform ()
+  ;;   (list
+  ;;    (when )))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package sudo-edit
   :after embark
   :commands (sudo-edit

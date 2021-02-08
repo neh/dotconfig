@@ -47,6 +47,7 @@
  ("emacs-hcl-mode" . "e12b1df2ca28d2b06c471cd709c038a2dc0bcdbd")
  ("emacs-jedi" . "9d5f29116c4d42cae561a9d69e6fba2b61e2cf43")
  ("emacs-python-environment" . "401006584e32864a10c69d29f14414828909362e")
+ ("emacs-run-command" . "a504d6d5f978e9e133daa901eda6c1420e19f307")
  ("emacs-theme-gruvbox" . "0013c68458ae62fe1dc4bbbb23f6a54a9d41e398")
  ("emacs-undo-fu" . "c0806c1903c5a0e4c69b6615cdc3366470a9b8ca")
  ("emacs-undo-fu-session" . "702210384a0c68f04aabc23e08ebd4d6f43ea2c7")
@@ -172,6 +173,7 @@
  ("with-editor" . "b439749da110af83aea40e79dd2a8c57427bc28a")
  ("writeroom-mode" . "b648b340172ce4e44307375697e190bc723203e0")
  ("ws-butler" . "e3a38d93e01014cd47bf5af4924459bd145fd7c4")
+ ("xterm-color" . "1a4012854c69a5cdaeb5a73d2ad705011892fca3")
  ("yaml-mode" . "fc5e1c58f94472944c4aa838f00f6adcac6fa992")
  ("yasnippet" . "5cbdbf0d2015540c59ed8ee0fcf4788effdf75b6"))
 :beta
