@@ -3318,6 +3318,8 @@ Try out =org-noter=.
   :commands (run-command)
   :custom
   (run-command-recipes '(run-command-recipe-nehtest
+                         run-command-recipe-terraform-init
+                         run-command-recipe-terraform-init-upgrade
                          run-command-recipe-terraform-plan
                          run-command-recipe-terraform-plan-continuous
                          run-command-recipe-terraform-apply))
@@ -3329,6 +3331,20 @@ Try out =org-noter=.
      (list :display "Just list files"
            :command-name "listem"
            :command-line "ls -la --color")))
+
+  (defun run-command-recipe-terraform-init ()
+    (list
+     (when (equal major-mode 'terraform-mode)
+       (list :display "Init"
+             :command-name "terraform-init"
+             :command-line "terraform init"))))
+
+  (defun run-command-recipe-terraform-init-upgrade ()
+    (list
+     (when (equal major-mode 'terraform-mode)
+       (list :display "Init + Upgrade"
+             :command-name "terraform-init-upgrade"
+             :command-line "terraform init -upgrade"))))
 
   (defun run-command-recipe-terraform-plan ()
     (list
