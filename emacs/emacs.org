@@ -1321,7 +1321,7 @@ FACE defaults to inheriting from default and highlight."
 
 #+begin_src emacs-lisp
 (use-package highlight-parentheses
-  :commands (highlight-parentheses-mode)
+  :hook (after-init . global-highlight-parentheses-mode)
   :custom
   (highlight-parentheses-colors '("red2" "DarkOrange1" "goldenrod2" "IndianRed4"))
   ;; (highlight-parentheses-background-colors '())
