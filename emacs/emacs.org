@@ -3814,7 +3814,7 @@ Try out =org-noter=.
   :config
   (add-to-list 'compilation-error-regexp-alist-alist
                '(terraform-error
-                 "^[[:blank:]]+on \\([^[:blank:]]+\\) line \\([[:digit:]]+\\)"
+                 "^Error: [[:print:]]+[[:space:]]+[[:blank:]]+on \\([^[:blank:]]+\\) line \\([[:digit:]]+\\)[,:]"
                  1 2))
   (add-to-list 'compilation-error-regexp-alist
                'terraform-error))
