@@ -3319,6 +3319,7 @@ Try out =org-noter=.
   :custom
   (run-command-recipes '(run-command-recipe-nehtest
                          run-command-recipe-terraform-plan
+                         run-command-recipe-terraform-plan-continuous
                          run-command-recipe-terraform-apply))
   (run-command-run-method 'compile)
 
@@ -3335,6 +3336,13 @@ Try out =org-noter=.
        (list :display "Plan"
              :command-name "terraform-plan"
              :command-line "terraform plan"))))
+
+  (defun run-command-recipe-terraform-plan-continuous ()
+    (list
+     (when (equal major-mode 'terraform-mode)
+       (list :display "Plan Continuously On Change"
+             :command-name "terraform-plan-continuous"
+             :command-line (format "find . | entr terraform plan")))))
 
   (defun run-command-recipe-terraform-apply ()
     (list
