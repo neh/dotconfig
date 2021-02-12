@@ -3849,6 +3849,7 @@ Try out =org-noter=.
   (terraform--resource-name-face
    ((t (:inherit 'font-lock-variable-name-face))))
   :config
+  (delete 'gnu compilation-error-regexp-alist)
   (add-to-list 'compilation-error-regexp-alist-alist
                '(terraform-error
                  "^Error: [[:print:]]+[[:space:]]+[[:blank:]]+on \\([^[:blank:]]+\\) line \\([[:digit:]]+\\)[,:]"
