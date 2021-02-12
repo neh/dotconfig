@@ -3325,7 +3325,9 @@ Try out =org-noter=.
                          run-command-recipe-terraform-init-upgrade
                          run-command-recipe-terraform-plan
                          run-command-recipe-terraform-plan-continuous
-                         run-command-recipe-terraform-apply))
+                         run-command-recipe-terraform-apply
+                         run-command-recipe-packer-build
+                         run-command-recipe-packer-validate))
   (run-command-run-method 'compile)
 
   :init
@@ -3363,6 +3365,20 @@ Try out =org-noter=.
        (list :display "Apply"
              :command-name "terraform-apply"
              :command-line "terraform apply"))))
+
+  (defun run-command-recipe-packer-validate ()
+    (list
+     (when (equal major-mode 'hcl-mode)
+       (list :display "Validate"
+             :command-name "packer-validate"
+             :command-line "packer validate ."))))
+
+  (defun run-command-recipe-packer-build ()
+    (list
+     (when (equal major-mode 'hcl-mode)
+       (list :display "Build"
+             :command-name "packer-build"
+             :command-line "packer build -on-error=ask ."))))
   )
 #+end_src
 
