@@ -3059,8 +3059,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :commands (pretty-hydra-define)
   :general
   (neh/leader-keys
+    "," #'neh/toggles/body
+    "'" #'neh/movement/body
     "G" 'hydra-git/body
     "rR" 'neh/reading/body)
+
   :config
   <<pretty-hydras>>
   )
@@ -3068,7 +3071,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
 Browser/link handling hydra.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
 (pretty-hydra-define hydra-browse (:hint nil
                                    :quit-key "q")
 
@@ -3226,10 +3229,6 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("X" kill-current-buffer "delete buffer")
     ("c" evil-window-delete "close window"))
    ))
-
-(neh/leader-keys
-  "," #'neh/toggles/body
-  "'" #'neh/movement/body)
 #+end_src
 
 Not using this one yet, but will allow associating a hydra to any major mode to provide common commands.
