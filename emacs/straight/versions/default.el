@@ -103,6 +103,8 @@
  ("key-chord" . "7f7fd7c5bd2b996fa054779357e1566f7989e07d")
  ("let-alist" . "6708ec0b2e6dff80ff5b64698aa009d9070a2ed2")
  ("link-hint.el" . "09ba5727d8ba4a2e5d4f5ce924aaebbc7478ff13")
+ ("lispy" . "38a7df4cbb16cfe3d62dc8ea98b50e2d9a572e58")
+ ("lispyville" . "89316f01822b2135e52ca27fd308d207ef618052")
  ("lua-mode" . "2d9a468b94acd8480299d47449b53136060b7b23")
  ("magit" . "255bf1677a10f1be31b6a70be7905404ffe67b7f")
  ("major-mode-hydra.el" . "20362323f66883c1336ffe70be24f91509addf54")

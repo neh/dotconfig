@@ -3303,6 +3303,14 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package lispy
+  :commands (lispy-mode))
+
+(use-package lispyville
+  :hook (lispy-mode . lispyville-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package compile
   :straight nil
   :custom
