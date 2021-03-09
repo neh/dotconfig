@@ -21,6 +21,15 @@ function init() {
     Keybindings = Extension.imports.keybindings;
     Examples = Extension.imports.examples;
     App = Extension.imports.app;
+
+    Tiling.defwinprop({
+        wm_class: "zoom",
+        scratch_layer: false,
+    });
+    Tiling.defwinprop({
+        wm_class: "update-manager",
+        scratch_layer: false,
+    });
 }
 
 function enable() {
