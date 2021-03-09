@@ -162,6 +162,25 @@ This file lists configuration paths to ignore when running =dconfd=. Not sure it
 /org/gtk/settings/file-chooser/*
 #+end_src
 
+** Dark mode toggle
+
+#+begin_src bash :tangle ~/bin/dark-toggle :shebang #!/bin/bash
+GTK_THEME_LIGHT='Yaru-light'
+GTK_THEME_DARK='Yaru-dark'
+
+current=$(gsettings get org.gnome.desktop.interface gtk-theme)
+
+if [[ "$current" =~ dark ]]; then
+    gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
+    gsettings set com.gexperts.Tilix.ProfilesList default 41f4a0a0-1054-4604-8f32-98ee11e14173
+else
+    gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
+    gsettings set com.gexperts.Tilix.ProfilesList default 2a800483-78d7-4509-b51c-23ff417dc81c
+fi
+
+emacsclient -e '(neh/toggle-dark-mode)'
+#+end_src
+
 ** Fade inactive windows
 
 #+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
