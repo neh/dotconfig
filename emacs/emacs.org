@@ -934,6 +934,7 @@ Let's start with selectrum, as it's the interface to most of the rest here. I tr
   (read-file-name-completion-ignore-case t)
   (read-buffer-completion-ignore-case t)
   (completion-ignore-case t)
+  (file-name-shadow-properties '(invisible t))
 
   :general
   (:keymaps 'selectrum-minibuffer-map
