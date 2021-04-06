@@ -1996,6 +1996,10 @@ Just always show images; I always want them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-M-RET-may-split-line '((default . nil)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
 (org-todo-keywords '((sequence "TODO(t!)"
                                "NEXT(n!)"
                                "DOING(i!)"
