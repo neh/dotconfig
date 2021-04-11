@@ -82,6 +82,12 @@ And then make [[https://github.com/jwiegley/use-package][use-package]] use strai
       )
 #+end_src
 
+Dump any other straight configuration here.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
+(setq straight-vc-git-auto-fast-forward nil)
+#+end_src
+
 Load =org-mode= using straight. This needs to happen early, or emacs will load and use its bundled version of =org-mode=, which is just too old.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
