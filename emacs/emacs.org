@@ -3158,13 +3158,23 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
+(defun neh/set-dark-mode ()
+  (interactive)
+  (setq neh/dark-mode t)
+  (load-theme neh/dark-theme t))
+
+(defun neh/set-light-mode ()
+  (interactive)
+  (setq neh/dark-mode nil)
+  (load-theme neh/light-theme t))
+
 (defun neh/toggle-dark-mode ()
   (interactive)
+  ;; change this to calculate how bright/dark the background is?
+  ;; there's a neh/dark-p function
   (if (member neh/light-theme custom-enabled-themes)
-      (progn (setq neh/dark-mode t)
-             (load-theme neh/dark-theme t))
-    (setq neh/dark-mode nil)
-    (load-theme neh/light-theme t)))
+      (neh/set-dark-mode)
+    (neh/set-light-mode)))
 
 (defun neh/set-frame-width (multiple)
   "Sets frame width to MULTIPLE of FILL-COLUMN."

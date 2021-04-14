@@ -186,13 +186,13 @@ if [[ "$current" == "$GTK_THEME_DARK" ]]; then
     # echo "Currently dark, going light"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
     gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_LIGHT
+    emacsclient -e '(neh/set-light-mode)'
 else
     # echo "Currently not dark, going dark"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
     gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_DARK
+    emacsclient -e '(neh/set-dark-mode)'
 fi
-
-emacsclient -e '(neh/toggle-dark-mode)'
 #+end_src
 
 ** Fade inactive windows
