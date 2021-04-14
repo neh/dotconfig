@@ -482,7 +482,15 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 #+begin_src emacs-lisp
 (use-package color
-  :demand t)
+  :demand t
+  :config
+  (defun neh/dark-p ()
+    (let ((bg (face-background 'default)))
+      (if (>= (color-distance "black" bg)
+              (color-distance "white" bg))
+          nil
+        t))))
+
 
 (use-package saveplace
   :demand t
@@ -2815,13 +2823,6 @@ directory to make multiple eshell windows easier."
    "<tab>" 'dired-subtree-toggle)
 
   :init
-  (defun neh/dark-p ()
-    (let ((bg (face-background 'default)))
-      (if (>= (color-distance "black" bg)
-              (color-distance "white" bg))
-          nil
-        t)))
-
   (defun neh/set-dired-subtree-background ()
     (if (featurep 'dired-subtree)
         (let* ((bg (face-background 'default))
