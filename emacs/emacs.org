@@ -2044,6 +2044,12 @@ Just always show images; I always want them.
 (org-plantuml-jar-path "~/bin/plantuml.jar")
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-appear
+  :commands (org-appear-mode)
+  :hook (org-mode . org-appear-mode))
+#+end_src
+
 ** Hooks
 
 I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which, you know, indents subheadings, and =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
