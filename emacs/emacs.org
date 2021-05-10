@@ -698,7 +698,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (interactive)
 
   (let* ((variable-tuple (cond
-                          ((x-list-fonts "Iosevka Aile")
+                          ((x-list-fonts "Iosevka Etoile")
                            `(:font "Iosevka Etoile"
                              :height ,(round (* neh/current-text-size 1.03))))
                           ((x-list-fonts "ETBembo")
