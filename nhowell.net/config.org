@@ -186,11 +186,17 @@ if [[ "$current" == "$GTK_THEME_DARK" ]]; then
     # echo "Currently dark, going light"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
     gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_LIGHT
+    if [[ -e ~/.config/alacritty/schemes.yml ]]; then
+        sed -i 's/colors: \*dark/colors: *light/' ~/.config/alacritty/schemes.yml
+    fi
     emacsclient -e '(neh/set-light-mode)'
 else
     # echo "Currently not dark, going dark"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
     gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_DARK
+    if [[ -e ~/.config/alacritty/schemes.yml ]]; then
+        sed -i 's/colors: \*light/colors: *dark/' ~/.config/alacritty/schemes.yml
+    fi
     emacsclient -e '(neh/set-dark-mode)'
 fi
 #+end_src
