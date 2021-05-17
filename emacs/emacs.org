@@ -689,7 +689,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (let* ((variable-tuple (cond
                           ((x-list-fonts "Iosevka Etoile")
                            `(:font "Iosevka Etoile"
-                             :height ,(round (* neh/current-text-size 1.03))))
+                             :height ,(round (* neh/current-text-size 1.04))))
                           ((x-list-fonts "ETBembo")
                            `(:font "ETBembo"
                              :height ,(round (* neh/current-text-size 1.23))))
@@ -708,13 +708,13 @@ And here’s the function where I collect my tweaks to the theme and set up font
          (fixed-tuple (cond
                        ((x-list-fonts "Iosevka Curly Slab")
                         `(:font "Iosevka Curly Slab"
-                          :height ,(round (* neh/current-text-size 1.0))))
+                          :height ,(round (* neh/current-text-size 1.04))))
                        ((x-list-fonts "Iosevka Slab")
                         `(:font "Iosevka Slab"
-                          :height ,(round (* neh/current-text-size 1.0))))
+                          :height ,(round (* neh/current-text-size 1.04))))
                        ((x-list-fonts "Iosevka")
                         `(:font "Iosevka"
-                          :height ,(round (* neh/current-text-size 1.0))))
+                          :height ,(round (* neh/current-text-size 1.04))))
                        ((x-family-fonts "Monospace")
                         '(:family "Monospace"))
                        (nil (warn "Cannot find a fixed width font.")))))
