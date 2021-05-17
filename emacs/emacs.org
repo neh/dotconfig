@@ -225,38 +225,6 @@ Set the window titles. Nothing fancy, just the buffer name.
       icon-title-format "%b") ;; unfocused window title format
 #+end_src
 
-Set my preferred font and size, taking display DPI into account. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]]. I will probably revisit and incorporate more of what’s there later, but for now this will do. I’ll have to test this with different screens and moving frames between them (particularly, the =set-frame-font= args may need adjustment). Also, a hook for a frame moving to a different screen would be useful.
-
-#+begin_src emacs-lisp
-(defun frame-monitor-mm ()
-  "Return the size of the current monitor in mm."
-  (alist-get 'mm-size (frame-monitor-attributes)))
-
-(defun frame-monitor-pixels ()
-  "Return the geometry of the current monitor in pixels."
-  (alist-get 'geometry (frame-monitor-attributes)))
-
-(defun monitor-dpi ()
-  "Return the DPI of the current monitor."
-  (let* ((mm (frame-monitor-mm))
-         (mm-width (car mm))
-         (pixels (frame-monitor-pixels))
-         (pixel-width (nth 2 pixels)))
-    (/ pixel-width (/ mm-width 25.4))))
-
-(defun neh/set-frame-options (frame)
-  "Set font options for a FRAME based on the DPI."
-  (let ((myfont "Iosevka")
-        (mysize (if (> (monitor-dpi) 160)
-                    20
-                  10.5)))
-    (set-frame-font (format "%s-%f" myfont mysize) t t)
-    (set-face-attribute 'default nil :font (format "%s-%f" myfont mysize))))
-
-;; (neh/set-frame-options nil)
-;; (add-hook 'after-make-frame-functions #'neh/set-frame-options)
-#+end_src
-
 I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, and I don't want customized settings accumulating in a file where they can be forgotten about and trip me up later. This seems like a sane way to use the customization system to me, so we'll see.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
@@ -670,12 +638,24 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (mapc #'disable-theme custom-enabled-themes))
 #+end_src
 
-Set my default preferred text size.
+Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
 
 #+begin_src emacs-lisp
-(setq neh/default-text-size 128)
-(when (not (boundp 'neh/current-text-size))
-  (setq neh/current-text-size neh/default-text-size))
+(defun frame-monitor-mm ()
+  "Return the size of the current monitor in mm."
+  (alist-get 'mm-size (frame-monitor-attributes)))
+
+(defun frame-monitor-pixels ()
+  "Return the geometry of the current monitor in pixels."
+  (alist-get 'geometry (frame-monitor-attributes)))
+
+(defun monitor-dpi ()
+  "Return the DPI of the current monitor."
+  (let* ((mm (frame-monitor-mm))
+         (mm-width (car mm))
+         (pixels (frame-monitor-pixels))
+         (pixel-width (nth 2 pixels)))
+    (/ pixel-width (/ mm-width 25.4))))
 #+end_src
 
 Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =neh/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
@@ -696,6 +676,15 @@ And here’s the function where I collect my tweaks to the theme and set up font
 #+begin_src emacs-lisp
 (defun neh/theme-tweaks ()
   (interactive)
+
+  ;; Set the default text size based on the monitor DPI
+  (let* ((dpi (monitor-dpi))
+         (size (cond ((< dpi 110) 128)
+                     ((< dpi 150) 144))))
+    (setq neh/default-text-size size))
+
+  (when (not (boundp 'neh/current-text-size))
+    (setq neh/current-text-size neh/default-text-size))
 
   (let* ((variable-tuple (cond
                           ((x-list-fonts "Iosevka Etoile")
