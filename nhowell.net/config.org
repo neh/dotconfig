@@ -847,6 +847,34 @@ function fish_prompt --description 'Write out the prompt'
 end
 #+end_src
 
+#+begin_src fish
+function fish_mode_prompt --description "Display my mode indicator for the prompt"
+    # Do nothing if not in vi mode
+    if test "$fish_key_bindings" = fish_vi_key_bindings
+        or test "$fish_key_bindings" = fish_hybrid_key_bindings
+        switch $fish_bind_mode
+            case default
+                set_color --bold ffffff -b 228b22
+                echo ' N '
+            case insert
+                set_color --bold 000000 -b ffd700
+                echo ' I '
+            case replace_one
+                set_color --bold ffffff -b 8b0000
+                echo ' R '
+            case replace
+                set_color --bold ffffff -b 8b0000
+                echo ' R '
+            case visual
+                set_color --bold 000000 -b fe8019
+                echo ' V '
+        end
+        set_color normal
+        echo -n ' '
+    end
+end
+#+end_src
+
 *** Fisher
 :PROPERTIES:
 :header-args: :tangle ~/.config/fish/functions/fisher.fish :mkdirp yes
