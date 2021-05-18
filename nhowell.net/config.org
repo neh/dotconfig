@@ -1318,222 +1318,6 @@ function _fisher_now -a elapsed
 end
 #+end_src
 
-** termite
-
-#+begin_src conf :tangle ~/.config/termite/config :noweb yes
-[options]
-font = Iosevka Term 11.5
-
-[colors]
-<<termite-gruvbox-dark-hard>>
-#+end_src
-
-#+begin_src conf :noweb-ref termite-custom :tangle no
-# foreground      = #ebdbb2
-# foreground_bold = #ebdbb2
-# cursor          = #ebdbb2
-# background      = #282828
-# color0  = #282828
-# color8  = #928374
-# color1  = #cc241d
-# color9  = #fb4934
-# color2  = #98971a
-# color10 = #b8bb26
-# color3  = #d79921
-# color11 = #fabd2f
-# color4  = #458588
-# color12 = #83a598
-# color5  = #b16286
-# color13 = #d3869b
-# color6  = #689d6a
-# color14 = #8ec07c
-# color7  = #a89984
-# color15 = #ebdbb2
-#+end_src
-
-#+begin_src conf :noweb-ref termite-solarized-light :tangle no
-### Solarized light
-# foreground = #657b83
-# foreground_bold = #073642
-# #foreground_dim = #888888
-# background = #fdf6e3
-# cursor = #586e75
-
-# # if unset, will reverse foreground and background
-# # highlight = #839496
-
-# # colors from color0 to color254 can be set
-# color0 = #073642
-# color1 = #dc322f
-# color2 = #859900
-# color3 = #b58900
-# color4 = #268bd2
-# color5 = #d33682
-# color6 = #2aa198
-# color7 = #eee8d5
-# color8 = #002b36
-# color9 = #cb4b16
-# color10 = #586e75
-# color11 = #657b83
-# color12 = #839496
-# color13 = #6c71c4
-# color14 = #93a1a1
-# color15 = #fdf6e3
-#+end_src
-
-#+begin_src conf :noweb-ref termite-solarized-dark :tangle no
-### Solarized dark
-# foreground = #839496
-# foreground_bold = #eee8d5
-# #foreground_dim = #888888
-# background = #002b36
-# cursor = #93a1a1
-
-# # if unset, will reverse foreground and background
-# #highlight = #839496
-
-# # colors from color0 to color254 can be set
-# color0 = #073642
-# color1 = #dc322f
-# color2 = #859900
-# color3 = #b58900
-# color4 = #268bd2
-# color5 = #d33682
-# color6 = #2aa198
-# color7 = #eee8d5
-# color8 = #002b36
-# color9 = #cb4b16
-# color10 = #586e75
-# color11 = #657b83
-# color12 = #839496
-# color13 = #6c71c4
-# color14 = #93a1a1
-# color15 = #fdf6e3
-#+end_src
-
-#+begin_src conf :noweb-ref termite-darktooth :tangle no
-# Base16 Darktooth
-# Author: Jason Milkins (https://github.com/jasonm23)
-
-foreground          = #A89984
-foreground_bold     = #D5C4A1
-cursor              = #D5C4A1
-cursor_foreground   = #1D2021
-background          = rgba(29, 32, 33)
-
-# 16 color space
-
-# Black, Gray, Silver, White
-color0  = #1D2021
-color8  = #665C54
-color7  = #A89984
-color15 = #FDF4C1
-
-# Red
-color1  = #FB543F
-color9  = #FB543F
-
-# Green
-color2  = #95C085
-color10 = #95C085
-
-# Yellow
-color3  = #FAC03B
-color11 = #FAC03B
-
-# Blue
-color4  = #0D6678
-color12 = #0D6678
-
-# Purple
-color5  = #8F4673
-color13 = #8F4673
-
-# Teal
-color6  = #8BA59B
-color14 = #8BA59B
-
-# Extra colors
-color16 = #FE8625
-color17 = #A87322
-color18 = #32302F
-color19 = #504945
-color20 = #928374
-color21 = #D5C4A1
-#+end_src
-
-#+begin_src conf :noweb-ref termite-gruvbox-dark-hard :tangle no
-# Base16 Gruvbox dark, hard
-# Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
-
-foreground          = #d5c4a1
-foreground_bold     = #ebdbb2
-cursor              = #ebdbb2
-cursor_foreground   = #1d2021
-background          = rgba(29, 32, 33)
-
-# 16 color space
-
-# Black, Gray, Silver, White
-color0  = #1d2021
-color8  = #665c54
-color7  = #d5c4a1
-color15 = #fbf1c7
-
-# Red
-color1  = #fb4934
-color9  = #fb4934
-
-# Green
-color2  = #b8bb26
-color10 = #b8bb26
-
-# Yellow
-color3  = #fabd2f
-color11 = #fabd2f
-
-# Blue
-color4  = #83a598
-color12 = #83a598
-
-# Purple
-color5  = #d3869b
-color13 = #d3869b
-
-# Teal
-color6  = #8ec07c
-color14 = #8ec07c
-
-# Extra colors
-color16 = #fe8019
-color17 = #d65d0e
-color18 = #3c3836
-color19 = #504945
-color20 = #bdae93
-color21 = #ebdbb2
-#+end_src
-
-#+begin_src conf :noweb-ref termite- :tangle no
-#+end_src
-
-#+begin_src conf :noweb-ref termite- :tangle no
-#+end_src
-
-#+begin_src conf :noweb-ref termite- :tangle no
-#+end_src
-
-#+begin_src conf :noweb-ref termite- :tangle no
-#+end_src
-
-#+begin_src conf :noweb-ref termite- :tangle no
-#+end_src
-
-#+begin_src bash
-for pid in $(pgrep termite); do
-  kill -s USR1 $pid
-done
-#+end_src
-
 ** Tilix
 
 #+begin_src json :tangle ~/.config/tilix/schemes/gruvbox-light-hard.json :mkdirp yes
@@ -1628,26 +1412,17 @@ set-option -g set-titles-string "#T"
 #+end_src
 
 #+begin_src conf
-# set-option -g pane-border-fg '#222222'
-# set-option -g pane-border-bg '#222222'
 set-option -g pane-border-style fg='#222222',bg='#222222'
-# set-option -g pane-active-border-fg '#222222'
-# set-option -g pane-active-border-bg '#222222'
 set-option -g pane-active-border-style fg='#222222',bg='#222222'
 #+end_src
 
 #+begin_src conf
-# set-option -g status-fg white
-# set-option -g status-fg white
-# set-option -g status-bg colour236
 set-option -g status-style fg=white,bg=colour236
 set-option -g status-left ''
 set-option -g status-right '[#S] [#(cut -d" " -f1-3 /proc/loadavg)]'
 
 set-window-option -g window-status-format ' #F#I:#W '
 set-window-option -g window-status-current-format ' #F#I:#W '
-# set-window-option -g window-status-current-fg black
-# set-window-option -g window-status-current-bg colour112
 set-window-option -g window-status-current-style fg=black,bg=colour112
 
 set-option -g -t main status off
