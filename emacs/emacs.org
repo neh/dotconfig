@@ -3769,6 +3769,11 @@ Try out =org-noter=.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package counsel-jq
+  :commands (counsel-jq))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package scad-mode
   :mode (("\\.scad__'" . scad-mode)))
 #+end_src
