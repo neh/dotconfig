@@ -1491,7 +1491,7 @@ TPM setup. I think I should remove this and just manually install what I want he
 Startup commands.
 
 #+begin_src conf
-new-session -s main
+# new-session -s main
 #+end_src
 
 * Old Config
