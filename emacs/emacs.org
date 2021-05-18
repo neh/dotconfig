@@ -1058,6 +1058,16 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 (use-package consult
   :init
   (fset 'multi-occur #'consult-multi-occur)
+
+  (defun neh/roam-rg ()
+    (interactive)
+    (if (boundp 'org-roam-directory)
+        (let ((initial (if (use-region-p)
+                           (buffer-substring-no-properties (region-beginning) (region-end))
+                         nil)))
+          (consult-ripgrep org-roam-directory initial))
+      (message "Org-roam notes are not available.")))
+
   :general
   (neh/leader-keys
     "oo" '(consult-buffer :which-key "switch buffer/recent")
@@ -1065,6 +1075,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "ha" '(consult-apropos :which-key "apropos")
     "sf" '(consult-ripgrep :which-key "rg")
     "sg" '(consult-git-grep :which-key "git-grep")
+    "sn" '(neh/roam-rg :which-key "git-grep")
     "so" '(consult-outline :which-key "outline")
     "st" '(consult-imenu :which-key "imenu")
     "/" '(consult-line :which-key "search lines"))
