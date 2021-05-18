@@ -1423,8 +1423,8 @@ set-option -g status-style fg=#f9f5d7,bg=#3c3836
 set-option -g status-left ''
 set-option -g status-right '[#S] [#(cut -d" " -f1-3 /proc/loadavg)]'
 
-set-window-option -g window-status-format ' #F#I#[fg=#bdae93]|#[fg=#f9f5d7]#W '
-set-window-option -g window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#W '
+set-window-option -g window-status-format ' #F#I#[fg=#bdae93]|#[fg=#f9f5d7]#{?#{==:#{window_name},fish},#{pane_current_path},#W} '
+set-window-option -g window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{pane_current_path},#W} '
 set-window-option -g window-status-current-style fg=#3c3836,bg=#f9f5d7
 
 set-option -g -t main status on
@@ -1433,7 +1433,7 @@ set-option -g -t main status-left ''
 set-option -g -t main status-right '#I '
 set-option -g -t main status-justify centre
 set-option -g -t main destroy-unattached off
-set-window-option -g -t main window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#W '
+set-window-option -g -t main window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{pane_current_path},#W} '
 #+end_src
 
 #+begin_src conf
