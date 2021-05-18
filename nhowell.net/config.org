@@ -1412,26 +1412,28 @@ set-option -g set-titles-string "#T"
 #+end_src
 
 #+begin_src conf
-set-option -g pane-border-style fg='#222222',bg='#222222'
-set-option -g pane-active-border-style fg='#222222',bg='#222222'
+set-option -g pane-border-format " #T "
+set-option -g pane-border-status top
+set-option -g pane-border-style fg=#bdae93,bg=#222222
+set-option -g pane-active-border-style fg=#fe8019,bg=#222222
 #+end_src
 
 #+begin_src conf
-set-option -g status-style fg=white,bg=colour236
+set-option -g status-style fg=#f9f5d7,bg=#3c3836
 set-option -g status-left ''
 set-option -g status-right '[#S] [#(cut -d" " -f1-3 /proc/loadavg)]'
 
-set-window-option -g window-status-format ' #F#I:#W '
-set-window-option -g window-status-current-format ' #F#I:#W '
-set-window-option -g window-status-current-style fg=black,bg=colour112
+set-window-option -g window-status-format ' #F#I#[fg=#bdae93]|#[fg=#f9f5d7]#W '
+set-window-option -g window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#W '
+set-window-option -g window-status-current-style fg=#3c3836,bg=#f9f5d7
 
-set-option -g -t main status off
+set-option -g -t main status on
 set-option -g -t main status-position top
 set-option -g -t main status-left ''
 set-option -g -t main status-right '#I '
 set-option -g -t main status-justify centre
 set-option -g -t main destroy-unattached off
-set-window-option -g -t main window-status-current-format ''
+set-window-option -g -t main window-status-current-format ' #F#I#[fg=#bdae93]|#[fg=#3c3836]#W '
 #+end_src
 
 #+begin_src conf
