@@ -2406,9 +2406,9 @@ Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/emacs --fg-daemon --chdir %h
+ExecStart=emacs --fg-daemon --chdir %h
 # ExecStart=/usr/bin/emacs --fg-daemon
-ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+ExecStop=emacsclient --eval "(kill-emacs)"
 Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 # Environment=SSH_AUTH_SOCK=%t/keyring/ssh XDG_RUNTIME_DIR=/run/user/%U EMACS_SOCKET_NAME=/run/user/%U/emacs/server
 Restart=on-failure
