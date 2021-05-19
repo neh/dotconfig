@@ -1446,9 +1446,13 @@ I find that diff-hl does a better job of showing diff information than git-gutte
 
 #+begin_src emacs-lisp
 (use-package diff-hl
-  :hook ((after-init . global-diff-hl-mode)
-         (global-diff-hl-mode . diff-hl-flydiff-mode)
+  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
          (dired-mode . diff-hl-dired-mode))
+  :commands (diff-hl-mode
+             diff-hl-update)
+  :general
+  (neh/leader-keys
+    "vD" '(diff-hl-mode :which-key "diff-hl"))
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
