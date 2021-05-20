@@ -201,6 +201,16 @@ else
 fi
 #+end_src
 
+#+begin_src conf :tangle ~/.local/share/applications/dark-toggle.desktop
+[Desktop Entry]
+Name=Toggle Dark Mode
+Exec=dark-toggle
+Icon=settings
+Type=Application
+Terminal=false
+Categories=Utility;
+#+end_src
+
 ** Fade inactive windows
 
 #+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
