@@ -58,6 +58,9 @@ This setting makes the straight bootstrap /much/ faster. See the discussion [[ht
 And now bootstrap straight, using the snippet from the docs.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-straight
+;; (setq native-comp-deferred-compilation-deny-list ()
+      ;; comp-deferred-compilation-deny-list ())
+;; (setq straight-repository-branch "develop")
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -92,7 +95,7 @@ Load =org-mode= using straight. This needs to happen early, or emacs will load a
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
 (use-package org
-  :ensure org-plus-contrib
+  ;; :ensure org-plus-contrib
   :demand t
   :config
   (setq custom-enabled-themes '()))
