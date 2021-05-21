@@ -2453,8 +2453,8 @@ Description=Emacs (server)
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
 [Service]
-Type=notify
-ExecStart=emacs --fg-daemon --chdir %h
+Type=forking
+ExecStart=emacs --daemon --chdir %h
 # ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=emacsclient --eval "(kill-emacs)"
 Environment=SSH_AUTH_SOCK=%t/keyring/ssh
