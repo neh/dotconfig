@@ -594,9 +594,6 @@ General settings for programming modes.
 * Pretty it up
 
 #+begin_src emacs-lisp
-(setq neh/dark-theme 'gruvbox-dark-hard
-      neh/light-theme 'gruvbox-light-hard)
-
 (use-package modus-themes
   :custom
   (modus-themes-org-blocks 'greyscale)
@@ -612,6 +609,53 @@ General settings for programming modes.
                            :slant italic)))))
 
 (use-package poet-theme)
+
+(defun neh/set-dark-mode ()
+  (interactive)
+  (setq neh/dark-mode t)
+  (load-theme neh/dark-theme t))
+
+(defun neh/set-light-mode ()
+  (interactive)
+  (setq neh/dark-mode nil)
+  (load-theme neh/light-theme t))
+
+(defun neh/toggle-dark-mode ()
+  (interactive)
+  (if (neh/dark-p)
+      (neh/set-light-mode)
+    (neh/set-dark-mode)))
+
+(defun neh/setthemeset (sym value)
+  (setq neh/themeset value)
+  (cond ((equal value "gruvbox")
+         (setq neh/dark-theme 'gruvbox-dark-hard
+               neh/light-theme 'gruvbox-light-hard))
+        ((equal value "modus")
+         (setq neh/dark-theme 'modus-vivendi
+               neh/light-theme 'modus-operandi)))
+  ;; (if (neh/dark-p)
+  ;;     (neh/set-light-mode)
+  ;;   (neh/set-dark-mode))
+  )
+
+(defcustom neh/themeset "gruvbox"
+  "Indicates which set of themes (dark and light) to use."
+  :type '(choice
+          (const "gruvbox")
+          (const "modus"))
+  :set 'neh/setthemeset
+  :initialize 'custom-initialize-set)
+
+;; (custom-set-variables '(neh/themeset "gruvbox"))
+
+;; (setq neh/themeset "gruvbox")
+;; (cond ((equal neh/themeset "gruvbox")
+;;        (setq neh/dark-theme 'gruvbox-dark-hard
+;;              neh/light-theme 'gruvbox-light-hard))
+;;       ((equal neh/themeset "modus")
+;;        (setq neh/dark-theme 'modus-vivendi
+;;              neh/light-theme 'modus-operandi)))
 
 (load-theme neh/light-theme t)
 #+end_src
@@ -3177,22 +3221,6 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
-(defun neh/set-dark-mode ()
-  (interactive)
-  (setq neh/dark-mode t)
-  (load-theme neh/dark-theme t))
-
-(defun neh/set-light-mode ()
-  (interactive)
-  (setq neh/dark-mode nil)
-  (load-theme neh/light-theme t))
-
-(defun neh/toggle-dark-mode ()
-  (interactive)
-  (if (neh/dark-p)
-      (neh/set-light-mode)
-    (neh/set-dark-mode)))
-
 (defun neh/set-frame-width (multiple)
   "Sets frame width to MULTIPLE of FILL-COLUMN."
   (interactive)
