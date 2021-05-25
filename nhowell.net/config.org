@@ -372,11 +372,14 @@ ipc.main()
 #+end_src
 
 ** All terminal windows are tmux
-A while ago I decided that I wanted all my terminal windows to automatically be part of a single tmux session. I hacked something together that worked in a couple of hours that still had a few quirks and used it for longer than I should have (got used to the quirks). Eventually I sat down and made it work better and here we have it.
+Revisiting this tmux setup after a few years of not using it was pretty confusing, so since I've managed to decipher what I was thinking when I first set it up, I'm going to actually explain myself here.
 
-The goals here are:
-- Every terminal window I launch is part of one tmux session
-- tmux functionality is only visible when there’s a reason
+The idea is to have every terminal I launch join a common tmux session. Just doing a simple attach would work, but wouldn't handle terminal windows of different sizes very well. The thing to use here is tmux session groups, which are independent views into one set of windows, so they can each have their own size. [[https://gist.github.com/chakrit/5004006][This github gist]] describes the same idea, and I remember finding it when I was originally getting this figured out. It's the only other place I've seen this described, so I guess it's a bit unusual.
+
+Here's how this configuration behaves: every terminal window runs the =tmux-main-attach= script below when launching, which creates a new tmux session in the =main= session group. It will be named with an incrementing number, so =main-1= will be the first one created (the root =main= session is created before this point in the tmux configuration file). The tmux status bar /only/ shows unattached windows in the =main= session, so it's not even shown if all tmux windows are currently visible in a terminal.
+
+Issues with this version:
+- Window switching is messy and switching to next/prev window is unpredictable.
 
 #+begin_src bash :tangle ~/bin/tmux-main-attach :shebang #!/bin/bash
 create_window=''
@@ -388,7 +391,13 @@ if $(tmux has-session -t main); then
         create_window="new-window ;"
     fi
 fi
-tmux new-session -t main \; ${create_window} attach \; set-option destroy-unattached on \; set-hook session-created 'run-shell ~/bin/tmux-bg-status.sh' \; set-hook session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; set-hook session-closed 'run-shell ~/bin/tmux-bg-status.sh'
+tmux new-session -t main \; \
+     ${create_window} \
+     attach \; \
+     set-option destroy-unattached on \; \
+     set-hook session-created 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook session-closed 'run-shell ~/bin/tmux-bg-status.sh'
 #+end_src
 
 
@@ -400,7 +409,7 @@ windows=($(tmux list-windows -t main -F '#I'))
 active_windows=($(for sess in $(tmux list-sessions -F '#S' | grep '^main-.*'); do tmux list-windows -t $sess -F '#{?window_active,#I,}'; done))
 unique_active_windows=($(printf "%s\n" "${active_windows[@]}" | sort -u))
 
-tmux set-window-option -g -t main window-status-format "#{?#{m:* #I *, ${active_windows[*]} },,#I (#W)}"
+tmux set-window-option -g -t main window-status-format "#{?#{m:* #I *, ${active_windows[*]} },, #F#I#[fg=#bdae93]|#[fg=#f9f5d7]#{?#{==:#{window_name},fish},#{s|$HOME|~|:pane_current_path},#W} }"
 if [[ ${#unique_active_windows[@]} -lt ${#windows[@]} ]]; then
     tmux set-option -t main -g status on
 else
@@ -1443,7 +1452,8 @@ set-option -g -t main status-left ''
 set-option -g -t main status-right '#I '
 set-option -g -t main status-justify centre
 set-option -g -t main destroy-unattached off
-set-window-option -g -t main window-status-current-format " #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{s|$HOME|~|:pane_current_path},#W} "
+# set-window-option -g -t main window-status-current-format " #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{s|$HOME|~|:pane_current_path},#W} "
+set-window-option -g -t main window-status-current-format ""
 #+end_src
 
 #+begin_src conf
@@ -1451,10 +1461,10 @@ bind-key b send-prefix
 bind-key a last-window
 bind-key ^a last-window
 
-#bind-key -n C-h swap-window -t:-
-#bind-key -n C-s swap-window -t:+
-bind-key -n C-h previous-window
-bind-key -n C-s next-window
+bind-key -n C-h swap-window -t:-
+bind-key -n C-s swap-window -t:+
+#bind-key -n C-h previous-window
+#bind-key -n C-s next-window
 
 bind-key C-b set-option -g status
 
@@ -1501,7 +1511,7 @@ TPM setup. I think I should remove this and just manually install what I want he
 Startup commands.
 
 #+begin_src conf
-# new-session -s main
+new-session -s main
 #+end_src
 
 * Old Config
