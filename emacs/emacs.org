@@ -2389,6 +2389,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :straight nil
   :after org
   :custom
+  (org-capture-bookmark nil)
   (org-capture-templates
    (doct '(("todo"
             :keys "t"
