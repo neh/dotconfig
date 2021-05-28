@@ -209,6 +209,12 @@ Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a
 (initial-frame-alist '((vertical-scroll-bars . nil)))
 #+end_src
 
+Log but don't pop up a buffer for warnings during native compilation of packages. They are just too annoying with deferred package loads.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(native-comp-async-report-warnings-errors 'silent)
+#+end_src
+
 Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
