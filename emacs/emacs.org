@@ -747,7 +747,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
          (size (cond ((< dpi 110) 128)
-                     ((< dpi 150) 144))))
+                     ((< dpi 160) 144))))
     (setq neh/default-text-size size))
 
   (when (not (boundp 'neh/current-text-size))
