@@ -3394,6 +3394,19 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package kubel
+  :commands (kubel
+             kubel-set-namespace
+             kubel-set-context
+             kubel-set-resource))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package docker
+  :commands (docker))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package lispy
   :commands (lispy-mode))
 
