@@ -191,7 +191,9 @@ Collect all the global, non-package-specific settings here.
           (insert arg)
           (add-hook 'post-command-hook #'exit-minibuffer nil t))
       (call-interactively #'customize-set-variable)))
-  )
+
+  :config
+  (fset 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
 Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a clean start.
