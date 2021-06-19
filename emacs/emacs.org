@@ -252,6 +252,12 @@ I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, a
 (custom-file null-device)
 #+end_src
 
+Running shell commands from emacs is handy, being able to use shell aliases makes it even better, so let's have emacs run commands in an interactive shell. "-ic" looks like it works for bash and fish, while zsh/oh-my-zsh needs "-csi".
+
+#+begin_src emacs-lisp :tangle no :noweb-rep emacs-custom
+(shell-command-switch "-ic")
+#+end_src
+
 Since I force there to be no file to store custom settings in, I get prompted for things like variables in ~.dir-locals.el~ files every time they are read (as emacs can't record my answers for the next time). So I whitelist the variables and values here that I don't want to be prompted for. I'm not sure this is the /right/ way to handle this, maybe I should have a custom file just for things like this and commit it to git so I can keep it controlled. The main reason I ditched the custom file was because it ended up having a bunch of forgotten settings hanging around affecting things, which having it in git would alleviate.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
