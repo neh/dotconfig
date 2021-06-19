@@ -505,6 +505,32 @@ function ec --description 'emacsclient'
 end
 #+end_src
 
+=fzf= can be used to do some really handy stuff. Here are aliases from [[https://wiki.archlinux.org/title/Fzf#Arch_specific_fzf_uses][the Arch wiki]] that do useful things with pacman data. More in [[https://www.reddit.com/r/archlinux/comments/ndduvm/recommendation_start_using_pacman_yay_and_paru/][this reddit thread]].
+
+Search packages, with info in a preview window, and install selected packages.
+
+#+begin_src fish :tangle ~/.config/fish/functions/pacman-fuzzy-install.fish
+function pacman-fuzzy-install
+    command pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S
+end
+#+end_src
+
+Search installed packages with info in a preview window, and remove selected packages.
+
+#+begin_src fish :tangle ~/.config/fish/functions/pacman-fuzzy-remove.fish
+function pacman-fuzzy-remove
+    command pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns
+end
+#+end_src
+
+This one adds a listing of files in the package to the preview window. =pacman -Fy= has to be run first to create the database it searches.
+
+#+begin_src fish :tangle ~/.config/fish/functions/pacman-fuzzy-files.fish
+function pacman-fuzzy-files
+    command pacman -Slq | fzf --multi --preview 'cat (pacman -Si {1} | psub) (pacman -Fl {1} | awk "{print \$2}" | psub)' | xargs -ro sudo pacman -S
+end
+#+end_src
+
 *** VI mode
 :PROPERTIES:
 :header-args: :tangle ~/.config/fish/functions/fish_vi_key_bindings.fish :mkdirp yes
