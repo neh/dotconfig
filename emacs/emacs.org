@@ -2843,7 +2843,8 @@ directory to make multiple eshell windows easier."
 
   :init
   (setq dired-deletion-confirmer 'y-or-n-p
-        dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e"))))
+        dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e")
+                                       ("" "xdg-open"))))
 #+end_src
 
 #+begin_src emacs-lisp
