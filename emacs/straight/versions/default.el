@@ -77,7 +77,7 @@
  ("evil-textobj-line" . "3d401b6831bdbeec967ec8e64177a8950251e812")
  ("evil-textobj-syntax" . "2d9ba8c75c754b409aea7469f46a5cfa52a872f3")
  ("exec-path-from-shell" . "bf4bdc8b8911e7a2c04e624b9a343164c3878282")
- ("expand-region.el" . "4b8322774d9c1d8b64a0049d1dbbc1e7ce80c1a0")
+ ("expand-region.el" . "6ed37a7c58549da761f5d9b6864192ff5e535bec")
  ("f.el" . "c4dbf8c8e83df834f5d6f72cd5649b9d8a8812ec")
  ("flycheck" . "f8c679fff349850c80541a31de50009c3c15d4c9")
  ("flycheck-inline" . "8e00b4c5951a9515a450a14aefe92e9f6ddcfbde")
