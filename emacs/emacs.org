@@ -1524,6 +1524,15 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
   :commands (company-ansible)
   :config
   (add-to-list 'company-backends 'company-ansible))
+
+(use-package company-org-block
+  :after (company org)
+  :custom
+  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
+  (company-org-block-auto-indent nil)
+  :hook ((org-mode . (lambda ()
+                       (add-to-list (make-local-variable 'company-backends)
+                                    'company-org-block)))))
 #+end_src
 
 * Git
