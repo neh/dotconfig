@@ -1501,7 +1501,7 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
   (company-idle-delay nil)
   :general
   (:states '(insert)
-   "C-." #'company-complete)
+   "<tab>" #'company-complete-common-or-cycle)
   :config
   (with-eval-after-load 'evil
     (with-eval-after-load 'company
