@@ -1806,6 +1806,10 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (org-link-set-parameters "id"
                            :complete 'org-id-complete-link)
 
+  (define-advice org-edit-src-exit (:after (&rest _args))
+    "End up in normal state after editing a src block."
+    (evil-normal-state))
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell . t)
