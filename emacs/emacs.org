@@ -2160,6 +2160,7 @@ I want to go straight into =evil-insert-states= in some modes so I can just star
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
 (org-log-buffer-setup . evil-insert-state)
+(org-src-mode . evil-insert-state)
 #+end_src
 
 I auto-tangle org files on save. Tangling this file is getting slow though, so I'm attempting things to make it faster.
