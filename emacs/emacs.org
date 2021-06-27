@@ -1530,6 +1530,7 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
   (company-org-block-auto-indent nil)
+  (org-edit-src-content-indentation 0)
   :hook ((org-mode . (lambda ()
                        (add-to-list (make-local-variable 'company-backends)
                                     'company-org-block)))))
