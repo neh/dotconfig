@@ -1820,6 +1820,18 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      (emacs-lisp . t))))
 #+end_src
 
+Finally found a package that lets org tables horizontally scroll while leaving the rest of the text alone.
+
+#+begin_src emacs-lisp :lexical no
+(use-package phscroll
+  :straight (phscroll :type git :host github :repo "misohena/phscroll")
+  :after org
+  :init
+  (setq org-startup-truncated nil)
+  :config
+  (load "org-phscroll.el"))
+#+end_src
+
 
 #+begin_src emacs-lisp
 (use-package org-journal

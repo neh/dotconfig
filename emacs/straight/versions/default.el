@@ -148,6 +148,7 @@
  ("parseedn" . "90cfe3df51b96f85e346f336c0a0ee6bf7fee508")
  ("pdf-tools" . "5f77dae43eb8f71e52e10ba8cf994883f74c3fb7")
  ("peg" . "014927e2130edcc453ca078a4fa06b48be63d834")
+ ("phscroll" . "773687edc4a2f14409f0485ee81901b6e3c892f4")
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("poet" . "16eb694f0755c04c4db98614d0eca1199fddad70")
