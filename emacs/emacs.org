@@ -708,7 +708,6 @@ General settings for programming modes.
                                            "get"
                                            "org.gnome.desktop.interface"
                                            "gtk-theme"))))
-      (message gtk-theme)
       (if (or (string-match-p "dark"  gtk-theme)
               (string-match-p "black" gtk-theme))
           (neh/set-dark-mode)
