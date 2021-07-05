@@ -623,7 +623,7 @@ General settings for programming modes.
 #+begin_src emacs-lisp
 (use-package modus-themes
   :custom
-  (modus-themes-org-blocks 'greyscale)
+  (modus-themes-org-blocks 'gray-background)
   (modus-themes-diffs 'desaturated)
   (modus-themes-bold-constructs t)
   (modus-themes-slanted-constructs t))
@@ -2202,6 +2202,9 @@ Just always show images; I always want them.
 (org-src-window-setup 'current-window)
 (org-src-tab-acts-natively t)
 (org-src-preserve-indentation t)
+
+(org-fontify-whole-block-delimiter-line nil)
+(org-fontify-quote-and-verse-blocks t)
 
 (org-plantuml-jar-path "~/bin/plantuml.jar")
 #+end_src
