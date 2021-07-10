@@ -1162,7 +1162,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :general
   ("C-," #'embark-act)
   (:keymaps 'embark-file-map
-   "F" #'find-file-other-frame)
+   "F" #'find-file-other-frame
+   "x" #'neh/dired-open)
   (:keymaps 'embark-symbol-map
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
@@ -2921,7 +2922,8 @@ directory to make multiple eshell windows easier."
 
   (neh/leader-keys
     "^" 'dired-jump
-    "od" 'dired-jump)
+    "od" 'dired-jump
+    "ox" #'neh/dired-open)
 
   :init
   (setq dired-deletion-confirmer 'y-or-n-p
@@ -4096,6 +4098,34 @@ Try out =org-noter=.
 #+end_src
 
 * Misc functions
+
+A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
+
+#+begin_src emacs-lisp :lexical no
+(defun open-file-external (file)
+  (interactive "f")
+  (let ((process-connection-type nil))
+    (start-process
+     "" nil shell-file-name
+     shell-command-switch
+     (format "nohup 1>/dev/null 2>/dev/null xdg-open %s"
+             (expand-file-name file)))))
+
+(defun neh/dired-open()
+  (interactive)
+  (cond
+   ;; use dired-find-file if it is a directory
+   ((file-directory-p (dired-get-file-for-visit))
+    (dired-find-file))
+   ;; use dired-find-file if the mime type of the file is emacs.desktop
+   ((string= "emacs.desktop" (string-trim-right (shell-command-to-string
+                                                 (format "xdg-mime query filetype %s | xargs xdg-mime query default"
+                                                         (shell-quote-argument (dired-get-file-for-visit))))))
+    (dired-find-file))
+   (t
+    ;; use xdg-open for everything else
+    (open-file-external (shell-quote-argument (dired-get-file-for-visit))))))
+#+end_src
 
 This function gives me a quicker way to edit src blocks in org mode, as well as making indirect buffer cloning a bit /less/ accessible (only on headings), since I do it relatively infrequently and have actually been ending up in indirect buffers a bit /too/ easily. I just bind this to =enter= in org mode.
 
