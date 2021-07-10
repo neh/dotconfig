@@ -1161,6 +1161,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :demand t
   :general
   ("C-," #'embark-act)
+  (neh/leader-keys
+    "oe" '(embark-act :which-key "embark"))
   (:keymaps 'embark-file-map
    "F" #'find-file-other-frame
    "x" #'neh/dired-open)
