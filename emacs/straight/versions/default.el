@@ -124,6 +124,7 @@
  ("mlscroll" . "d912fec98698c4f72a5f408d5a3f80e95327817d")
  ("modus-themes" . "ba6bb146ffccb05ab4f701ca7a05d66cacd709db")
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
+ ("no-littering" . "b12a85a5afff7b5d60f889c1c2e8f5deab7fdbae")
  ("nov.el" . "b3c7cc28e95fe25ce7b443e5f49e2e45360944a3")
  ("nswbuff" . "2aa3a96abbc76f007923f3fbb19a5246e29ae500")
  ("olivetti" . "4a0719021625ece4def8f18d28f86a681bee7d28")
