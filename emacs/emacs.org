@@ -3489,6 +3489,14 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp :lexical no
+(use-package journalctl-mode
+  :commands (journalctl
+             journalctl-boot
+             journalctl-unit
+             journalctl-user-unit))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
 (use-package no-littering)
 #+end_src
 

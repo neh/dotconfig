@@ -107,6 +107,7 @@
  ("imenu-list" . "76f2335ee6f2f066d87fe4e4729219d70c9bc70d")
  ("inheritenv" . "7e4c8b0d0a43b6f1c6c4d6dbd2f3bf5ce7f20067")
  ("jinja2-mode" . "ecd19a40b7832bb00f0a2244e3b0713d0bf3850d")
+ ("journalctl-mode" . "c5bca1a5f42d2fe2a00fdf52fe480137ace971d3")
  ("json-mode" . "0e819e519ae17a2686e0881c4ca51fa873fa9b83")
  ("json-reformat" . "8eb6668ed447988aea06467ba8f42e1f2178246f")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
