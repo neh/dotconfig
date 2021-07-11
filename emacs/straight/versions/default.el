@@ -117,6 +117,7 @@
  ("link-hint.el" . "ae73db6a5948c8d109fc1d570760bcafa3f07175")
  ("lispy" . "38a7df4cbb16cfe3d62dc8ea98b50e2d9a572e58")
  ("lispyville" . "89316f01822b2135e52ca27fd308d207ef618052")
+ ("literate-calc-mode.el" . "18d523d5b6a8cecc3e93c550d2ceab2d1035de02")
  ("lua-mode" . "2bd9077dd0405efc9276f612e24a345698c539c4")
  ("magit" . "ea1f626b0adfc25e5beacc6f4c9d8cff6d5cfc35")
  ("major-mode-hydra.el" . "84c1929a5153be169ca5c36737439d51dffde505")

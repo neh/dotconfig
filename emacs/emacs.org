@@ -3489,6 +3489,16 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp :lexical no
+(use-package literate-calc-mode
+  :commands (literate-calc-mode
+             literate-calc-minor-mode)
+  :general
+  (neh/leader-keys
+    :keymaps 'org-mode-map
+    "vC" '(literate-calc-minor-mode :which-key "calculations")))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
 (use-package journalctl-mode
   :commands (journalctl
              journalctl-boot
