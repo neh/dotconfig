@@ -1892,6 +1892,14 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package org-attach
+  :straight nil
+  :after org
+  :custom
+  (org-attach-id-dir (concat org-directory "/data")))
+#+end_src
+
 Add plantuml for nice text-based diagram generation. I’ll mainly use this in org mode files, generating inline diagrams from src blocks.
 
 #+begin_src emacs-lisp
