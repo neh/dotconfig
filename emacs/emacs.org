@@ -3497,6 +3497,11 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp :lexical no
+(use-package evil-string-inflection
+  :after evil)
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
 (use-package literate-calc-mode
   :commands (literate-calc-mode
              literate-calc-minor-mode)
