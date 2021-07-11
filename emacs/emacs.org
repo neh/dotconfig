@@ -3893,8 +3893,15 @@ Try out =org-noter=.
   :hook (emacs-lisp-mode . aggressive-indent-mode))
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package envrc
+  :hook (after-init . envrc-global-mode)
+  :ensure-system-package (direnv))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package direnv
+  :disabled t
   :hook (after-init . direnv-mode)
   :custom
   (direnv-always-show-summary nil))
