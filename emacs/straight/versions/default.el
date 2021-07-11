@@ -46,7 +46,6 @@
  ("emacs-company-terraform" . "2d11a21fee2f298e48968e479ddcaeda4d736e12")
  ("emacs-ctable" . "48b73742757a3ae5736d825fe49e00034cc453b5")
  ("emacs-deferred" . "2239671d94b38d92e9b28d4e12fd79814cfb9c16")
- ("emacs-direnv" . "4b94393a9adf677c7c037215e233eef5fbca553d")
  ("emacs-epc" . "e1bfa5ca163273859336e3cc89b4b6460f7f8cda")
  ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-fish" . "a7c953b1491ac3a3e00a7b560f2c9f46b3cb5c04")
