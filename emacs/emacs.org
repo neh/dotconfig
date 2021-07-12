@@ -1205,10 +1205,11 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "oo" '(consult-buffer :which-key "switch buffer/recent")
     "of" '(find-file :which-key "file")
     "ha" '(consult-apropos :which-key "apropos")
+    "sa" '(consult-org-agenda :which-key "agenda")
     "sf" '(consult-ripgrep :which-key "rg")
     "sg" '(consult-git-grep :which-key "git-grep")
     "sn" '(neh/roam-rg :which-key "notes")
-    "so" '(consult-outline :which-key "outline")
+    "so" '(consult-org-heading :which-key "heading")
     "st" '(consult-imenu :which-key "imenu")
     "/" '(consult-line :which-key "search lines"))
   (:keymaps 'embark-buffer-map
