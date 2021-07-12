@@ -492,6 +492,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :config
   (save-place-mode t))
 
+(use-package recentf
+  :straight nil
+  :config
+  (recentf-mode t))
+
 (use-package eldoc
   :straight nil
   :custom
