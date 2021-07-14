@@ -142,6 +142,7 @@
  ("org-ql" . "8342656b2d9af4bb6af9daa0a8b037d3693bd940")
  ("org-roam" . "756f6215b672e267f986a3d6e494f5309825b91a")
  ("org-roam-server" . "a0f82bf41e318d4ef606a26f54054262ed6c3441")
+ ("org-sidebar" . "1b37069e47d1ea4745eacdf2dec2bdad756ee235")
  ("org-super-agenda" . "f5e80e4d0da6b2eeda9ba21e021838fa6a495376")
  ("org-superstar-mode" . "9d64c42e5029910153ec74cb9b5747b074281140")
  ("ov" . "c5b9aa4e1b00d702eb2caedd61c69a22a5fa1fab")
