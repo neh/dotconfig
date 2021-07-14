@@ -125,7 +125,6 @@
  ("marginalia" . "9796fada769f44cb8e05914bd6be3fcc15d791e2")
  ("markdown-mode" . "1c7d29d52986b2cb153b5f643167ea49417de469")
  ("melpa" . "a11fd12ba99427246c17c178ef9277fc2d2e2eed")
- ("mlscroll" . "d912fec98698c4f72a5f408d5a3f80e95327817d")
  ("modus-themes" . "ba6bb146ffccb05ab4f701ca7a05d66cacd709db")
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
  ("no-littering" . "b12a85a5afff7b5d60f889c1c2e8f5deab7fdbae")

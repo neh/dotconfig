@@ -902,17 +902,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (setq-default doom-modeline-column-zero-based nil))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package mlscroll
-  :after (doom-modeline)
-  :custom
-  (mlscroll-right-align t)
-  (mlscroll-alter-percent-position t)
-  (mlscroll-width 100)
-  :init
-  (mlscroll-mode 1))
-#+end_src
-
 * Eeeeevil
 
 I come from vim, so evil is a necessity.
