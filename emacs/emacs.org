@@ -3676,6 +3676,9 @@ Try out =org-noter=.
                                            checkdoc-show-diagnostics
                                            checkdoc
                                            company-capf
+                                           org-sidebar
+                                           org-sidebar-tree
+                                           org-sidebar-toggle
                                            org-compile-file
                                            embark-collect-live
                                            embark-collect-snapshot))
