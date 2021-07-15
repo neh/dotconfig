@@ -3503,6 +3503,13 @@ Try out =org-noter=.
   (org-noter-set-auto-save-last-location t))
 #+end_src
 
+* Gaming
+
+#+begin_src emacs-lisp :lexical no
+(use-package org-d20
+  :commands (org-d20-mode))
+#+end_src
+
 * Misc packages
 
 #+begin_src emacs-lisp :lexical no

@@ -137,6 +137,7 @@
  ("orderless" . "2646dad28c0819fbe9ee521d39efb9ae40e03982")
  ("org" . "5c07b279e0737b19e91c1d1b21016d9b4c8ffa62")
  ("org-appear" . "9254ad85886e9d5720a82cf4f0fda42a68ff0a86")
+ ("org-d20" . "e6149dcfbb6302d10109dd792fd0ffae7bfe2595")
  ("org-download" . "947ca223643d28e189480e607df68449c15786cb")
  ("org-journal" . "5f253a880e1919ef4b98f0d91f271a8b522eaae5")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
