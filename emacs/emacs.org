@@ -3532,6 +3532,14 @@ Try out =org-noter=.
 (use-package no-littering)
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package kubernetes
+  :commands (kubernetes-overview))
+
+(use-package kubernetes-evil
+  :after kubernetes)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package kubel
   :commands (kubel
