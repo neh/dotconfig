@@ -2228,7 +2228,11 @@ Just always show images; I always want them.
 #+begin_src emacs-lisp
 (use-package org-appear
   :commands (org-appear-mode)
-  :hook (org-mode . org-appear-mode))
+  :hook (org-mode . org-appear-mode)
+  :general
+  (neh/leader-keys
+    :keymaps 'org-mode-map
+    "vE" '(org-appear-mode :which-key "toggle emphasis auto-hiding")))
 #+end_src
 
 ** Hooks
