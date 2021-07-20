@@ -2759,6 +2759,18 @@ Let’s try to get some window behaviour under control.
 
 * Shells
 
+#+begin_src emacs-lisp :lexical no
+(use-package terminal-here
+  :commands (terminal-here-launch
+             terminal-here-project-launch)
+  :custom
+  (terminal-here-linux-terminal-command 'alacritty)
+  :general
+  (neh/leader-keys
+    "ot" '(terminal-here-launch :which-key "terminal")
+    "oT" '(terminal-here-project-launch :which-key "project terminal")))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package eshell
   :ensure nil

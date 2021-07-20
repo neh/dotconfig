@@ -187,6 +187,7 @@
  ("symbol-overlay" . "4231a36e39b7393d639e9cdef19f311d780deeab")
  ("system-packages" . "05add2fe051846e2ecb3c23ef22c41ecc59a1f36")
  ("tablist" . "faab7a035ef2258cc4ea2182f67e3aedab7e2af9")
+ ("terminal-here" . "e0e89344624fadf080f6770132ebdd7991355fdd")
  ("terraform-mode" . "e560caaa9d9a11b0868adf6d9dcae5ebb5055730")
  ("transient" . "37684a8cf7c97b7c0599ae70c6c9c993587a0202")
  ("treepy.el" . "3ac940e97f3d03e48ca9d7fcd74916a9b01c72f3")
