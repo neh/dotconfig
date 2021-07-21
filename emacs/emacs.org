@@ -532,9 +532,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
 
+(use-package apropos
+  :straight nil)
+
 (use-package helpful
-  :demand t
-  :after apropos
+  :after (apropos)
   :custom
   (helpful-max-buffers 5)
   :general
