@@ -1209,7 +1209,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
       (message "Org-roam notes are not available.")))
 
   (defun neh/consult-buffer-dwim ()
-    (interactive)
     (when (eq this-command #'consult-buffer)
       (when (projectile-project-p)
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
