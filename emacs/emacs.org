@@ -2656,95 +2656,92 @@ MimeType=x-scheme-handler/org-protocol;
 ** Org-roam
 
 #+begin_src emacs-lisp
-(defun neh/load-org-packages ()
-  (use-package org-roam
-    :commands (org-roam-mode
-               org-roam
-               org-roam-find-file
-               org-roam-insert)
+(use-package org-roam
+  :commands (org-roam-mode
+             org-roam
+             org-roam-find-file
+             org-roam-insert)
 
-    :custom
-    (org-roam-directory "~/org/roam")
-    (org-roam-completion-everywhere t)
-    (org-roam-list-files-commands '(rg find))
-    (org-roam-buffer-window-parameters '((no-other-window . t)))
-    (org-roam-tag-sources '(prop all-directories))
-    (org-roam-capture-templates
-     '(("p" "project" plain #'org-roam-capture--get-point
-        "%?"
-        :file-name "%<%Y%m%d%H%M%S>-${slug}"
-        :head "#+title: ${title}\n#+roam_tags: project\n\n"
-        :unnarrowed t)
-       ("l" "literature" plain #'org-roam-capture--get-point
-        "%?"
-        :file-name "%<%Y%m%d%H%M%S>-${slug}"
-        :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
-        :unnarrowed t)
-       ("d" "default" plain #'org-roam-capture--get-point
-        "%?"
-        :file-name "%<%Y%m%d%H%M%S>-${slug}"
-        :head "#+title: ${title}\n"
-        :unnarrowed t)))
+  :custom
+  (org-roam-directory "~/org/roam")
+  (org-roam-completion-everywhere t)
+  (org-roam-list-files-commands '(rg find))
+  (org-roam-buffer-window-parameters '((no-other-window . t)))
+  (org-roam-tag-sources '(prop all-directories))
+  (org-roam-capture-templates
+   '(("p" "project" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_tags: project\n\n"
+      :unnarrowed t)
+     ("l" "literature" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
+      :unnarrowed t)
+     ("d" "default" plain #'org-roam-capture--get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n"
+      :unnarrowed t)))
 
-    :general
-    (neh/leader-keys
-     "no" #'org-roam-find-file)
+  :general
+  (neh/leader-keys
+    "no" #'org-roam-find-file)
 
-    (neh/leader-keys
-     :keymaps 'org-roam-mode-map
-     "nl" #'org-roam
-     "nG" #'org-roam-show-graph)
+  (neh/leader-keys
+    :keymaps 'org-roam-mode-map
+    "nl" #'org-roam
+    "nG" #'org-roam-show-graph)
 
-    (neh/leader-keys
-     :keymaps 'org-mode-map
-      "ni" #'org-roam-insert)
+  (neh/leader-keys
+    :keymaps 'org-mode-map
+    "ni" #'org-roam-insert)
 
-    :init
-    ;; stolen from https://org-roam.discourse.group/t/creating-an-org-roam-note-from-an-existing-headline/978
-    (defun org-roam-create-note-from-headline ()
-      "Create an Org-roam note from the current headline and jump to it.
+  :init
+  (defun neh/check-org-files ()
+    (when (> (length (directory-files org-directory nil "\\.org$")) 0)
+      (org-roam-mode 1)
+      (cancel-function-timers #'neh/check-org-files)))
+
+  (run-with-timer 0 5 #'neh/check-org-files)
+
+  ;; stolen from https://org-roam.discourse.group/t/creating-an-org-roam-note-from-an-existing-headline/978
+  (defun org-roam-create-note-from-headline ()
+    "Create an Org-roam note from the current headline and jump to it.
 
 Normally, insert the headline’s title using the ’#title:’ file-level property
 and delete the Org-mode headline. However, if the current headline has a
 Org-mode properties drawer already, keep the headline and don’t insert
 ‘#+title:'. Org-roam can extract the title from both kinds of notes, but using
 ‘#+title:’ is a bit cleaner for a short note, which Org-roam encourages."
-      (interactive)
-      (let ((title (nth 4 (org-heading-components)))
-            (has-properties (org-get-property-block)))
-        (org-cut-subtree)
-        (org-roam-find-file title nil nil 'no-confirm)
-        (org-paste-subtree)
-        (unless has-properties
-          (kill-line)
-          (while (outline-next-heading)
-            (org-promote)))
-        (goto-char (point-min))
-        (when has-properties
-          (kill-line)
-          (kill-line)))))
+    (interactive)
+    (let ((title (nth 4 (org-heading-components)))
+          (has-properties (org-get-property-block)))
+      (org-cut-subtree)
+      (org-roam-find-file title nil nil 'no-confirm)
+      (org-paste-subtree)
+      (unless has-properties
+        (kill-line)
+        (while (outline-next-heading)
+          (org-promote)))
+      (goto-char (point-min))
+      (when has-properties
+        (kill-line)
+        (kill-line)))))
 
-  (use-package org-roam-server
-    :commands (org-roam-server-mode)
-    :custom
-    (org-roam-server-host "127.0.0.1")
-    (org-roam-server-port 8081)
-    (org-roam-server-export-inline-images t)
-    (org-roam-server-authenticate nil)
-    (org-roam-server-network-poll t)
-    (org-roam-server-network-arrows nil)
-    (org-roam-server-network-label-truncate t)
-    (org-roam-server-network-label-truncate-length 60)
-    (org-roam-server-network-label-wrap-length 20))
-
-  (cancel-function-timers #'neh/check-org-files)
-  (org-roam-mode 1))
-
-(defun neh/check-org-files ()
-  (if (> (length (directory-files org-directory nil "\\.org$")) 0)
-      (neh/load-org-packages)))
-
-(run-with-timer 0 5 #'neh/check-org-files)
+(use-package org-roam-server
+  :commands (org-roam-server-mode)
+  :custom
+  (org-roam-server-host "127.0.0.1")
+  (org-roam-server-port 8081)
+  (org-roam-server-export-inline-images t)
+  (org-roam-server-authenticate nil)
+  (org-roam-server-network-poll t)
+  (org-roam-server-network-arrows nil)
+  (org-roam-server-network-label-truncate t)
+  (org-roam-server-network-label-truncate-length 60)
+  (org-roam-server-network-label-wrap-length 20))
 #+end_src
 
 #+begin_src emacs-lisp
