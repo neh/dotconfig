@@ -1231,6 +1231,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (:keymaps 'embark-file-map
    "X" #'consult-file-externally)
   :custom
+  (consult-narrow-key "<")
   (consult-ripgrep-command (string-join '("rg" "--null" "--no-ignore-vcs" "--smart-case" "--line-buffered" "--color=always" "--max-columns=1000" "--no-heading" "--line-number" "." "-e ARG OPTS") " "))
   :config
   (setq consult-project-root-function #'projectile-project-root))
