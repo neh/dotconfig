@@ -1206,6 +1206,13 @@ Consult takes over for a lot of what counsel did, as well as swiper.
           (consult-ripgrep org-roam-directory initial))
       (message "Org-roam notes are not available.")))
 
+  (defun neh/consult-buffer-dwim ()
+    (interactive)
+    (when (eq this-command #'consult-buffer)
+      (when (projectile-project-p)
+        (setq unread-command-events (append unread-command-events (list ?p 32))))))
+  (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
+
   :general
   (neh/leader-keys
     "oo" '(consult-buffer :which-key "switch buffer/recent")
