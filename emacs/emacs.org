@@ -1214,11 +1214,20 @@ Consult takes over for a lot of what counsel did, as well as swiper.
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
   (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
 
+  (defun consult-line-thing-at-point ()
+    (interactive)
+    (let ((initial (if (use-region-p)
+                       (progn (buffer-substring-no-properties (region-beginning) (region-end))
+                              (deactivate-mark))
+                     (thing-at-point 'symbol))))
+      (consult-line initial)))
+
   :general
   (neh/leader-keys
     "oo" '(consult-buffer :which-key "switch buffer/recent")
     "of" '(find-file :which-key "file")
     "ha" '(consult-apropos :which-key "apropos")
+    "s*" '(consult-line-thing-at-point :which-key "lines with symbol")
     "sa" '(consult-org-agenda :which-key "agenda")
     "sf" '(consult-ripgrep :which-key "rg")
     "sg" '(consult-git-grep :which-key "git-grep")
