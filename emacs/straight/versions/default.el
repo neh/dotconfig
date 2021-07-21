@@ -20,7 +20,7 @@
  ("company-jedi" . "4775b659564f1d57bc68c88c9faabf44c9fe4e4d")
  ("company-mode" . "1fd1b363eee68e4cdcf0e610005c0bdbf9940604")
  ("company-org-block" . "4fd9a9c673225196e211bb3ced411d0ef9ff2f88")
- ("consult" . "5cef041e001548874dd1aa98e2764e0518d9a92d")
+ ("consult" . "5fb6248c8e12630ce1247985c67ea28ae4077e4f")
  ("counsel-jq" . "8cadd2e96470402ede4881b4e955872976443689")
  ("csv-mode" . "8da54e8b4ef9e5fe8a0afa147c625ced603dc0aa")
  ("dash.el" . "88d799595e8f1b4154637ce8a3f81b97b0520c1a")
