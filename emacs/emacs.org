@@ -1223,6 +1223,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
       (consult-line initial)))
 
   :general
+  ([remap evil-search-forward] #'consult-line)
   (neh/leader-keys
     "oo" '(consult-buffer :which-key "switch buffer/recent")
     "of" '(find-file :which-key "file")
@@ -1233,8 +1234,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "sg" '(consult-git-grep :which-key "git-grep")
     "sn" '(neh/roam-rg :which-key "notes")
     "so" '(consult-org-heading :which-key "heading")
-    "st" '(consult-imenu :which-key "imenu")
-    "/" '(consult-line :which-key "search lines"))
+    "st" '(consult-imenu :which-key "imenu"))
   (:keymaps 'embark-buffer-map
    "F" #'consult-buffer-other-frame)
   (:keymaps 'embark-file-map
