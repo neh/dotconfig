@@ -705,16 +705,6 @@ General settings for programming modes.
 
 (customize-set-variable 'neh/themeset "mix")
 
-;; (setq neh/themeset "gruvbox")
-;; (cond ((equal neh/themeset "gruvbox")
-;;        (setq neh/dark-theme 'gruvbox-dark-hard
-;;              neh/light-theme 'gruvbox-light-hard))
-;;       ((equal neh/themeset "modus")
-;;        (setq neh/dark-theme 'modus-vivendi
-;;              neh/light-theme 'modus-operandi)))
-
-;; (load-theme neh/light-theme t)
-
 ;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
 
 (defun call-process-string (program &rest args)
@@ -3085,15 +3075,6 @@ Version 2017-09-01"
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package dired-k
-  :disabled t
-  :hook ((dired-initial-position-hook . dired-k)
-         (dired-after-readin-hook . dired-k-no-revert))
-  :init
-  (setq dired-k-human-readable t))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package dired-git-info
   :commands (dired-git-info-mode))
 #+end_src
@@ -4106,28 +4087,6 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package gcode-mode
   :mode (("\\.gcode__'" . gcode-mode)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package ctrlf
-  :disabled
-  :commands (ctrlf-mode
-             ctrlf-forward-literal
-             ctrlf-backward-literal
-             ctrlf-forward-regexp
-             ctrlf-backward-regexp
-             ctrlf-forward-symbol
-             ctrlf-forward-symbol-at-point)
-  :custom
-  (ctrlf-auto-recenter t)
-  (ctrlf-mode-bindings '(("C-," . ctrlf-forward-literal)
-                         ("C-'" . ctrlf-backward-literal)
-                         ("C-<" . ctrlf-forward-regexp)
-                         ("C-\"" . ctrlf-backward-regexp)
-                         ("M-s _" . ctrlf-forward-symbol)
-                         ("M-s ." . ctrlf-forward-symbol-at-point)))
-  :init
-  (ctrlf-mode))
 #+end_src
 
 #+begin_src emacs-lisp
