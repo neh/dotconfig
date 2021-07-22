@@ -1436,6 +1436,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :custom-face
   (scrollkeeper-guideline-highlight ((t (:background "Orange" :extend t))))
   :general
+  ([remap scroll-up-command] #'scrollkeeper-down)
+  ([remap scroll-down-command] #'scrollkeeper-up)
   ([remap evil-scroll-up] #'scrollkeeper-up)
   ([remap evil-scroll-down] #'scrollkeeper-down)
   ([remap evil-scroll-page-up] #'scrollkeeper-up)
