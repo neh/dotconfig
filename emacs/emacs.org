@@ -2594,6 +2594,11 @@ Quick heading movement and task item state changes. I'm getting into the habit o
                (not (eq this-command 'org-capture-refile)))
       (delete-frame)))
 
+  (defun neh/capture-full-frame ()
+    (interactive)
+    (org-capture)
+    (delete-other-windows))
+
   (defun neh/full-frame-capture ()
     (if (string= (frame-parameter nil 'name) "capture")
         (delete-other-windows))))
@@ -3347,6 +3352,43 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :config
   <<pretty-hydras>>
   )
+#+end_src
+
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
+(pretty-hydra-define hydra-go (:hint nil
+                               :quit-key "q")
+
+  ("open" (("p" projectile-switch-project "project" :exit t)
+           ("o" consult-buffer "buffer" :exit t)
+           ("e" execute-extended-command "command" :exit t)
+           ("n" org-roam-find-file "notes" :exit t)
+           ("a" neh/agenda-current-window "agenda" :exit t)
+           ("c" neh/capture-full-frame "capture" :exit t)
+           ("f" find-file "file" :exit t))
+
+   "search" (("N" neh/roam-rg "notes" :exit t)
+             ("F" consult-find "files" :exit t)
+             ("A" consult-org-agenda "agenda" :exit t)
+             ("5" hydra-5e/body "5e" :exit t))
+
+   ;; "help" (("a" consult-apropos "apropos" :exit t)
+   ;;         ("f" helpful-callable "function" :exit t)
+   ;;         ("v" helpful-variable "variable" :exit t))
+   ))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no :noweb-ref pretty-hydras :tangle no
+(pretty-hydra-define hydra-5e (:hint nil
+                               :quit-key "q")
+
+  ("open" (("p" projectile-switch-project "project" :exit t)
+           ("o" consult-buffer "buffer" :exit t)
+           ("f" find-file "file" :exit t))
+
+   "search" (("N" neh/roam-rg "notes" :exit t)
+             ("F" consult-find "files" :exit t)
+             ("A" consult-org-agenda "agenda" :exit t))
+   ))
 #+end_src
 
 Browser/link handling hydra.
