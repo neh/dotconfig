@@ -204,6 +204,8 @@ Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a
 (initial-scratch-message nil)
 (inhibit-startup-echo-area-message t)
 
+(tab-always-indent 'complete)
+
 (menu-bar-mode nil)
 (tool-bar-mode nil)
 (scroll-bar-mode nil)
