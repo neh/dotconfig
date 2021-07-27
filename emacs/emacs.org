@@ -1515,6 +1515,14 @@ FACE defaults to inheriting from default and highlight."
              bufler-workspace-frame-set))
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package burly
+  :commands (burly-bookmark-frames
+             burly-bookmark-windows
+             burly-open-bookmark
+             burly-open-last-bookmark))
+#+end_src
+
 * Snippets
 
 #+begin_src emacs-lisp
