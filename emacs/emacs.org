@@ -246,12 +246,6 @@ Set the window titles. Nothing fancy, just the buffer name.
       icon-title-format "%b") ;; unfocused window title format
 #+end_src
 
-I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, and I don't want customized settings accumulating in a file where they can be forgotten about and trip me up later. This seems like a sane way to use the customization system to me, so we'll see.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(custom-file null-device)
-#+end_src
-
 Running shell commands from emacs is handy, being able to use shell aliases makes it even better, so let's have emacs run commands in an interactive shell. "-ic" looks like it works for bash and fish, while zsh/oh-my-zsh needs "-csi".
 
 #+begin_src emacs-lisp :tangle no :noweb-rep emacs-custom
@@ -264,6 +258,15 @@ Since I force there to be no file to store custom settings in, I get prompted fo
 (safe-local-variable-values '((auto-revert-use-notify)
                               (epa-file-encrypt-to . "C113BA91EAF8B45B6B84BDCBB600587C4549248A")
                               (org-download-image-dir)))
+#+end_src
+
+I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, and I don't want customized settings accumulating in a file where they can be forgotten about and trip me up later. This seems like a sane way to use the customization system to me, so we'll see.
+
+#+begin_src emacs-lisp
+(use-package cus-edit
+  :straight nil
+  :custom
+  (custom-file null-device))
 #+end_src
 
 All UTF-8, all the time.
