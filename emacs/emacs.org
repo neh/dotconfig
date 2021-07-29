@@ -1170,6 +1170,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :custom
   (prefix-help-command #'embark-prefix-help-command)
   :general
+  ("M-SPC" #'embark-act)
   ("C-," #'embark-act)
   (neh/leader-keys
     "oe" '(embark-act :which-key "embark"))
