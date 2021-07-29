@@ -1142,6 +1142,7 @@ As nice (and customizable) as orderless is, I missed what I was getting from pre
   (prescient-persist-mode t))
 
 (use-package company-prescient
+  :disabled
   :hook (company-mode . company-prescient-mode)
   :custom
   (company-prescient-sort-length-enable nil))
@@ -1243,6 +1244,18 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (setq consult-project-root-function #'projectile-project-root))
 
 (use-package embark-consult)
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
+(use-package corfu
+  :init
+  (corfu-global-mode)
+  :general
+  (:keymaps 'corfu-map
+   :states 'insert
+   "<tab>" #'corfu-next
+   "C-t" #'corfu-next
+   "C-n" #'corfu-previous))
 #+end_src
 
 Avy is a really handy way to jump around your visible buffer contents. One aspect that doesn’t seem to really be documented is the avy-actions mechanism. It lets you do things other than just jump to the point you select. So you can hit the key for whichever avy function you like, then, /before/ making your selection, press the key associated with an avy-action function to do that thing instead. This way, you can easily copy a word from elsewhere on your screen and paste it at your cursor with avy, no cursor movement needed at all. Also, =avy-copy-line= is a useful standalone function. I find it useful particularly when working in Terraform files, as lines need to be duplicated fairly often there.
@@ -1573,6 +1586,7 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
 
 #+begin_src emacs-lisp
 (use-package company
+  :disabled
   :commands (global-company-mode)
   :hook ((after-init . global-company-mode))
   :custom
@@ -1590,21 +1604,25 @@ Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company.
       (evil-define-key nil company-active-map (kbd "C-t") #'company-select-next))))
 
 (use-package company-terraform
+  :disabled
   :after company
   :hook (terraform-mode . company-terraform-init))
 
 (use-package company-box
+  :disabled
   :after company
   :hook (company-mode . company-box-mode)
   :custom
   (company-box-enable-icon nil))
 
 (use-package company-ansible
+  :disabled
   :commands (company-ansible)
   :config
   (add-to-list 'company-backends 'company-ansible))
 
 (use-package company-org-block
+  :disabled
   :after (company org)
   :custom
   (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
@@ -4185,6 +4203,7 @@ Try out =org-noter=.
   (elpy-rpc-python-command "python3"))
 
 (use-package company-jedi
+  :disabled
   :after company
   :commands (company-jedi)
   :config
