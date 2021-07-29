@@ -1180,12 +1180,12 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
    "." #'hydra-browse/body)
-  :config
-  (setq embark-action-indicator
-        (lambda (map _target)
-          (which-key--show-keymap "Embark" map nil nil 'no-paging)
-          #'which-key--hide-popup-ignore-command)
-        embark-become-indicator embark-action-indicator)
+  ;; :config
+  ;; (setq embark-action-indicator
+  ;;       (lambda (map _target)
+  ;;         (which-key--show-keymap "Embark" map nil nil 'no-paging)
+  ;;         #'which-key--hide-popup-ignore-command)
+  ;;       embark-become-indicator embark-action-indicator)
   )
 #+end_src
 
