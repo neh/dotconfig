@@ -455,6 +455,7 @@ Which-key shows a handy popup for available keybindings at any given time.
 
 #+begin_src emacs-lisp
 (use-package which-key
+  :disabled
   :demand t
   :custom
   (which-key-idle-secondary-delay 0.25)
@@ -1165,6 +1166,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   ;; :commands (embark-act
   ;;            embark-become)
   :demand t
+  :custom
+  (prefix-help-command #'embark-prefix-help-command)
   :general
   ("C-," #'embark-act)
   (neh/leader-keys
