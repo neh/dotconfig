@@ -1181,7 +1181,21 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
    "." #'hydra-browse/body)
-  ;; :config
+  :config
+  (defun embark-target-org-heading ()
+    "Target the heading at point."
+    (when (org-at-heading-p)
+      (message "YOOO")
+      (cons 'heading (org-get-heading))))
+  (add-to-list 'embark-target-finders #'embark-target-org-heading)
+
+  (embark-define-keymap embark-heading-map
+    "Actions for org mode headings."
+    :parent embark-general-map
+    ("I" org-id-get-create)
+    ("l" org-store-link))
+  (add-to-list 'embark-keymap-alist '(heading . embark-heading-map))
+
   ;; (setq embark-action-indicator
   ;;       (lambda (map _target)
   ;;         (which-key--show-keymap "Embark" map nil nil 'no-paging)
