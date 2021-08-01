@@ -1169,6 +1169,9 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :demand t
   :custom
   (prefix-help-command #'embark-prefix-help-command)
+  (embark-cycle-key (kbd "M-SPC"))
+  (embark-indicator 'embark-mixed-indicator)
+  (embark-mixed-indicator-delay 0.8)
   :general
   ("M-SPC" #'embark-act)
   ("C-," #'embark-act)
@@ -1185,8 +1188,9 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (defun embark-target-org-heading ()
     "Target the heading at point."
     (when (org-at-heading-p)
-      (message "YOOO")
-      (cons 'heading (org-get-heading))))
+      `(heading
+        ,(org-get-heading)
+        ,(line-beginning-position) . ,(line-end-position))))
   (add-to-list 'embark-target-finders #'embark-target-org-heading)
 
   (embark-define-keymap embark-heading-map
@@ -3848,6 +3852,7 @@ Try out =org-noter=.
                                            org-sidebar-tree
                                            org-sidebar-toggle
                                            org-compile-file
+                                           embark-act
                                            embark-collect-live
                                            embark-collect-snapshot))
 

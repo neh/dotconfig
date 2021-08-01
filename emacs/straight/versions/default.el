@@ -53,7 +53,7 @@
  ("emacsmirror-mirror" . "6b40ad4759fcfdb113e05fb4aaf8c0ef577f7e1e")
  ("emacsql" . "9dca5996168c4963eb67e61c7f17fdcb8228e314")
  ("emacsql-sqlite3" . "50aa9bdd76b0d18bf80526cff13a69fe306ee29c")
- ("embark" . "acbe1cba548832d295449da348719f69b9685c6f")
+ ("embark" . "0f71d82daef0add1b5f0572cb8791680ff5f9480")
  ("envrc" . "8a9a142cf9d35e62a70d9d100a946f78fe0b066a")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("eshell-prompt-extras" . "d7d874ce3da3ae55a42f669aca723a8774c8292c")
