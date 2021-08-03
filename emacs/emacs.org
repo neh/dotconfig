@@ -2304,6 +2304,9 @@ Just always show images; I always want them.
                                "DONE(d!)"
                                "CANCELED(c@)")))
 
+(org-log-into-drawer t)
+(org-log-repeat nil)
+
 (org-startup-indented t)
 (org-ellipsis " …")
 (org-fontify-whole-heading-line t)
