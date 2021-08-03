@@ -602,6 +602,14 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   (exec-path-from-shell-arguments '("-l")))
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package isearch
+  :straight nil
+  :custom
+  (search-whitespace-regexp ".*?")
+  (isearch-lazy-count t))
+#+end_src
+
 * Text mode
 
 General settings when in text editing modes.
