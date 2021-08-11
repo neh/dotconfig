@@ -507,6 +507,12 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
           nil
         t))))
 
+(use-package bookmark
+  :demand t
+  :straight nil
+  :custom
+  (bookmark-fontify nil))
+
 
 (use-package saveplace
   :demand t
