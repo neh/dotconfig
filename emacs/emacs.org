@@ -2764,26 +2764,16 @@ MimeType=x-scheme-handler/org-protocol;
       "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
-     )
-   )
+     ("p" "project" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: project\n\n")
+      :unnarrowed t)
+     ;; ("l" "literature" plain
+     ;;  "%?"
+     ;;  :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "%^{roam_refs|%x}p#+title: ${title}\n#+filetags: literature\n\n")
+     ;;  :unnarrowed t)
+     ))
   ;; (org-roam-buffer-window-parameters '((no-other-window . t)))
-
-  ;; (org-roam-capture-templates
-  ;;  '(("p" "project" plain #'org-roam-capture--get-point
-  ;;     "%?"
-  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-  ;;     :head "#+title: ${title}\n#+roam_tags: project\n\n"
-  ;;     :unnarrowed t)
-  ;;    ("l" "literature" plain #'org-roam-capture--get-point
-  ;;     "%?"
-  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-  ;;     :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
-  ;;     :unnarrowed t)
-  ;;    ("d" "default" plain #'org-roam-capture--get-point
-  ;;     "%?"
-  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-  ;;     :head "#+title: ${title}\n"
-  ;;     :unnarrowed t)))
 
   :general
   (neh/leader-keys
