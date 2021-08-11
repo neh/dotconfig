@@ -133,7 +133,7 @@
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "a5b61bca3f8c91b0859bb0df1a929f9a31a57b99")
  ("org-ql" . "8342656b2d9af4bb6af9daa0a8b037d3693bd940")
- ("org-roam" . "756f6215b672e267f986a3d6e494f5309825b91a")
+ ("org-roam" . "5dce6261a2a45798cdf0c65371b76c83dd5b1de6")
  ("org-roam-server" . "a0f82bf41e318d4ef606a26f54054262ed6c3441")
  ("org-sidebar" . "1b37069e47d1ea4745eacdf2dec2bdad756ee235")
  ("org-super-agenda" . "f5e80e4d0da6b2eeda9ba21e021838fa6a495376")

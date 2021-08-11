@@ -2743,91 +2743,69 @@ MimeType=x-scheme-handler/org-protocol;
 
 #+begin_src emacs-lisp
 (use-package org-roam
-  :commands (org-roam-mode
-             org-roam
-             org-roam-find-file
-             org-roam-insert)
+  :after org
+  :commands (org-roam-setup
+             org-roam-capture
+             org-roam-buffer-toggle
+             org-roam-node-find
+             org-roam-node-insert)
 
   :custom
   (org-roam-directory "~/org/roam")
   (org-roam-completion-everywhere t)
   (org-roam-list-files-commands '(rg find))
-  (org-roam-buffer-window-parameters '((no-other-window . t)))
-  (org-roam-tag-sources '(prop all-directories))
   (org-roam-capture-templates
-   '(("p" "project" plain #'org-roam-capture--get-point
+   '(("d" "default" plain
       "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: project\n\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
-     ("l" "literature" plain #'org-roam-capture--get-point
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
-      :unnarrowed t)
-     ("d" "default" plain #'org-roam-capture--get-point
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n"
-      :unnarrowed t)))
+     )
+   )
+  ;; (org-roam-buffer-window-parameters '((no-other-window . t)))
+
+  ;; (org-roam-capture-templates
+  ;;  '(("p" "project" plain #'org-roam-capture--get-point
+  ;;     "%?"
+  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+  ;;     :head "#+title: ${title}\n#+roam_tags: project\n\n"
+  ;;     :unnarrowed t)
+  ;;    ("l" "literature" plain #'org-roam-capture--get-point
+  ;;     "%?"
+  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+  ;;     :head "#+title: ${title}\n#+roam_key: %x\n#+roam_tags: literature\n\n"
+  ;;     :unnarrowed t)
+  ;;    ("d" "default" plain #'org-roam-capture--get-point
+  ;;     "%?"
+  ;;     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+  ;;     :head "#+title: ${title}\n"
+  ;;     :unnarrowed t)))
 
   :general
   (neh/leader-keys
-    "no" #'org-roam-find-file)
-
-  (neh/leader-keys
-    :keymaps 'org-roam-mode-map
-    "nl" #'org-roam
-    "nG" #'org-roam-show-graph)
+    "no" #'org-roam-node-find)
 
   (neh/leader-keys
     :keymaps 'org-mode-map
-    "ni" #'org-roam-insert)
+    "ni" #'org-roam-node-insert)
 
   :init
+  (setq org-roam-v2-ack t)
+
   (defun neh/check-org-files ()
     (when (> (length (directory-files org-directory nil "\\.org$")) 0)
-      (org-roam-mode 1)
+      (org-roam-setup)
       (cancel-function-timers #'neh/check-org-files)))
 
   (run-with-timer 0 5 #'neh/check-org-files)
 
-  ;; stolen from https://org-roam.discourse.group/t/creating-an-org-roam-note-from-an-existing-headline/978
-  (defun org-roam-create-note-from-headline ()
-    "Create an Org-roam note from the current headline and jump to it.
+  :config
+  (cl-defmethod org-roam-node-directories ((node org-roam-node))
+    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+        (format "(%s)" (string-join (f-split dirs) "/"))
+      ""))
 
-Normally, insert the headline’s title using the ’#title:’ file-level property
-and delete the Org-mode headline. However, if the current headline has a
-Org-mode properties drawer already, keep the headline and don’t insert
-‘#+title:'. Org-roam can extract the title from both kinds of notes, but using
-‘#+title:’ is a bit cleaner for a short note, which Org-roam encourages."
-    (interactive)
-    (let ((title (nth 4 (org-heading-components)))
-          (has-properties (org-get-property-block)))
-      (org-cut-subtree)
-      (org-roam-find-file title nil nil 'no-confirm)
-      (org-paste-subtree)
-      (unless has-properties
-        (kill-line)
-        (while (outline-next-heading)
-          (org-promote)))
-      (goto-char (point-min))
-      (when has-properties
-        (kill-line)
-        (kill-line)))))
-
-(use-package org-roam-server
-  :commands (org-roam-server-mode)
-  :custom
-  (org-roam-server-host "127.0.0.1")
-  (org-roam-server-port 8081)
-  (org-roam-server-export-inline-images t)
-  (org-roam-server-authenticate nil)
-  (org-roam-server-network-poll t)
-  (org-roam-server-network-arrows nil)
-  (org-roam-server-network-label-truncate t)
-  (org-roam-server-network-label-truncate-length 60)
-  (org-roam-server-network-label-wrap-length 20))
+  (setq org-roam-node-display-template "${directories:10} ${title:*} ${tags:10}")
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3440,7 +3418,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   ("open" (("p" projectile-switch-project "project" :exit t)
            ("o" consult-buffer "buffer" :exit t)
            ("e" execute-extended-command "command" :exit t)
-           ("n" org-roam-find-file "notes" :exit t)
+           ("n" org-roam-node-find "notes" :exit t)
            ("a" neh/agenda-current-window "agenda" :exit t)
            ("c" neh/capture-full-frame "capture" :exit t)
            ("f" find-file "file" :exit t))
