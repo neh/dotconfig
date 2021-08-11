@@ -2799,12 +2799,33 @@ MimeType=x-scheme-handler/org-protocol;
   (run-with-timer 0 5 #'neh/check-org-files)
 
   :config
+  (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+    "Return the file TITLE for the node."
+    (if-let ((file (org-roam-node-file node)))
+        (with-temp-buffer
+          (insert-file-contents file nil 0 1024)
+          (cadr (assoc "TITLE"
+                       (org-collect-keywords (list "TITLE")))))
+      (cadr (assoc "TITLE"
+                   (org-collect-keywords (list "TITLE"))))))
+
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    "Return the hierarchy for the node."
+    (let ((title (org-roam-node-title node))
+          (olp (org-roam-node-olp node))
+          (level (org-roam-node-level node))
+          (filetitle (org-roam-node-filetitle node)))
+      (concat
+       (if (> level 0) (concat filetitle " > "))
+       (if (> level 1) (concat (string-join olp " > ") " > "))
+       title)))
+
   (cl-defmethod org-roam-node-directories ((node org-roam-node))
     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
         (format "(%s)" (string-join (f-split dirs) "/"))
       ""))
 
-  (setq org-roam-node-display-template "${directories:10} ${title:*} ${tags:10}")
+  (setq org-roam-node-display-template "${directories:10} ${hierarchy:*} ${title:*} ${tags:10}")
   )
 #+end_src
 
