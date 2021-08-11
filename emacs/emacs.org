@@ -2825,7 +2825,7 @@ MimeType=x-scheme-handler/org-protocol;
         (format "(%s)" (string-join (f-split dirs) "/"))
       ""))
 
-  (setq org-roam-node-display-template "${directories:10} ${hierarchy:*} ${title:*} ${tags:10}")
+  (setq org-roam-node-display-template "${directories:10} ${hierarchy:*} ${tags:10}")
   )
 #+end_src
 
