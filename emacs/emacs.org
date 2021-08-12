@@ -1267,10 +1267,15 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                      (thing-at-point 'symbol))))
       (consult-line initial)))
 
+  (defun neh/consult-line-again ()
+    (interactive)
+    (consult-line (car consult--line-history)))
+
   :general
   ;; ([remap evil-search-forward] #'consult-line)
   (neh/leader-keys
     "/" '(consult-line :which-key "line")
+    "sl" #'neh/consult-line-again
     "oo" '(consult-buffer :which-key "switch buffer/recent")
     "of" '(find-file :which-key "file")
     "ha" '(consult-apropos :which-key "apropos")
