@@ -521,6 +521,8 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 (use-package recentf
   :straight nil
+  :custom
+  (recentf-max-saved-items 100)
   :config
   (recentf-mode t))
 
