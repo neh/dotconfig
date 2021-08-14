@@ -1305,6 +1305,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 (use-package consult-dir
   :commands (consult-dir
              consult-dir-jump-file)
+  :general
+  (:keymaps 'selectrum-minibuffer-map
+   "M-d" #'consult-dir
+   "M-j" #'consult-dir-jump-file)
   :custom
   (consult-dir-project-list-function #'consult-dir-projectile-dirs))
 #+end_src
