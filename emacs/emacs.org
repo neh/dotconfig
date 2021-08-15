@@ -735,7 +735,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
       (neh/set-dark-mode)
     (neh/set-light-mode)))
 
-(defcustom neh/themeset "gruvbox"
+(defcustom neh/themeset "mix"
   "Indicates which set of themes (dark and light) to use."
   :type '(choice
           (const "gruvbox")
