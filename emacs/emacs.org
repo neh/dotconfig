@@ -535,8 +535,17 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (recentf-mode t))
 
 (use-package savehist
-  :init
-  (savehist-mode))
+  :straight nil
+  :demand t
+  :custom
+  (savehist-additional-variables '(evil-jumps-history
+                                   projectile-project-command-history
+                                   command-history
+                                   ))
+  (savehist-autosave-interval 90)
+  ;; :config
+  ;; (savehist-mode 1)
+  )
 
 (use-package eldoc
   :straight nil
@@ -850,6 +859,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
 #+begin_src emacs-lisp
 (defun neh/theme-tweaks ()
   (interactive)
+
+  (savehist-mode 1)
 
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
