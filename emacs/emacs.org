@@ -1201,7 +1201,7 @@ Faster narrowing of a list of candidates matters, and orderless is a nice straig
   :custom
   (completion-styles '(substring orderless))
   (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles substring))))
+  (completion-category-overrides '((file (styles substring partial-completion))))
   (orderless-matching-styles '(orderless-regexp))
   (orderless-style-dispatchers '(;;first-initialism
                                  literal-if-equals
