@@ -1885,7 +1885,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (defun org-id-complete-link (&optional arg)
     "Create an id: link using completion"
     (concat "id:"
-            (org-id-get-with-outline-path-completion)))
+            (org-id-get-with-outline-path-completion org-refile-targets)))
 
   ;; (defface org-inprogress
   ;;   '((default :inherit org-todo))
