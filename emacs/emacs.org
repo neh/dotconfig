@@ -340,6 +340,13 @@ Some text fill options.
 (comment-auto-fill-only-comments t)
 #+end_src
 
+Set standard emacs completion to ignore case for files and buffers.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(read-buffer-completion-ignore-case t)
+(read-file-name-completion-ignore-case t)
+#+end_src
+
 I view man pages in emacs sometimes, and want a fixed width for them.
 
 #+begin_src emacs-lisp
@@ -525,6 +532,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (recentf-max-saved-items 100)
   :config
   (recentf-mode t))
+
+(use-package savehist
+  :init
+  (savehist-mode))
 
 (use-package eldoc
   :straight nil
@@ -1093,30 +1104,71 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
 I used ivy and friends for a quite a while here, mostly because helm didn't really make sense to me when I started using emacs, and ivy did. So I quickly got a configuration together that worked for me, and enjoyed using ivy, swiper, counsel etc. but I never really put a lot of effort into understanding what I had. Occasionally I would rework some part of it, but I mostly left it alone.
 
-I was interested when the "new tools" like selectrum, and orderless, and then consult, marginalia, and embark started showing up and looked like a nice composable, understandable set of functionality I could assemble the way I wanted to. So that's what I have here now.
+I was interested when the "new tools" like vertico, and orderless, and then consult, marginalia, and embark started showing up and looked like a nice composable, understandable set of functionality I could assemble the way I wanted to. So that's what I have here now.
 
-Let's start with selectrum, as it's the interface to most of the rest here. I tried icomplete-vertical for a few days first, and then tried selectrum and liked it more.
+Let's start with vertico, as it's the interface to most of the rest here. I tried icomplete-vertical for a few days first, and then tried selectrum, and now vertico.
 
 #+begin_src emacs-lisp
-(use-package selectrum
-  :demand t
+(use-package vertico
+  :init
+  (defun neh/file-or-not1 ()
+    (interactive)
+    (if (and (eq 'file
+                 (completion-metadata-get
+                  (completion-metadata
+                   (buffer-substring (minibuffer-prompt-end)
+                                     (max (minibuffer-prompt-end) (point)))
+                   minibuffer-completion-table
+                   minibuffer-completion-predicate)
+                  'category))
+             (not (eq (char-before) ?/))
+             )
+        (progn
+          (minibuffer-complete)
+          (message "minibuffer-complete")
+          )
+      (vertico-insert)
+      (message "vertico-insert")))
 
-  :custom
-  (read-file-name-completion-ignore-case t)
-  (read-buffer-completion-ignore-case t)
-  (completion-ignore-case t)
-  (file-name-shadow-properties '(invisible t))
+  (defun neh/file-or-not2 ()
+    (interactive)
+    (if (and (eq 'file
+                 (completion-metadata-get
+                  (completion-metadata
+                   (buffer-substring (minibuffer-prompt-end)
+                                     (max (minibuffer-prompt-end) (point)))
+                   minibuffer-completion-table
+                   minibuffer-completion-predicate)
+                  'category))
+             ;; (not (eq (char-before) ?/))
+             )
+        (progn
+          (let ((mbc (minibuffer-complete)))
+            (when mbc
+              ;; (message "mbc %s" mbc)
+              (vertico-insert))
+            ;; (message "minibuffer-complete, mbc %s" mbc)
+            )
+          )
+      (vertico-insert)
+      ;; (message "vertico-insert")
+      ))
+
+  (vertico-mode)
 
   :general
-  (:keymaps 'selectrum-minibuffer-map
+  (:keymaps 'vertico-map
    :states '(insert normal)
-   "C-t" #'selectrum-next-candidate
-   "C-n" #'selectrum-previous-candidate
-   "C-w" #'evil-delete-backward-word
+   "C-t" #'vertico-next
+   "C-n" #'vertico-previous
+   ;; "C-w" #'evil-delete-backward-word
+   "C-S-t" #'vertico-next-group
+   "C-S-n" #'vertico-previous-group
+   "<tab>" #'neh/file-or-not2
+   "M-<tab>" #'vertico-insert
    )
+  )
 
-  :config
-  (selectrum-mode t))
 #+end_src
 
 Faster narrowing of a list of candidates matters, and orderless is a nice straightforward way to get it.
@@ -1146,7 +1198,9 @@ Faster narrowing of a list of candidates matters, and orderless is a nice straig
       `(orderless-without-literal . ,(substring pattern 1))))
 
   :custom
-  (completion-styles '(orderless))
+  (completion-styles '(substring orderless))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles substring))))
   (orderless-matching-styles '(orderless-regexp))
   (orderless-style-dispatchers '(;;first-initialism
                                  literal-if-equals
@@ -1159,6 +1213,7 @@ As nice (and customizable) as orderless is, I missed what I was getting from pre
 
 #+begin_src emacs-lisp
 (use-package selectrum-prescient
+  :disabled
   :demand t
   :hook (selectrum-prescient-mode . (lambda ()
                                       (setq selectrum-refine-candidates-function
@@ -1186,12 +1241,10 @@ There's plenty of useful extra information that can be attached to each candidat
   :custom
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
-  (marginalia-mode t)
-  (advice-add #'marginalia-cycle :after
-              (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit)))))
+  (marginalia-mode t))
 #+end_src
 
-One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in selectrum, or pretty much anywhere in emacs.
+One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in vertico, or pretty much anywhere in emacs.
 
 #+begin_src emacs-lisp
 (use-package embark
@@ -1306,7 +1359,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (consult-dir
              consult-dir-jump-file)
   :general
-  (:keymaps 'selectrum-minibuffer-map
+  (:keymaps 'vertico-map
    "M-d" #'consult-dir
    "M-j" #'consult-dir-jump-file)
   :custom
