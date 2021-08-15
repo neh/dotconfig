@@ -343,6 +343,7 @@ Some text fill options.
 Set standard emacs completion to ignore case for files and buffers.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(completion-ignore-case t)
 (read-buffer-completion-ignore-case t)
 (read-file-name-completion-ignore-case t)
 #+end_src
