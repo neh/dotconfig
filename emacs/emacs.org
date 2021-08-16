@@ -4211,7 +4211,7 @@ Try out =org-noter=.
     "hn" #'symbol-overlay-switch-backward
     "ht" #'symbol-overlay-switch-forward
     "hc" #'symbol-overlay-remove-all
-    "hM" #'symbol-overlay-mode)
+    "hM" #'symbol-overlay-mode))
 #+end_src
 
 #+begin_src emacs-lisp
