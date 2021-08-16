@@ -1274,12 +1274,21 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (neh/leader-keys
     "oe" '(embark-act :which-key "embark"))
   (:keymaps 'embark-file-map
+   "s" #'neh/consult-ripgrep-from-dir
    "F" #'find-file-other-frame
    "x" #'neh/dired-open)
   (:keymaps 'embark-symbol-map
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
    "." #'hydra-browse/body)
+
+  :init
+  ;; stolen from https://github.com/oantolin/embark/issues/252
+  ;; and an assist from https://github.com/oantolin/embark/issues/42
+  (defun neh/consult-ripgrep-from-dir (file)
+    (interactive "fRipgrep from dir:")
+    (consult-ripgrep (file-name-directory file)))
+
   :config
   (defun embark-target-org-heading ()
     "Target the heading at point."
