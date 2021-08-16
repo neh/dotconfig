@@ -417,74 +417,61 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
    "C-)" '(lambda () (interactive) (neh/adjust-text-height 0)))
 
   (neh/leader-keys
-    "<SPC>" '(save-buffer :which-key "save")
+    "<SPC>" #'save-buffer
 
-    "e" '(execute-extended-command :which-key "run a command")
+    "e" #'execute-extended-command
     "Q" #'bury-buffer
 
-    "b" '(:ignore t :which-key "buffer")
-    "c" '(:ignore t :which-key "c?")
-    "f" '(:ignore t :which-key "formatting")
-    "g" '(:ignore t :which-key "git")
-    "h" '(:ignore t :which-key "help")
-    "i" '(:ignore t :which-key "insert")
-    "n" '(:ignore t :which-key "narrow")
-    "o" '(:ignore t :which-key "open")
-    "r" '(:ignore t :which-key "read")
-    "s" '(:ignore t :which-key "search")
-    "v" '(:ignore t :which-key "view")
+    "b" '(:ignore t)
+    "c" '(:ignore t)
+    "f" '(:ignore t)
+    "g" '(:ignore t)
+    "h" '(:ignore t)
+    "i" '(:ignore t)
+    "n" '(:ignore t)
+    "o" '(:ignore t)
+    "r" '(:ignore t)
+    "s" '(:ignore t)
+    "v" '(:ignore t)
 
-    "ip" '(clipboard-yank :which-key "paste from clipboard")
+    "ip" #'clipboard-yank
     )
 
   (neh/leader-keys
     :infix "c"
-    "c" '(comment-or-uncomment-region-or-line :which-key "toggle comment")
-    "q" '(quick-calc :which-key "quick-calc"))
+    "c" #'comment-or-uncomment-region-or-line
+    "q" #'quick-calc)
 
   (neh/leader-keys
     :infix "f"
-    "a" '(auto-fill-mode :which-key "auto fill")
-    "i" '(indent-region :which-key "indent region")
-    "p" '(fill-paragraph :which-key "paragraph")
-    "r" '(fill-region :which-key "fill region")
-    "t" '(toggle-truncate-lines :which-key "truncate lines")
+    "a" #'auto-fill-mode
+    "i" #'indent-region
+    "p" #'fill-paragraph
+    "r" #'fill-region
+    "t" #'toggle-truncate-lines
     "f" '(lambda () (interactive) (set-frame-width nil fill-column)))
 
   (neh/leader-keys
     :infix "h"
-    "m" '(describe-mode :which-key "describe mode")
-    "l" '(highlight-lines-matching-regexp :which-key "highlight line")
-    "r" '(highlight-regexp :which-key "highlight regexp")
-    "u" '(unhighlight-regexp :which-key "unhighlight regexp"))
+    "m" #'describe-mode
+    "l" #'highlight-lines-matching-regexp
+    "r" #'highlight-regexp
+    "u" #'unhighlight-regexp)
 
   (neh/leader-keys
     :infix "n"
-    "d" '(narrow-to-defun :which-key "narrow to defun")
-    "p" '(narrow-to-page :which-key "narrow to page")
-    "r" '(narrow-to-region :which-key "narrow to region")
-    "w" '(widen :which-key "widen"))
+    "d" #'narrow-to-defun
+    "p" #'narrow-to-page
+    "r" #'narrow-to-region
+    "w" #'widen)
 
   (neh/leader-keys
     :infix "x"
-    "b" '(eval-buffer :which-key "eval buffer")
-    "e" '(eval-expression :which-key "eval expression")
-    "r" '(eval-region :which-key "eval region")
-    "s" '(eval-last-sexp :which-key "eval sexp"))
+    "b" #'eval-buffer
+    "e" #'eval-expression
+    "r" #'eval-region
+    "s" #'eval-last-sexp)
   )
-#+end_src
-
-Which-key shows a handy popup for available keybindings at any given time.
-
-#+begin_src emacs-lisp
-(use-package which-key
-  :disabled
-  :demand t
-  :custom
-  (which-key-idle-secondary-delay 0.25)
-  :config
-  (which-key-setup-side-window-bottom)
-  (which-key-mode))
 #+end_src
 
 Key chords are interesting, and I’m not sure I’ll keep them yet. Doing vim-style bindings with leaders is maybe just as good?
@@ -574,7 +561,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :commands (whitespace-mode)
   :general
   (neh/leader-keys
-    "vw" '(whitespace-mode :which-key "whitespace"))
+    "vw" #'whitespace-mode)
   :custom
   (whitespace-line-column 80)
   (whitespace-style '(face trailing tabs lines-tail)))
@@ -591,10 +578,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (helpful-max-buffers 5)
   :general
   (neh/leader-keys
-    "h." '(helpful-at-point :which-key "point help")
-    "hf" '(helpful-callable :which-key "function help")
-    "hk" '(helpful-key :which-key "key help")
-    "hv" '(helpful-variable :which-key "variable help"))
+    "h." #'helpful-at-point
+    "hf" #'helpful-callable
+    "hk" #'helpful-key
+    "hv" #'helpful-variable)
   (:keymaps 'embark-symbol-map
    "h" #'helpful-symbol)
   :config
@@ -649,13 +636,13 @@ General settings when in text editing modes.
   :hook ((text-mode prog-mode) . visual-line-mode)
   :general
   (neh/leader-keys
-    "fv" '(visual-line-mode :which-key "visual line mode")))
+    "fv" #'visual-line-mode))
 
 (use-package visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :general
   (neh/leader-keys
-    "fc" '(visual-fill-column-mode :which-key "visual fill column"))
+    "fc" #'visual-fill-column-mode)
 
   :custom
   (split-window-preferred-function #'visual-fill-column-split-window-sensibly)
@@ -1047,7 +1034,7 @@ And here are just general evil-related bindings.
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
 (neh/leader-keys
-  "q" '(kill-current-buffer :which-key "delete buffer"))
+  "q" #'kill-current-buffer)
 #+end_src
 
 Put some whitespace around the evil state modeline labels just so they look better.
@@ -1272,7 +1259,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   ("M-SPC" #'embark-act)
   ("C-," #'embark-act)
   (neh/leader-keys
-    "oe" '(embark-act :which-key "embark"))
+    "oe" #'embark-act)
   (:keymaps 'embark-file-map
    "s" #'neh/consult-ripgrep-from-dir
    "F" #'find-file-other-frame
@@ -1304,12 +1291,6 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
     ("I" org-id-get-create)
     ("l" org-store-link))
   (add-to-list 'embark-keymap-alist '(heading . embark-heading-map))
-
-  ;; (setq embark-action-indicator
-  ;;       (lambda (map _target)
-  ;;         (which-key--show-keymap "Embark" map nil nil 'no-paging)
-  ;;         #'which-key--hide-popup-ignore-command)
-  ;;       embark-become-indicator embark-action-indicator)
   )
 #+end_src
 
@@ -1350,18 +1331,18 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :general
   ;; ([remap evil-search-forward] #'consult-line)
   (neh/leader-keys
-    "/" '(consult-line :which-key "line")
+    "/" #'consult-line
     "sl" #'neh/consult-line-again
-    "oo" '(consult-buffer :which-key "switch buffer/recent")
-    "of" '(find-file :which-key "file")
-    "ha" '(consult-apropos :which-key "apropos")
-    "s*" '(consult-line-thing-at-point :which-key "lines with symbol")
-    "sa" '(consult-org-agenda :which-key "agenda")
-    "sf" '(consult-ripgrep :which-key "rg")
-    "sg" '(consult-git-grep :which-key "git-grep")
-    "sn" '(neh/roam-rg :which-key "notes")
-    "so" '(consult-org-heading :which-key "heading")
-    "st" '(consult-imenu :which-key "imenu"))
+    "oo" #'consult-buffer
+    "of" #'find-file
+    "ha" #'consult-apropos
+    "s*" #'consult-line-thing-at-point
+    "sa" #'consult-org-agenda
+    "sf" #'consult-ripgrep
+    "sg" #'consult-git-grep
+    "sn" #'neh/roam-rg
+    "so" #'consult-org-heading
+    "st" #'consult-imenu)
   (:keymaps 'embark-buffer-map
    "F" #'consult-buffer-other-frame)
   (:keymaps 'embark-file-map
@@ -1407,10 +1388,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (general-define-key
    :states '(normal visual)
    :prefix "j"
-   "j" '(avy-goto-char-2 :which-key "char(2)")
-   "c" '(avy-goto-char-timer :which-key "char")
-   "h" '(avy-org-goto-heading-timer :which-key "org heading")
-   "l" '(avy-goto-line :which-key "line"))
+   "j" #'avy-goto-char-2
+   "c" #'avy-goto-char-timer
+   "h" #'avy-org-goto-heading-timer
+   "l" #'avy-goto-line)
 
   (neh/leader-keys
     "cl" 'avy-copy-line)
@@ -1700,9 +1681,9 @@ FACE defaults to inheriting from default and highlight."
 
   :general
   (neh/leader-keys
-    "op" '(projectile-switch-project :which-key "switch project")
-    "oh" '(projectile-find-file-dwim :which-key "open file in project")
-    "pg" '(projectile-ripgrep :which-key "rg in project"))
+    "op" #'projectile-switch-project
+    "oh" #'projectile-find-file-dwim
+    "pg" #'projectile-ripgrep)
 
   :config
   (setq frame-title-format
@@ -1786,7 +1767,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              diff-hl-update)
   :general
   (neh/leader-keys
-    "vD" '(diff-hl-mode :which-key "diff-hl"))
+    "vD" #'diff-hl-mode)
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
@@ -1864,9 +1845,9 @@ Of course, the great magit.
    "L" 'evil-search-previous)
 
   (neh/leader-keys
-    "gf" '(magit-file-dispatch :which-key "file")
-    "gg" '(magit-dispatch :which-key "menu")
-    "gs" '(magit-status :which-key "status")))
+    "gf" #'magit-file-dispatch
+    "gg" #'magit-dispatch
+    "gs" #'magit-status))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
@@ -2438,7 +2419,7 @@ Just always show images; I always want them.
   :general
   (neh/leader-keys
     :keymaps 'org-mode-map
-    "vE" '(org-appear-mode :which-key "toggle emphasis auto-hiding")))
+    "vE" #'org-appear-mode))
 #+end_src
 
 ** Hooks
@@ -2490,16 +2471,16 @@ General purpose org keybindings.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
 (neh/leader-keys
-  "nb" '(org-narrow-to-block :which-key "narrow to block")
-  "ne" '(org-narrow-to-element :which-key "narrow to element")
-  "ns" '(org-narrow-to-subtree :which-key "narrow to subtree")
+  "nb" #'org-narrow-to-block
+  "ne" #'org-narrow-to-element
+  "ns" #'org-narrow-to-subtree
 
   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
-  "o." '(org-open-at-point :which-key "follow link")
+  "o." #'org-open-at-point
 
-  "ve" '(neh/toggle-local-emphasis-markers :which-key "emphasis")
-  "vi" '(org-toggle-inline-images :which-key "images")
-  "vl" '(org-toggle-link-display :which-key "links"))
+  "ve" #'neh/toggle-local-emphasis-markers
+  "vi" #'org-toggle-inline-images
+  "vl" #'org-toggle-link-display)
 #+end_src
 
 Add a binding for =org-open-at-point=. I need to look into whether this is worth it, and the differences between this and =browse-url-at-point=.
@@ -2576,8 +2557,8 @@ Quick heading movement and task item state changes. I'm getting into the habit o
    "C-'" nil
    "C-," nil)
   (neh/leader-keys
-    "a" '(org-agenda :which-key "agenda")
-    "og" '(org-agenda :which-key "agenda"))
+    "a" #'org-agenda
+    "og" #'org-agenda)
 
   :init
   (defun neh/agenda-current-window ()
@@ -2970,8 +2951,8 @@ Let’s try to get some window behaviour under control.
   (terminal-here-linux-terminal-command 'alacritty)
   :general
   (neh/leader-keys
-    "ot" '(terminal-here-launch :which-key "terminal")
-    "oT" '(terminal-here-project-launch :which-key "project terminal")))
+    "ot" #'terminal-here-launch
+    "oT" #'terminal-here-project-launch))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3333,7 +3314,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (use-package imenu-list
   :general
   (neh/leader-keys
-    "os" '(imenu-list-smart-toggle :which-key "code structure"))
+    "os" #'imenu-list-smart-toggle)
 
   :custom
   (imenu-list-focus-after-activation t))
@@ -3341,7 +3322,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (use-package imenu-anywhere
   :general
   (neh/leader-keys
-    "sT" '(imenu-anywhere :which-key "imenu anywhere")))
+    "sT" #'imenu-anywhere))
 #+end_src
 
 * Hydra
@@ -3384,10 +3365,10 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (use-package hydra
   :general
   (neh/leader-keys
-    "rc" '(hydra-codereading/body :which-key "changes")
-    "rg" '(hydra-git-gutter/body :which-key "changes")
-    "ro" '(hydra-org/body :which-key "org")
-    "rr" '(hydra-reading/body :which-key "plain text"))
+    "rc" #'hydra-codereading/body
+    "rg" #'hydra-git-gutter/body
+    "ro" #'hydra-org/body
+    "rr" #'hydra-reading/body)
 
   :custom
   (hydra-hint-display-type 'lv)
@@ -3811,7 +3792,7 @@ Try out =org-noter=.
   :general
   (neh/leader-keys
     :keymaps 'org-mode-map
-    "vC" '(literate-calc-minor-mode :which-key "calculations")))
+    "vC" #'literate-calc-minor-mode))
 #+end_src
 
 #+begin_src emacs-lisp :lexical no
@@ -4104,7 +4085,7 @@ Try out =org-noter=.
 (use-package rainbow-delimiters
   :general
   (neh/leader-keys
-    "vd" '(rainbow-delimiters-mode :which-key "delimiters"))
+    "vd" #'rainbow-delimiters-mode)
 
   :custom-face
   (rainbow-delimiters-unmatched-face ((t (:height 1.0 :inherit 'error))))
@@ -4198,7 +4179,7 @@ Try out =org-noter=.
 (use-package rainbow-mode
   :general
   (neh/leader-keys
-    "vc" '(rainbow-mode :which-key "colours")))
+    "vc" #'rainbow-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4226,11 +4207,11 @@ Try out =org-noter=.
     "C" 'symbol-overlay-remove-all)
 
   (neh/leader-keys
-    "hs" '(symbol-overlay-put :which-key "highlight symbol")
-    "hn" '(symbol-overlay-switch-backward :which-key "previous highlighted symbol")
-    "ht" '(symbol-overlay-switch-forward :which-key "next highlighted symbol")
-    "hc" '(symbol-overlay-remove-all :which-key "clear highlighted symbols")
-    "hM" '(symbol-overlay-mode :which-key "symbol overlay mode")))
+    "hs" #'symbol-overlay-put
+    "hn" #'symbol-overlay-switch-backward
+    "ht" #'symbol-overlay-switch-forward
+    "hc" #'symbol-overlay-remove-all
+    "hM" #'symbol-overlay-mode)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4354,8 +4335,7 @@ Try out =org-noter=.
 ;; (use-package lsp-mode
 ;;   :commands (lsp-mode
 ;;              lsp)
-;;   :hook ((lsp-mode . lsp-enable-which-key-integration)
-;;          (go-mode . lsp)))
+;;   :hook ((go-mode . lsp)))
 
 ;; (use-package lsp-pyright
 ;;   :disabled
