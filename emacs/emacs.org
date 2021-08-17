@@ -274,9 +274,6 @@ I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, a
 All UTF-8, all the time.
 
 #+begin_src emacs-lisp
-;; (setq coding-system-for-read 'utf-8
-;;       coding-system-for-write 'utf-8)
-
 ;; https://goyoambrosio.com/2018/06/Dealing-with-utf-8-in-Emacs/
 
 (prefer-coding-system 'utf-8)
@@ -508,7 +505,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (bookmark-fontify nil))
 
-
 (use-package saveplace
   :demand t
   :config
@@ -675,18 +671,6 @@ And let’s try out writeroom mode.
   (add-to-list 'writeroom-global-effects 'writeroom-set-internal-border-width))
 #+end_src
 
-* Prog mode
-
-General settings for programming modes.
-
-#+begin_src emacs-lisp
-(defun my-prog-mode-hook ()
-  "Set line-numbers settings for 'prog-mode'."
-  ;; (setq display-line-numbers 'relative)
-  (add-hook 'prog-mode-hook #'my-prog-mode-hook)
-  (add-hook 'yaml-mode-hook #'my-prog-mode-hook))
-#+end_src
-
 * Pretty it up
 
 Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
@@ -753,7 +737,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   :initialize 'custom-initialize-set)
 
 (customize-set-variable 'neh/themeset "mix")
+#+end_src
 
+#+begin_src emacs-lisp
 ;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
 
 (defun call-process-string (program &rest args)
@@ -912,7 +898,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
           (buffer-list)))
 
   (set-scroll-bar-mode nil)
-  ;; (neh/enable-scroll-highlight)
   )
 #+end_src
 
@@ -1075,7 +1060,6 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   :custom
   (evil-collection-outline-bind-tab-p nil)
-  (evil-collection-company-use-tng nil)
   (evil-collection-setup-minibuffer t)
 
   :init
@@ -1210,31 +1194,6 @@ Faster narrowing of a list of candidates matters, and orderless is a nice straig
                                  flex-if-star
                                  regex-if-twiddle
                                  without-if-bang)))
-#+end_src
-
-As nice (and customizable) as orderless is, I missed what I was getting from prescient when I was using ivy. Taking recency into account makes a big difference to me in finding what I want in a list of candidates.
-
-#+begin_src emacs-lisp
-(use-package selectrum-prescient
-  :disabled
-  :demand t
-  :hook (selectrum-prescient-mode . (lambda ()
-                                      (setq selectrum-refine-candidates-function
-                                            #'orderless-filter)))
-  :custom
-  (prescient-history-length 250)
-
-  :config
-  (selectrum-prescient-mode t)
-  (setq selectrum-refine-candidates-function #'orderless-filter)
-  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
-  (prescient-persist-mode t))
-
-(use-package company-prescient
-  :disabled
-  :hook (company-mode . company-prescient-mode)
-  :custom
-  (company-prescient-sort-length-enable nil))
 #+end_src
 
 ** Marginalia
@@ -1453,23 +1412,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                                     "^\*.*\*"
                                     "^magit.*:.+"))
   (nswbuff-include-buffer-regexps '("^*Org Src"))
-
-  ;; (nswbuff-start-with-current-centered t)
-
-  ;; :init
-  ;; (defun neh/nswbuff-switch-to-previous-buffer ()
-  ;;   (interactive)
-  ;;   ;; (let (nswbuff-buffer-list-function '(lambda () (nreverse (nswbuff-buffer-list))))
-  ;;   (let (nswbuff-buffer-list-function #'nswbuff-buffer-list)
-  ;;     (message nswbuff-buffer-list-function)
-  ;;     (nswbuff-switch-to-previous-buffer)))
-
-        ;; nswbuff-buffer-list-function '(lambda ()
-        ;;                                 (interactive)
-        ;;                                 (if (projectile-project-p)
-        ;;                                     (nswbuff-projectile-buffer-list)
-        ;;                                   (buffer-list)))
-        )
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1492,8 +1435,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :commands (ibuffer-projectile-set-filter-groups)
   :hook ((ibuffer . (lambda ()
                       (ibuffer-projectile-set-filter-groups)
-                      ;; (unless (eq ibuffer-sorting-mode 'alphabetic)
-                      ;;   (ibuffer-do-sort-by-alphabetic))
                       )))
   :init
   (defun neh/ibuffer-magit ()
@@ -1513,68 +1454,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
     (pulse-momentary-highlight-region beg end)
     (apply orig-fn beg end args))
   (advice-add 'evil-yank :around 'meain/evil-yank-advice))
-
-;; (defun my-View-scroll-half-page-forward-other-window ()
-;;   (interactive)
-;;   (with-selected-window (next-window)
-;;     (call-interactively 'View-scroll-half-page-forward)))
-
-;; (defun my-View-scroll-half-page-backward-other-window ()
-;;   (interactive)
-;;   (with-selected-window (next-window)
-;;     (call-interactively 'View-scroll-half-page-backward)))
-
-(defface neh-highlight
-  '((default :inherit default))
-  "Face for highlighting based on theme.")
-
-;; (let ((bg (face-attribute 'default :background)))
-;;   (if (< (color-distance bg "black") (color-distance bg "white"))
-;;       (set-face-attribute 'neh-highlight nil :background (color-lighten-name bg 20))
-;;     (set-face-attribute 'neh-highlight nil :background (color-darken-name bg 20))))
-
-(set-face-attribute 'neh-highlight nil :background "SpringGreen4")
-
-(defvar neh/scroll-up-functions '(evil-scroll-up
-                                  evil-scroll-page-up))
-(defvar neh/scroll-down-functions '(evil-scroll-down
-                                    evil-scroll-page-down))
-
-;; TODO scroll highlight interferes with hydras
-
-(defun neh/enable-scroll-highlight ()
-  (interactive)
-  (general-add-advice neh/scroll-up-functions
-                      :around #'my-indicate-scroll-backward)
-  (general-add-advice neh/scroll-down-functions
-                      :around #'my-indicate-scroll-forward))
-
-(defun neh/disable-scroll-highlight ()
-  (interactive)
-  (general-remove-advice neh/scroll-up-functions
-                         #'my-indicate-scroll-backward)
-  (general-remove-advice neh/scroll-down-functions
-                         #'my-indicate-scroll-forward))
-
-(defun my-indicate-scroll-get-line (pos)
-  (save-excursion
-    (goto-char pos)
-    (string-to-number (format-mode-line "%l"))))
-
-(defun my-indicate-scroll (linep f args)
-  (let ((linen (my-indicate-scroll-get-line linep))
-        (pulse-delay 0.06))
-    (save-excursion
-      (goto-line linen)
-      (pulse-momentary-highlight-one-line (point) 'neh-highlight))
-    (sit-for 0.1)
-    (apply f args)))
-
-(defun my-indicate-scroll-forward (f &rest args)
-  (my-indicate-scroll (1- (window-end)) f args))
-
-(defun my-indicate-scroll-backward (f &rest args)
-  (my-indicate-scroll (window-start) f args))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1655,7 +1534,6 @@ FACE defaults to inheriting from default and highlight."
   :hook (after-init . global-highlight-parentheses-mode)
   :custom
   (highlight-parentheses-colors '("red2" "DarkOrange1" "goldenrod2" "IndianRed4"))
-  ;; (highlight-parentheses-background-colors '())
   (highlight-parentheses-attributes '((:weight ultra-bold)
                                       (:weight ultra-bold)
                                       (:weight ultra-bold)
@@ -1718,59 +1596,6 @@ FACE defaults to inheriting from default and highlight."
              (unless (string= "-" project-name)
                (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
   (projectile-mode t))
-#+end_src
-
-* Company
-
-Ok, so the =:demand+:hook= combo works with doom-modeline, but not with company. What. The =prog-mode= hook works though. Or just load it in =:config=.
-
-#+begin_src emacs-lisp
-(use-package company
-  :disabled
-  :commands (global-company-mode)
-  :hook ((after-init . global-company-mode))
-  :custom
-  (company-idle-delay nil)
-  :general
-  (:states '(insert)
-   "C-." #'company-complete-common
-   "\t" #'company-complete-common)
-  :config
-  (with-eval-after-load 'evil
-    (with-eval-after-load 'company
-      (define-key evil-insert-state-map (kbd "C-n") nil)
-      (define-key evil-insert-state-map (kbd "C-p") nil)
-      (evil-define-key nil company-active-map (kbd "C-n") #'company-select-previous)
-      (evil-define-key nil company-active-map (kbd "C-t") #'company-select-next))))
-
-(use-package company-terraform
-  :disabled
-  :after company
-  :hook (terraform-mode . company-terraform-init))
-
-(use-package company-box
-  :disabled
-  :after company
-  :hook (company-mode . company-box-mode)
-  :custom
-  (company-box-enable-icon nil))
-
-(use-package company-ansible
-  :disabled
-  :commands (company-ansible)
-  :config
-  (add-to-list 'company-backends 'company-ansible))
-
-(use-package company-org-block
-  :disabled
-  :after (company org)
-  :custom
-  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
-  (company-org-block-auto-indent nil)
-  (org-edit-src-content-indentation 0)
-  :hook ((org-mode . (lambda ()
-                       (add-to-list (make-local-variable 'company-backends)
-                                    'company-org-block)))))
 #+end_src
 
 * Git
@@ -1949,7 +1774,6 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   (defun neh/babel-to-buffer-from-narrow ()
     (interactive)
-    ;; (org-src-do-key-sequence-at-code-block "<SPC>o!")
     (org-src-do-at-code-block '(neh/babel-to-buffer))
     )
 
@@ -1963,15 +1787,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (concat "id:"
             (org-id-get-with-outline-path-completion org-refile-targets)))
 
-  ;; (defface org-inprogress
-  ;;   '((default :inherit org-todo))
-  ;;   "Face for INPROGRESS org tasks")
-  ;; (defface org-waiting
-  ;;   '((default :inherit org-todo))
-  ;;   "Face for WAITING org tasks")
-
   (let* ((headline      `(:inherit variable-pitch :weight bold))
-         ;; (done          `(:inherit fixed-pitch :weight normal :foreground "#7c6f64"))
          )
 
     (custom-theme-set-faces
@@ -1994,28 +1810,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      `(org-level-2 ((t (,@headline :height 1.05))))
      `(org-level-1 ((t (,@headline :weight normal :height 1.35))))
 
-     ;; `(org-todo ((t (,@headline
-     ;;                 :weight bold
-     ;;                 :foreground ,(color-complement-hex
-     ;;                               (face-attribute 'default :background))))))
-     ;; `(org-inprogress ((t (,@headline
-     ;;                       :weight bold
-     ;;                       :foreground "#eeeeee"
-     ;;                       :background "DarkGreen"))))
-     ;; `(org-waiting ((t (,@headline
-     ;;                    :weight bold
-     ;;                    :foreground "#222222"
-     ;;                    :background "gold2"))))
-     ;; `(org-done ((t (,@done :strike-through t))))
-     ;; `(org-archived ((t (,@done :strike-through t))))
-     ;; `(org-headline-done ((t (,@done))))
-
      `(org-document-title ((t (,@headline :height 1.3 :underline nil))))))
-
-  ;; (setq org-todo-keyword-faces
-  ;;       '(("TODO" . org-todo)
-  ;;         ("INPROGRESS" . org-inprogress)
-  ;;         ("WAITING" . org-waiting)))
 
   (defmacro my-org-in-calendar (command)
     (let ((name (intern (format "my-org-in-calendar-%s" command))))
@@ -2464,13 +2259,6 @@ I want all drawers hidden on file load.
 (org-mode . neh/org-hide-all-drawers)
 #+end_src
 
-I auto-tangle org files on save. Tangling this file is getting slow though, so I'm attempting things to make it faster.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-;; (org-mode . (lambda () (add-hook 'after-save-hook 'neh/config-tangle
-;;                                  'run-at-end 'only-in-org-mode)))
-#+end_src
-
 I use plantuml to generate various images, and this makes sure that generated images are redisplayed after re-processing diagram source code in a block.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
@@ -2544,18 +2332,6 @@ Quick heading movement and task item state changes. I'm getting into the habit o
   :straight nil
   :custom
   (org-agenda-files '("~/org/"))
-  ;; (org-agenda-custom-commands '(("n" "Agenda and all TODOs"
-  ;;                                ((agenda "-archive")
-  ;;                                 (alltodo ""))
-  ;;                                ((org-agenda-tag-filter-preset '("-archive"))))
-  ;;                               ("p" "Personal"
-  ;;                                ((agenda "" )
-  ;;                                 (tags-todo "-archive -work"))
-  ;;                                ((org-agenda-tag-filter-preset '("-work"))))
-  ;;                               ("w" "Work"
-  ;;                                ((agenda "")
-  ;;                                 (tags-todo "-archive +work"))
-  ;;                                ((org-agenda-tag-filter-preset '("+work"))))))
 
   (org-agenda-skip-deadline-if-done t)
   (org-agenda-skip-scheduled-if-done t)
@@ -3081,9 +2857,6 @@ directory to make multiple eshell windows easier."
      (when (and epe-show-python-info (bound-and-true-p venv-current-name))
        (epe-colorize-with-face (concat "(" venv-current-name ") ") 'epe-venv-face))
 
-     ;; (when (and epe-terraform (bound-and-true-p terraform-workspace))
-     ;;   (epe-colorize-with-face (concat "(" terraform-workspace ") ") 'epe-terraform-face))
-
      (epe-colorize-with-face "" 'epe-symbol-face)
      (epe-colorize-with-face (if (= (user-uid) 0) "#" "") 'epe-sudo-symbol-face)
 
@@ -3101,22 +2874,6 @@ directory to make multiple eshell windows easier."
   (epe-git-detached-HEAD-char "D:")
   (epe-path-style 'fish)
   (eshell-prompt-function 'epe-theme-neh))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package aweshell
-  :straight (aweshell
-             :type git
-             :host github
-             :repo "manateelazycat/aweshell")
-
-  :commands (aweshell-new
-             aweshell-next
-             aweshell-prev
-             aweshell-toggle
-             aweshell-clear-buffer
-             aweshell-sudo-toggle
-             aweshell-switch-buffer))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3868,7 +3625,9 @@ Try out =org-noter=.
   (defun my/advice-compilation-filter (f proc string)
     (funcall f proc (xterm-color-filter string)))
   (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
+#+end_src
 
+#+begin_src emacs-lisp
 (use-package run-command
   :commands (run-command)
   :custom
@@ -3968,7 +3727,6 @@ Try out =org-noter=.
                                            report-emacs-bug
                                            checkdoc-show-diagnostics
                                            checkdoc
-                                           company-capf
                                            org-sidebar
                                            org-sidebar-tree
                                            org-sidebar-toggle
@@ -4000,7 +3758,6 @@ Try out =org-noter=.
   :straight nil
   :commands (hl-line-mode
              global-hl-line-mode))
-  ;; :hook (after-init . global-hl-line-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4189,7 +3946,6 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package typo
-  ;; :hook (text-mode . typo-mode)
   :commands (typo-mode))
 #+end_src
 
@@ -4242,14 +3998,6 @@ Try out =org-noter=.
 (use-package envrc
   :hook (after-init . envrc-global-mode)
   :ensure-system-package (direnv))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package direnv
-  :disabled t
-  :hook (after-init . direnv-mode)
-  :custom
-  (direnv-always-show-summary nil))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4342,37 +4090,6 @@ Try out =org-noter=.
   (with-eval-after-load 'python (elpy-enable))
   :custom
   (elpy-rpc-python-command "python3"))
-
-(use-package company-jedi
-  :disabled
-  :after company
-  :commands (company-jedi)
-  :config
-  (add-to-list 'company-backends 'company-jedi))
-
-;; (use-package lsp-mode
-;;   :commands (lsp-mode
-;;              lsp)
-;;   :hook ((go-mode . lsp)))
-
-;; (use-package lsp-pyright
-;;   :disabled
-;;   :hook (python-mode . (lambda ()
-;;                           (require 'lsp-pyright)
-;;                           (lsp))))
-
-;; (use-package lsp-python-ms
-;;   :disabled
-;;   :init (setq lsp-python-ms-auto-install-server t)
-;;   :hook (python-mode . (lambda ()
-;;                          (require 'lsp-python-ms)
-;;                          (lsp))))
-
-;; (use-package lsp-ui
-;;   :commands lsp-ui-mode
-;;   :custom
-;;   (lsp-ui-doc-max-width 90)
-;;   (lsp-ui-doc-position 'top))
 #+end_src
 
 #+begin_src emacs-lisp
