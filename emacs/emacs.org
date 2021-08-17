@@ -833,7 +833,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
 (defun neh/theme-tweaks ()
   (interactive)
 
-  (savehist-mode 1)
+  (unless savehist-loaded
+    (savehist-mode 1))
 
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
