@@ -1343,6 +1343,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (neh/leader-keys
     "/" #'consult-line
     "sl" #'neh/consult-line-again
+    "l" #'consult-line
+    "L" #'neh/consult-line-again
     "oo" #'consult-buffer
     "of" #'find-file
     "ha" #'consult-apropos
