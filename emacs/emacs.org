@@ -1333,6 +1333,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (consult-dir
              consult-dir-jump-file)
   :general
+  (neh/leader-keys
+    "d" #'consult-dir)
   (:keymaps 'vertico-map
    "M-d" #'consult-dir
    "M-j" #'consult-dir-jump-file)
