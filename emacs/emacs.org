@@ -1105,6 +1105,8 @@ I used ivy and friends for a quite a while here, mostly because helm didn't real
 
 I was interested when the "new tools" like vertico, and orderless, and then consult, marginalia, and embark started showing up and looked like a nice composable, understandable set of functionality I could assemble the way I wanted to. So that's what I have here now.
 
+** Vertico
+
 Let's start with vertico, as it's the interface to most of the rest here. I tried icomplete-vertical for a few days first, and then tried selectrum, and now vertico.
 
 #+begin_src emacs-lisp
@@ -1170,6 +1172,8 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 #+end_src
 
+** Orderless
+
 Faster narrowing of a list of candidates matters, and orderless is a nice straightforward way to get it.
 
 #+begin_src emacs-lisp
@@ -1233,6 +1237,8 @@ As nice (and customizable) as orderless is, I missed what I was getting from pre
   (company-prescient-sort-length-enable nil))
 #+end_src
 
+** Marginalia
+
 There's plenty of useful extra information that can be attached to each candidate in a list, and marginalia does a great job with it.
 
 #+begin_src emacs-lisp
@@ -1242,6 +1248,8 @@ There's plenty of useful extra information that can be attached to each candidat
   :init
   (marginalia-mode t))
 #+end_src
+
+** Embark
 
 One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in vertico, or pretty much anywhere in emacs.
 
@@ -1293,6 +1301,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (add-to-list 'embark-keymap-alist '(heading . embark-heading-map))
   )
 #+end_src
+
+** Consult
 
 Consult takes over for a lot of what counsel did, as well as swiper.
 
@@ -1368,6 +1378,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-dir-project-list-function #'consult-dir-projectile-dirs))
 #+end_src
 
+** Corfu
+
 #+begin_src emacs-lisp :lexical no
 (use-package corfu
   :init
@@ -1379,6 +1391,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    "C-t" #'corfu-next
    "C-n" #'corfu-previous))
 #+end_src
+
+** Avy
 
 Avy is a really handy way to jump around your visible buffer contents. One aspect that doesn’t seem to really be documented is the avy-actions mechanism. It lets you do things other than just jump to the point you select. So you can hit the key for whichever avy function you like, then, /before/ making your selection, press the key associated with an avy-action function to do that thing instead. This way, you can easily copy a word from elsewhere on your screen and paste it at your cursor with avy, no cursor movement needed at all. Also, =avy-copy-line= is a useful standalone function. I find it useful particularly when working in Terraform files, as lines need to be duplicated fairly often there.
 
@@ -1412,6 +1426,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
   (avy-line-insert-style 'below))
 #+end_src
+
+** Buffers
 
 #+begin_src emacs-lisp
 (use-package nswbuff
