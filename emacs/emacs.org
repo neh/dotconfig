@@ -95,7 +95,6 @@ Load =org-mode= using straight. This needs to happen early, or emacs will load a
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
 (use-package org
-  ;; :ensure org-plus-contrib
   :demand t
   :config
   (setq custom-enabled-themes '()))
@@ -418,18 +417,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
     "e" #'execute-extended-command
     "Q" #'bury-buffer
-
-    "b" '(:ignore t)
-    "c" '(:ignore t)
-    "f" '(:ignore t)
-    "g" '(:ignore t)
-    "h" '(:ignore t)
-    "i" '(:ignore t)
-    "n" '(:ignore t)
-    "o" '(:ignore t)
-    "r" '(:ignore t)
-    "s" '(:ignore t)
-    "v" '(:ignore t)
 
     "ip" #'clipboard-yank
     )
@@ -1225,9 +1212,6 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
   :general
   ("M-SPC" #'embark-act)
-  ("C-," #'embark-act)
-  (neh/leader-keys
-    "oe" #'embark-act)
   (:keymaps 'embark-file-map
    "s" #'neh/consult-ripgrep-from-dir
    "F" #'find-file-other-frame
@@ -1301,8 +1285,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :general
   ;; ([remap evil-search-forward] #'consult-line)
   (neh/leader-keys
-    "/" #'consult-line
-    "sl" #'neh/consult-line-again
     "l" #'consult-line
     "L" #'neh/consult-line-again
     "oo" #'consult-buffer
@@ -1321,7 +1303,18 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    "X" #'consult-file-externally)
   :custom
   (consult-narrow-key "<")
-  (consult-ripgrep-command (string-join '("rg" "--null" "--no-ignore-vcs" "--smart-case" "--line-buffered" "--color=always" "--max-columns=1000" "--no-heading" "--line-number" "." "-e ARG OPTS") " "))
+  (consult-ripgrep-command (string-join '("rg"
+                                          "--null"
+                                          "--no-ignore-vcs"
+                                          "--smart-case"
+                                          "--line-buffered"
+                                          "--color=always"
+                                          "--max-columns=1000"
+                                          "--no-heading"
+                                          "--line-number"
+                                          "."
+                                          "-e ARG OPTS"
+                                          ) " "))
   :config
   (setq consult-project-root-function #'projectile-project-root))
 
@@ -1874,6 +1867,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package org-journal
+  :disabled t
   :after org
   :custom
   (org-journal-dir "~/org/journal/")
