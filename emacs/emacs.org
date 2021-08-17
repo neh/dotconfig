@@ -184,6 +184,7 @@ Collect all the global, non-package-specific settings here.
 
   :init
   (defun neh/customize-this (arg)
+    "Call customize-set-variable with a specific setting pre-selected."
     (interactive)
     (minibuffer-with-setup-hook
         (lambda ()
@@ -685,16 +686,19 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 (use-package poet-theme)
 
 (defun neh/set-dark-mode ()
+  "Load dark theme."
   (interactive)
   (setq neh/dark-mode t)
   (load-theme neh/dark-theme t))
 
 (defun neh/set-light-mode ()
+  "Load light theme."
   (interactive)
   (setq neh/dark-mode nil)
   (load-theme neh/light-theme t))
 
 (defun neh/toggle-dark-mode ()
+  "Toggle dark/light theme."
   (interactive)
   (if (neh/dark-p)
       (neh/set-light-mode)
@@ -805,6 +809,7 @@ Change global text sizes with this function. This is the function I bind to a ke
 
 #+begin_src emacs-lisp
 (defun neh/adjust-text-height (adjustment)
+  "Adjust text size up or down by ADJUSTMENT."
   (interactive)
 
   (if (= adjustment 0)
@@ -818,6 +823,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 #+begin_src emacs-lisp
 (defun neh/theme-tweaks ()
+  "Apply my catchall set of mostly appearance tweaks."
   (interactive)
 
   (unless savehist-loaded
@@ -1225,6 +1231,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   ;; stolen from https://github.com/oantolin/embark/issues/252
   ;; and an assist from https://github.com/oantolin/embark/issues/42
   (defun neh/consult-ripgrep-from-dir (file)
+    "Jump into consult-ripgrep from embark."
     (interactive "fRipgrep from dir:")
     (consult-ripgrep (file-name-directory file)))
 
@@ -1256,6 +1263,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (fset 'multi-occur #'consult-multi-occur)
 
   (defun neh/roam-rg ()
+    "Search org-roam notes with ripgrep."
     (interactive)
     (if (boundp 'org-roam-directory)
         (let ((initial (if (use-region-p)
@@ -1265,12 +1273,14 @@ Consult takes over for a lot of what counsel did, as well as swiper.
       (message "Org-roam notes are not available.")))
 
   (defun neh/consult-buffer-dwim ()
+    "Narrow consult-buffer to current project if there is one."
     (when (eq this-command #'consult-buffer)
       (when (projectile-project-p)
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
   (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
 
   (defun consult-line-thing-at-point ()
+    "Start consult-line with thing-at-point as initial input."
     (interactive)
     (let ((initial (if (use-region-p)
                        (progn (buffer-substring-no-properties (region-beginning) (region-end))
@@ -1279,6 +1289,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
       (consult-line initial)))
 
   (defun neh/consult-line-again ()
+    "Repeat the last consult-line search."
     (interactive)
     (consult-line (car consult--line-history)))
 
@@ -1775,6 +1786,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     )
 
   (defun neh/toggle-local-emphasis-markers ()
+    "Toggle visibility of org emphasis markers."
     (interactive)
     (setq-local org-hide-emphasis-markers (if org-hide-emphasis-markers nil t))
     (font-lock-fontify-buffer))
@@ -2554,6 +2566,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
       (delete-frame)))
 
   (defun neh/capture-full-frame ()
+    "Start org-capture in a frame by itself."
     (interactive)
     (org-capture)
     (delete-other-windows))
@@ -2915,11 +2928,13 @@ directory to make multiple eshell windows easier."
 
   :init
   (defun neh/dired-copy-full-path ()
+    "Copy full path of entries that are marked or at point."
     (interactive)
     (let ((current-prefix-arg 0))
       (call-interactively #'dired-copy-filename-as-kill)))
 
   (defun neh/dired-copy-full-path-quoted ()
+    "Copy quoted full path of entries that are marked or at point."
     (interactive)
     (kill-new (shell-quote-argument (neh/dired-copy-full-path))))
 
@@ -4152,10 +4167,12 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp :lexical no
 (defun neh/indent-buffer ()
+  "Indent the current buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
 
 (defun neh/indent-region-or-buffer ()
+  "Indent the active region or the current buffer."
   (interactive)
   (save-excursion
     (if (region-active-p)
@@ -4171,6 +4188,7 @@ A nice couple of functions for opening files from dired asynchronously. Handy us
 
 #+begin_src emacs-lisp :lexical no
 (defun open-file-external (file)
+  "Open a file externally with xdg-open."
   (interactive "f")
   (let ((process-connection-type nil))
     (start-process
@@ -4199,7 +4217,7 @@ This function gives me a quicker way to edit src blocks in org mode, as well as 
 
 #+begin_src emacs-lisp
 (defun neh/org-ret ()
-  "Take different actions on RET in org mode."
+  "Make RET either narrow to the heading at point or edit the src block at point."
   (interactive)
   (cond ((org-at-heading-p) (org-tree-to-indirect-buffer))
         ((org-in-src-block-p) (org-edit-src-code))))
@@ -4227,7 +4245,7 @@ Ending up at the bottom of the window and not being able see enough context when
 
 #+begin_src emacs-lisp
 (defun neh/after-jump (&optional arg)
-  "Position text sanely after jumping. ARG is unused but apparently necessary."
+  "Center text at point after jumping."
   (evil-scroll-line-to-center (line-number-at-pos)))
 #+end_src
 
