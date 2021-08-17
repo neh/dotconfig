@@ -419,6 +419,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "e" #'execute-extended-command
     "Q" #'bury-buffer
 
+    "y" #'clipboard-yank
     "ip" #'clipboard-yank
     )
 
