@@ -25,7 +25,6 @@
         ;; use-package-always-defer t
         )
   (use-package org
-    ;; :ensure org-plus-contrib
     :demand t
     :config
     (setq custom-enabled-themes '()))
