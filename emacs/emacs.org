@@ -258,6 +258,7 @@ Since I force there to be no file to store custom settings in, I get prompted fo
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
 (safe-local-variable-values '((auto-revert-use-notify)
+                              (auto-revert-check-vc-info . nil)
                               (epa-file-encrypt-to . "C113BA91EAF8B45B6B84BDCBB600587C4549248A")
                               (org-download-image-dir)))
 #+end_src
