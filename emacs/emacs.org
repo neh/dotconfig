@@ -2918,9 +2918,8 @@ directory to make multiple eshell windows easier."
     "t" nil)
 
   (neh/leader-keys
-    "^" 'dired-jump
-    "od" 'dired-jump
-    "ox" #'neh/dired-open)
+    "j" #'dired-jump
+    "xx" #'neh/dired-open)
 
   :init
   (defun neh/dired-copy-full-path ()
