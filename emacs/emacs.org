@@ -3708,9 +3708,9 @@ Try out =org-noter=.
              sudo-edit-find-file)
   :general
   (:keymaps 'embark-file-map
-   "s" #'sudo-edit-find-file)
+   "$" #'sudo-edit-find-file)
   (:keymaps 'embark-become-file+buffer-map
-   "s" #'sudo-edit-find-file))
+   "$" #'sudo-edit-find-file))
 #+end_src
 
 #+begin_src emacs-lisp
