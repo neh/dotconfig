@@ -1088,25 +1088,6 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 #+begin_src emacs-lisp
 (use-package vertico
   :init
-  (defun neh/file-or-not1 ()
-    (interactive)
-    (if (and (eq 'file
-                 (completion-metadata-get
-                  (completion-metadata
-                   (buffer-substring (minibuffer-prompt-end)
-                                     (max (minibuffer-prompt-end) (point)))
-                   minibuffer-completion-table
-                   minibuffer-completion-predicate)
-                  'category))
-             (not (eq (char-before) ?/))
-             )
-        (progn
-          (minibuffer-complete)
-          (message "minibuffer-complete")
-          )
-      (vertico-insert)
-      (message "vertico-insert")))
-
   (defun neh/file-or-not2 ()
     (interactive)
     (if (and (eq 'file
@@ -1131,7 +1112,35 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
       ;; (message "vertico-insert")
       ))
 
-  (vertico-mode)
+  ;; stolen from vertico-directory extension to vertico
+  (defun neh/completing-file-p ()
+    "Return non-nil when completing file names."
+    (eq 'file
+        (completion-metadata-get
+         (completion-metadata
+          (buffer-substring (minibuffer-prompt-end)
+                            (max (minibuffer-prompt-end) (point)))
+          minibuffer-completion-table
+          minibuffer-completion-predicate)
+         'category)))
+
+  (defun neh/file-or-not3 ()
+    (interactive)
+    (cond ((neh/completing-file-p)
+           ;; (minibuffer-complete)
+           ;; (vertico-insert)
+           (when (minibuffer-complete)
+             (vertico-insert))
+           )
+          (t (vertico-insert))))
+
+  (defun neh/file-or-not4 ()
+    (interactive)
+    (when (neh/completing-file-p)
+      (minibuffer-complete))
+    (vertico-insert))
+
+  (vertico-mode t)
 
   :general
   (:keymaps 'vertico-map
@@ -1141,11 +1150,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    ;; "C-w" #'evil-delete-backward-word
    "C-S-t" #'vertico-next-group
    "C-S-n" #'vertico-previous-group
-   "<tab>" #'neh/file-or-not2
+   "<tab>" #'neh/file-or-not4
    "M-<tab>" #'vertico-insert
    )
   )
-
 #+end_src
 
 ** Orderless
