@@ -409,10 +409,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
    "C-M-n" 'scroll-other-window-down
 
    "<C-mouse-5>" '(lambda () (interactive) (neh/adjust-text-height -5))
-   "<C-mouse-4>" '(lambda () (interactive) (neh/adjust-text-height 5))
-   "C-_" '(lambda () (interactive) (neh/adjust-text-height -7))
-   "C-+" '(lambda () (interactive) (neh/adjust-text-height 7))
-   "C-)" '(lambda () (interactive) (neh/adjust-text-height 0)))
+   "<C-mouse-4>" '(lambda () (interactive) (neh/adjust-text-height 5)))
 
   (neh/leader-keys
     "<SPC>" #'save-buffer
@@ -421,7 +418,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "Q" #'bury-buffer
 
     "y" #'clipboard-yank
-    "ip" #'clipboard-yank
     )
 
   (neh/leader-keys
@@ -2363,8 +2359,7 @@ Quick heading movement and task item state changes. I'm getting into the habit o
    "C-'" nil
    "C-," nil)
   (neh/leader-keys
-    "a" #'org-agenda
-    "og" #'org-agenda)
+    "a" #'org-agenda)
 
   :init
   (defun neh/agenda-current-window ()
@@ -2549,7 +2544,6 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 
   :general
   (neh/leader-keys
-    "oc" 'org-capture
     "k" 'org-capture)
 
   :init
