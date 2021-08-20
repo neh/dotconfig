@@ -2724,7 +2724,7 @@ MimeType=x-scheme-handler/org-protocol;
     "nS" #'org-download-screenshot
     "nD" #'org-download-yank)
   :custom
-  (org-download-image-dir "./images"))
+  (org-download-method 'attach))
 #+end_src
 
 #+begin_src emacs-lisp
