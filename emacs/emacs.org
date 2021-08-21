@@ -2926,6 +2926,8 @@ directory to make multiple eshell windows easier."
     "t" nil)
 
   (neh/leader-keys
+    "cp" #'neh/dired-copy-full-path
+    "cP" #'neh/dired-copy-full-path-quoted
     "j" #'dired-jump
     "xx" #'neh/dired-open)
 
@@ -2936,10 +2938,21 @@ directory to make multiple eshell windows easier."
     (let ((current-prefix-arg 0))
       (call-interactively #'dired-copy-filename-as-kill)))
 
-  (defun neh/dired-copy-full-path-quoted ()
+  (defun neh/dired-copy-full-path-shell-quoted ()
     "Copy quoted full path of entries that are marked or at point."
     (interactive)
     (kill-new (shell-quote-argument (neh/dired-copy-full-path))))
+
+
+  (defun neh/dired-copy-full-path-quoted ()
+    "Copy quoted full path of entries that are marked or at point."
+    (interactive)
+    (neh/copy-file-path nil nil t))
+
+  (defun neh/dired-copy-full-path-quoted-list ()
+    "Copy quoted full path of entries that are marked or at point."
+    (interactive)
+    (neh/copy-file-path nil "\n" t))
 
   (defun neh/copy-file-path (&optional @dir-path-only-p separator shell-quote-p)
     "Copy the current buffer's file path or dired path to `kill-ring'.
