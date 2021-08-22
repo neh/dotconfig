@@ -2669,6 +2669,8 @@ MimeType=x-scheme-handler/org-protocol;
 
   :general
   (neh/leader-keys
+    "N" #'(lambda () (interactive) (neh/customize-this "neh/org-roam-context"))
+    "nc" #'neh/org-roam-node-find
     "no" #'org-roam-node-find)
 
   (neh/leader-keys
@@ -2677,6 +2679,73 @@ MimeType=x-scheme-handler/org-protocol;
 
   :init
   (setq org-roam-v2-ack t)
+
+  (defun neh/dnd-only (node)
+    (neh/by-tag "d&d" node))
+
+  (defun neh/projects-only (node)
+    (neh/by-tag "project" node))
+
+  (defun neh/by-tag (tag node)
+    (member tag (org-roam-node-tags node)))
+
+
+  (defun neh/org-roam-node-find ()
+    (interactive)
+    (org-roam-node-find t nil #'neh/notes-by-context))
+
+  (defun neh/set-org-roam-context (sym value)
+    (setq neh/org-roam-context value))
+
+  (defcustom neh/org-roam-context "personal"
+    "Set org roam context."
+    :type '(choice
+            (const "personal")
+            (const "work")
+            (const "d&d"))
+    :set 'neh/set-org-roam-context
+    :initialize 'custom-initialize-set)
+
+  (defun neh/notes-by-context (node)
+    (let ((tags (org-roam-node-tags node)))
+      (cond ((equal neh/org-roam-context "personal")
+             ;; '(notes-not-tagged "work"))
+             (not (member "work" tags)))
+            ((equal neh/org-roam-context "work")
+             ;; '(notes-by-tag "work"))
+             (member "work" tags))
+            ((equal neh/org-roam-context "d&d")
+             (member "d&d" tags))
+             ;; '(notes-by-tag "d&d"))
+            (t '(lambda (node) t))
+            )))
+
+  (defmacro notes-by-context ()
+    (cond ((equal neh/org-roam-context "personal")
+           (notes-not-tagged "work"))
+          ((equal neh/org-roam-context "work")
+           (notes-by-tag "work"))
+          ((equal neh/org-roam-context "d&d")
+           (notes-by-tag "d&d"))
+          (t '(lambda (node) t))
+          ))
+
+
+  (defmacro notes-tagged (tag)
+    (let ((name (intern (format "notes-tagged-%s" tag))))
+      `(progn
+         (defun ,name (node)
+           (member ,tag (org-roam-node-tags node)))
+         #',name)))
+
+  (defmacro notes-by-tag (tag)
+    `(lambda (node)
+       (member ,tag (org-roam-node-tags node))))
+
+  (defmacro notes-not-tagged (tag)
+    `(lambda (node)
+       (not (member ,tag (org-roam-node-tags node)))))
+
 
   (defun neh/check-org-files ()
     (when (> (length (directory-files org-directory nil "\\.org$")) 0)
