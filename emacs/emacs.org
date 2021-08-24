@@ -2641,7 +2641,7 @@ MimeType=x-scheme-handler/org-protocol;
 #+begin_src emacs-lisp
 (use-package org-roam
   :after org
-  :commands (org-roam-setup
+  :commands (org-roam-db-autosync-mode
              org-roam-capture
              org-roam-buffer-toggle
              org-roam-node-find
@@ -2750,7 +2750,7 @@ MimeType=x-scheme-handler/org-protocol;
 
   (defun neh/check-org-files ()
     (when (> (length (directory-files org-directory nil "\\.org$")) 0)
-      (org-roam-setup)
+      (org-roam-db-autosync-mode t)
       (cancel-function-timers #'neh/check-org-files)))
 
   (run-with-timer 0 5 #'neh/check-org-files)
