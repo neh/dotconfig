@@ -2106,6 +2106,7 @@ Make org-mode prettier.
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
   :custom
+  (org-superstar-leading-bullet " ")
   (org-superstar-headline-bullets-list '(" " "‣" "•" "–" "◦" "•" "◦" "•"))
   (org-superstar-special-todo-items t)
   (org-superstar-todo-bullet-alist '(("TODO" . 9744)
@@ -2262,12 +2263,23 @@ Just always show images; I always want them.
     "vE" #'org-appear-mode))
 #+end_src
 
+I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which, you know, indents things nicely.
+
+#+begin_src emacs-lisp
+(use-package org-indent
+  :straight nil
+  :after org
+  :hook (org-mode . org-indent-mode)
+  :custom
+  (org-indent-mode-turns-on-hiding-stars nil)
+  (org-indent-indentation-per-level 1))
+#+end_src
+
 ** Hooks
 
-I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which, you know, indents subheadings, and =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
+For a bit more org mode prettiness: =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-(org-mode . org-indent-mode)
 (org-mode . variable-pitch-mode)
 #+end_src
 
