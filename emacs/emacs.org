@@ -2702,6 +2702,16 @@ MimeType=x-scheme-handler/org-protocol;
     :keymaps 'org-mode-map
     "ni" #'org-roam-node-insert)
 
+  (:keymaps '(org-roam-mode-map
+              org-roam-node-map)
+   "n" nil
+   "SPC" nil
+   "S-SPC" nil
+
+   "M-t" #'magit-section-forward
+   "M-n" #'magit-section-backward
+   )
+
   :init
   (setq org-roam-v2-ack t)
 
