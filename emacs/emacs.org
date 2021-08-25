@@ -2343,6 +2343,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
   :keymaps 'org-mode-map
   :states '(normal emacs)
   "<RET>" 'neh/org-ret
+  "S-<return>" 'neh/org-shift-ret
   "ze" 'outline-show-branches)
 #+end_src
 
@@ -4330,6 +4331,13 @@ This function gives me a quicker way to edit src blocks in org mode, as well as 
   (interactive)
   (cond ((org-at-heading-p) (org-tree-to-indirect-buffer))
         ((org-in-src-block-p) (org-edit-src-code))))
+
+(defun neh/org-shift-ret ()
+  "Make S-RET either narrow to the heading at point or edit the src block at point."
+  (interactive)
+  (cond ((org-at-heading-p) (org-tree-to-indirect-buffer-other-frame))
+        ((org-in-src-block-p) (org-edit-src-code))
+        ))
 #+end_src
 
 I wanted a way to move org items to the top of their own level, and found one [[https://emacs.stackexchange.com/questions/43651/moving-a-subtree-to-the-top-or-bottom-of-its-parent][on stackoverflow]]. I inverted its behaviour to move to the top by default, and to the bottom with a prefix arg.
@@ -4504,7 +4512,7 @@ Attaching this next one to =org-src-mode= will disable the annoying flycheck war
 
 #+begin_src emacs-lisp
 (defun org-tree-to-indirect-buffer-other-frame ()
-  (interactive
+  (interactive)
    (let ((org-indirect-buffer-display 'new-frame))
-     (org-tree-to-indirect-buffer))))
+     (org-tree-to-indirect-buffer)))
 #+end_src
