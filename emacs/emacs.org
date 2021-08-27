@@ -436,10 +436,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   (neh/leader-keys
     :infix "h"
-    "m" #'describe-mode
-    "l" #'highlight-lines-matching-regexp
-    "r" #'highlight-regexp
-    "u" #'unhighlight-regexp)
+    "m" #'describe-mode)
 
   (neh/leader-keys
     :infix "n"
@@ -4092,6 +4089,18 @@ Try out =org-noter=.
   :general
   (neh/leader-keys
     "vc" #'rainbow-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hi-lock
+  :straight nil
+  :general
+  (neh/leader-keys
+    :infix "h"
+    "l" #'highlight-lines-matching-regexp
+    "r" #'highlight-regexp
+    "u" #'unhighlight-regexp)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
