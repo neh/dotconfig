@@ -1484,7 +1484,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package scrollkeeper
   :custom
   (scrollkeeper-scroll-steps 1)
-  (scrollkeeper-scroll-distance 0.90)
+  (scrollkeeper-scroll-distance 0.85)
   (scrollkeeper-guideline-pulse-interval 0.07)
   (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
   :custom-face
