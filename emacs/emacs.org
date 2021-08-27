@@ -4299,6 +4299,18 @@ Try out =org-noter=.
 
 * Misc functions
 
+#+begin_src emacs-lisp
+;; from https://www.reddit.com/r/emacs/comments/l51ocx/what_is_the_most_useful_part_of_your_emacs_config/gkrz1di
+(defun insert-date ()
+  "Insert today's date at point"
+  (interactive "*")
+  (insert (format-time-string "%F")))
+
+(general-define-key
+ :states '(normal insert)
+  "C-c C-." #'insert-date)
+#+end_src
+
 #+begin_src emacs-lisp :lexical no
 (defun neh/indent-buffer ()
   "Indent the current buffer."
