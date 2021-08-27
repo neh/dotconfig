@@ -31,6 +31,15 @@ pactl set-default-sink bluez_sink.94_DB_56_63_CE_1E.headset_head_unit
 pactl set-default-source bluez_sink.94_DB_56_63_CE_1E.headset_head_unit.monitor
 #+end_src
 
+** Git config
+Would like to get this in here. Will need to deal with conditional bits like identity on work/personal boxes. Useful stuff on =include= and =includeIf= in git configuration in [[https://blog.thomasheartman.com/posts/modularizing-your-git-config-with-conditional-includes][this article]].
+
+This looks like a handy alias to include ([[https://carolynvanslyck.com/blog/2020/12/git-wip/][source]]):
+#+begin_src conf
+[alias]
+  wip = for-each-ref --sort='authordate:iso8601' --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short)' refs/heads
+#+end_src
+
 ** Dconf (Gnome settings)
 Gnome desktop and related settings are stored in dconf, which has a binary database format that is not conducive to version control. I tried a few ways to deal with this, none of which were especially good, and then this well-titled article popped up: [[https://anarc.at/blog/2020-03-02-moving-dconf-entries-to-git/][Moving dconf entries to git]]. I'm extremely grateful for this post and the resources it references: [[https://annex.debconf.org/debconf-share/debconf14/slides/josh-triplett-dconf-git-home/dconf.pdf][Josh Triplett's Debconf 14 talk]], and an accompanying [[https://joshtriplett.org/git/home][git repo]] (that's useful as a git clone URL, not a browser one). That post explains things pretty well, but I'm going to do my own version of it here, with the benefit of org mode and src blocks so I can tangle the files right into place. All of the scripts in this section originally came from Josh Triplett's git repo.
 
