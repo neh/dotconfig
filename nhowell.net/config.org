@@ -6,6 +6,31 @@
 #+email: nath@nhowell.net
 
 * Little bits
+** Sound setups
+
+Some quick commands for setting devices up without clicking around the settings app. Probably don't need to do a lot of fancifying here with pipewire coming along?
+
+For desktop use with speakers:
+#+begin_src sh
+pactl set-default-source alsa_input.usb-046d_HD_Pro_Webcam_C920_C2D6BAFF-02.analog-stereo
+pactl set-default-sink alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo
+#+end_src
+
+For normal use of sony headphones:
+#+begin_src sh
+pacmd set-card-profile bluez_card.94_DB_56_63_CE_1E a2dp_sink
+pactl set-default-source alsa_input.usb-046d_HD_Pro_Webcam_C920_C2D6BAFF-02.analog-stereo
+pactl set-default-sink bluez_sink.94_DB_56_63_CE_1E.a2dp_sink
+# pactl set-default-sink bluez_sink.94_DB_56_63_CE_1E.a2dp_sink
+#+end_src
+
+For zoom with sony headphones:
+#+begin_src sh
+pacmd set-card-profile bluez_card.94_DB_56_63_CE_1E headset_head_unit
+pactl set-default-sink bluez_sink.94_DB_56_63_CE_1E.headset_head_unit
+pactl set-default-source bluez_sink.94_DB_56_63_CE_1E.headset_head_unit.monitor
+#+end_src
+
 ** Dconf (Gnome settings)
 Gnome desktop and related settings are stored in dconf, which has a binary database format that is not conducive to version control. I tried a few ways to deal with this, none of which were especially good, and then this well-titled article popped up: [[https://anarc.at/blog/2020-03-02-moving-dconf-entries-to-git/][Moving dconf entries to git]]. I'm extremely grateful for this post and the resources it references: [[https://annex.debconf.org/debconf-share/debconf14/slides/josh-triplett-dconf-git-home/dconf.pdf][Josh Triplett's Debconf 14 talk]], and an accompanying [[https://joshtriplett.org/git/home][git repo]] (that's useful as a git clone URL, not a browser one). That post explains things pretty well, but I'm going to do my own version of it here, with the benefit of org mode and src blocks so I can tangle the files right into place. All of the scripts in this section originally came from Josh Triplett's git repo.
 
