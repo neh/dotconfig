@@ -1831,7 +1831,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      `(org-level-4 ((t (,@headline :height 1.05))))
      `(org-level-3 ((t (,@headline :height 1.15))))
      `(org-level-2 ((t (,@headline :height 1.25))))
-     `(org-level-1 ((t (,@headline :height 1.35))))
+     `(org-level-1 ((t (,@headline :height 1.35 :underline t :extend t))))
 
      `(org-document-title ((t (,@headline :height 1.45 :underline nil))))))
 
