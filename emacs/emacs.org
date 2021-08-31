@@ -2104,7 +2104,8 @@ Make org-mode prettier.
   :hook (org-mode . org-superstar-mode)
   :custom
   (org-superstar-leading-bullet " ")
-  (org-superstar-headline-bullets-list '(" " "‣" "•" "–" "◦" "•" "◦" "•"))
+  ;; ○🞆□🞐◦▭▯▷‣•▫⬫◊
+  (org-superstar-headline-bullets-list '(" " "▭" "◦" "•" "◦" "•" "◦" "•"))
   (org-superstar-special-todo-items t)
   (org-superstar-todo-bullet-alist '(("TODO" . 9744)
                                      ("NEXT" . 9744)
