@@ -115,7 +115,7 @@
  ("marginalia" . "b65d66e9301f9a0e3012568ca6721ae4ec276ebc")
  ("markdown-mode" . "1c7d29d52986b2cb153b5f643167ea49417de469")
  ("melpa" . "461a4fc1ea3fcfac1a10e8004d7a917b14a0b771")
- ("modus-themes" . "ba6bb146ffccb05ab4f701ca7a05d66cacd709db")
+ ("modus-themes" . "af648e2d4b26a69b04041204018508dd60f0dfd3")
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
  ("no-littering" . "b12a85a5afff7b5d60f889c1c2e8f5deab7fdbae")
  ("nov.el" . "b3c7cc28e95fe25ce7b443e5f49e2e45360944a3")
