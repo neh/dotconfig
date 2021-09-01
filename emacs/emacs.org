@@ -3427,6 +3427,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
   ("open" (("p" projectile-switch-project "project" :exit t)
            ("o" consult-buffer "buffer" :exit t)
+           ("b" ibuffer "ibuffer" :exit t)
            ("e" execute-extended-command "command" :exit t)
            ("n" org-roam-node-find "notes" :exit t)
            ("a" neh/agenda-current-window "agenda" :exit t)
