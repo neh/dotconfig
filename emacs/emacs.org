@@ -3016,7 +3016,8 @@ directory to make multiple eshell windows easier."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package fish-mode)
+(use-package fish-mode
+  :commands (fish-mode))
 #+end_src
 
 * Dired
