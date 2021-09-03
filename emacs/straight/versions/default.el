@@ -45,6 +45,7 @@
  ("emacs-fish" . "a7c953b1491ac3a3e00a7b560f2c9f46b3cb5c04")
  ("emacs-hcl-mode" . "e12b1df2ca28d2b06c471cd709c038a2dc0bcdbd")
  ("emacs-kv" . "721148475bce38a70e0b678ba8aa923652e8900e")
+ ("emacs-libvterm" . "fb299a8bf8c10e5fffeb06bc07341c103a7c5050")
  ("emacs-run-command" . "ce2d69feeffb9ef9815ef5b5e32f236763197a10")
  ("emacs-theme-gruvbox" . "c2ae5e3fff39f78f23109d90fdf36b3b189df511")
  ("emacs-undo-fu" . "e0ad06b5ef2ac2733dad2ad48e3957b5c36edfa5")
