@@ -2881,6 +2881,13 @@ Let’s try to get some window behaviour under control.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package multi-vterm
+  :commands (multi-vterm
+             multi-vterm-next
+             multi-vterm-prev))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package eshell
   :ensure nil
   :custom
