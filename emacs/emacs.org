@@ -192,6 +192,12 @@ Collect all the global, non-package-specific settings here.
           (add-hook 'post-command-hook #'exit-minibuffer nil t))
       (call-interactively #'customize-set-variable)))
 
+  (defun neh/update-packages (arg)
+    "Set all packages to the versions in the straight.el lockfile."
+    (straight-fetch-all)
+    (straight-thaw-versions)
+    (straight-check-all))
+  (add-to-list 'command-switch-alist '("--update-packages" . neh/update-packages))
   :config
   (fset 'yes-or-no-p 'y-or-n-p))
 #+end_src
