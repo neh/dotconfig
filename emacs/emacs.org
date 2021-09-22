@@ -3710,7 +3710,10 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp :lexical no
 (use-package org-d20
-  :commands (org-d20-mode))
+  :commands (org-d20-mode)
+  :init
+  (put 'org-d20-party 'safe-local-variable
+       (lambda (x) (listp x))))
 #+end_src
 
 * Misc packages
