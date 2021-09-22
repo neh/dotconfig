@@ -131,7 +131,7 @@
  ("org-download" . "947ca223643d28e189480e607df68449c15786cb")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "a5b61bca3f8c91b0859bb0df1a929f9a31a57b99")
- ("org-ql" . "94f9e6f3031b32cf5e2149beca7074807235dcb0")
+ ("org-ql" . "8f307a8820f3fe05514800ea407016f76f726675")
  ("org-roam" . "1795039ab93ef19611dbb3fca21c4211c4e655a9")
  ("org-sidebar" . "288703b897449f5110c9c76e78eb9a928ffc0dcd")
  ("org-super-agenda" . "a5557ea4f51571ee9def3cd9a1ab1c38f1a27af7")
