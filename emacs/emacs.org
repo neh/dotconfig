@@ -911,7 +911,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :hook ((after-init . doom-modeline-init)
+  :hook ((after-init . doom-modeline-mode)
          (after-change-major-mode . doom-modeline-conditional-buffer-encoding))
 
   :custom-face
