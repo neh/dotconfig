@@ -196,7 +196,7 @@ Collect all the global, non-package-specific settings here.
     "Set all packages to the versions in the straight.el lockfile."
     (straight-fetch-all)
     (straight-thaw-versions)
-    (straight-check-all))
+    (straight-rebuild-all))
   (add-to-list 'command-switch-alist '("--update-packages" . neh/update-packages))
   :config
   (fset 'yes-or-no-p 'y-or-n-p))
