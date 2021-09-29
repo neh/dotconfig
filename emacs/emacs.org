@@ -247,6 +247,11 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 (auto-hscroll-mode 'current-line)
 #+end_src
 
+from https://www.wisdomandwonder.com/programming/13521/automatically-open-read-only-files-in-view-mode
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(view-read-only t)
+#+end_src
+
 Set the window titles. Nothing fancy, just the buffer name.
 
 #+begin_src emacs-lisp
