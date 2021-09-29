@@ -830,6 +830,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (unless savehist-loaded
     (savehist-mode 1))
 
+  ;; Workaround so I can use S-SPC as a binding
+  ;; https://www.reddit.com/r/emacs/comments/osscfd/pgtk_emacswaylandgnome_no_shiftspace/
+  ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-07/msg00071.html
+  (when (fboundp 'pgtk-use-im-context)
+    (pgtk-use-im-context nil))
+
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
          (size (cond ((< dpi 110) 128)
