@@ -1267,6 +1267,24 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
     (consult-ripgrep (file-name-directory file)))
 
   :config
+  (defun embark-target-org-timestamp ()
+    "Target the org timestamp at point."
+    (when (org-at-timestamp-p 'inactive)
+      `(org-timestamp
+        ,(cond ((looking-at "[\[\<]")
+                (plist-get (car (cdr (org-element-timestamp-parser))) :raw-value))
+               (t (save-excursion
+                    (re-search-backward "[\[\<]")
+                    (plist-get (car (cdr (org-element-timestamp-parser))) :raw-value))))
+        ,(line-beginning-position) . ,(line-end-position))))
+  (add-to-list 'embark-target-finders #'embark-target-org-timestamp)
+
+  (embark-define-keymap embark-org-timestamp-map
+    "Actions for org mode timestamps."
+    :parent embark-general-map
+    ("T" org-toggle-timestamp-type))
+  (add-to-list 'embark-keymap-alist '(org-timestamp . embark-org-timestamp-map))
+
   (defun embark-target-org-heading ()
     "Target the heading at point."
     (when (org-at-heading-p)
