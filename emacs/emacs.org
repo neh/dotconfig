@@ -1270,13 +1270,10 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (defun embark-target-org-timestamp ()
     "Target the org timestamp at point."
     (when (org-at-timestamp-p 'inactive)
-      `(org-timestamp
-        ,(cond ((looking-at "[\[\<]")
-                (plist-get (car (cdr (org-element-timestamp-parser))) :raw-value))
-               (t (save-excursion
-                    (re-search-backward "[\[\<]")
-                    (plist-get (car (cdr (org-element-timestamp-parser))) :raw-value))))
-        ,(line-beginning-position) . ,(line-end-position))))
+      (let ((tsprops (cl-second (org-element-context))))
+        `(org-timestamp
+          ,(plist-get tsprops :raw-value)
+          ,(plist-get tsprops :begin) . ,(plist-get tsprops :end)))))
   (add-to-list 'embark-target-finders #'embark-target-org-timestamp)
 
   (embark-define-keymap embark-org-timestamp-map
