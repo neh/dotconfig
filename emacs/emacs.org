@@ -522,7 +522,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :demand t
   :custom
   (savehist-additional-variables '(evil-jumps-history
-                                   ;; projectile-project-command-history
+                                   projectile-project-command-history
                                    command-history
                                    ))
   (savehist-autosave-interval 90)
@@ -1354,7 +1354,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (defun neh/consult-buffer-dwim ()
     "Narrow consult-buffer to current project if there is one."
     (when (eq this-command #'consult-buffer)
-      (when (project-current)
+      (when (projectile-project-p)
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
   (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
 
@@ -1406,9 +1406,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                                           "-e ARG OPTS"
                                           ) " "))
   :config
-  (setq consult-project-root-function (lambda ()
-                                        (when-let (project (project-current))
-                                          (car (project-roots project))))))
+  (setq consult-project-root-function #'projectile-project-root))
 
 (use-package embark-consult)
 #+end_src
@@ -1424,7 +1422,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    "M-d" #'consult-dir
    "M-j" #'consult-dir-jump-file)
   :custom
-  (consult-dir-project-list-function #'consult-dir-project-dirs))
+  (consult-dir-project-list-function #'consult-dir-projectile-dirs))
 #+end_src
 
 ** Corfu
@@ -1480,7 +1478,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package nswbuff
-  ;; :after (projectile)
+  :after (projectile)
   :commands (nswbuff-switch-to-previous-buffer
              nswbuff-switch-to-next-buffer)
 
@@ -1492,7 +1490,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
     "C-S-<iso-lefttab>" 'nswbuff-switch-to-next-buffer)
 
   :custom
-  (nswbuff-buffer-list-function #'nswbuff-project-buffer-list)
+  (nswbuff-buffer-list-function #'nswbuff-projectile-buffer-list)
   (nswbuff-status-window-layout 'scroll)
   (nswbuff-display-intermediate-buffers t)
   (nswbuff-recent-buffers-first t)
@@ -1516,14 +1514,12 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
            (size 9 -1 :right)
            " "
            (mode 16 16 :left :elide)
-           " " filename-and-process)
+           " " project-relative-file)
      (mark " "
            (name 16 -1)
-           " " filename)))
-  )
+           " " filename))))
 
 (use-package ibuffer-projectile
-  :disabled t
   :commands (ibuffer-projectile-set-filter-groups)
   :hook ((ibuffer . (lambda ()
                       (ibuffer-projectile-set-filter-groups)
@@ -1663,7 +1659,6 @@ FACE defaults to inheriting from default and highlight."
 
 #+begin_src emacs-lisp
 (use-package projectile
-  :disabled t
   :commands (projectile-project-root
              projectile-mode)
   :custom
@@ -1690,13 +1685,6 @@ FACE defaults to inheriting from default and highlight."
              (unless (string= "-" project-name)
                (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
   (projectile-mode t))
-
-(use-package project
-  :straight nil
-  :general
-  (neh/leader-keys
-    "op" #'project-switch-project
-    "oh" #'project-find-file))
 #+end_src
 
 * Git
@@ -3571,7 +3559,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (pretty-hydra-define hydra-go (:hint nil
                                :quit-key "q")
 
-  ("open" (("p" project-switch-project "project" :exit t)
+  ("open" (("p" projectile-switch-project "project" :exit t)
            ("o" consult-buffer "buffer" :exit t)
            ("b" ibuffer "ibuffer" :exit t)
            ("e" execute-extended-command "command" :exit t)
