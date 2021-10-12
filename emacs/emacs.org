@@ -1263,6 +1263,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
    "." #'hydra-browse/body)
+  (:keymaps 'embark-buffer-map
+   "F" #'switch-to-buffer-other-frame)
 
   :init
   ;; stolen from https://github.com/oantolin/embark/issues/252
