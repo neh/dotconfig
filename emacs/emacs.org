@@ -1508,6 +1508,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :straight nil
   :hook (ibuffer-mode . ibuffer-auto-mode)
   :custom
+  (ibuffer-show-empty-filter-groups nil)
   (ibuffer-formats
    '((mark modified read-only locked " "
            (name 18 18 :left :elide)
