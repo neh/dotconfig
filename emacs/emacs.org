@@ -198,6 +198,11 @@ Collect all the global, non-package-specific settings here.
     (straight-thaw-versions)
     (straight-rebuild-all))
   (add-to-list 'command-switch-alist '("--update-packages" . neh/update-packages))
+
+  (defun neh/recenter-after (&rest args)
+    "A function to use as :after advice for recentering wherever."
+    (recenter 10))
+
   :config
   (fset 'yes-or-no-p 'y-or-n-p))
 #+end_src
@@ -4110,7 +4115,13 @@ Try out =org-noter=.
          (neh/deadgrep-context-adjust 2))
    "-" (lambda ()
          (interactive)
-         (neh/deadgrep-context-adjust -2))))
+         (neh/deadgrep-context-adjust -2)))
+
+  :config
+  (general-add-advice (list #'deadgrep-backward-filename
+                            #'deadgrep-forward-filename)
+                      :after #'neh/recenter-after)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
