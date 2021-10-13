@@ -4195,7 +4195,9 @@ Try out =org-noter=.
   :commands (quick-peek-show
              quick-peek-hide
              quick-peek-overlay-contents
-             quick-peek-overlay-ensure-at))
+             quick-peek-overlay-ensure-at)
+  :custom
+  (quick-peek-add-spacer nil))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4220,15 +4222,15 @@ Try out =org-noter=.
   (flycheck-inline-info ((t (:height 1.0
                              :foreground "#000000" :background "#87ceeb"
                              :inherit 'info
-                             :box (:line-width 3 :color "#87ceeb")))))
+                             :box (:line-width 5 :color "#87ceeb")))))
   (flycheck-inline-warning ((t (:height 1.0
                                 :foreground "#000000" :background "#ffd700"
                                 :inherit 'warning
-                                :box (:line-width 3 :color "#ffd700")))))
+                                :box (:line-width 5 :color "#ffd700")))))
   (flycheck-inline-error ((t (:height 1.0
                               :foreground "#ffffff" :background "#b22222"
                               :inherit 'error
-                              :box (:line-width 3 :color "#b22222"))))))
+                              :box (:line-width 5 :color "#b22222"))))))
 
 (use-package flycheck-posframe
   :disabled
