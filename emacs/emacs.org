@@ -4110,6 +4110,12 @@ Try out =org-noter=.
   (general-define-key
    :keymaps 'deadgrep-mode-map
    :states '(emacs normal)
+   "M-n" #'deadgrep-backward-match
+   "M-t" #'deadgrep-forward-match
+   "M-h" #'deadgrep-backward-filename
+   "M-s" #'deadgrep-forward-filename
+   "D" #'deadgrep-search-directory
+   "S" #'deadgrep-search-term
    "+" (lambda ()
          (interactive)
          (neh/deadgrep-context-adjust 2))
