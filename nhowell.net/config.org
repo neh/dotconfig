@@ -587,6 +587,13 @@ function fish_prompt --description 'Write out the prompt; do not replace this. I
 end
 #+end_src
 
+
+#+begin_src fish :tangle ~/.config/fish/functions/k.fish
+function k --wraps kubectl --description 'alias k=kubectl' ()
+    kubectl $argv
+end
+#+end_src
+
 *** VI mode
 :PROPERTIES:
 :header-args: :tangle ~/.config/fish/functions/fish_vi_key_bindings.fish :mkdirp yes
