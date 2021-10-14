@@ -414,6 +414,8 @@ Here's how this configuration behaves: every terminal window runs the =tmux-main
 
 Issues with this version:
 - Window switching is messy and switching to next/prev window is unpredictable.
+- Have to use full path in gnome keyboard shortcut, no variables
+- Would like a way to have tmux next/prev-window commands switch between only unattached windows
 
 #+begin_src bash :tangle ~/bin/tmux-main-attach :shebang #!/bin/bash
 create_window=''
@@ -1554,10 +1556,10 @@ bind-key b send-prefix
 bind-key a last-window
 bind-key ^a last-window
 
-bind-key -n C-h swap-window -t:-
-bind-key -n C-s swap-window -t:+
-#bind-key -n C-h previous-window
-#bind-key -n C-s next-window
+#bind-key -n C-h swap-window -t:-
+#bind-key -n C-s swap-window -t:+
+bind-key -n C-h previous-window
+bind-key -n C-s next-window
 
 bind-key C-b set-option -g status
 
