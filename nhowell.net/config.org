@@ -458,20 +458,57 @@ fi
 declare -a windows
 declare -a inactive_windows
 
+debug=''
+
+case "$1" in
+    "left") direction='left' ;;
+    ,*) direction='right' ;;
+esac
+
+current_session=$(tmux display-message -p '#S')
 current_window=$(tmux list-windows -F '#{?window_active,#I,}')
 
 windows=($(tmux list-windows -t main -F '#I'))
-active_windows=($(for sess in $(tmux list-sessions -F '#S' | grep '^main-.*'); do tmux list-windows -t $sess -F '#{?window_active,#I,}'; done))
-unique_active_windows=($(printf "%s\n" "${active_windows[@]}" | sort -u))
-unique_inactive_windows=($(echo ${windows[@]} ${unique_active_windows[@]} | tr ' ' '\n' | sort | uniq -u))
+active_windows=($(tmux list-windows -a -f '#{&&:#{!=:#{session_name},main},#{window_active}}' -F '#I' | sort -u))
+inactive_windows=($(echo ${windows[@]} ${active_windows[@]} | tr ' ' '\n' | sort | uniq -u))
 
-echo ${unique_inactive_windows[@]}
+if [[ $debug ]]; then
+    echo ${windows[@]}
+    echo ${active_windows[@]}
+    echo ${inactive_windows[@]}
+fi
 
-# if [[ ${#unique_active_windows[@]} -lt ${#windows[@]} ]]; then
-#     tmux set-option -t main -g status on
-# else
-#     tmux set-option -t main -g status off
-# fi
+if [[ "$direction" = "right" && "$current_window" -ge "${inactive_windows[-1]}" ]]; then
+    tmux select-window -t ${inactive_windows[0]}
+    if [[ $debug ]]; then
+        echo "0: go to ${inactive_windows[0]}"
+    fi
+elif [[ "$direction" = "left" && "$current_window" -le "${inactive_windows[0]}" ]]; then
+    tmux select-window -t ${inactive_windows[-1]}
+    if [[ $debug ]]; then
+        echo "1: go to ${inactive_windows[-1]}"
+    fi
+else
+    for window in "${inactive_windows[@]}"; do
+        if [[ "$window" -lt "$current_window" ]]; then
+            left=$window
+        elif [[ "$window" -gt "$current_window" ]]; then
+            right=$window
+            break
+        fi
+    done
+    if [[ "$direction" = "left" ]]; then
+        tmux select-window -t $left
+        if [[ $debug ]]; then
+            echo "3: go to $left"
+        fi
+    else
+        tmux select-window -t $right
+        if [[ $debug ]]; then
+            echo "4: go to $right"
+        fi
+    fi
+fi
 #+end_src
 
 
@@ -1570,7 +1607,7 @@ set-option -g -t main status-right '#I '
 set-option -g -t main status-justify centre
 set-option -g -t main destroy-unattached off
 # set-window-option -g -t main window-status-current-format " #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{s|$HOME|~|:pane_current_path},#W} "
-set-window-option -g -t main window-status-current-format ""
+set-window-option -g -t main window-status-current-format "^"
 #+end_src
 
 #+begin_src conf
@@ -1582,9 +1619,13 @@ bind-key ^a last-window
 #bind-key -n C-s swap-window -t:+
 # bind-key -n C-h previous-window
 # bind-key -n C-s next-window
-bind-key -n C-M-h previous-window
-bind-key -n C-S-Tab previous-window
-bind-key -n C-Tab next-window
+
+# bind-key -n C-M-h previous-window
+# bind-key -n C-S-Tab previous-window
+# bind-key -n C-Tab next-window
+bind-key -n C-M-h run-shell "~/bin/tmux-switch-to-unattached-window.sh left"
+bind-key -n C-S-Tab run-shell "~/bin/tmux-switch-to-unattached-window.sh left"
+bind-key -n C-Tab run-shell "~/bin/tmux-switch-to-unattached-window.sh"
 
 bind-key C-b set-option -g status
 
