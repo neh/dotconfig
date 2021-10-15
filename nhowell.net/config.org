@@ -453,6 +453,28 @@ else
 fi
 #+end_src
 
+
+#+begin_src bash :tangle ~/bin/tmux-switch-to-unattached-window.sh :shebang #!/bin/bash
+declare -a windows
+declare -a inactive_windows
+
+current_window=$(tmux list-windows -F '#{?window_active,#I,}')
+
+windows=($(tmux list-windows -t main -F '#I'))
+active_windows=($(for sess in $(tmux list-sessions -F '#S' | grep '^main-.*'); do tmux list-windows -t $sess -F '#{?window_active,#I,}'; done))
+unique_active_windows=($(printf "%s\n" "${active_windows[@]}" | sort -u))
+unique_inactive_windows=($(echo ${windows[@]} ${unique_active_windows[@]} | tr ' ' '\n' | sort | uniq -u))
+
+echo ${unique_inactive_windows[@]}
+
+# if [[ ${#unique_active_windows[@]} -lt ${#windows[@]} ]]; then
+#     tmux set-option -t main -g status on
+# else
+#     tmux set-option -t main -g status off
+# fi
+#+end_src
+
+
 Not sure this one is used anywhere (was =~/bin/tmux-kill-main-attached=).
 
 #+begin_src bash :shebang #!/bin/bash
@@ -1527,7 +1549,7 @@ set-option -g set-titles-string "#T"
 
 #+begin_src conf
 set-option -g pane-border-format " #T "
-set-option -g pane-border-status top
+set-option -g pane-border-status off
 set-option -g pane-border-style fg=#bdae93,bg=#222222
 set-option -g pane-active-border-style fg=#fe8019,bg=#222222
 #+end_src
@@ -1558,15 +1580,20 @@ bind-key ^a last-window
 
 #bind-key -n C-h swap-window -t:-
 #bind-key -n C-s swap-window -t:+
-bind-key -n C-h previous-window
-bind-key -n C-s next-window
+# bind-key -n C-h previous-window
+# bind-key -n C-s next-window
+bind-key -n C-M-h previous-window
+bind-key -n C-S-Tab previous-window
+bind-key -n C-Tab next-window
 
 bind-key C-b set-option -g status
 
-bind-key n select-pane -t:.-
-bind-key t select-pane -t:.+
-bind-key -n C-n select-pane -t:.-
-bind-key -n C-t select-pane -t:.+
+# bind-key n select-pane -t:.-
+# bind-key t select-pane -t:.+
+bind-key -n C-h select-pane -L
+bind-key -n C-t select-pane -D
+bind-key -n C-n select-pane -U
+bind-key -n C-s select-pane -R
 
 bind-key c new-window -c "#{pane_current_path}"
 bind-key | split-window -h -c "#{pane_current_path}"
