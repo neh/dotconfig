@@ -401,10 +401,12 @@ live_config_reload: true
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-#shell:
-#  program: /bin/bash
-#  args:
-#    - --login
+shell:
+  program: /usr/bin/fish
+  args:
+    - --login
+    - -c
+    - tmux-main-attach
 
 # Startup directory
 #
