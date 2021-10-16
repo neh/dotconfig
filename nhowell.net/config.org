@@ -1643,8 +1643,6 @@ bind-key -n ^_ detach-client
 bind-key r source-file ~/.tmux.conf
 
 bind-key p paste-buffer
-bind-key P run "tmux set-buffer \"$(wl-paste -pn)\"; tmux paste-buffer"
-bind-key y run "tmux show-buffer | wl-copy"
 
 bind-key ` copy-mode
 bind-key Space copy-mode
@@ -1658,6 +1656,20 @@ bind-key -Tcopy-mode-vi y send -X copy-selection
 
 bind-key -Tchoose t send-keys -X cursor-down
 bind-key -Tchoose n send-keys -X cursor-up
+#+end_src
+
+Use wayland tools on wayland desktop (using emacs pgtk build as a test for wayland desktop usage, which is not perfect, but good enough for me.)
+
+#+begin_src conf :tangle (if (featurep 'pgtk) "~/.tmux.conf" "no")
+bind-key P run "tmux set-buffer \"$(wl-paste -pn)\"; tmux paste-buffer"
+bind-key y run "tmux show-buffer | wl-copy"
+#+end_src
+
+Use good old xclip on xorg desktop sessions.
+
+#+begin_src conf :tangle (if (not (featurep 'ptk)) "~/.tmux.conf" "no")
+bind-key P run "tmux set-buffer \"$(xclip -o -sel clipboard)\"; tmux paste-buffer"
+bind-key y run "tmux save-buffer - | xclip -i -sel clipboard"
 #+end_src
 
 TPM setup. I think I should remove this and just manually install what I want here.
