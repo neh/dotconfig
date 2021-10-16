@@ -4487,6 +4487,18 @@ Try out =org-noter=.
   (interactive)
   (indent-region (point-min) (point-max)))
 
+(defun neh/indent-region-or-block-or-buffer ()
+  "Indent the active region, org src block, or the current buffer."
+  (interactive)
+  (save-excursion
+    (cond ((region-active-p)
+           (indent-region (region-beginning) (region-end)))
+          ((org-in-src-block-p)
+           (let ((context (org-element-context)))
+             (indent-region (plist-get (cl-second context) :begin)
+                            (plist-get (cl-second context) :end))))
+          (t (neh/indent-buffer)))))
+
 (defun neh/indent-region-or-buffer ()
   "Indent the active region or the current buffer."
   (interactive)
@@ -4497,7 +4509,7 @@ Try out =org-noter=.
 
 (general-define-key
  :states 'normal
- "=" #'neh/indent-region-or-buffer)
+ "=" #'neh/indent-region-or-block-or-buffer)
 #+end_src
 
 A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
