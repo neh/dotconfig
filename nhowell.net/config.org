@@ -1667,7 +1667,7 @@ bind-key y run "tmux show-buffer | wl-copy"
 
 Use good old xclip on xorg desktop sessions.
 
-#+begin_src conf :tangle (if (not (featurep 'ptk)) "~/.tmux.conf" "no")
+#+begin_src conf :tangle (if (not (featurep 'pgtk)) "~/.tmux.conf" "no")
 bind-key P run "tmux set-buffer \"$(xclip -o -sel clipboard)\"; tmux paste-buffer"
 bind-key y run "tmux save-buffer - | xclip -i -sel clipboard"
 #+end_src
