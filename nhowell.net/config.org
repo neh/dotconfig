@@ -1606,7 +1606,7 @@ set-option -g -t main status-right '#I '
 set-option -g -t main status-justify centre
 set-option -g -t main destroy-unattached off
 # set-window-option -g -t main window-status-current-format " #F#I#[fg=#bdae93]|#[fg=#3c3836]#{?#{==:#{window_name},fish},#{s|$HOME|~|:pane_current_path},#W} "
-set-window-option -g -t main window-status-current-format "^"
+set-window-option -g -t main window-status-current-format " ▼  "
 #+end_src
 
 #+begin_src conf
