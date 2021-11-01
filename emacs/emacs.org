@@ -2802,7 +2802,8 @@ MimeType=x-scheme-handler/org-protocol;
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
   :general
-  ("S-SPC" #'org-roam-node-find)
+  (:keymaps '(normal)
+   "S-SPC" #'org-roam-node-find)
   (neh/leader-keys
     "N" #'(lambda () (interactive) (neh/customize-this "neh/org-roam-context"))
     "nc" #'neh/org-roam-node-find
