@@ -413,9 +413,10 @@ The idea is to have every terminal I launch join a common tmux session. Just doi
 Here's how this configuration behaves: every terminal window runs the =tmux-main-attach= script below when launching, which creates a new tmux session in the =main= session group. It will be named with an incrementing number, so =main-1= will be the first one created (the root =main= session is created before this point in the tmux configuration file). The tmux status bar /only/ shows unattached windows in the =main= session, so it's not even shown if all tmux windows are currently visible in a terminal.
 
 Issues with this version:
-- Window switching is messy and switching to next/prev window is unpredictable.
 - Have to use full path in gnome keyboard shortcut, no variables
-- Would like a way to have tmux next/prev-window commands switch between only unattached windows
+- should always go to a background window on window close (should just call the switch script?)
+
+Need another script to hook into window close to kill the terminal window if there are no background windows to move to? Currently it will go to any other window, including active ones. Maybe can just go in the status script. `pane-exited` hook? Detaching from the session seems to kill the terminal window, which is perfect
 
 #+begin_src bash :tangle ~/bin/tmux-main-attach :shebang #!/bin/bash
 create_window=''
@@ -430,16 +431,28 @@ fi
 tmux new-session -t main \; \
      ${create_window} \
      attach \; \
-     set-option destroy-unattached on \; \
-     set-hook session-created 'run-shell ~/bin/tmux-bg-status.sh' \; \
-     set-hook session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; \
-     set-hook session-closed 'run-shell ~/bin/tmux-bg-status.sh'
+     set-option -t main remain-on-exit on \; \
+     # set-option -t main destroy-unattached on \; \
+     set-hook -t main session-created 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t main session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t main session-closed 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t main pane-exited 'run-shell ~/bin/tmux-kill-terminal' \; \
+     set-hook -t main pane-died 'run-shell ~/bin/tmux-kill-terminal'
 #+end_src
 
 
 #+begin_src bash :tangle ~/bin/tmux-bg-status.sh :shebang #!/bin/bash
 declare -a windows
 declare -a active_windows
+
+current_session=$(tmux display-message -p '#S')
+tmux set-option -t $current_session remain-on-exit on \; \
+     set-option -t $current_session destroy-unattached on \; \
+     set-hook -t $current_session session-created 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t $current_session session-window-changed 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t $current_session session-closed 'run-shell ~/bin/tmux-bg-status.sh' \; \
+     set-hook -t $current_session pane-exited 'run-shell ~/bin/tmux-kill-terminal' \; \
+     set-hook -t $current_session pane-died 'run-shell ~/bin/tmux-kill-terminal'
 
 windows=($(tmux list-windows -t main -F '#I'))
 unique_active_windows=($(tmux list-windows -a -f '#{&&:#{!=:#{session_name},main},#{window_active}}' -F '#I' | sort -u))
@@ -449,6 +462,32 @@ if [[ ${#unique_active_windows[@]} -lt ${#windows[@]} ]]; then
     tmux set-option -t main -g status on
 else
     tmux set-option -t main -g status off
+fi
+#+end_src
+
+
+#+begin_src bash :tangle ~/bin/tmux-kill-terminal :shebang #!/bin/bash
+declare -a windows
+declare -a active_windows
+declare -a inactive_windows
+
+test_log_file='/tmp/tmux-test-log'
+
+# echo "tmux-kill-terminal running" >> $test_log_file
+
+windows=($(tmux list-windows -t main -F '#I'))
+active_windows=($(tmux list-windows -a -f '#{&&:#{!=:#{session_name},main},#{window_active}}' -F '#I' | sort -u))
+# echo $(echo ${windows[@]} ${active_windows[@]})
+inactive_windows=($(echo ${windows[@]} ${active_windows[@]} | tr ' ' '\n' | sort | uniq -u))
+# echo ${inactive_windows[@]} >> $test_log_file
+# echo "${#inactive_windows[@]}" >> $test_log_file
+if [[ "${#inactive_windows[@]}" -eq 0 ]]; then
+    # echo "tmux-kill-terminal detaching" >> $test_log_file
+    tmux kill-pane
+    tmux detach-client
+else
+    # echo "tmux-kill-terminal killing pane" >> $test_log_file
+    tmux kill-pane
 fi
 #+end_src
 
