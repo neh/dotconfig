@@ -187,7 +187,7 @@
  ("undo-tree" . "e326c6135e62f5fe8536528d3acd5e798f847407")
  ("use-package" . "a7422fb8ab1baee19adb2717b5b47b9c3812a84c")
  ("vertico" . "03178d3c827299f9d6fa01dd122de4a54f5d3d48")
- ("visual-fill-column" . "577fd2d285f4830fd85b17c2ded74a91dba9d522")
+ ("visual-fill-column" . "cf3e2bc632b68d54145c79beede85d3458a337de")
  ("with-editor" . "cfe70f43c551852125bc139df467e28e1b6087df")
  ("writeroom-mode" . "eac1da790f316f357ed76ed67fbb790d6a4d126a")
  ("ws-butler" . "e3a38d93e01014cd47bf5af4924459bd145fd7c4")
