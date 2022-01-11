@@ -1120,70 +1120,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 #+begin_src emacs-lisp
 (use-package vertico
+  :straight (:files (:defaults "extensions/*")
+             :includes (vertico-directory))
+
   :init
-  (defun neh/file-or-not2 ()
-    (interactive)
-    (if (and (eq 'file
-                 (completion-metadata-get
-                  (completion-metadata
-                   (buffer-substring (minibuffer-prompt-end)
-                                     (max (minibuffer-prompt-end) (point)))
-                   minibuffer-completion-table
-                   minibuffer-completion-predicate)
-                  'category))
-             ;; (not (eq (char-before) ?/))
-             )
-        (progn
-          (let ((mbc (minibuffer-complete)))
-            (when mbc
-              ;; (message "mbc %s" mbc)
-              (vertico-insert))
-            ;; (message "minibuffer-complete, mbc %s" mbc)
-            )
-          )
-      (vertico-insert)
-      ;; (message "vertico-insert")
-      ))
-
-  ;; stolen from vertico-directory extension to vertico
-  (defun neh/completing-file-p ()
-    "Return non-nil when completing file names."
-    (eq 'file
-        (completion-metadata-get
-         (completion-metadata
-          (buffer-substring (minibuffer-prompt-end)
-                            (max (minibuffer-prompt-end) (point)))
-          minibuffer-completion-table
-          minibuffer-completion-predicate)
-         'category)))
-
-  (defun neh/file-or-not3 ()
-    (interactive)
-    (cond ((neh/completing-file-p)
-           ;; (minibuffer-complete)
-           ;; (vertico-insert)
-           (when (minibuffer-complete)
-             (vertico-insert))
-           )
-          (t (vertico-insert))))
-
-  (defun neh/file-or-not4 ()
-    (interactive)
-    (when (neh/completing-file-p)
-      (minibuffer-complete))
-    (vertico-insert))
-
-  (defun vertico-directory-tidy ()
-    "Tidy shadowed file name, see `rfn-eshadow-overlay'."
-    (when (and (eq this-command #'self-insert-command)
-               (bound-and-true-p rfn-eshadow-overlay)
-               (overlay-buffer rfn-eshadow-overlay)
-               (= (point) (point-max))
-               (or (>= (- (point) (overlay-end rfn-eshadow-overlay)) 2)
-                   (eq ?/ (char-before (- (point) 2)))))
-      (delete-region (overlay-start rfn-eshadow-overlay) (overlay-end rfn-eshadow-overlay))))
-  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
-
   (vertico-mode t)
 
   :general
@@ -1191,12 +1131,32 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    :states '(insert normal)
    "C-t" #'vertico-next
    "C-n" #'vertico-previous
-   ;; "C-w" #'evil-delete-backward-word
    "C-S-t" #'vertico-next-group
    "C-S-n" #'vertico-previous-group
-   "<tab>" #'neh/file-or-not4
    "<backtab>" #'vertico-insert
    )
+  )
+
+(use-package vertico-directory
+  :after vertico
+  :straight nil
+
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
+
+  :general
+  (:keymaps 'vertico-map
+   "TAB" #'neh/file-or-not
+   "RET" #'vertico-directory-enter
+   "DEL" #'vertico-directory-delete-char
+   "M-DEL" #'vertico-directory-delete-word)
+
+  :init
+  (defun neh/file-or-not ()
+    (interactive)
+    (when (vertico-directory--completing-file-p)
+      (minibuffer-complete))
+    (vertico-insert))
   )
 #+end_src
 
