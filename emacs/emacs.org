@@ -1122,7 +1122,17 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 #+begin_src emacs-lisp
 (use-package vertico
   :straight (:files (:defaults "extensions/*")
-             :includes (vertico-directory))
+             :includes (vertico-buffer
+                        vertico-directory
+                        vertico-flat
+                        vertico-grid
+                        vertico-indexed
+                        vertico-mouse
+                        vertico-multiform
+                        vertico-quick
+                        vertico-repeat
+                        vertico-reverse
+                        vertico-unobtrusive))
 
   :init
   (vertico-mode t)
