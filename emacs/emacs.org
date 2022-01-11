@@ -689,7 +689,8 @@ And let’s try out writeroom mode.
 Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
 
 #+begin_src emacs-lisp
-(defadvice load-theme (before theme-dont-propagate activate)
+(define-advice load-theme (:before (&rest _args) theme-dont-propagate)
+  "Discard all themes before loading new."
   (mapc #'disable-theme custom-enabled-themes))
 #+end_src
 
