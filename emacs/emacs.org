@@ -1190,7 +1190,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
            ;; buffer
            ;; (vertico-buffer-display-action . (display-buffer-same-window))
            ;; )
-          (t reverse)))
+          ))
   )
 
 (use-package vertico-repeat
