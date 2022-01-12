@@ -1136,6 +1136,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
   :init
   (vertico-mode t)
+  (vertico-mouse-mode t)
+
+  :custom
+  (vertico-count 20)
 
   :general
   (:keymaps 'vertico-map
@@ -1169,6 +1173,44 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
       (minibuffer-complete))
     (vertico-insert))
   )
+
+(use-package vertico-multiform
+  :after vertico
+  :straight nil
+  :init
+  (vertico-multiform-mode t)
+  (setq vertico-multiform-categories
+        '((file
+           buffer grid
+           (vertico-buffer-display-action . (display-buffer-same-window)))
+          (t reverse)))
+  (setq vertico-multiform-commands
+        '(
+          ;; (consult-ripgrep
+           ;; buffer
+           ;; (vertico-buffer-display-action . (display-buffer-same-window))
+           ;; )
+          (t reverse)))
+  )
+
+(use-package vertico-repeat
+  :after vertico
+  :straight nil
+  :hook (minibuffer-setup . vertico-repeat-save)
+  ;; needs a keybinding
+  )
+
+(use-package vertico-reverse
+  :after vertico
+  :straight nil
+  :general
+  (:keymaps 'vertico-reverse-map
+   :states '(insert normal)
+   "C-n" #'vertico-next
+   "C-t" #'vertico-previous
+   "C-S-n" #'vertico-next-group
+   "C-S-t" #'vertico-previous-group
+   ))
 #+end_src
 
 ** Orderless
