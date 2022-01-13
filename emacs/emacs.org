@@ -1181,7 +1181,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   (vertico-multiform-mode t)
   (setq vertico-multiform-categories
         '((file
-           buffer grid
+           buffer
            (vertico-buffer-display-action . (display-buffer-same-window)))
           (t reverse)))
   (setq vertico-multiform-commands
