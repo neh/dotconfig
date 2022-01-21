@@ -2809,11 +2809,6 @@ MimeType=x-scheme-handler/org-protocol;
      ))
   ;; (org-roam-buffer-window-parameters '((no-other-window . t)))
 
-  (org-roam-dailies-directory "daily/")
-  (org-roam-dailies-capture-templates
-   '(("d" "default" entry "* %<%k:%M> %?"
-      :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
-
   :general
   (:keymaps '(normal)
    "S-SPC" #'org-roam-node-find)
@@ -2965,6 +2960,16 @@ MimeType=x-scheme-handler/org-protocol;
              ;; (browse-url-firefox (car urls)))
             (t (message "No URLs found."))
             )))
+  )
+
+(use-package org-roam-dailies
+  :after org-roam
+  :straight nil
+  :custom
+  (org-roam-dailies-directory "daily/")
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry "* %<%k:%M> %?"
+      :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   )
 #+end_src
 
