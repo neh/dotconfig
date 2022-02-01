@@ -590,6 +590,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
     "h." #'helpful-at-point
     "hf" #'helpful-callable
     "hk" #'helpful-key
+    "ho" #'helpful-symbol
     "hv" #'helpful-variable)
   (:keymaps 'embark-symbol-map
    "h" #'helpful-symbol)
