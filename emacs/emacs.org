@@ -4400,7 +4400,9 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (defun neh/python-mode-hook ()
   "My python mode settings."
-  (setq-local fill-column 80))
+  (setq-local fill-column 80)
+  (auto-virtualenv-set-virtualenv)
+  (lsp-deferred))
 
 (use-package python-mode
   :straight nil
@@ -4410,11 +4412,28 @@ Try out =org-noter=.
   (org-babel-python-command "python3"))
 
 (use-package elpy
+  :disabled
   :commands (elpy-enable)
   :init
   (with-eval-after-load 'python (elpy-enable))
   :custom
   (elpy-rpc-python-command "python3"))
+
+(use-package pyvenv
+  :commands (pyvenv-activate))
+
+(use-package auto-virtualenv
+  :commands (auto-virtualenv-set-virtualenv))
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :commands (lsp
+             lsp-deferred))
+
+(use-package lsp-pyright
+  )
 #+end_src
 
 #+begin_src emacs-lisp
