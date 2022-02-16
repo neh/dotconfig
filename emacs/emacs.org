@@ -4435,6 +4435,9 @@ Try out =org-noter=.
   :commands (lsp
              lsp-deferred))
 
+(use-package lsp-ui
+  :after lsp-mode)
+
 (use-package lsp-pyright
   )
 #+end_src

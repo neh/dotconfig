@@ -111,6 +111,7 @@
  ("literate-calc-mode.el" . "ba7d22140a165b0fdd900a8d04916115ca6ab8ff")
  ("lsp-mode" . "9b3a9215807af0727b514e8c7cf440bcc0bdad44")
  ("lsp-pyright" . "d428dbcf1802fbe147271c8dc74b073bd9cd7403")
+ ("lsp-ui" . "21ce926eedd41ef305c2d89412506ce59b1a7eac")
  ("lua-mode" . "5a9bee8d5fc978dc64fcb677167417010321ba65")
  ("magit" . "2a6b51b7f1b2d35f1dd3ec7b158362263fab77cc")
  ("magit-popup" . "d8585fa39f88956963d877b921322530257ba9f5")
