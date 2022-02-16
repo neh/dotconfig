@@ -4237,14 +4237,17 @@ Try out =org-noter=.
   (flycheck-inline-info ((t (:height 1.0
                              :foreground "#000000" :background "#87ceeb"
                              :inherit 'info
+                              :extend t
                              :box (:line-width 5 :color "#87ceeb")))))
   (flycheck-inline-warning ((t (:height 1.0
                                 :foreground "#000000" :background "#ffd700"
                                 :inherit 'warning
+                                :extend t
                                 :box (:line-width 5 :color "#ffd700")))))
   (flycheck-inline-error ((t (:height 1.0
                               :foreground "#ffffff" :background "#b22222"
                               :inherit 'error
+                              :extend t
                               :box (:line-width 5 :color "#b22222"))))))
 
 (use-package flycheck-posframe
