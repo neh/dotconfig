@@ -1801,10 +1801,7 @@ Of course, the great magit.
 
 #+begin_src emacs-lisp
 (use-package forge
-  :after markdown-mode
-  :init
-  (use-package closql)
-  (use-package ghub))
+  :after magit)
 #+end_src
 
 Handy package to browse to git repo web interfaces.
