@@ -3852,6 +3852,28 @@ Try out =org-noter=.
 
 * Misc packages
 
+#+begin_src emacs-lisp
+(use-package treemacs
+  :commands (treemacs)
+  :general
+  (:keymaps 'treemacs-mode-map
+   :states 'treemacs
+   "t" #'treemacs-next-line
+   "n" #'treemacs-previous-line))
+
+(use-package treemacs-evil
+  :after (treemacs
+          evil))
+
+(use-package treemacs-projectile
+  :after (treemacs
+          projectile))
+
+(use-package treemacs-magit
+  :after (treemacs
+          magit))
+#+end_src
+
 #+begin_src emacs-lisp :lexical no
 (use-package evil-string-inflection
   :after evil)
