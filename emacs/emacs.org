@@ -594,6 +594,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
     "hv" #'helpful-variable)
   (:keymaps 'embark-symbol-map
    "h" #'helpful-symbol)
+  :init
+  ;; https://github.com/Wilfred/elisp-refs/issues/35
+  (when (>= emacs-major-version 29)
+    (defvar read-symbol-positions-list nil))
   :config
   ;; from https://github.com/Wilfred/helpful/issues/25
   ;; makes apropos lookups use helpful functions
