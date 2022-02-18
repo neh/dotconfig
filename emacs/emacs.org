@@ -194,6 +194,7 @@ Collect all the global, non-package-specific settings here.
 
   (defun neh/update-packages (arg)
     "Set all packages to the versions in the straight.el lockfile."
+    (straight-pull-recipe-repositories)
     (straight-fetch-all)
     (straight-thaw-versions)
     (straight-rebuild-all))
