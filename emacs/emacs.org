@@ -4111,13 +4111,9 @@ Try out =org-noter=.
                                           (if (< after 0) 0 after)))
       (deadgrep-restart)))
 
-  (defun neh/return-default-dir ()
-    default-directory)
-
   (defun neh/deadgrep-here ()
     (interactive)
-    (let ((deadgrep-project-root-function #'neh/return-default-dir))
-      (deadgrep (deadgrep--read-search-term))))
+      (deadgrep (deadgrep--read-search-term) default-directory))
 
   :general
   (neh/leader-keys
