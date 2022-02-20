@@ -87,7 +87,7 @@
  ("go-mode.el" . "3273fcece5d9ab7edd4f15b2d6bce61f4e5a0666")
  ("goto-chg" . "278cd3e6d5107693aa2bb33189ca503f22f227d0")
  ("groovy-emacs-modes" . "02670e1401c070e6ae3f50a8d79b210ca4f3a0ee")
- ("helpful" . "f865f17ad04cd270685187b0a5331ec8eb06e541")
+ ("helpful" . "67cdd1030b3022d3dc4da2297f55349da57cde01")
  ("highlight-parentheses" . "98178e79a92515fcacd278fb486702dedde0bed3")
  ("ht.el" . "c4c1be487d6ecb353d07881526db05d7fc90ea87")
  ("hydra" . "9e9e00cb240ea1903ffd36a54956b3902c379d29")
