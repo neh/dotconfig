@@ -409,6 +409,14 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (xref-search-program 'ripgrep))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package finder
+  :straight nil
+  :general
+  (neh/leader-keys
+    "hC" #'finder-commentary))
+#+end_src
+
 * Keybindings
 
 [[https://github.com/noctuid/general.el][General.el]] handles keybinding management.
