@@ -1713,10 +1713,17 @@ I find that diff-hl does a better job of showing diff information than git-gutte
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
          (dired-mode . diff-hl-dired-mode))
   :commands (diff-hl-mode
+             diff-hl-flydiff-mode
              diff-hl-update)
   :general
   (neh/leader-keys
     "vD" #'diff-hl-mode)
+  (general-define-key
+   :states '(normal visual)
+    "gp" #'diff-hl-previous-hunk
+    "gn" #'diff-hl-next-hunk
+    "gs" #'diff-hl-show-hunk
+    "gS" #'diff-hl-stage-current-hunk)
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
@@ -1731,6 +1738,7 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 
 #+begin_src emacs-lisp
 (use-package git-gutter
+  :disabled
   :hook (prog-mode . git-gutter-mode)
   :general
   (general-define-key
