@@ -409,14 +409,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (xref-search-program 'ripgrep))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package finder
-  :straight nil
-  :general
-  (neh/leader-keys
-    "hC" #'finder-commentary))
-#+end_src
-
 * Keybindings
 
 [[https://github.com/noctuid/general.el][General.el]] handles keybinding management.
@@ -647,6 +639,15 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   :custom
   (search-whitespace-regexp ".*?")
   (isearch-lazy-count t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package finder
+  :straight nil
+  :after general
+  :general
+  (neh/leader-keys
+    "hC" #'finder-commentary))
 #+end_src
 
 * Text mode
