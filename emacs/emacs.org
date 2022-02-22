@@ -620,6 +620,8 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :hook
   (org-mode . auto-revert-mode)
+  :custom
+  (global-auto-revert-non-file-buffers t)
   :config
   (global-auto-revert-mode 1))
 #+end_src
