@@ -4383,7 +4383,8 @@ Try out =org-noter=.
          ("\\.yml|yaml\\'" . yaml-mode))
   :hook ((yaml-mode . (lambda () (typo-mode -1)))
          (jinja2-mode . (lambda () (typo-mode -1)))
-         (yaml-mode . git-gutter-mode))
+         ;; (yaml-mode . git-gutter-mode)
+         )
   :init
   (add-to-list 'magic-mode-alist '("#cloud-config" . yaml-mode)))
 #+end_src
