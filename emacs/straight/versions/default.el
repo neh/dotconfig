@@ -142,6 +142,7 @@
  ("org-sidebar" . "288703b897449f5110c9c76e78eb9a928ffc0dcd")
  ("org-super-agenda" . "fb5e2ef277bc811a3b061106c99e4c47b6b86f80")
  ("org-superstar-mode" . "03be6c0a3081c46a59b108deb8479ee24a6d86c0")
+ ("org-transclusion" . "526bdfadff7d3a5c6bad594f2bb1a4474cc584e6")
  ("ov" . "c5b9aa4e1b00d702eb2caedd61c69a22a5fa1fab")
  ("ox-gfm" . "99f93011b069e02b37c9660b8fcb45dab086a07f")
  ("ox-pandoc" . "b2e43b936249de2a100afb4262698105c39ce289")

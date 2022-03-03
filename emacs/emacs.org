@@ -3013,6 +3013,16 @@ MimeType=x-scheme-handler/org-protocol;
              org-ql-sparse-tree))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-transclusion
+  :commands (org-transclusion-add
+             org-transclusion-mode)
+  :custom
+  (org-transclusion-extensions '(org-transclusion-src-lines
+                                 org-transclusion-font-lock
+                                 org-transclusion-indent-mode)))
+#+end_src
+
 * Shackle
 
 Let’s try to get some window behaviour under control.
