@@ -1189,7 +1189,8 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
         '((file
            buffer
            (vertico-buffer-display-action . (display-buffer-same-window)))
-          (t reverse)))
+          ;; (t reverse)
+          ))
   (setq vertico-multiform-commands
         '(
           ;; (consult-ripgrep
