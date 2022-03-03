@@ -1272,6 +1272,15 @@ There's plenty of useful extra information that can be attached to each candidat
   (marginalia-mode t))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package all-the-icons-completion
+  :after (marginalia
+          all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+#+end_src
+
 ** Embark
 
 One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in vertico, or pretty much anywhere in emacs.
@@ -1458,6 +1467,15 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    "<tab>" #'corfu-next
    "C-t" #'corfu-next
    "C-n" #'corfu-previous))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package kind-icon
+  :after  corfu
+  :custom
+  (kind-icon-default-face 'corfu-default)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 ** Avy
