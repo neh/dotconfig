@@ -2347,6 +2347,7 @@ Just always show images; I always want them.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
 (org-startup-with-inline-images t)
+(org-image-actual-width nil)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
