@@ -3891,6 +3891,18 @@ Try out =org-noter=.
 
 * Misc packages
 
+New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
+
+#+begin_src emacs-lisp
+(use-package pixel-scroll
+  :straight nil
+  :if (>= emacs-major-version 29)
+  :commands (pixel-scroll-precision-mode)
+  :custom
+  (pixel-scroll-precision-interpolate-page t)
+  (pixel-scroll-precision-interpolation-factor 10.0))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package treemacs
   :commands (treemacs)
