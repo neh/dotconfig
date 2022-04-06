@@ -1455,6 +1455,18 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-dir-project-list-function #'consult-dir-projectile-dirs))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package consult-org-roam
+  :after (consult
+          org-roam)
+  :commands (consult-org-roam-mode
+             consult-org-roam-search
+             consult-org-roam-backlinks
+             consult-org-roam-file-find)
+  :custom
+  (consult-org-roam-grep-func #'consult-ripgrep))
+#+end_src
+
 ** Corfu
 
 #+begin_src emacs-lisp :lexical no

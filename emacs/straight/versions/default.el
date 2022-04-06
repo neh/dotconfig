@@ -18,6 +18,7 @@
  ("closql" . "1ba85ce9f7094aeddce25044689278eda6739531")
  ("consult" . "95d1851567637325425c0956adbf711c801dd45c")
  ("consult-dir" . "08f543ae6acbfc1ffe579ba1d00a5414012d5c0b")
+ ("consult-org-roam" . "ca417a73c15368b8844fe22e4949d80f23b6c234")
  ("corfu" . "8a11d575b85917d8033c5c693c73f2eec19a9ba3")
  ("counsel-jq" . "8cadd2e96470402ede4881b4e955872976443689")
  ("csv-mode" . "a4ad2e59d4039bf3b1bdbebdfab21c122ad5b487")
