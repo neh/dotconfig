@@ -770,7 +770,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   :set 'neh/setthemeset
   :initialize 'custom-initialize-set)
 
-(customize-set-variable 'neh/themeset "mix")
+(customize-set-variable 'neh/themeset "modus")
 #+end_src
 
 #+begin_src emacs-lisp
