@@ -28,7 +28,6 @@
  ("dired-du" . "4ce114a0195b852022a81b05f0c8e0cbbc1ed013")
  ("dired-git-info" . "9461476a28a5fec0784260f6e318237c662c3430")
  ("dired-hacks" . "7c0ef09d57a80068a11edc74c3568e5ead5cc15a")
- ("dired-single" . "b254f9b7bfc96a5eab5760a56811f2872d2c590a")
  ("docker-tramp.el" . "930d7b46c180d8a13240a028c1b40af84f2a3219")
  ("docker.el" . "78881bea51c74ef171788fa989908cd51f5b3f8d")
  ("dockerfile-mode" . "11c43de04b128b7638cd98a1e80be2b661c18fbb")
