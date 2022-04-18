@@ -3914,6 +3914,12 @@ Try out =org-noter=.
 
 * Misc packages
 
+#+begin_src emacs-lisp
+(use-package org-web-tools
+  :commands (org-web-tools-insert-web-page-as-entry
+             org-web-tools-read-url-as-org))
+#+end_src
+
 New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
 
 #+begin_src emacs-lisp
