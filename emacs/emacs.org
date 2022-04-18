@@ -2270,7 +2270,7 @@ Make org-mode prettier.
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
 
 #+begin_src emacs-lisp
-;; defface won't update an existing face, it has to be done like this:
+;; defface won't update an existing face (fixed in 28.1?), it has to be done like this:
 ;; (face-spec-set
 ;;  'neh/org-link
 ;;  '((t :inherit org-link
