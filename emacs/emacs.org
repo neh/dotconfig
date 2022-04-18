@@ -3642,6 +3642,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
                                :quit-key "q")
 
   ("open" (("p" projectile-switch-project "project" :exit t)
+           ("t" org-roam-dailies-goto-today "today's note" :exit t)
            ("o" consult-buffer "buffer" :exit t)
            ("b" ibuffer "ibuffer" :exit t)
            ("e" execute-extended-command "command" :exit t)
