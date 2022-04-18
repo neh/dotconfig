@@ -446,6 +446,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "<SPC>" #'save-buffer
 
     "e" #'execute-extended-command
+    "E" #'execute-extended-command-for-buffer
     "Q" #'bury-buffer
 
     "y" #'clipboard-yank
