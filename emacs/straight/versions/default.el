@@ -135,6 +135,7 @@
  ("org-appear" . "ffbd742267ff81ba8433177fac5d7fe22b6d68a9")
  ("org-d20" . "e6149dcfbb6302d10109dd792fd0ffae7bfe2595")
  ("org-download" . "947ca223643d28e189480e607df68449c15786cb")
+ ("org-modern" . "ff1046705b3950b7a49da50bc34c11da86c6226d")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "a5b61bca3f8c91b0859bb0df1a929f9a31a57b99")
  ("org-ql" . "31aeb0a2505acf8044c07824888ddec7f3e529c1")

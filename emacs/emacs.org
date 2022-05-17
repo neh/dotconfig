@@ -379,7 +379,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(line-spacing 0.1)
+(line-spacing 0.2)
 #+end_src
 
 How to make display buffer names.
@@ -2252,6 +2252,7 @@ Make org-mode prettier.
 
 #+begin_src emacs-lisp
 (use-package org-superstar
+  :disabled
   :hook (org-mode . org-superstar-mode)
   :custom
   (org-superstar-leading-bullet " ")
@@ -2381,7 +2382,8 @@ Just always show images; I always want them.
 (org-log-into-drawer t)
 (org-log-repeat nil)
 
-(org-startup-indented t)
+;; (org-startup-indented t)
+(org-hide-leading-stars t)
 (org-ellipsis " …")
 (org-fontify-whole-heading-line t)
 (org-fontify-done-headline t)
@@ -2417,12 +2419,33 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
 
 #+begin_src emacs-lisp
 (use-package org-indent
+  :disabled t
   :straight nil
   :after org
-  :hook (org-mode . org-indent-mode)
+  ;; :hook (org-mode . org-indent-mode)
   :custom
   (org-indent-mode-turns-on-hiding-stars nil)
   (org-indent-indentation-per-level 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-modern
+  :after org
+  :custom
+  (org-modern-star ["▭" "◦" "•" "◦" "•" "◦" "•"])
+  (org-modern-hide-stars nil)
+  :config
+  (modify-all-frames-parameters
+   '((right-divider-width . 15)
+     (internal-border-width . 15)))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background))
+
+  (global-org-modern-mode))
 #+end_src
 
 ** Hooks
