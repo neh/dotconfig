@@ -4654,7 +4654,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (save-excursion
     (cond ((region-active-p)
            (indent-region (region-beginning) (region-end)))
-          ((org-in-src-block-p)
+          ((and (string= major-mode 'org-mode)
+                (org-in-src-block-p))
            (let ((context (org-element-context)))
              (indent-region (plist-get (cl-second context) :begin)
                             (plist-get (cl-second context) :end))))
