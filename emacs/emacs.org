@@ -3035,16 +3035,12 @@ MimeType=x-scheme-handler/org-protocol;
             (t
              (call-interactively #'org-roam-ref-add)))))
 
-  (defun neh/org-roam-browse-ref ()
+  ;; https://org-roam.discourse.group/t/opening-url-in-roam-refs-field/2564/3
+  (defun neh/open-node-roam-ref-url ()
+    "Open the URL in this node's ROAM_REFS property, if one exists"
     (interactive)
-    (let* ((refs (org-property-values "ROAM_REFS"))
-           ;; (urls refs))
-           (urls (seq-filter #'(lambda (x) (string-match-p "^http" x)) refs)))
-      (cond ((> (length urls) 0)
-             (completing-read "Browse ref:" urls))
-             ;; (browse-url-firefox (car urls)))
-            (t (message "No URLs found."))
-            )))
+    (when-let ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
+      (browse-url ref-url)))
   )
 
 (use-package org-roam-dailies
