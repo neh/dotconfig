@@ -1487,7 +1487,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 #+begin_src emacs-lisp :lexical no
 (use-package corfu
   :init
-  (corfu-global-mode)
+  (global-corfu-mode)
   :general
   (:keymaps 'corfu-map
    :states 'insert
