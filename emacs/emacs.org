@@ -123,6 +123,15 @@ Then reset the value of =gc-cons-threshold=, not to its original value; we still
   (setq neh/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect)))
 #+end_src
 
+Another interesting option here, gc when unfocusing a frame, from https://news.ycombinator.com/item?id=31394001
+
+#+begin_src emacs-lisp :tangle no
+(add-function :after
+  after-focus-change-function
+  (lambda () (unless (frame-focus-state)
+               (garbage-collect))))
+#+end_src
+
 * Performance optimization
 
 #+begin_src emacs-lisp
