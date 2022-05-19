@@ -1340,24 +1340,26 @@ LINK-TYPE is a string of the part before the colon in an org link.
 ACTION-TYPE is a symbol and should be a key in embark-keymap-alist.")
 
   (defun embark-target-org-link ()
-    (when-let ((context (org-element-context)))
-      (when (eq (car context) 'link)
-        (let ((type (plist-get (cl-second context) :type))
-              (path (plist-get (cl-second context) :path))
-              (url (plist-get (cl-second context) :raw-link))
-              (begin (plist-get (cl-second context) :begin))
-              (end (plist-get (cl-second context) :end)))
-          (if-let ((matched-type (alist-get type neh/embark-org-link-type-alist
-                                            nil
-                                            nil
-                                            #'string=)))
-              (cons matched-type path)
-            `(url ,url ,begin . ,end))))))
+    (when (string= major-mode 'org-mode)
+      (when-let ((context (org-element-context)))
+        (when (eq (car context) 'link)
+          (let ((type (plist-get (cl-second context) :type))
+                (path (plist-get (cl-second context) :path))
+                (url (plist-get (cl-second context) :raw-link))
+                (begin (plist-get (cl-second context) :begin))
+                (end (plist-get (cl-second context) :end)))
+            (if-let ((matched-type (alist-get type neh/embark-org-link-type-alist
+                                              nil
+                                              nil
+                                              #'string=)))
+                (cons matched-type path)
+              `(url ,url ,begin . ,end)))))))
   (add-to-list 'embark-target-finders #'embark-target-org-link)
 
   (defun embark-target-org-timestamp ()
     "Target the org timestamp at point."
-    (when (org-at-timestamp-p 'inactive)
+    (when (and (string= major-mode 'org-mode)
+               (org-at-timestamp-p 'inactive))
       (let ((tsprops (cl-second (org-element-context))))
         `(org-timestamp
           ,(plist-get tsprops :raw-value)
