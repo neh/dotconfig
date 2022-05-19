@@ -957,6 +957,34 @@ And here’s the function where I collect my tweaks to the theme and set up font
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package fontaine
+  :commands (fontaine-set-preset)
+  :custom
+  (fontaine-font-families '((default "Iosevka Curly Slab" "Iosevka")
+                            (fixed-pitch)
+                            (variable-pitch "ETBembo")))
+  (fontaine-presets `(
+                      (normal-calc
+                       :default-height ,(round (* neh/current-text-size 1.04))
+                       :fixed-pitch-height ,(round (* neh/current-text-size 1.04))
+                       :variable-pitch-height ,(round (* neh/current-text-size 1.23)))
+                      (normal-fixed
+                       :default-height 158
+                       :fixed-pitch-height 158
+                       :variable-pitch-height 184)
+                      (large
+                       :default-height 203
+                       :fixed-pitch-height 203
+                       :variable-pitch-height 240)
+                      (t
+                       :default-family "Iosevka Curly Slab"
+                       :default-weight normal
+                       :variable-pitch-family "ETBembo"
+                       :line-spacing 0.2)
+                      )))
+#+end_src
+
 * Modeline
 
 #+begin_src emacs-lisp
