@@ -1612,6 +1612,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package scrollkeeper
+  :disabled
   :custom
   (scrollkeeper-scroll-steps 1)
   (scrollkeeper-scroll-distance 0.85)
@@ -3098,6 +3099,7 @@ Let’s try to get some window behaviour under control.
 
 #+begin_src emacs-lisp
 (use-package shackle
+  :disabled
   :hook (after-init . shackle-mode)
   :custom
   (shackle-rules
@@ -4216,6 +4218,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package auto-dim-other-buffers
+  :disabled
   :commands (auto-dim-other-buffers-mode)
   :custom
   (auto-dim-other-buffers-dim-on-focus-out nil)
@@ -4303,6 +4306,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package restart-emacs
+  :disabled
+  ;; looks like this will be included in emacs 29
   :commands (restart-emacs))
 #+end_src
 
@@ -4412,6 +4417,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package typo
+  :disabled
   :commands (typo-mode))
 #+end_src
 
