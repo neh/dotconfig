@@ -890,8 +890,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
-         (size (cond ((< dpi 110) 128)
-                     ((< dpi 160) 144))))
+         (size (cond ((< dpi 110) 125)
+                     ((< dpi 160) 150))))
     (setq neh/default-text-size size))
 
   (when (not (boundp 'neh/current-text-size))
@@ -939,6 +939,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (set-face-italic 'font-lock-comment-face t)
 
   (set-face-foreground 'org-hide (face-background 'default))
+
+  ;; for org-modern
+  (set-face-background 'fringe (face-attribute 'default :background))
 
   ;; (set-face-attribute 'mode-line nil :height 1.0)
   ;; (set-face-attribute 'mode-line-inactive nil :height 1.0)
@@ -1990,10 +1993,10 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      `(org-level-5 ((t (,@headline :height 1.0))))
      `(org-level-4 ((t (,@headline :height 1.05))))
      `(org-level-3 ((t (,@headline :height 1.15))))
-     `(org-level-2 ((t (,@headline :height 1.25))))
-     `(org-level-1 ((t (,@headline :height 1.35 :underline t :extend t))))
+     `(org-level-2 ((t (,@headline :height 1.20))))
+     `(org-level-1 ((t (,@headline :height 1.25 :underline t :extend t))))
 
-     `(org-document-title ((t (,@headline :height 1.45 :underline nil))))))
+     `(org-document-title ((t (,@headline :height 1.40 :underline nil))))))
 
   (defmacro my-org-in-calendar (command)
     (let ((name (intern (format "my-org-in-calendar-%s" command))))
@@ -2392,7 +2395,7 @@ Just always show images; I always want them.
 (org-log-repeat nil)
 
 ;; (org-startup-indented t)
-(org-hide-leading-stars t)
+;; (org-hide-leading-stars t)
 (org-ellipsis " …")
 (org-fontify-whole-heading-line t)
 (org-fontify-done-headline t)
@@ -2442,7 +2445,16 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
   :after org
   :custom
   (org-modern-star ["▭" "◦" "•" "◦" "•" "◦" "•"])
-  (org-modern-hide-stars nil)
+  ;; (org-modern-hide-stars nil)
+
+  (org-agenda-block-separator ?─)
+  (org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+  (org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
   :config
   (modify-all-frames-parameters
    '((right-divider-width . 15)
