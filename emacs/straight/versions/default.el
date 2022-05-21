@@ -141,6 +141,7 @@
  ("org-ql" . "46f523d94a376b168176c75bbd0e3e0d00e61170")
  ("org-roam" . "36152590ad1e8ffea86cb909e5ef818cbdb2a22d")
  ("org-sidebar" . "288703b897449f5110c9c76e78eb9a928ffc0dcd")
+ ("org-sticky-header" . "79136b8c54c48547ba8a07a72a9790cb8e23ecbd")
  ("org-super-agenda" . "3108bc3f725818f0e868520d2c243abe9acbef4e")
  ("org-transclusion" . "526bdfadff7d3a5c6bad594f2bb1a4474cc584e6")
  ("org-web-tools" . "b94a07add8558ef7b0666173dbb8a2554f1d41a6")

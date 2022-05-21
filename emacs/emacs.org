@@ -3108,6 +3108,16 @@ MimeType=x-scheme-handler/org-protocol;
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package org-sticky-header
+  :after org
+  ;; :hook (org-mode . org-sticky-header-mode)
+  :commands (org-sticky-header-mode)
+  :custom
+  (org-sticky-header-prefix "🦜 ")
+  (org-sticky-header-full-path 'full))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package org-transclusion
   :commands (org-transclusion-add
              org-transclusion-mode)
