@@ -3133,7 +3133,6 @@ Let’s try to get some window behaviour under control.
 
 #+begin_src emacs-lisp
 (use-package shackle
-  :disabled
   :hook (after-init . shackle-mode)
   :custom
   (shackle-rules

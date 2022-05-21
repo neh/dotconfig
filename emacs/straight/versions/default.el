@@ -174,6 +174,7 @@
  ("sane-term" . "369178c2dd0348250c2ec0019567688376c637f7")
  ("scratch-el" . "4813d82b39a451f2a6d5b730cd7ec49a9bdabcca")
  ("sesman" . "e0f555f963c9f02f8e4a50e06fc353eb4c15ee77")
+ ("shackle" . "f1467db75a8fa5d51c676181fb308ccbf7b05e6f")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
  ("smartparens" . "ec15aaa748b21c9b8453dd95604ccc95fc1138cf")
  ("spinner" . "34905eae12a236753fa88abc831eff1e41e8576e")
