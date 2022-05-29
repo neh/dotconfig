@@ -2066,7 +2066,6 @@ My org config is pretty long, so I've broken it up for easier reading and explan
    'org-babel-load-languages
    '((shell . t)
      (sql . t)
-     (plantuml . t)
      (css . t)
      (python . t)
      (emacs-lisp . t))))
@@ -2137,7 +2136,10 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :straight nil
   :custom
   (org-plantuml-exec-mode 'jar)
-  (org-plantuml-jar-path "~/bin/plantuml.jar"))
+  (org-plantuml-jar-path "~/bin/plantuml.jar")
+  :commands
+  (org-babel-execute:plantuml))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package restclient
