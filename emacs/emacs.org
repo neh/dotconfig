@@ -2138,6 +2138,17 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :custom
   (org-plantuml-exec-mode 'jar)
   (org-plantuml-jar-path "~/bin/plantuml.jar"))
+
+#+begin_src emacs-lisp
+(use-package restclient
+  :commands (restclient-mode
+             restclient-http-send-current
+             restclient-http-send-current-stay-in-window))
+
+(use-package ob-restclient
+  :after (restclient)
+  :commands
+  (org-babel-execute:restclient))
 #+end_src
 
 #+begin_src emacs-lisp
