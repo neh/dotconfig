@@ -3131,7 +3131,7 @@ MimeType=x-scheme-handler/org-protocol;
   :commands (org-sticky-header-mode)
   :custom
   (org-sticky-header-prefix "🦜 ")
-  (org-sticky-header-full-path 'full))
+  (org-sticky-header-full-path 'reversed))
 #+end_src
 
 #+begin_src emacs-lisp
