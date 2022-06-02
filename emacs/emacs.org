@@ -4576,7 +4576,17 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 (use-package cider
   :commands (cider
-             cider-mode))
+             cider-mode
+             cider-jack-in)
+  )
+
+(use-package ob-clojure
+  :straight nil
+  :after org
+  :custom
+  (org-babel-clojure-backend 'cider)
+  :commands
+  (org-babel-execute:clojure))
 #+end_src
 
 #+begin_src emacs-lisp
