@@ -2503,6 +2503,10 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
   (org-agenda-current-time-string
    "⭠ now ─────────────────────────────────────────────────")
 
+  :general
+  (neh/leader-keys
+    "vm" #'global-org-modern-mode)
+
   :config
   (modify-all-frames-parameters
    '((right-divider-width . 15)
