@@ -2065,15 +2065,42 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   (define-advice org-edit-src-exit (:after (&rest _args))
     "End up in normal state after editing a src block."
-    (evil-normal-state))
+    (evil-normal-state)))
+#+end_src
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((shell . t)
-     (sql . t)
-     (css . t)
-     (python . t)
-     (emacs-lisp . t))))
+#+begin_src emacs-lisp
+(use-package ob-shell
+  :straight nil
+  :after org
+  :commands
+  (org-babel-execute:sh
+   org-babel-expand-body:sh
+   org-babel-execute:bash
+   org-babel-expand-body:bash))
+
+(use-package ob-python
+  :straight nil
+  :after org
+  :commands
+  (org-babel-execute:python))
+
+(use-package ob-sql
+  :straight nil
+  :after org
+  :commands
+  (org-babel-execute:sql))
+
+(use-package ob-css
+  :straight nil
+  :after org
+  :commands
+  (org-babel-execute:css))
+
+(use-package ob-emacs-lisp
+  :straight nil
+  :after org
+  :commands
+  (org-babel-execute:emacs-lisp))
 #+end_src
 
 Finally found a package that lets org tables horizontally scroll while leaving the rest of the text alone.
