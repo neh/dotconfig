@@ -2975,7 +2975,9 @@ MimeType=x-scheme-handler/org-protocol;
   (neh/leader-keys
     "N" #'(lambda () (interactive) (neh/customize-this "neh/org-roam-context"))
     "nc" #'neh/org-roam-node-find
-    "no" #'org-roam-node-find)
+    "no" #'org-roam-node-find
+    "w" #'org-roam-node-find
+    )
 
   (neh/leader-keys
     :keymaps 'org-mode-map
