@@ -2989,7 +2989,6 @@ MimeType=x-scheme-handler/org-protocol;
    )
 
   :init
-  (setq org-roam-v2-ack t)
 
   (defun neh/dnd-only (node)
     (neh/by-tag "d&d" node))
