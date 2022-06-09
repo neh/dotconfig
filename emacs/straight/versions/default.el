@@ -5,6 +5,7 @@
  ("all-the-icons-dired" . "147ed0dfd1034a686795a08dc63e2c293128597e")
  ("all-the-icons.el" . "68365b48f142d75ef4bdc3a274256d97752e3b65")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
+ ("apheleia" . "cececba08fa7cb39a24d0f2c97aebf3dfd70a2cf")
  ("auto-virtualenv" . "07064e05feb62277991b8a7c04f7cdad50acaddf")
  ("autothemer" . "1dbc06ad430c51b5ec1a602a808ee46b9bd4bafa")
  ("avy" . "ba5f035be33693d1a136a5cbeedb24327f551a92")

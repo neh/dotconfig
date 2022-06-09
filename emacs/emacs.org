@@ -4038,6 +4038,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package apheleia
+  :config
+  (apheleia-global-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package org-web-tools
   :commands (org-web-tools-insert-web-page-as-entry
              org-web-tools-read-url-as-org))
@@ -4694,8 +4700,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 (use-package terraform-mode
   :mode ("\\.tf|tfvars\\'" . terraform-mode)
-  :hook ((terraform-mode . terraform-format-on-save-mode)
-         (terraform-mode . yas-minor-mode-on))
+  :hook ((terraform-mode . yas-minor-mode-on))
   :custom-face
   (terraform--resource-type-face
    ((t (:inherit 'font-lock-constant-face))))
