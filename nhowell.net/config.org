@@ -212,16 +212,19 @@ fi
 ALACRITTY_LIGHT='modus_operandi'
 ALACRITTY_DARK='gruvbox_dark'
 
-current=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
+current_theme=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
+current_scheme=$(gsettings get org.gnome.desktop.interface color-scheme | tr -d "'")
 
-if [[ "$current" == "$GTK_THEME_DARK" ]]; then
+if [[ "$current_scheme" == "prefer-dark" ]]; then
     # echo "Currently dark, going light"
+    gsettings set org.gnome.desktop.interface color-scheme "default"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_DARK}$/colors: *${ALACRITTY_LIGHT}/" ~/.config/alacritty/schemes.yml
     fi
 else
     # echo "Currently not dark, going dark"
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_LIGHT}$/colors: *${ALACRITTY_DARK}/" ~/.config/alacritty/schemes.yml
