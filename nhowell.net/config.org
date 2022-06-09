@@ -203,14 +203,10 @@ if [[ "$USER" == "nhowell" ]]; then
     # work
     GTK_THEME_LIGHT='Yaru-light'
     GTK_THEME_DARK='Yaru-dark'
-    TILIX_LIGHT='41f4a0a0-1054-4604-8f32-98ee11e14173'
-    TILIX_DARK='2a800483-78d7-4509-b51c-23ff417dc81c'
 else
     # home
     GTK_THEME_LIGHT='Adwaita'
     GTK_THEME_DARK='Adwaita-dark'
-    TILIX_LIGHT='53ebd9b3-5576-4eba-a6be-7912f063b6f3'
-    TILIX_DARK='f2c11740-320b-40f0-8eda-1395b9bea412'
 fi
 
 ALACRITTY_LIGHT='modus_operandi'
@@ -221,19 +217,15 @@ current=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
 if [[ "$current" == "$GTK_THEME_DARK" ]]; then
     # echo "Currently dark, going light"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
-    gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_LIGHT
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_DARK}$/colors: *${ALACRITTY_LIGHT}/" ~/.config/alacritty/schemes.yml
     fi
-    # emacsclient -e '(neh/set-light-mode)'
 else
     # echo "Currently not dark, going dark"
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
-    gsettings set com.gexperts.Tilix.ProfilesList default $TILIX_DARK
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_LIGHT}$/colors: *${ALACRITTY_DARK}/" ~/.config/alacritty/schemes.yml
     fi
-    # emacsclient -e '(neh/set-dark-mode)'
 fi
 #+end_src
 
