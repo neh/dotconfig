@@ -3073,7 +3073,9 @@ MimeType=x-scheme-handler/org-protocol;
            (file-relative-name (org-roam-node-file node) org-roam-directory))))
       (error "")))
 
-  (setq org-roam-node-display-template "${type:10} ${hierarchy:*} ${tags:10}")
+  (setq org-roam-node-display-template
+        (concat "${type:8} ${hierarchy:*} "
+                (propertize "${tags:10}" 'face 'org-tag)))
 
   (defun neh/org-roam-ref-add-dwim ()
     (interactive)
