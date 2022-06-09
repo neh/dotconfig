@@ -4375,6 +4375,15 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (general-add-advice (list #'deadgrep-backward-filename
                             #'deadgrep-forward-filename)
                       :after #'neh/recenter-after)
+
+  (defun neh/deadgrep--include-args (rg-args)
+    (when (string= (projectile-project-name) ".config")
+      ;; (push "--hidden" rg-args) ;; consider hidden folders/files
+      ;; (push "--follow" rg-args) ;; follow symlink
+      (push "--no-ignore-vcs" rg-args) ;; ignore .gitignore
+      ))
+
+  (advice-add 'deadgrep--arguments :filter-return #'neh/deadgrep--include-args)
   )
 #+end_src
 
