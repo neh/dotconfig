@@ -191,6 +191,9 @@ Collect all the global, non-package-specific settings here.
   :custom
   <<emacs-custom>>
 
+  :hook
+  (minibuffer-setup . cursor-intangible-mode)
+
   :init
   (defun neh/customize-this (arg)
     "Call customize-set-variable with a specific setting pre-selected."
@@ -330,6 +333,9 @@ More options. I’m not sure where to put some things in this file yet. Here are
 (ring-bell-function 'ignore)
 (enable-recursive-minibuffers t)
 (global-subword-mode t)
+
+(minibuffer-prompt-properties
+ '(read-only t cursor-intangible t face minibuffer-prompt))
 #+end_src
 
 Don’t warn me when I do these potentially confusing narrowing operations.
