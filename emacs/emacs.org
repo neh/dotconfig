@@ -4064,6 +4064,37 @@ Try out =org-noter=.
        (lambda (x) (listp x))))
 #+end_src
 
+* Email
+
+#+begin_src emacs-lisp
+(use-package notmuch
+  :straight nil
+  :commands (notmuch)
+  :custom
+  (notmuch-show-logo nil)
+  )
+
+;; doesn't exist any more maybe?
+;; (use-package org-notmuch)
+#+end_src
+
+* Chat
+
+#+begin_src emacs-lisp
+(use-package plz
+  :straight (plz
+             :type git
+             :host github
+             :repo "alphapapa/plz.el"))
+
+(use-package ement
+  :straight (ement
+             :type git
+             :host github
+             :repo "alphapapa/ement.el")
+  :commands (ement-connect))
+#+end_src
+
 * Misc packages
 
 #+begin_src emacs-lisp
