@@ -195,6 +195,15 @@ Collect all the global, non-package-specific settings here.
   (minibuffer-setup . cursor-intangible-mode)
 
   :init
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
   (defun neh/customize-this (arg)
     "Call customize-set-variable with a specific setting pre-selected."
     (interactive)
