@@ -2541,7 +2541,9 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
 
 #+begin_src emacs-lisp
 (use-package org-modern
-  :after org
+  :requires org
+  :hook (org-mode . org-modern-mode)
+
   :custom
   (org-modern-star ["" "‣" "•" "◦" "•" "◦" "•"])
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
@@ -2558,11 +2560,7 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
 
   :general
   (neh/leader-keys
-    "vm" #'global-org-modern-mode)
-
-  :config
-
-  (global-org-modern-mode))
+    "vm" #'org-modern-mode))
 #+end_src
 
 ** Hooks
