@@ -2359,27 +2359,6 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
       "-" 'org-agenda-manipulate-query-subtract)))
 #+end_src
 
-Make org-mode prettier.
-
-#+begin_src emacs-lisp
-(use-package org-superstar
-  :disabled
-  :hook (org-mode . org-superstar-mode)
-  :custom
-  (org-superstar-leading-bullet " ")
-  ;; ○🞆□🞐◦▭▯▷‣•▫⬫◊
-  (org-superstar-headline-bullets-list '(" " "▭" "◦" "•" "◦" "•" "◦" "•"))
-  (org-superstar-special-todo-items t)
-  (org-superstar-todo-bullet-alist '(("TODO" . 9744)
-                                     ("NEXT" . 9744)
-                                     ("INTERRUPT" . 9888)
-                                     ("DOING" . 9881)
-                                     ("WAITING" . 8987)
-                                     ("TESTING" . 8987)
-                                     ("DONE" . 9745)
-                                     ("CANCELED" . 9746))))
-#+end_src
-
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
 
 #+begin_src emacs-lisp
@@ -2524,19 +2503,6 @@ Just always show images; I always want them.
   (neh/leader-keys
     :keymaps 'org-mode-map
     "vE" #'org-appear-mode))
-#+end_src
-
-I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which, you know, indents things nicely.
-
-#+begin_src emacs-lisp
-(use-package org-indent
-  :disabled t
-  :straight nil
-  :after org
-  ;; :hook (org-mode . org-indent-mode)
-  :custom
-  (org-indent-mode-turns-on-hiding-stars nil)
-  (org-indent-indentation-per-level 1))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3510,21 +3476,6 @@ Version 2017-09-01"
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package dired-single
-  :disabled t
-  :after dired
-  :commands (dired-single-buffer
-             dired-single-buffer-mouse
-             dired-single-up-directory)
-  :general
-  (general-define-key
-   :states 'normal
-   :keymaps 'dired-mode-map
-   "<return>" 'dired-single-buffer
-   "^" 'dired-single-up-directory))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package dired-git-info
   :commands (dired-git-info-mode))
 #+end_src
@@ -4376,16 +4327,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :straight nil
   :commands (hl-line-mode
              global-hl-line-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package auto-dim-other-buffers
-  :disabled
-  :commands (auto-dim-other-buffers-mode)
-  :custom
-  (auto-dim-other-buffers-dim-on-focus-out nil)
-  :init
-  (auto-dim-other-buffers-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
