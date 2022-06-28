@@ -204,6 +204,17 @@ Collect all the global, non-package-specific settings here.
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
+  ;; for org-modern
+  (modify-all-frames-parameters
+   '((right-divider-width . 15)
+     (internal-border-width . 15)))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background))
+
   (defun neh/customize-this (arg)
     "Call customize-set-variable with a specific setting pre-selected."
     (interactive)
@@ -2550,15 +2561,6 @@ I like Org files to look reasonably pretty, so I enable =org-indent-mode=, which
     "vm" #'global-org-modern-mode)
 
   :config
-  (modify-all-frames-parameters
-   '((right-divider-width . 15)
-     (internal-border-width . 15)))
-  (dolist (face '(window-divider
-                  window-divider-first-pixel
-                  window-divider-last-pixel))
-    (face-spec-reset-face face)
-    (set-face-foreground face (face-attribute 'default :background)))
-  (set-face-background 'fringe (face-attribute 'default :background))
 
   (global-org-modern-mode))
 #+end_src
