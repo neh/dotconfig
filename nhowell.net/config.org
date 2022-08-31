@@ -1743,8 +1743,8 @@ I use [[https://github.com/swaywm/sway][sway]].
 Set some of the basic options like font, terminal, etc.
 
 #+begin_src conf
-font pango:DejaVu Sans 10
-set $terminal termite
+font pango:Noto Sans 13
+set $terminal alacritty
 floating_modifier Mod4
 #+end_src
 
@@ -1881,33 +1881,33 @@ smart_borders on
 Output configuration for work laptop.
 
 #+begin_src conf
-set $work_monitor_left "Ancor Communications Inc ASUS PB278 E1LMTF061086"
-set $work_monitor_right "Ancor Communications Inc ASUS PB278 E3LMTF122568"
+# set $work_monitor_left "Ancor Communications Inc ASUS PB278 E1LMTF061086"
+# set $work_monitor_right "Ancor Communications Inc ASUS PB278 E3LMTF122568"
 
-set $home_monitor "Goldstar Company Ltd LG Ultra HD 0x0000EFE8"
+# set $home_monitor "Goldstar Company Ltd LG Ultra HD 0x0000EFE8"
 
-workspace 1 output $work_monitor_right
-workspace 2 output $work_monitor_right
-workspace 3 output $work_monitor_right
-workspace 4 output $work_monitor_left
-workspace 5 output $work_monitor_left
-workspace 7 output $work_monitor_left
-workspace 8 output $work_monitor_left
+# workspace 1 output $work_monitor_right
+# workspace 2 output $work_monitor_right
+# workspace 3 output $work_monitor_right
+# workspace 4 output $work_monitor_left
+# workspace 5 output $work_monitor_left
+# workspace 7 output $work_monitor_left
+# workspace 8 output $work_monitor_left
 
-output eDP-1 {
+# output eDP-1 {
     # scale 1.0
     # disable
-    pos 4000,1000
-}
+    # pos 4000,1000
+# }
 
-output $work_monitor_left {
-    transform 270
-    pos 0,0
-}
+# output $work_monitor_left {
+    # transform 270
+    # pos 0,0
+# }
 
-output $work_monitor_right {
-    pos 1440,220
-}
+# output $work_monitor_right {
+    # pos 1440,220
+# }
 #+end_src
 
 Set the background colour on all outputs.
@@ -1933,7 +1933,7 @@ input type:keyboard {
     xkb_variant dvorak
 
     repeat_delay 275
-    repeat_rate 40
+    repeat_rate 60
 }
 #+end_src
 
@@ -1996,6 +1996,12 @@ Settings for the logitech mice I have.
 
 #+begin_src conf
 input "1133:16489:Logitech_MX_Master_2S" {
+    pointer_accel 0.8
+    natural_scroll enabled
+    scroll_factor 3.0
+}
+
+input "1133:16514:Logitech_MX_Master_3" {
     pointer_accel 0.8
     natural_scroll enabled
     scroll_factor 3.0
@@ -2285,7 +2291,7 @@ exec $terminal
 #+begin_src conf :tangle ~/.config/waybar/config :noweb yes
 [{
     "layer": "top",
-    "height": 26,
+    "height": 30,
     "modules-left": [
         "sway/workspaces",
         "sway/window"
@@ -2349,8 +2355,8 @@ exec $terminal
 ,* {
     border: none;
     border-radius: 0;
-    font-family: DejaVu Sans, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-family: Noto Sans, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 18px;
     min-height: 0;
     color: #ebdbb2;
 }
