@@ -1912,6 +1912,18 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
   (advice-add 'git-gutter:next-hunk :after #'neh/after-jump))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package transient
+  :custom
+  (transient-display-buffer-action
+   '(display-buffer-below-selected
+     (dedicated . t)
+     (inhibit-same-window . t)
+     (window-parameters
+      (no-other-window . t))))
+  )
+#+end_src
+
 Of course, the great magit.
 
 #+begin_src emacs-lisp
