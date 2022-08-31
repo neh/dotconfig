@@ -144,7 +144,7 @@
  ("org-modern" . "ff1046705b3950b7a49da50bc34c11da86c6226d")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "967f48fb5038bba32915ee9da8dc4e8b10ba3376")
- ("org-ql" . "46f523d94a376b168176c75bbd0e3e0d00e61170")
+ ("org-ql" . "bacdacb1b233e4199ccda810152484edd59fa091")
  ("org-roam" . "36152590ad1e8ffea86cb909e5ef818cbdb2a22d")
  ("org-roam-ui" . "9474a254390b1e42488a1801fed5826b32a8030b")
  ("org-sidebar" . "288703b897449f5110c9c76e78eb9a928ffc0dcd")
