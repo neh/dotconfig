@@ -171,6 +171,7 @@
  ("posframe" . "c91d4d53fa479ceb604071008ce0a901770eff57")
  ("project" . "e721db5ad1f87600c5124234aa23bbfb1982c2e8")
  ("projectile" . "a4f86f981c84a546530d5904253fa266431ef806")
+ ("pulsar" . "57010e2c6cdee14acfd87b4c2bd75c796f04a75e")
  ("pyvenv" . "31ea715f2164dd611e7fc77b26390ef3ca93509b")
  ("queue" . "130c2d656cd5d7376552272fab9e50a7c37d0c4a")
  ("quick-peek" . "03a276086795faad46a142454fc3e28cab058b70")
