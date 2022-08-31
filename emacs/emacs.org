@@ -2857,7 +2857,19 @@ Quick heading movement and task item state changes. I'm getting into the habit o
 
   (defun neh/full-frame-capture ()
     (if (string= (frame-parameter nil 'name) "capture")
-        (delete-other-windows))))
+        (delete-other-windows)))
+
+  :config
+  ;; from https://stackoverflow.com/questions/54192239/open-org-capture-buffer-in-specific-window/54251825#54251825
+  ;; modifies the capture process to not mess up window layouts, even temporarily, and make the capture window more controllable
+  (defun my-org-capture-place-template-dont-delete-windows (oldfun &rest args)
+    (cl-letf (((symbol-function 'delete-other-windows) 'ignore))
+      (apply oldfun args)))
+
+  (with-eval-after-load "org-capture"
+    (advice-add 'org-capture-place-template :around
+                'my-org-capture-place-template-dont-delete-windows))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3173,16 +3185,36 @@ MimeType=x-scheme-handler/org-protocol;
                                  org-transclusion-indent-mode)))
 #+end_src
 
-* Shackle
+* Window management
 
 Let’s try to get some window behaviour under control.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(switch-to-buffer-in-dedicated-window 'pop)
+(switch-to-buffer-obey-display-actions t)
+#+end_src
+
+ #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(display-buffer-alist
+ '(("\\*Org Select\\*"
+    (display-buffer-below-selected))
+   ("Calendar"
+    (display-buffer-below-selected))
+   ("CAPTURE-*"
+    (display-buffer-below-selected))
+   ("\\*helpful *"
+    (display-buffer-reuse-mode-window display-buffer-pop-up-window)
+    (mode . helpful-mode)
+    (inhibit-same-window . t))))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package shackle
   :hook (after-init . shackle-mode)
   :custom
   (shackle-rules
-   '((magit-diff-mode :align 'below :size 0.8))))
+   '((magit-diff-mode :align 'below :size 0.8)
+     (compilation-mode :noselect t))))
 #+end_src
 
 * Shells
@@ -4319,7 +4351,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
      (flycheck-display-errors-function frames-only-mode-flycheck-display-errors)))
 
   :init
-  (frames-only-mode t))
+  (frames-only-mode -1))
 #+end_src
 
 #+begin_src emacs-lisp
