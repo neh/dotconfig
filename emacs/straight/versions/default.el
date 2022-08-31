@@ -167,6 +167,7 @@
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("plz.el" . "9156de9c59c1836139db1b600f4056454b42dfd2")
  ("poet" . "16eb694f0755c04c4db98614d0eca1199fddad70")
+ ("popper" . "d7560f18350faaee8362aee16481268de3cc6457")
  ("popup-el" . "114d646f0f4dd49de19dfedd78630018f71470e5")
  ("posframe" . "c91d4d53fa479ceb604071008ce0a901770eff57")
  ("project" . "e721db5ad1f87600c5124234aa23bbfb1982c2e8")

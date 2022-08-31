@@ -3217,6 +3217,26 @@ Let’s try to get some window behaviour under control.
      (compilation-mode :noselect t))))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package popper
+  :general
+  (neh/leader-keys
+    "pl" #'popper-toggle-latest
+    "pp" #'popper-cycle
+    "pt" #'popper-toggle-type)
+
+  :custom
+  (popper-display-control nil)
+  (popper-reference-buffers
+   '("\\*Messages\\*$"
+     compilation-mode
+     ("\\*Shell Command Output\\*" . hide)
+     ))
+
+  :init
+  (popper-mode t))
+#+end_src
+
 * Shells
 
 #+begin_src emacs-lisp :lexical no
