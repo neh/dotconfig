@@ -206,8 +206,9 @@ Collect all the global, non-package-specific settings here.
 
   ;; for org-modern
   (modify-all-frames-parameters
-   '((right-divider-width . 15)
-     (internal-border-width . 15)))
+   '((right-divider-width . 3)
+     (internal-border-width . 0)
+     ))
   (dolist (face '(window-divider
                   window-divider-first-pixel
                   window-divider-last-pixel))
@@ -3214,6 +3215,16 @@ Let’s try to get some window behaviour under control.
   :straight nil
   :init
   (winner-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package tab-bar
+  :straight nil
+  :custom
+  (tab-bar-format '(tab-bar-format-history
+                    tab-bar-format-tabs-groups
+                    tab-bar-separator
+                    tab-bar-format-add-tab)))
 #+end_src
 
 #+begin_src emacs-lisp
