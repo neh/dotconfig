@@ -1915,6 +1915,7 @@ Of course, the great magit.
   :custom
   (magit-commit-show-diff t)
   (magit-diff-refine-hunk t)
+  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 
   :general
   (general-define-key
@@ -3220,7 +3221,8 @@ Let’s try to get some window behaviour under control.
   :hook (after-init . shackle-mode)
   :custom
   (shackle-rules
-   '((magit-diff-mode :align 'below :size 0.8)
+   '(
+     ;; (magit-diff-mode :align 'below :size 0.8)
      (compilation-mode :noselect t))))
 #+end_src
 
