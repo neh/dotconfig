@@ -1733,6 +1733,22 @@ new-session -s main
 :VISIBILITY: folded
 :END:
 Some configuration for tools that I don't really use any more and want out of the way, but want to keep around.
+** SSH agent for sway
+#+begin_src conf :tangle ~/.config/systemd/user/ssh-agent.service
+[Unit]
+Description=SSH key agent
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+# DISPLAY required for ssh-askpass to work
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+
+[Install]
+WantedBy=default.target
+#+end_src
+
 ** Sway
 :PROPERTIES:
 :header-args: :tangle ~/.config/sway/config :mkdirp yes
