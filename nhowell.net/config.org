@@ -573,14 +573,20 @@ docker pull azuresdk/azure-cli-python:latest
 :header-args: :tangle ~/.config/sway/config :mkdirp yes
 :END:
 
-I use [[https://github.com/swaywm/sway][sway]].
+I'm using [[https://github.com/swaywm/sway][Sway]]. I used it before for quite some time, before leaving to use [[https://github.com/paperwm/PaperWM][PaperWM]], a Gnome tiling extension. Unfortunately, Gnome extensions are not the most stable, and don't seem to be a priority for Gnome as a project, so I'm back to Sway for a while to see how I like it now, and if I can get workflows I like. I'm using parts and configuration from the [[https://nwg-piotr.github.io/nwg-shell/][nwg-shell]] project, which is building a nice GTK environment for sway that is reminiscent of Gnome (hopefully in good ways).
 
 Set some of the basic options like font, terminal, etc.
 
 #+begin_src conf
 font pango:Noto Sans 13
 set $terminal alacritty
-floating_modifier Mod4
+floating_modifier Mod1 normal
+
+set $Mod Mod4
+
+for_window [title="^.*"] border pixel 4, title_format "<b> %title (%app_id) </b>"
+default_border pixel 4
+smart_borders on
 #+end_src
 
 I'm a crazy dvorak user, and I like my movement keys on the home row right hand keys, so I set some variables to use later.
@@ -595,60 +601,68 @@ set $right s
 Terminal launching. I use a custom every-terminal-is-in-one-tmux-session setup. More on that elsewhere in this file. I still have a binding to launch a non-tmux terminal though.
 
 #+begin_src conf
-bindsym Mod4+c exec $terminal -e ~/bin/tmux-main-attach
-bindsym Mod4+Shift+c exec $terminal
+bindsym $Mod+period exec $terminal
+bindsym $Mod+Shift+c exec $terminal
 #+end_src
 
-App launching. Using rofi currently.
+App launching. Using wofi currently. The =mywofi= wrapper script has some settings, and will launch in dark or light mode according to the system setting (using the GTK scheme).
 
 #+begin_src conf
-bindsym Mod4+e exec --no-startup-id \
-    i3-dmenu-desktop --dmenu="rofi -dmenu -i -p 'run: '" --entry-type=name
+bindsym $Mod+e exec --no-startup-id mywofi
+#+end_src
+
+Import variables, register with dbus, set up polkit, etc. Needed for nice desktop integration.
+
+#+begin_src conf
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK SSH_AUTH_SOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 #+end_src
 
 Here we have keybindings that deal with windows.
 
 #+begin_src conf
 # kill focused window
-bindsym Mod4+k kill
+bindsym $Mod+k kill
 
 # change focus
-bindsym Mod4+$left focus left
-bindsym Mod4+$down focus down
-bindsym Mod4+$up focus up
-bindsym Mod4+$right focus right
+bindsym $Mod+$left focus left
+bindsym $Mod+$down focus down
+bindsym $Mod+$up focus up
+bindsym $Mod+$right focus right
 
 # move focused window
-bindsym Mod4+Shift+$left move left
-bindsym Mod4+Shift+$down move down
-bindsym Mod4+Shift+$up move up
-bindsym Mod4+Shift+$right move right
+bindsym $Mod+Shift+$left move left
+bindsym $Mod+Shift+$down move down
+bindsym $Mod+Shift+$up move up
+bindsym $Mod+Shift+$right move right
 
 # toggle tiling / floating
-bindsym Mod4+r floating toggle
+bindsym $Mod+r floating toggle
 #+end_src
 
 And layout-related keybindings.
 
 #+begin_src conf
 # split in horizontal orientation
-bindsym Mod4+z split h
+bindsym $Mod+z split h
 
 # split in vertical orientation
-bindsym Mod4+v split v, layout stacking
+bindsym $Mod+v split v, layout stacking
 
 # enter fullscreen mode for the focused container
-bindsym Mod4+f exec ~/bin/fullscreen
+bindsym $Mod+f exec ~/bin/fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-# bindsym Mod4+j layout stacking
-# bindsym Mod4+Shift+j layout tabbed
-# bindsym Mod4+x layout toggle split
+# bindsym $Mod+j layout stacking
+# bindsym $Mod+Shift+j layout tabbed
+# bindsym $Mod+x layout toggle split
 
-bindsym Mod4+space layout toggle all
+bindsym $Mod+space layout toggle all
 
 # focus the parent container
-bindsym Mod4+u focus parent
+bindsym $Mod+u focus parent
 
 # focus the child container
 bindsym Mod1+d focus child
@@ -671,42 +685,40 @@ Workspace keybindings.
 
 #+begin_src conf
 # switch to workspace
-bindsym Mod4+1 workspace number 1
-bindsym Mod4+2 workspace number 2
-bindsym Mod4+3 workspace number 3
-bindsym Mod4+4 workspace number 4
-bindsym Mod4+5 workspace number 5
-bindsym Mod4+6 workspace number 6
-bindsym Mod4+7 workspace number 7
-bindsym Mod4+8 workspace number 8
-bindsym Mod4+9 workspace number 9
-bindsym Mod4+0 workspace number 10
+bindsym $Mod+1 workspace number 1
+bindsym $Mod+2 workspace number 2
+bindsym $Mod+3 workspace number 3
+bindsym $Mod+4 workspace number 4
+bindsym $Mod+5 workspace number 5
+bindsym $Mod+6 workspace number 6
+bindsym $Mod+7 workspace number 7
+bindsym $Mod+8 workspace number 8
+bindsym $Mod+9 workspace number 9
+bindsym $Mod+0 workspace number 10
 
-bindsym Mod4+Tab workspace back_and_forth
-bindsym Mod4+p workspace back_and_forth
-bindsym Control+Mod1+Tab workspace back_and_forth
-bindsym Mod4+Control+$left workspace prev
-bindsym Mod4+Control+$right workspace next
-bindsym Mod4+Control+Shift+$left move workspace to output left
-bindsym Mod4+Control+Shift+$right move workspace to output right
+bindsym $Mod+Tab workspace back_and_forth
+bindsym $Mod+Mod1+$left workspace prev
+bindsym $Mod+Mod1+$right workspace next
+bindsym $Mod+Mod1+Shift+$left move workspace to output left
+bindsym $Mod+Mod1+Shift+$right move workspace to output right
 
 # move focused container to workspace
-bindsym Mod4+Shift+1 move container to workspace number 1
-bindsym Mod4+Shift+2 move container to workspace number 2
-bindsym Mod4+Shift+3 move container to workspace number 3
-bindsym Mod4+Shift+4 move container to workspace number 4
-bindsym Mod4+Shift+5 move container to workspace number 5
-bindsym Mod4+Shift+6 move container to workspace number 6
-bindsym Mod4+Shift+7 move container to workspace number 7
-bindsym Mod4+Shift+8 move container to workspace number 8
-bindsym Mod4+Shift+9 move container to workspace number 9
-bindsym Mod4+Shift+0 move container to workspace number 10
+bindsym $Mod+Shift+1 move container to workspace number 1
+bindsym $Mod+Shift+2 move container to workspace number 2
+bindsym $Mod+Shift+3 move container to workspace number 3
+bindsym $Mod+Shift+4 move container to workspace number 4
+bindsym $Mod+Shift+5 move container to workspace number 5
+bindsym $Mod+Shift+6 move container to workspace number 6
+bindsym $Mod+Shift+7 move container to workspace number 7
+bindsym $Mod+Shift+8 move container to workspace number 8
+bindsym $Mod+Shift+9 move container to workspace number 9
+bindsym $Mod+Shift+0 move container to workspace number 10
 #+end_src
 
 Window border handling.
 
 #+begin_src conf
-bindsym Mod4+b border toggle
+bindsym $Mod+b border toggle
 # default_border normal
 default_floating_border normal
 default_border pixel 4
@@ -756,8 +768,10 @@ output * {
 A bit of laptop display management. I use laptops docked a lot of the time, and usually don't use the internal display when docked. So I want that display disabled when the laptop has external active displays and then is closed, and I want it enabled when opening the laptop.
 
 #+begin_src conf
-bindswitch --locked lid:off output eDP-1 enable
-bindswitch --locked lid:on exec ~/bin/dock-outputs.py
+# bindswitch --locked lid:on exec ~/bin/dock-outputs.py
+set $laptop eDP-1
+bindswitch lid:on output $laptop disable
+bindswitch lid:off output $laptop enable
 #+end_src
 
 Global input device settings. I dvorak.
@@ -906,7 +920,7 @@ mode "system" {
 
         bindsym Escape mode "default"
 }
-bindsym Mod4+w mode "system"
+bindsym $Mod+w mode "system"
 #+end_src
 
 Window resizing keybindings.
@@ -928,7 +942,7 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-bindsym Mod4+l mode "resize"
+bindsym $Mod+l mode "resize"
 #+end_src
 
 App-related keybindings.
@@ -947,7 +961,7 @@ mode "apps" {
 
         bindsym Escape mode "default"
 }
-bindsym Mod4+g mode "apps"
+bindsym $Mod+g mode "apps"
 #+end_src
 
 #+begin_src conf
