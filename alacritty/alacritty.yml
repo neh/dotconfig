@@ -75,17 +75,17 @@ window:
   #startup_mode: Windowed
 
   # Window title
-  #title: Alacritty
+  title: alacritty
 
   # Allow terminal applications to change Alacritty's window title.
   #dynamic_title: true
 
   # Window class (Linux/BSD only):
-  #class:
+  class:
     # Application instance name
-    #instance: Alacritty
+    instance: alacritty
     # General application class
-    #general: Alacritty
+    general: alacritty
 
   # GTK theme variant (Linux/BSD only)
   #
@@ -150,7 +150,7 @@ font:
     #style: Bold Italic
 
   # Point size
-  size: 15.0
+  size: 15.5
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
