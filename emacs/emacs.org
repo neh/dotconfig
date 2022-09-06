@@ -3552,7 +3552,21 @@ Version 2017-09-01"
 
   (setq dired-deletion-confirmer 'y-or-n-p
         dired-guess-shell-alist-user '(("\\.rar\\'" "unrar x" "unrar e")
-                                       ("" "xdg-open"))))
+                                       ("" "xdg-open")))
+
+  (defvar my-dired-new-file-first-dirs
+    '("Downloads?/$")
+    "Dired directory patterns where newest files are on the top.")
+
+  (defun my-dired-mode-hook-setup ()
+    "Set up Dired."
+    (when (cl-find-if (lambda (regexp)
+                        (let ((case-fold-search t))
+                          (string-match regexp default-directory)))
+                      my-dired-new-file-first-dirs)
+      (setq dired-actual-switches "-lahvt")))
+  (add-hook 'dired-mode-hook 'my-dired-mode-hook-setup)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
