@@ -2453,10 +2453,10 @@ Org export.
 
 ** Options
 
-When using =C-c C-t=, allow todo state selection using single letters instead of cycling through choices.
+When using =C-c C-t=, allow todo state selection using single letters instead of cycling through choices. Also, don't let the options appear in a new window. Temporary org windows like this tend to be difficult to position sanely.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
-(org-use-fast-todo-selection t "Enable fast todo state selection")
+(org-use-fast-todo-selection 'expert)
 #+end_src
 
 Org file locations.
