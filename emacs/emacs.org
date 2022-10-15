@@ -2563,6 +2563,8 @@ Just always show images; I always want them.
   (org-agenda-current-time-string
    "⭠ now ─────────────────────────────────────────────────")
 
+  (org-modern-table nil)
+
   :custom-face
   (org-modern-symbol ((t (:family "Iosevka"))))
 
