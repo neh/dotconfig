@@ -3255,7 +3255,15 @@ Let’s try to get some window behaviour under control.
   (tab-bar-format '(tab-bar-format-history
                     tab-bar-format-tabs-groups
                     tab-bar-separator
-                    tab-bar-format-add-tab)))
+                    tab-bar-format-add-tab))
+  :general
+  (general-define-key
+   :keymaps 'tab-bar-map
+   "<mouse-4>" #'tab-next
+   "<mouse-5>" #'tab-previous
+   "<wheel-up>" #'tab-next
+   "<wheel-down>" #'tab-previous
+   ))
 #+end_src
 
 #+begin_src emacs-lisp
