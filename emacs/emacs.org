@@ -760,6 +760,8 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (modus-themes-slanted-constructs t)
   (modus-themes-region '(bg-only)))
 
+(use-package ef-themes)
+
 (use-package gruvbox-theme
   :custom-face
   (org-block-begin-line ((t (:inherit fixed-pitch

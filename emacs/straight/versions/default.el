@@ -36,6 +36,7 @@
  ("doom-modeline" . "68689f4c5e46e6ac3d4669966d506b8b5609cd72")
  ("dumb-jump" . "0a783d1db610ff1dc4e1b7869589cff16ff92f7a")
  ("edit-indirect" . "f80f63822ffae78de38dbe72cacaeb1aaa96c732")
+ ("ef-themes" . "4121e0b1dd2e4bf5aa42df498bdb221fd7c874d4")
  ("el-get" . "0a9d5684089bb1be9bd2ff670358006add4c6aff")
  ("elf-mode" . "cd280d683cd3341d8bb31af6db7e3b74a133e6ab")
  ("elisp-refs" . "af73739084637c8ebadad337a8fe58ff4f1d2ec1")
