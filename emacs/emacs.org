@@ -1260,7 +1260,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :init
   (defun neh/file-or-not ()
     (interactive)
-    (when (vertico-directory--completing-file-p)
+    (when (eq 'file (vertico--metadata-get 'category))
       (minibuffer-complete))
     (vertico-insert))
   )
