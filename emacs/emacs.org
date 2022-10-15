@@ -1503,7 +1503,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (defun neh/consult-buffer-dwim ()
     "Narrow consult-buffer to current project if there is one."
     (when (eq this-command #'consult-buffer)
-      (when (projectile-project-p)
+      (when (consult--project-root)
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
   (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
 
