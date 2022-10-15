@@ -80,7 +80,6 @@
  ("f.el" . "d50dca48929575642912bb5bbb2585709ba38f82")
  ("flycheck" . "d72c29fec85f1da6584475d88c1265f80e1275ad")
  ("flycheck-inline" . "8e00b4c5951a9515a450a14aefe92e9f6ddcfbde")
- ("frames-only-mode" . "d3f6647c484656ddabdac5d18546599a03823cd4")
  ("fontaine" . "3fa4ec70d961c469c69da5a8434deea484b882f5")
  ("forge" . "2a2c6dde1754679673ccb29eb384dabe1d43624c")
  ("gcode-mode.el" . "1f83845af4102efc5e5856b55bd5ad165b2f0cdd")
