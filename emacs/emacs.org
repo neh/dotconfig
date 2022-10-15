@@ -1130,8 +1130,7 @@ I'm one of those strange people that not only uses a dvorak keyboard layout and 
  "l" 'evil-search-next
  "L" 'evil-search-previous
  "S" 'evil-window-bottom
-
- "N" 'evil-narrow-indirect)
+ )
 #+end_src
 
 I like using =control+direction= for window navigation. Yes, I'm unbinding =C-h=. I put help functions elsewhere.
@@ -1156,6 +1155,7 @@ And here are just general evil-related bindings.
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
 (neh/leader-keys
+  "nR" #'evil-narrow-indirect
   "q" #'kill-current-buffer)
 #+end_src
 
