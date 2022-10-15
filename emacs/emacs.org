@@ -2170,10 +2170,9 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 (use-package phscroll
   :straight (phscroll :type git :host github :repo "misohena/phscroll")
   :after org
+  :hook (org-mode . org-phscroll-mode)
   :init
-  (setq org-startup-truncated nil)
-  :config
-  (load "org-phscroll.el"))
+  (setq org-startup-truncated nil))
 #+end_src
 
 Org-mouse enables nice mouse interaction with bits of org like headings and checkboxes.
