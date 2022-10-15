@@ -57,6 +57,7 @@
  ("emacsmirror-mirror" . "9a56c1d1a7e05f742dde80ed5bff6a83d30c04e4")
  ("emacsql" . "ec4f3d091b8e2c60ee305a63a6f45f0ea5996ed6")
  ("embark" . "2422d4e86f24b2b4204f2441f953e8407d011a2e")
+ ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
  ("ement.el" . "f4e1eb9b392a93920542080a06dcc90b37f61712")
  ("envrc" . "0cd450ae74af2b927db2403bc3c9b81f43c8e29b")
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")

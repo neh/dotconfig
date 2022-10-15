@@ -1100,6 +1100,14 @@ I come from vim, so evil is a necessity.
     :config
     (global-evil-surround-mode t))
 
+  (use-package evil-embrace
+    :after (evil
+            evil-surround
+            org)
+    :hook (org-mode . embrace-org-mode-hook)
+    :config
+    (evil-embrace-enable-evil-surround-integration))
+
   (use-package evil-indent-plus
     :config
     (evil-indent-plus-default-bindings))
