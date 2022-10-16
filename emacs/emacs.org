@@ -486,6 +486,11 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     )
 
   (neh/leader-keys
+    :keymaps 'override
+    :states '(normal)
+    "u" (general-key "C-x"))
+
+  (neh/leader-keys
     :infix "c"
     "c" #'comment-or-uncomment-region-or-line
     "q" #'quick-calc)
