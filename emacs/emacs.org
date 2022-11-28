@@ -4211,6 +4211,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package rfc-mode
+  :commands (rfc-mode-browse
+             rfc-mode-read))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package dwim-shell-command
   :config
   (require 'dwim-shell-commands))

@@ -183,6 +183,7 @@
  ("rainbow-delimiters" . "a32b39bdfe6c61c322c37226d66e1b6d4f107ed0")
  ("rainbow-mode" . "55a8c15782197cd9db8950d2f5ed1b9caca08dae")
  ("restclient.el" . "1fb570643b08ba66eb70831b6f874f52546917f1")
+ ("rfc-mode" . "53ec006aa6aa4fae9c6c64004692aa3d01b38275")
  ("rust-mode" . "b4537b6f5fa65626c1bab944681b35769cab9b5c")
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("sane-term" . "369178c2dd0348250c2ec0019567688376c637f7")
