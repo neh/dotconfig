@@ -115,8 +115,8 @@ Here's where the rest of this file gets tangled and loaded, but only if it's new
 Then reset the value of =gc-cons-threshold=, not to its original value; we still leave it much larger than default so that GCs don't happen so often and impact performance. We also tweak =gc-cons-percentage= and set an idle timer to run =garbage-collect= whenever emacs is idle for 5 seconds.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-gc-setup
-(setq gc-cons-threshold (* 250 1000 1000)
-      gc-cons-percentage 0.5)
+(setq gc-cons-threshold (* 3200 1000)
+      gc-cons-percentage 0.6)
 
 (defvar neh/gc-idle-timer nil)
 (unless (timerp neh/gc-idle-timer)

@@ -35,8 +35,8 @@
               (file-newer-than-file-p orgfile elfile)
               (file-newer-than-file-p orgfile earlyfile))
       (org-babel-tangle-file orgfile)))
-  (setq gc-cons-threshold (* 250 1000 1000)
-        gc-cons-percentage 0.5)
+  (setq gc-cons-threshold (* 3200 1000)
+        gc-cons-percentage 0.6)
   
   (defvar neh/gc-idle-timer nil)
   (unless (timerp neh/gc-idle-timer)
