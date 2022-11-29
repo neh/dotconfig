@@ -141,7 +141,7 @@
  ("olivetti" . "8d287a80c5e3d72ac01b56c8afe60b01f18500b4")
  ("openscad" . "fbeda1aa0340b4a7cce9ed8c6b73e526ad382895")
  ("orderless" . "6b86527b30ef96e047d97e314ac640a410891d1f")
- ("org" . "4b010e8dc35d7409d05b75b5d04cfc6473c98374")
+ ("org" . "b3da427ebb1c401355aa4cba9baeaa92f87ccb2f")
  ("org-appear" . "60ba267c5da336e75e603f8c7ab3f44e6f4e4dac")
  ("org-d20" . "e6149dcfbb6302d10109dd792fd0ffae7bfe2595")
  ("org-download" . "19e166f0a8c539b4144cfbc614309d47a9b2a9b7")
