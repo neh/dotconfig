@@ -4218,6 +4218,20 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package diff-at-point
+  :commands (diff-at-point-open-and-goto-hunk
+             diff-at-point-goto-source-and-close)
+  :general
+  (neh/leader-keys
+    :keymaps 'prog-mode-map
+    "gG" #'diff-at-point-open-and-goto-hunk)
+  (neh/leader-keys
+    :keymaps 'diff-mode-shared-map
+    "gG" #'diff-at-point-goto-source-and-close)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package rfc-mode
   :commands (rfc-mode-browse
              rfc-mode-read))
