@@ -129,6 +129,7 @@
  ("map" . "9f46b9c966505874d68d9036827a4f63b55ab846")
  ("marginalia" . "51085868d06852858bf2aa99baee273bf7703272")
  ("markdown-mode" . "92d037504742cb3e579f1f488bc3fc23c648ff29")
+ ("mastodon.el" . "ef10fe596e394dac16d23df893d91e7d68989ffc")
  ("melpa" . "657ffe9e8dac16a89c52cb9137afbcc45e28fa60")
  ("modus-themes" . "58f74f0350419890a5561ba4ab09f234c710d8e1")
  ("multi-vterm" . "a3df7218c1ecadef779e2c47815201052283f9ea")

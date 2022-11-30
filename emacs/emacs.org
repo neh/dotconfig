@@ -4208,6 +4208,13 @@ Try out =org-noter=.
   :commands (ement-connect))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package mastodon
+  :custom
+  (mastodon-instance-url "https://hachyderm.io")
+  (mastodon-active-user "neh"))
+#+end_src
+
 * Misc packages
 
 #+begin_src emacs-lisp
