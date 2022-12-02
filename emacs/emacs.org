@@ -1410,12 +1410,12 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
   :custom
   (prefix-help-command #'embark-prefix-help-command)
-  (embark-cycle-key (kbd "M-SPC"))
-  (embark-indicator 'embark-mixed-indicator)
+  (embark-help-key (kbd "?"))
+  (embark-cycle-key (kbd "C-,"))
   (embark-mixed-indicator-delay 0.8)
 
   :general
-  ("M-SPC" #'embark-act)
+  ("C-," #'embark-act)
   (:keymaps 'embark-file-map
    "s" #'neh/consult-ripgrep-from-dir
    "F" #'find-file-other-frame
