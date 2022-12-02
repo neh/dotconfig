@@ -135,6 +135,7 @@
  ("modus-themes" . "58f74f0350419890a5561ba4ab09f234c710d8e1")
  ("multi-vterm" . "a3df7218c1ecadef779e2c47815201052283f9ea")
  ("names" . "d8baba5360e5253938a25d3e005455b6d2d86971")
+ ("nix-mode" . "54e5626829168e22126b233e079f04dff3c71b90")
  ("no-littering" . "1d5ac2720662aa60a33ff916dc9402e61c65064b")
  ("nongnu-elpa" . "6d76d3c04b1f36a778b78433571c4646c9c229ac")
  ("nov.el" . "cb5f45cbcfbcf263cdeb2d263eb15edefc8b07cb")

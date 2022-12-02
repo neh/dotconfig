@@ -4218,6 +4218,11 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package nix-mode
+  :mode "\\.nix\\'")
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package diff-at-point
   :commands (diff-at-point-open-and-goto-hunk
              diff-at-point-goto-source-and-close)
