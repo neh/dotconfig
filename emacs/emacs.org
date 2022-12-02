@@ -1887,6 +1887,8 @@ I find that diff-hl does a better job of showing diff information than git-gutte
     "vD" #'diff-hl-mode)
   (general-define-key
    :states '(normal visual)
+    "gG" #'diff-at-point-open-and-goto-hunk
+    ;; find better hunk nav bindings, these conflict/get overridden
     "gp" #'diff-hl-previous-hunk
     "gn" #'diff-hl-next-hunk
     "gs" #'diff-hl-show-hunk
@@ -4227,12 +4229,10 @@ Try out =org-noter=.
   :commands (diff-at-point-open-and-goto-hunk
              diff-at-point-goto-source-and-close)
   :general
-  (neh/leader-keys
-    :keymaps 'prog-mode-map
-    "gG" #'diff-at-point-open-and-goto-hunk)
-  (neh/leader-keys
-    :keymaps 'diff-mode-shared-map
-    "gG" #'diff-at-point-goto-source-and-close)
+  (general-define-key
+   :keymaps 'diff-mode-shared-map
+   :states '(normal visual)
+   "gG" #'diff-at-point-goto-source-and-close)
   )
 #+end_src
 
