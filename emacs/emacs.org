@@ -509,13 +509,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "m" #'describe-mode)
 
   (neh/leader-keys
-    :infix "n"
-    "d" #'narrow-to-defun
-    "p" #'narrow-to-page
-    "r" #'narrow-to-region
-    "w" #'widen)
-
-  (neh/leader-keys
     :infix "x"
     "b" #'eval-buffer
     "e" #'eval-expression
@@ -2628,10 +2621,6 @@ General purpose org keybindings.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
 (neh/leader-keys
-  "nb" #'org-narrow-to-block
-  "ne" #'org-narrow-to-element
-  "ns" #'org-narrow-to-subtree
-
   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
   "o." #'org-open-at-point
 
