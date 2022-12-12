@@ -2168,6 +2168,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      (emacs-lisp . t)
      (css . t)
      (sql . t)
+     (sqlite . t)
      (python . t)))
 
   (define-advice org-edit-src-exit (:after (&rest _args))
