@@ -1987,7 +1987,7 @@ Of course, the great magit.
   (neh/leader-keys
     "gf" #'magit-file-dispatch
     "gg" #'magit-dispatch
-    "gs" #'magit-status))
+    "gs" #'magit-status-here))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
