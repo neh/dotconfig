@@ -430,7 +430,6 @@ How to make display buffer names.
 Some git/vc options.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(auto-revert-check-vc-info t)
 (vc-follow-symlinks t)
 #+end_src
 
@@ -659,8 +658,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :hook
   (org-mode . auto-revert-mode)
+  (dired-mode . auto-revert-mode)
   :custom
   (global-auto-revert-non-file-buffers t)
+  (auto-revert-check-vc-info t)
   :config
   (global-auto-revert-mode 1))
 #+end_src
@@ -3496,8 +3497,7 @@ directory to make multiple eshell windows easier."
 #+begin_src emacs-lisp
 (use-package dired
   :straight nil
-  :hook ((dired-mode . dired-hide-details-mode)
-         (dired-mode . auto-revert-mode))
+  :hook ((dired-mode . dired-hide-details-mode))
   :commands (dired-jump
              dired-mode)
 
