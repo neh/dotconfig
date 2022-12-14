@@ -2517,7 +2517,8 @@ Just always show images; I always want them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
-(org-todo-keywords '((sequence "TODO(t!)"
+(org-todo-keywords '((sequence "SOMEDAY(m!)"
+                               "TODO(t!)"
                                "NEXT(n!)"
                                "DOING(i!)"
                                "INTERRUPT(p!)"
@@ -2835,6 +2836,12 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
             :file ""
             :headline "Incoming"
             :template ("* TODO %?" "%U")
+            :prepend t)
+           ("someday"
+            :keys "m"
+            :file ""
+            :headline "Incoming"
+            :template ("* SOMEDAY %?" "%U")
             :prepend t)
            ("interruption"
             :keys "i"
