@@ -60,6 +60,7 @@
  ("emacs-undo-fu" . "9a7a297e98114deed6c66f7569b7d0ee4aa2ee0a")
  ("emacs-undo-fu-session" . "e141c929f617acfb888a6e5d72ace740b7c4d535")
  ("emacs-web-server" . "22ce66ea43e0eadb9ec1d691a35d9695fc29cee6")
+ ("emacs-websearch" . "594d681fede3f2d168779888d7d3d9bb8252676c")
  ("emacs-websocket" . "82b370602fa0158670b1c6c769f223159affce9b")
  ("emacsmirror-mirror" . "91e39fcdc6122ce5fd02388872e0dd42bf4a09c1")
  ("emacsql" . "6b2e65bdf785364cf7c34c31fea5812e1e58c657")

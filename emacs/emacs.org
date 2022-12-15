@@ -4224,6 +4224,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package websearch
+  :commands (websearch
+             websearch-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package tabspaces
   :hook (after-init . tabspaces-mode)
   :commands (tabspaces-switch-or-create-workspace
