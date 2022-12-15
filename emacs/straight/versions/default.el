@@ -225,6 +225,7 @@
  ("with-editor" . "4da109748da0828b79198701eb641d5b724153ce")
  ("writeroom-mode" . "1fd52848eb58301c864712fd26c4ec37a938cc19")
  ("ws-butler" . "e3a38d93e01014cd47bf5af4924459bd145fd7c4")
+ ("x509-mode" . "1112186d848c7a673e3e634c4fceec3f7100fb8b")
  ("xref" . "7f878254b71c0716b0b231a02efcca290021a3f7")
  ("xterm-color" . "1a4012854c69a5cdaeb5a73d2ad705011892fca3")
  ("yaml-mode" . "3fcb36d6039bef57e2a0f6e24c51f623c0bf5fb7")

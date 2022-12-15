@@ -4224,6 +4224,11 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package x509-mode
+  :commands (x509-dwim))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package websearch
   :commands (websearch
              websearch-mode))
