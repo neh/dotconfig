@@ -661,7 +661,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (dired-mode . auto-revert-mode)
   :custom
   (global-auto-revert-non-file-buffers t)
-  (auto-revert-check-vc-info t)
+  (auto-revert-check-vc-info nil)
   :config
   (global-auto-revert-mode 1))
 #+end_src
