@@ -4895,10 +4895,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :mode (("\\(host\\|group\\)_vars.*" . yaml-mode)
          ("\\.*cloud-\\(init\\|config\\).*" . yaml-mode)
          ("\\.yml|yaml\\'" . yaml-mode))
-  :hook ((yaml-mode . (lambda () (typo-mode -1)))
-         (jinja2-mode . (lambda () (typo-mode -1)))
-         ;; (yaml-mode . git-gutter-mode)
-         )
   :init
   (add-to-list 'magic-mode-alist '("#cloud-config" . yaml-mode)))
 #+end_src
