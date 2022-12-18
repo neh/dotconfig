@@ -1254,6 +1254,8 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    "C-n" #'vertico-previous
    "C-S-t" #'vertico-next-group
    "C-S-n" #'vertico-previous-group
+   "C-S-<down>" #'vertico-next-group
+   "C-S-<up>" #'vertico-previous-group
    "<backtab>" #'vertico-insert
    )
   )
@@ -1975,6 +1977,8 @@ Of course, the great magit.
    "M-s" 'magit-section-goto-successor
    "M-t" 'magit-section-forward-sibling
    "M-n" 'magit-section-backward-sibling
+   "M-<down>" 'magit-section-forward-sibling
+   "M-<up>" 'magit-section-backward-sibling
    "t" 'evil-next-visual-line
    "n" 'evil-previous-visual-line)
 
@@ -3035,6 +3039,8 @@ MimeType=x-scheme-handler/org-protocol;
 
    "M-t" #'magit-section-forward
    "M-n" #'magit-section-backward
+   "M-<down>" #'magit-section-forward
+   "M-<up>" #'magit-section-backward
    )
 
   :init
@@ -3384,13 +3390,17 @@ Let’s try to get some window behaviour under control.
       :keymaps 'eshell-mode-map
       :states '(insert)
       "M-n" #'eshell-previous-input
-      "M-t" #'eshell-next-input)
+      "M-t" #'eshell-next-input
+      "M-<up>" #'eshell-previous-input
+      "M-<down>" #'eshell-next-input)
 
     (general-def
       :keymaps 'eshell-mode-map
       :states '(normal)
       "M-n" #'eshell-previous-prompt
-      "M-t" #'eshell-next-prompt)
+      "M-t" #'eshell-next-prompt
+      "M-<up>" #'eshell-previous-prompt
+      "M-<down>" #'eshell-next-prompt)
 
     (eshell/alias "ll" "ls -l")
     (eshell/alias "la" "ls -al")
@@ -4637,6 +4647,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
    :states '(emacs normal)
    "M-n" #'deadgrep-backward-match
    "M-t" #'deadgrep-forward-match
+   "M-<up>" #'deadgrep-backward-match
+   "M-<down>" #'deadgrep-forward-match
    "M-h" #'deadgrep-backward-filename
    "M-s" #'deadgrep-forward-filename
    "D" #'deadgrep-search-directory
@@ -4839,6 +4851,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
     "M-n" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
     "M-t" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
+    "M-<up>" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
+    "M-<down>" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
     "M-N" '(lambda () (interactive) (symbol-overlay-switch-backward) (recenter))
     "M-T" '(lambda () (interactive) (symbol-overlay-switch-forward) (recenter))
 
