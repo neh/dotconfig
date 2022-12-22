@@ -5027,6 +5027,14 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package eglot
+  :straight nil
+  :config
+  (add-to-list 'eglot-server-programs
+               '(terraform-mode . ("terraform-ls" "serve"))))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode))
 #+end_src
