@@ -230,6 +230,7 @@
  ("xref" . "7f878254b71c0716b0b231a02efcca290021a3f7")
  ("xterm-color" . "1a4012854c69a5cdaeb5a73d2ad705011892fca3")
  ("yaml-mode" . "3fcb36d6039bef57e2a0f6e24c51f623c0bf5fb7")
+ ("yaml-pro" . "391e67b6ebebd804fdc0497cba0ae31ffac0b891")
  ("yaml.el" . "73fde9d8fbbaf2596449285df9eb412ae9dd74d9")
  ("yasnippet" . "5cbdbf0d2015540c59ed8ee0fcf4788effdf75b6")
  ("zoutline" . "32857c6c4b9b0bcbed14d825a10b91a98d5fed0a"))

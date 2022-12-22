@@ -4919,6 +4919,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (setq evil-shift-width yaml-indent-offset))
 
 (use-package yaml-mode
+  :disabled
   :gfhook #'my-evil-indent-setup
   :commands yaml-mode
   :mode (("\\(host\\|group\\)_vars.*" . yaml-mode)
@@ -4926,6 +4927,12 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
          ("\\.yml|yaml\\'" . yaml-mode))
   :init
   (add-to-list 'magic-mode-alist '("#cloud-config" . yaml-mode)))
+
+(use-package yaml-pro
+  :mode (("\\(host\\|group\\)_vars.*" . yaml-pro-ts-mode)
+         ("\\.*cloud-\\(init\\|config\\).*" . yaml-pro-ts-mode)
+         ("\\.yml|yaml\\'" . yaml-pro-ts-mode))
+  :commands (yaml-pro-ts-mode))
 #+end_src
 
 #+begin_src emacs-lisp
