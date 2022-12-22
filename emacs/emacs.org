@@ -4239,7 +4239,11 @@ Try out =org-noter=.
              sqlformat-region
              sqlformat-on-save-mode)
   :custom
-  (sqlformat-command 'pgformatter))
+  (sqlformat-command 'pgformatter)
+  (sqlformat-args '("-f1"
+                    "-u1"
+                    "--spaces=2"))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
