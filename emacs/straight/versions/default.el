@@ -13,7 +13,7 @@
  ("bufler.el" . "bf5fdccbae6bb6dc51e31dc282805e32bb41e412")
  ("burly.el" . "f570fa87ee72a451f535cfb038d81798a01a7e20")
  ("cfrs" . "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121")
- ("cider" . "fc7b92918ef3d46ad5bafa7418f0f1b0dfa69040")
+ ("cider" . "b029f5034d001ae2f1bbfd98e67cd5c89ef41847")
  ("clojure-mode" . "3717e449dded7c8d9f50369bd34a19c077c2c538")
  ("closql" . "820e95170acb79de0fb554577a0dc9b707e23aea")
  ("compat" . "7ca7d300d1d256f674f83932d2918d8e70cd28f6")
