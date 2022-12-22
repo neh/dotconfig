@@ -289,7 +289,7 @@ ipc.main()
 
 Full opacity for all windows.
 
-#+begin_src python :tangle ~/bin/focus-opacity.py :shebang #!/usr/bin/env python
+#+begin_src python :shebang #!/usr/bin/env python
 import i3ipc
 from time import sleep
 
