@@ -4763,10 +4763,12 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package flycheck
+  :disabled
   :hook (prog-mode . flycheck-mode)
   :custom (flycheck-check-syntax-automatically '(save mode-enabled)))
 
 (use-package flycheck-inline
+  :disabled
   :hook (flycheck-mode . turn-on-flycheck-inline)
 
   :init
@@ -4983,7 +4985,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   "My python mode settings."
   (setq-local fill-column 80)
   (auto-virtualenv-set-virtualenv)
-  (lsp-deferred))
+  ;; (lsp-deferred)
+  )
 
 (use-package python-mode
   :straight nil
@@ -5007,6 +5010,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :commands (auto-virtualenv-set-virtualenv))
 
 (use-package lsp-mode
+  :disabled
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
@@ -5014,9 +5018,11 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
              lsp-deferred))
 
 (use-package lsp-ui
+  :disabled
   :after lsp-mode)
 
 (use-package lsp-pyright
+  :disabled
   )
 #+end_src
 
