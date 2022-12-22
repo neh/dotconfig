@@ -262,7 +262,7 @@ opacity = 0.90
 
 def fade_opacity(c, start, end):
     step = round(abs(start - end) / fade_steps, 2)
-    for i in range(fade_steps):
+    for _ in range(fade_steps):
         if start > end:
             c.command('opacity ' + str(end + step))
             end += step
@@ -272,7 +272,7 @@ def fade_opacity(c, start, end):
         sleep(fade_time / fade_steps)
 
 
-def on_window_focus(ipc, e):
+def on_window_focus(ipc, _):
     current = False
     for c in ipc.get_tree():
         if c.focused:
