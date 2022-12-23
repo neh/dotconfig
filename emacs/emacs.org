@@ -3366,7 +3366,7 @@ Let’s try to get some window behaviour under control.
 
 #+begin_src emacs-lisp
 (use-package eshell
-  :ensure nil
+  :straight nil
   :custom
   (eshell-scroll-to-bottom-on-input 'this)
   (eshell-error-if-no-glob t)
