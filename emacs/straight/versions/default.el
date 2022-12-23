@@ -53,6 +53,7 @@
  ("emacs-hcl-mode" . "e4d9eef631e8a386341ae8f94f7c2579586e65b5")
  ("emacs-kv" . "721148475bce38a70e0b678ba8aa923652e8900e")
  ("emacs-libvterm" . "f14d113ee4618f052879509ec378feb9766b871b")
+ ("emacs-reformatter" . "f454b179ab7d39dc8783b9f2a046cab353b272f5")
  ("emacs-request" . "fe567ec0222a1ba658866697a9e7fb6b63d71ff7")
  ("emacs-run-command" . "0ac25bc1acae652ffb58c48a3853cd1dcd7b40a4")
  ("emacs-scad-mode" . "acf2bdb5d1fa5e8fd108e620f18e6291b5eb6a9e")
