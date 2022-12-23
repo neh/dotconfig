@@ -667,10 +667,10 @@ bindsym $Mod+f exec ~/bin/fullscreen
 bindsym $Mod+space layout toggle all
 
 # focus the parent container
-bindsym $Mod+u focus parent
+bindsym $Mod+p focus parent
 
 # focus the child container
-bindsym Mod1+d focus child
+bindsym $Mod+Shift+p focus child
 #+end_src
 
 Some special window handling rules.
@@ -874,20 +874,16 @@ input "1133:4133:Logitech_M510" {
 }
 #+end_src
 
-Audio keybindings.
+Audio keybindings. Using [[https://github.com/francma/wob][wob]] for simple visual feedback when changing volume.
 
 #+begin_src conf
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-
-bindsym XF86AudioRaiseVolume exec --no-startup-id \
-    pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioLowerVolume exec --no-startup-id \
-    pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ 0
-bindsym XF86AudioMute exec --no-startup-id \
-    pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioStop exec playerctl stop
+bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioRaiseVolume exec pamixer -i 5 && pamixer --get-volume > $XDG_RUNTIME_DIR/wob.sock
+bindsym XF86AudioLowerVolume exec pamixer -d 5 && pamixer --get-volume > $XDG_RUNTIME_DIR/wob.sock
 #+end_src
 
 Handle laptop display brightness.
