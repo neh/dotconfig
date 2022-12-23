@@ -4233,6 +4233,23 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package detached
+  :init
+  (detached-init)
+  :bind (;; Replace `async-shell-command' with `detached-shell-command'
+         ([remap async-shell-command] . detached-shell-command)
+         ;; Replace `compile' with `detached-compile'
+         ([remap compile] . detached-compile)
+         ([remap recompile] . detached-compile-recompile)
+         ;; Replace built in completion of sessions with `consult'
+         ([remap detached-open-session] . detached-consult-session))
+  :custom ((detached-show-output-on-attach t)
+           ;; don't use fish here
+           (detached-shell-program "/usr/bin/env bash")
+           (detached-terminal-data-command system-type)))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package sqlformat
   :commands (sqlformat
              sqlformat-buffer

@@ -27,6 +27,7 @@
  ("csv-mode" . "e13282b678af6b9ba74e5232610c6a4406c87877")
  ("dash.el" . "3df46d7d9fe74f52a661565888e4d31fd760f0df")
  ("deadgrep" . "f687ca31f8d3bd8ebf05165b080b50ba724ce9bf")
+ ("detached.el" . "6b64d4d8064cee781e071e825857b442ea96c3d9")
  ("diff-hl" . "68fb280b300c5d8460cc7b9183e29fb3ec604136")
  ("dired-du" . "4ce114a0195b852022a81b05f0c8e0cbbc1ed013")
  ("dired-git-info" . "9461476a28a5fec0784260f6e318237c662c3430")
