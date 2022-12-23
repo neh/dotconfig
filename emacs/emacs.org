@@ -4233,6 +4233,20 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package goto-addr
+  :straight nil
+  :hook ((compilation-mode . goto-address-mode)
+         (prog-mode . goto-address-prog-mode)
+         (eshell-mode . goto-address-mode)
+         (shell-mode . goto-address-mode))
+  :bind (:map goto-address-highlight-keymap
+         ("<RET>" . goto-address-at-point)
+         ("M-<RET>" . newline))
+  :commands (goto-address-prog-mode
+             goto-address-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package detached
   :init
   (detached-init)
