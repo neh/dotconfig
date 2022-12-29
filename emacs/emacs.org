@@ -1131,6 +1131,9 @@ I'm one of those strange people that not only uses a dvorak keyboard layout and 
  "n" 'evil-previous-visual-line
  "s" 'evil-forward-char
 
+ "<down>" 'evil-next-visual-line
+ "<up>" 'evil-previous-visual-line
+
  "l" 'evil-search-next
  "L" 'evil-search-previous
  "S" 'evil-window-bottom
