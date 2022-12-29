@@ -491,10 +491,11 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "y" #'clipboard-yank
     )
 
-  (neh/leader-keys
-    :keymaps 'override
-    :states '(normal)
-    "u" (general-key "C-x"))
+  ;; ???
+  ;; (neh/leader-keys
+  ;;   :keymaps 'override
+  ;;   :states '(normal)
+  ;;   "u" (general-key "C-x"))
 
   (neh/leader-keys
     :infix "c"
@@ -527,10 +528,12 @@ Key chords are interesting, and I’m not sure I’ll keep them yet. Doing vim-s
 
 #+begin_src emacs-lisp
 (use-package key-chord
+  :disabled
   :demand t)
 
 (use-package use-package-chords
   :after key-chord
+  :disabled
   :demand t
   :config
   (key-chord-mode 1))
@@ -656,9 +659,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package autorevert
   :demand t
   :straight nil
-  :hook
-  (org-mode . auto-revert-mode)
-  (dired-mode . auto-revert-mode)
+  ;; :hook
+  ;; not sure why I have these hooks when I set it globally below...
+  ;; (org-mode . auto-revert-mode)
+  ;; (dired-mode . auto-revert-mode)
   :custom
   (global-auto-revert-non-file-buffers t)
   (auto-revert-check-vc-info nil)
@@ -1213,7 +1217,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   :config
   (evil-collection-init)
-  (add-hook 'evil-collection-setup-hook  #'neh/evil-key-translations))
+  (add-hook 'evil-collection-setup-hook #'neh/evil-key-translations))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3497,6 +3501,7 @@ directory to make multiple eshell windows easier."
 
 #+begin_src emacs-lisp
 (use-package sane-term
+  :disabled
   :commands (sane-term
              sane-term-create)
   :custom
