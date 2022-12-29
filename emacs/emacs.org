@@ -3344,7 +3344,9 @@ Let’s try to get some window behaviour under control.
    "<mouse-5>" #'tab-previous
    "<wheel-up>" #'tab-next
    "<wheel-down>" #'tab-previous
-   ))
+   )
+  :config
+  (tab-bar-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
