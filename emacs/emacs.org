@@ -1130,7 +1130,10 @@ I'm one of those strange people that not only uses a dvorak keyboard layout and 
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
 (general-define-key
- :states '(normal visual)
+ :states '(normal visual motion)
+ "j" nil
+ "k" nil
+
  "h" 'evil-backward-char
  "t" 'evil-next-visual-line
  "n" 'evil-previous-visual-line
