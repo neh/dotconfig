@@ -3730,7 +3730,8 @@ Version 2017-09-01"
 #+begin_src emacs-lisp
 (use-package dired-subtree
   :after dired
-  :commands (dired-subtree-toggle)
+  :commands (dired-subtree-toggle
+             dired-subtree-cycle)
   :hook (after-load-theme . neh/set-dired-subtree-background)
 
   :general
