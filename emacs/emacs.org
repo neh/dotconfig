@@ -4376,12 +4376,12 @@ Try out =org-noter=.
 
   :custom
   (tabspaces-use-filtered-buffers-as-default t)
-  (tabspaces-default-tab "Default")
+  (tabspaces-default-tab "default")
   (tabspaces-remove-to-default t)
   (tabspaces-include-buffers '("*scratch*"))
   ;; sessions
-  (tabspaces-session t)
-  (tabspaces-session-auto-restore t)
+  (tabspaces-session nil)
+  (tabspaces-session-auto-restore nil)
 
   ;; :config
   ;; (with-eval-after-load 'consult
