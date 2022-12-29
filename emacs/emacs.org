@@ -4937,6 +4937,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+begin_src emacs-lisp
 (use-package pulsar
   :hook (focus-in . pulsar-pulse-line)
+  :custom
+  (pulsar-delay 0.08)
   :init
   (pulsar-global-mode t)
 
