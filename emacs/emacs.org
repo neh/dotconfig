@@ -1145,24 +1145,6 @@ I'm one of those strange people that not only uses a dvorak keyboard layout and 
  )
 #+end_src
 
-I like using =control+direction= for window navigation. Yes, I'm unbinding =C-h=. I put help functions elsewhere.
-
-#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
-(general-define-key
- :keymaps 'override
- :states '(normal emacs)
- "C-h" nil
- "C-t" nil
- "C-n" nil
- "C-s" nil
- "C-e" nil
-
- "C-h" 'evil-window-left
- "C-t" 'evil-window-down
- "C-n" 'evil-window-up
- "C-s" 'evil-window-right)
-#+end_src
-
 And here are just general evil-related bindings.
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
