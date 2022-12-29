@@ -1594,7 +1594,28 @@ Consult takes over for a lot of what counsel did, as well as swiper.
              consult-org-roam-backlinks
              consult-org-roam-file-find)
   :custom
+  (consult-org-roam-buffer-after-buffers t)
   (consult-org-roam-grep-func #'consult-ripgrep))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package consult-jump-project
+  :straight (consult-jump-project
+             :type git
+             :host github
+             :repo "jdtsmith/consult-jump-project")
+  :commands (consult-jump-project))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package consult-notes
+  :commands (consult-notes
+             consult-notes-search-in-all-notes
+             consult-notes-org-roam-find-node
+             consult-notes-org-roam-find-node-relation)
+  :config
+  (setq consult-notes-sources `(("Notes"  ?n  ,org-roam-directory)))
+  (consult-notes-org-roam-mode))
 #+end_src
 
 ** Corfu
