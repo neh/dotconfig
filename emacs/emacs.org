@@ -531,21 +531,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   )
 #+end_src
 
-Key chords are interesting, and I’m not sure I’ll keep them yet. Doing vim-style bindings with leaders is maybe just as good?
-
-#+begin_src emacs-lisp
-(use-package key-chord
-  :disabled
-  :demand t)
-
-(use-package use-package-chords
-  :after key-chord
-  :disabled
-  :demand t
-  :config
-  (key-chord-mode 1))
-#+end_src
-
 * Base2
 
 Not sure where to put everything yet, so this section is a grab bag of stuff that needs package management (straight) to be in place.
@@ -2218,17 +2203,6 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
   :straight nil)
 #+end_src
 
-
-#+begin_src emacs-lisp
-(use-package org-journal
-  :disabled t
-  :after org
-  :custom
-  (org-journal-dir "~/org/journal/")
-  (org-journal-enable-encryption nil)
-  (org-journal-date-format "%A, %x")
-  (org-journal-file-type 'daily))
-#+end_src
 
 #+begin_src emacs-lisp
 (use-package org-id
@@ -4799,13 +4773,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package restart-emacs
-  :disabled
-  ;; looks like this will be included in emacs 29
-  :commands (restart-emacs))
-#+end_src
-
-#+begin_src emacs-lisp
 ;; The auto-decrypt-encrypt hook complains about the password-file var not being set, even though
 ;; the manual encrypt/decrypt functions work just fine.
 (use-package ansible
@@ -4909,12 +4876,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
                       :height 1.1 :foreground "#111111" :background "#ffd700" :inherit 'warning)
   (set-face-attribute 'flycheck-posframe-error-face nil
                       :height 1.1 :foreground "#eeeeee" :background "#b22222" :inherit 'error))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package typo
-  :disabled
-  :commands (typo-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5099,14 +5060,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :custom
   (python-shell-interpreter "python3")
   (org-babel-python-command "python3"))
-
-(use-package elpy
-  :disabled
-  :commands (elpy-enable)
-  :init
-  (with-eval-after-load 'python (elpy-enable))
-  :custom
-  (elpy-rpc-python-command "python3"))
 
 (use-package pyvenv
   :commands (pyvenv-activate))
