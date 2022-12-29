@@ -3400,6 +3400,11 @@ Let’s try to get some window behaviour under control.
 
 #+begin_src emacs-lisp
 (use-package ace-window
+  :custom
+  (aw-scope 'visible)
+  (aw-keys '(?a ?o ?e ?u))
+  (aw-reverse-frame-list t)
+
   :general
   (general-define-key
    :states '(normal visual)
