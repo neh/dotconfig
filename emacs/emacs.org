@@ -3382,6 +3382,23 @@ Let’s try to get some window behaviour under control.
 * Window Navigation
 
 #+begin_src emacs-lisp
+(use-package repeat
+  :straight nil
+  :custom
+  (repeat-exit-key "ESC")
+  :config
+  (repeat-mode t))
+
+(use-package repeat-help
+  :disabled
+  ;; this package seems to break repeat-mode in weird ways
+  :hook (repeat-mode . repeat-help-mode)
+  :custom
+  ;; (repeat-help-key "")
+  (repeat-help-auto nil))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package ace-window
   :general
   (general-define-key
