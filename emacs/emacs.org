@@ -470,6 +470,13 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     :non-normal-prefix "C-SPC"
     :prefix "SPC")
 
+  (general-create-definer
+    neh/leader-nav
+    :keymaps 'override
+    :states '(emacs normal visual motion insert)
+    :non-normal-prefix "C-j"
+    :prefix "j")
+
   (general-override-mode)
 
   (general-define-key
