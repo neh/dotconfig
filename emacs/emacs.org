@@ -3298,6 +3298,31 @@ Let’s try to get some window behaviour under control.
 #+end_src
 
 #+begin_src emacs-lisp
+;; from https://christiantietze.de/posts/2022/12/updated-org-mode-agenda-display-buffer-alist/
+(defun ct/display-buffer-org-agenda-managed-p (buffer-name action)
+  "Determine whether BUFFER-NAME is an org-agenda managed buffer."
+  (with-current-buffer buffer-name
+    (and (derived-mode-p 'org-mode)
+         (member (buffer-file-name) (org-agenda-files)))))
+
+(add-to-list 'display-buffer-alist
+             `("\\*Org Agenda\\*"
+               (display-buffer-in-tab  ;; Make sure to use the "agenda" tab
+                display-buffer-reuse-mode-window)
+               (ignore-current-tab . t)
+               (tab-name . "agenda")
+               (window-width . fill-column)
+               (dedicated . side)  ;; Make the agenda a dedicated side-window
+               (side . left)       ;; to the left so it always stays open.
+               (inhibit-same-window . nil)))
+(add-to-list 'display-buffer-alist
+             '(ct/display-buffer-org-agenda-managed-p
+               (display-buffer-reuse-mode-window  ;; Prioritize reuse of current window
+                display-buffer-in-tab)            ;; over switching to the Org tab.
+               (tab-name . "agenda")))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package winner
   :straight nil
   :init
