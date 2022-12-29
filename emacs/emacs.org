@@ -4478,7 +4478,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :commands (pixel-scroll-precision-mode)
   :custom
   (pixel-scroll-precision-interpolate-page t)
-  (pixel-scroll-precision-interpolation-factor 10.0)
+  (pixel-scroll-precision-interpolation-factor 2.0)
+  (pixel-scroll-precision-large-scroll-height nil)
   :init
   (pixel-scroll-precision-mode t))
 #+end_src
