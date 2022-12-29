@@ -3285,6 +3285,8 @@ Let’s try to get some window behaviour under control.
 (display-buffer-alist
  '(("\\*Org Select\\*"
     (display-buffer-below-selected))
+   ("\\*Agenda Commands\\*"
+    (display-buffer-below-selected))
    ("Calendar"
     (display-buffer-below-selected))
    ("CAPTURE-*"
