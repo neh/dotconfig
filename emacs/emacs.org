@@ -383,7 +383,7 @@ I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager,
 
 #+begin_src emacs-lisp
 (when (string= (getenv "SSH_AUTH_SOCK") nil)
-  (setenv "SSH_AUTH_SOCK" (format "/tmp/ssh-agent-%s-tmux" (getenv "USER"))))
+  (setenv "SSH_AUTH_SOCK" (format "%s/ssh-agent.socket" (getenv "XDG_RUNTIME_DIR"))))
 #+end_src
 
 Some text fill options.
