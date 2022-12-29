@@ -1149,7 +1149,6 @@ And here are just general evil-related bindings.
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
 (neh/leader-keys
-  "nR" #'evil-narrow-indirect
   "q" #'kill-current-buffer)
 #+end_src
 
@@ -1181,6 +1180,10 @@ This defines an evil operator I can use to highlight some text and quickly get a
   (interactive "<R>")
   (evil-normal-state)
   (narrow-to-region-indirect beg end))
+
+(general-define-key
+ :keymaps 'narrow-map
+ "i" #'evil-narrow-indirect)
 #+end_src
 
 Evil-collection helps with setting up evil-friendly bindings all over the place, including the handy key translation feature I use here for my crazy =hjkl =-> =htns= ways.
