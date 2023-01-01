@@ -1630,9 +1630,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :general
   (neh/leader-nav
    "j" #'avy-goto-char-2
-   "c" #'avy-goto-char-timer
-   "h" #'avy-org-goto-heading-timer
-   "l" #'avy-goto-line)
+   ;; "c" #'avy-goto-char-timer
+   ;; "h" #'avy-org-goto-heading-timer
+   ;; "l" #'avy-goto-line
+   )
 
   (neh/leader-keys
     "cl" 'avy-copy-line)
@@ -3366,6 +3367,76 @@ Let’s try to get some window behaviour under control.
 #+end_src
 
 #+begin_src emacs-lisp
+;; (symbol-plist 'windmove-right)
+;; (put 'windmove-left 'repeat-exit-timeout 1)
+;; (put 'windmove-right 'repeat-exit-timeout 1)
+;; (get 'windmove-right 'repeat-exit-timeout)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package windmove
+  :straight nil
+  :general
+  (neh/leader-nav
+    "h" #'windmove-left
+    "s" #'windmove-right
+    "n" #'windmove-up
+    "t" #'windmove-down
+
+    "H" #'windmove-swap-states-left
+    "S" #'windmove-swap-states-right
+    "N" #'windmove-swap-states-up
+    "T" #'windmove-swap-states-down
+
+    "g" #'tab-previous
+    "l" #'tab-next
+
+    "G" #'tab-bar-move-tab-backward
+    "L" #'tab-move
+    )
+  :config
+  ;; add split-in-direction commands to this?
+  (defvar windmove-repeat-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "h") 'windmove-left)
+      (define-key map (kbd "s") 'windmove-right)
+      (define-key map (kbd "n") 'windmove-up)
+      (define-key map (kbd "t") 'windmove-down)
+
+      (define-key map (kbd "H") 'windmove-swap-states-left)
+      (define-key map (kbd "S") 'windmove-swap-states-right)
+      (define-key map (kbd "N") 'windmove-swap-states-up)
+      (define-key map (kbd "T") 'windmove-swap-states-down)
+      map))
+
+  (map-keymap
+   (lambda (_key cmd)
+     (when (symbolp cmd)
+       (put cmd 'repeat-map 'windmove-repeat-map)
+       (put cmd 'repeat-exit-timeout 0.6)
+       ))
+   windmove-repeat-map)
+
+  (defvar tabmove-repeat-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "g") 'tab-previous)
+      (define-key map (kbd "l") 'tab-next)
+
+      (define-key map (kbd "G") 'tab-bar-move-tab-backward)
+      (define-key map (kbd "L") 'tab-move)
+      map))
+
+  (map-keymap
+   (lambda (_key cmd)
+     (when (symbolp cmd)
+       (put cmd 'repeat-map 'tabmove-repeat-map)
+       (put cmd 'repeat-exit-timeout 0.6)
+       ))
+   tabmove-repeat-map)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package ace-window
   :custom
   (aw-scope 'visible)
@@ -3377,8 +3448,15 @@ Let’s try to get some window behaviour under control.
    :states '(normal visual)
    :prefix "j"
    "w" #'ace-select-window
-   "s" #'ace-swap-window
-   ))
+   ;; only pops to window switched to with ace
+   "W" #'aw-flip-window
+   ;; "s" #'ace-swap-window
+   )
+  :config
+  ;; (setq display-buffer-base-action
+  ;;       '((display-buffer-reuse-window
+  ;;          ace-display-buffer)))
+  (ace-window-display-mode t))
 #+end_src
 
 * Shells
