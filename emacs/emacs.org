@@ -2606,6 +2606,19 @@ Just always show images; I always want them.
 
   (org-modern-table nil)
 
+  (org-modern-todo-faces '(("SOMEDAY"
+                            :weight semibold
+                            :background "OliveDrab4"
+                            :foreground "white")
+                           ;; ("TODO"
+                           ;;  :background "red"
+                           ;;  :foreground "white")
+                           ("NEXT"
+                            :weight semibold
+                            :background "gold"
+                            :foreground "black")
+                           ))
+
   :custom-face
   (org-modern-symbol ((t (:family "Iosevka"))))
 
