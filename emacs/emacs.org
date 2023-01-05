@@ -1652,8 +1652,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package avy
   :general
   (neh/leader-nav
-   "j" #'avy-goto-char-2
-   ;; "c" #'avy-goto-char-timer
+   ;; "j" #'avy-goto-char-2
+   "j" #'avy-goto-char-timer
    ;; "h" #'avy-org-goto-heading-timer
    ;; "l" #'avy-goto-line
    )
