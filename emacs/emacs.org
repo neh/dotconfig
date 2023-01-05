@@ -3431,7 +3431,7 @@ Let’s try to get some window behaviour under control.
    (lambda (_key cmd)
      (when (symbolp cmd)
        (put cmd 'repeat-map 'tabmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 0.6)
+       (put cmd 'repeat-exit-timeout 0.9)
        ))
    tabmove-repeat-map)
   )
