@@ -1608,14 +1608,31 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp :lexical no
 (use-package corfu
-  :init
-  (global-corfu-mode)
+  :load-path "straight/build/corfu/extensions"
+
   :general
   (:keymaps 'corfu-map
    :states 'insert
    "<tab>" #'corfu-next
    "C-t" #'corfu-next
-   "C-n" #'corfu-previous))
+   "C-n" #'corfu-previous
+
+   "M-m" #'corfu-move-to-minibuffer)
+
+  :init
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (let ((completion-extra-properties corfu--extra)
+          completion-cycle-threshold completion-cycling)
+      (apply #'consult-completion-in-region completion-in-region--data)))
+
+  :config
+  (require 'corfu-popupinfo)
+  (setq corfu-popupinfo-delay nil)
+  (set-face-attribute 'corfu-popupinfo nil :height 1.0)
+  (corfu-popupinfo-mode t)
+
+  (global-corfu-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
