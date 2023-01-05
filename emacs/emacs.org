@@ -1865,7 +1865,6 @@ FACE defaults to inheriting from default and highlight."
   (project-switch-commands '((project-find-file "Find file" ?f)
                              (project-find-regexp "Find regexp" ?r)
                              (project-find-dir "Find directory" ?d)
-                             (project-dired "Root" ?D)
                              (magit-project-status "Git" ?g)
                              (project-vc-dir "VC-Dir")
                              (project-eshell "Eshell"))
