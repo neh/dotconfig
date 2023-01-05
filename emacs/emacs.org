@@ -1403,6 +1403,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (embark-help-key (kbd "?"))
   (embark-cycle-key (kbd "C-,"))
   (embark-mixed-indicator-delay 0.8)
+  (y-or-n-p-use-read-key t)
 
   :general
   ("C-," #'embark-act)
@@ -1483,6 +1484,10 @@ ACTION-TYPE is a symbol and should be a key in embark-keymap-alist.")
     ("l" org-store-link))
   (add-to-list 'embark-keymap-alist '(heading . embark-heading-map))
   )
+
+(use-package avy-embark-collect
+  :commands (avy-embark-collect-act
+             avy-embark-collect-choose))
 #+end_src
 
 ** Consult
