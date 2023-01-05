@@ -751,6 +751,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 (use-package modus-themes
   :custom
   (modus-themes-org-blocks 'gray-background)
+  (modus-themes-mixed-fonts t)
   (modus-themes-bold-constructs t)
   (modus-themes-italic-constructs t)
   (modus-themes-region '(bg-only)))
