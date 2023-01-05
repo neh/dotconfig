@@ -5172,7 +5172,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 (defun neh/python-mode-hook ()
   "My python mode settings."
   (setq-local fill-column 80)
-  (auto-virtualenv-set-virtualenv)
+  ;; (auto-virtualenv-set-virtualenv)
   ;; (lsp-deferred)
   )
 
