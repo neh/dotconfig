@@ -1911,6 +1911,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
          (dired-mode . diff-hl-dired-mode))
   :commands (diff-hl-mode
+             global-diff-hl-mode
              diff-hl-flydiff-mode
              diff-hl-update)
   :general
@@ -1931,7 +1932,9 @@ I find that diff-hl does a better job of showing diff information than git-gutte
   :custom-face
   (diff-hl-change ((t (:foreground "#222222" :background "#ffd700"))))
   (diff-hl-insert ((t (:foreground "dark green" :background "ForestGreen"))))
-  (diff-hl-delete ((t (:foreground "dark red" :background "red4")))))
+  (diff-hl-delete ((t (:foreground "dark red" :background "red4"))))
+  :config
+  (global-diff-hl-mode t))
 #+end_src
 
 Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing things with diffs. So I have it active for navigation and staging actions. It’s disabled in org mode because I had issues with it before. Now that my config is in org though, it would be handy to have back. Another TODO.
