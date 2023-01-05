@@ -3440,19 +3440,20 @@ Let’s try to get some window behaviour under control.
 #+begin_src emacs-lisp
 (use-package ace-window
   :custom
-  (aw-scope 'visible)
-  (aw-keys '(?a ?o ?e ?u))
+  (aw-scope 'frame)
+  (aw-keys '(?a ?o ?e ?u ?h ?t ?s))
   (aw-reverse-frame-list t)
 
   :general
   (general-define-key
    :states '(normal visual)
    :prefix "j"
-   "w" #'ace-select-window
+   "w" #'ace-window
    ;; only pops to window switched to with ace
    "W" #'aw-flip-window
    ;; "s" #'ace-swap-window
    )
+
   :config
   ;; (setq display-buffer-base-action
   ;;       '((display-buffer-reuse-window
