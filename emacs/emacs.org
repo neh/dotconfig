@@ -793,6 +793,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
         ((equal value "modus")
          (setq neh/dark-theme 'modus-vivendi
                neh/light-theme 'modus-operandi))
+        ((equal value "modus-tinted")
+         (setq neh/dark-theme 'modus-vivendi-tinted
+               neh/light-theme 'modus-operandi-tinted))
         ((equal value "mix")
          (setq neh/dark-theme 'gruvbox-dark-hard
                neh/light-theme 'modus-operandi)))
@@ -805,6 +808,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   :type '(choice
           (const "gruvbox")
           (const "modus")
+          (const "modus-tinted")
           (const "mix"))
   :set 'neh/setthemeset
   :initialize 'custom-initialize-set)
