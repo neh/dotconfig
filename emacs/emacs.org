@@ -1564,7 +1564,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :config
   (setq consult-project-root-function #'projectile-project-root))
 
-(use-package embark-consult)
+(use-package embark-consult
+  :general
+  (:keymaps 'embark-become-match-map
+   "k" #'consult-keep-lines))
 #+end_src
 
 #+begin_src emacs-lisp
