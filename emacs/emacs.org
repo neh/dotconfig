@@ -947,17 +947,23 @@ And here’s the function where I collect my tweaks to the theme and set up font
                           ;; ((x-list-fonts "Iosevka Etoile")
                           ;;  `(:family "Iosevka Etoile"
                           ;;    :height ,(round (* neh/current-text-size 1.04))))
-                          ((x-list-fonts "Roboto")
-                           `(:family "Roboto"
-                             :height 162))
-                          ((x-list-fonts "ETBembo")
-                           `(:family "ETBembo" :height ,(round (* neh/current-text-size 1.23))))
-                          ((x-list-fonts "Inter")
-                           `(:family "Inter"
-                             :height ,(round (* neh/current-text-size 1.01))))
+                          ;; ((x-list-fonts "DejaVu Serif")
+                          ;;  `(:family "DejaVu Serif"
+                          ;;    :height ,(round (* neh/current-text-size 1.03))))
+                          ;; ((x-list-fonts "Roboto")
+                          ;;  `(:family "Roboto"
+                          ;;    :height 162))
+                          ;; ((x-list-fonts "ETBembo")
+                          ;;  `(:family "ETBembo" :height ,(round (* neh/current-text-size 1.23))))
+                          ;; ((x-list-fonts "Inter")
+                          ;;  `(:family "Inter"
+                          ;;    :height ,(round (* neh/current-text-size 1.01))))
+                          ;; ((x-list-fonts "Noto Serif")
+                          ;;  `(:family "Noto Serif"
+                          ;;    :height ,(round (* neh/current-text-size 1.04))))
                           ((x-list-fonts "Noto Sans")
                            `(:family "Noto Sans"
-                             :height ,(round (* neh/current-text-size 1.01))))
+                             :height ,(round (* neh/current-text-size 1.04))))
                           ((x-list-fonts "DejaVu Sans")
                            `(:family "DejaVu Sans"
                              :height ,(round (* neh/current-text-size 0.945))))
