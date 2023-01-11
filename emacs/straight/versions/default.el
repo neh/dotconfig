@@ -19,6 +19,7 @@
  ("compat" . "7ca7d300d1d256f674f83932d2918d8e70cd28f6")
  ("consult" . "201e46a911820d85db7670f93b2df50c4941303e")
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")
+ ("consult-git-log-grep" . "c58f16c77dfcad68f7768a3046c6260b4eaf3606")
  ("consult-jump-project" . "f129b374baa7dc0297beb140c9c76a84293ef2f2")
  ("consult-notes" . "6e8299d4e53b758985a228c296aeb851440fa01a")
  ("consult-org-roam" . "96c95e5a14378cc6fc9c22981f5bfd9e18c419f6")
