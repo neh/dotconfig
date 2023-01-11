@@ -3516,6 +3516,32 @@ Let’s try to get some window behaviour under control.
    "W" #'aw-flip-window
    ;; "s" #'ace-swap-window
    )
+  (neh/leader-keys
+    "ow" #'neh/other-window-prefix)
+
+  :init
+  (defun neh/other-window-prefix ()
+    "Display the buffer of the next command in a new window.
+The next buffer is the buffer displayed by the next command invoked
+immediately after this command (ignoring reading from the minibuffer).
+Creates a new window before displaying the buffer.
+When `switch-to-buffer-obey-display-actions' is non-nil,
+`switch-to-buffer' commands are also supported."
+    (interactive)
+    (display-buffer-override-next-command
+     (lambda (buffer alist)
+       (let ((aw-dispatch-always t)
+             ;; (alist (append '((inhibit-same-window . t)) alist))
+             window type)
+         (setq window (ace-display-buffer buffer alist))
+         (setq type 'window)
+         ;; (if (setq window (display-buffer-pop-up-window buffer alist))
+         ;;     (setq type 'window)
+         ;;   (setq window (display-buffer-use-some-window buffer alist)
+         ;;         type 'reuse))
+         (cons window type)))
+     (lambda (_ _) (balance-windows (window-parent))) "[other-window]")
+    (message "Display next command buffer in a new window..."))
 
   :config
   (setq display-buffer-base-action
