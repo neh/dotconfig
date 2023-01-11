@@ -112,6 +112,7 @@
  ("journalctl-mode" . "baaffdfd22a19afb1997ec3715d063186b80d3f5")
  ("json-mode" . "eedb4560034f795a7950fa07016bd4347c368873")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
+ ("just-mode.el" . "45a221063093f3461816913acdaba898e62b42ce")
  ("kind-icon" . "42d2a41874d5a61731556e53ba57547b4ef95342")
  ("kubedoc.el" . "f8503f121e38f0ff9343544a5c912e50b25efd4c")
  ("kubel" . "aa6040d2aff9b8b99eb6692a0227357258622ddb")
