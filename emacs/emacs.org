@@ -164,14 +164,6 @@ Set up ESUP for startup profiling.
   :commands (esup))
 #+end_src
 
-* Package management
-
-This =use-package= extension allows declaring dependencies on system commands.
-
-#+begin_src emacs-lisp
-(use-package use-package-ensure-system-package)
-#+end_src
-
 * Base settings
 
 Load any host-specific configuration. Anything set here will just get overridden by deferred package loads so the way I’m dealing with that is to set vars here with different (=neh/…=) names, then set the real vars conditionally in package configurations elsewhere.
