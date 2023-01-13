@@ -3148,6 +3148,40 @@ MimeType=x-scheme-handler/org-protocol;
     (interactive)
     (when-let ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
       (browse-url ref-url)))
+
+  ;; https://ag91.github.io/blog/2021/03/12/find-org-roam-notes-via-their-relations/
+  (defun neh/navigate-note (arg &optional node choices)
+    "Navigate notes by link. With universal ARG tries to use only to navigate the tags of the current note. Optionally takes a selected NOTE and filepaths CHOICES."
+    (interactive "P")
+    (let* ((depth (if (numberp arg) arg 1))
+           (choices
+            (or choices
+                (when arg
+                  (-map #'org-roam-backlink-target-node (org-roam-backlinks-get (org-roam-node-from-id (or (ignore-errors (org-roam-node-id node))
+                                                                                                           (org-id-get-create))))))))
+           (all-notes (org-roam-node-read--completions))
+           (completions
+            (or (--filter (-contains-p choices (cdr it)) all-notes) all-notes))
+           (next-node
+            ;; taken from org-roam-node-read
+            (let* ((nodes completions)
+                   (node (completing-read
+                          "Node: "
+                          (lambda (string pred action)
+                            (if (eq action 'metadata)
+                                '(metadata
+                                  (annotation-function . (lambda (title)
+                                                           (funcall org-roam-node-annotation-function
+                                                                    (get-text-property 0 'node title))))
+                                  (category . org-roam-node))
+                              (complete-with-action action nodes string pred))))))
+              (or (cdr (assoc node nodes))
+                  (org-roam-node-create :title node)))
+            )
+           )
+      (if (equal node next-node)
+          (org-roam-node-visit node)
+        (neh/navigate-note nil next-node (cons next-node (-map #'org-roam-backlink-source-node (org-roam-backlinks-get next-node)))))))
   )
 
 (use-package org-roam-dailies
