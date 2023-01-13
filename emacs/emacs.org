@@ -3273,10 +3273,28 @@ Let’s try to get some window behaviour under control.
 (use-package tab-bar
   :straight nil
   :custom
+  (tab-bar-tab-name-format-function #'neh/tab-bar-tab-name-format-default)
   (tab-bar-format '(tab-bar-format-history
                     tab-bar-format-tabs-groups
                     tab-bar-separator
-                    tab-bar-format-add-tab))
+                    tab-bar-format-add-tab
+                    ))
+  (tab-bar-close-button-show nil)
+  (tab-bar-new-button-show nil)
+  (tab-bar-auto-width nil)
+  :custom-face
+  (tab-bar-tab ((t (:height 1.0
+                    :family ,(face-attribute 'variable-pitch :family)
+                    :weight bold
+                    )))
+               )
+  (tab-bar-tab-inactive ((t (:height 0.95
+                             :family ,(face-attribute 'variable-pitch :family)
+                             :weight light
+                             :box nil
+                             )))
+                        )
+
   :general
   (general-define-key
    :keymaps 'tab-bar-map
@@ -3285,6 +3303,24 @@ Let’s try to get some window behaviour under control.
    "<wheel-up>" #'tab-next
    "<wheel-down>" #'tab-previous
    )
+
+  :init
+  (defun neh/tab-bar-tab-name-format-default (tab i)
+    (let ((current-p (eq (car tab) 'current-tab)))
+      (propertize
+       (concat
+        "  "
+        (if tab-bar-tab-hints (format "%d " i) "")
+        (alist-get 'name tab)
+        (or (and tab-bar-close-button-show
+                 (not (eq tab-bar-close-button-show
+                          (if current-p 'non-selected 'selected)))
+                 tab-bar-close-button)
+            "")
+        "  "
+        )
+       'face (funcall tab-bar-tab-face-function tab))))
+
   :config
   (tab-bar-mode t))
 #+end_src
