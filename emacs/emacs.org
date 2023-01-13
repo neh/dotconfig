@@ -3520,10 +3520,11 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
              terminal-here-project-launch)
   :custom
   (terminal-here-linux-terminal-command 'alacritty)
-  :general
-  (neh/leader-keys
-    "ot" #'terminal-here-launch
-    "oT" #'terminal-here-project-launch))
+  ;; :general
+  ;; (neh/leader-keys
+  ;;   "ot" #'terminal-here-launch
+  ;;   "oT" #'terminal-here-project-launch)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3538,7 +3539,11 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 (use-package multi-vterm
   :commands (multi-vterm
              multi-vterm-next
-             multi-vterm-prev))
+             multi-vterm-prev)
+  :general
+  (neh/leader-keys
+    "ot" #'multi-vterm-dedicated-toggle
+    "oT" #'terminal-here-project-launch))
 #+end_src
 
 #+begin_src emacs-lisp
