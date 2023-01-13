@@ -1524,7 +1524,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :general
   (:keymaps 'corfu-map
    :states 'insert
-   "<tab>" #'corfu-next
    "C-t" #'corfu-next
    "C-n" #'corfu-previous
 
@@ -1537,13 +1536,14 @@ Consult takes over for a lot of what counsel did, as well as swiper.
           completion-cycle-threshold completion-cycling)
       (apply #'consult-completion-in-region completion-in-region--data)))
 
+  (global-corfu-mode t)
+
   :config
   (require 'corfu-popupinfo)
   (setq corfu-popupinfo-delay nil)
   (set-face-attribute 'corfu-popupinfo nil :height 1.0)
   (corfu-popupinfo-mode t)
-
-  (global-corfu-mode t))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1553,6 +1553,19 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (kind-icon-default-face 'corfu-default)
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package cape
+  :after corfu
+  :commands (cape-dabbrev
+             cape-file)
+  ;; :custom
+  ;; (cape-dabbrev-min-length )
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  )
 #+end_src
 
 ** Avy
