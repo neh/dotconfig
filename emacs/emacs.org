@@ -3000,6 +3000,10 @@ MimeType=x-scheme-handler/org-protocol;
 ** Org-roam
 
 #+begin_src emacs-lisp
+(use-package emacsql-sqlite-builtin)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package org-roam
   :after org
   :commands (org-roam-db-autosync-mode
@@ -3009,6 +3013,7 @@ MimeType=x-scheme-handler/org-protocol;
              org-roam-node-insert)
 
   :custom
+  (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/org/roam")
   (org-roam-completion-everywhere t)
   (org-roam-list-files-commands '(rg find))
