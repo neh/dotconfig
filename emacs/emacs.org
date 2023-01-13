@@ -5266,6 +5266,9 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
                  1 2))
   (add-to-list 'compilation-error-regexp-alist
                'terraform-error))
+
+(use-package terraform-doc
+  :commands (terraform-doc))
 #+end_src
 
 #+begin_src emacs-lisp

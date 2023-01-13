@@ -208,6 +208,7 @@
  ("taxy" . "b222226f9e1057490150c1a8a98e8b471df88302")
  ("taxy-magit-section" . "08899d283264b6c0a8931f3074b32217d5dc85e1")
  ("terminal-here" . "4bf2a77e450b260570033afda463e178fdf34617")
+ ("terraform-doc" . "16179e57ce290190c222b27961900657a1981330")
  ("terraform-mode" . "80f0433358b79ed4ba88c51829c7359baa1af8b1")
  ("transient" . "c6cf2f2705ab56cd89d807e723ce45b9fcdfb9e1")
  ("tree-sitter-langs" . "bf125472c185f098136b26b30d5e74332b4ee46b")
