@@ -3296,21 +3296,24 @@ Let’s try to get some window behaviour under control.
     (and (derived-mode-p 'org-mode)
          (member (buffer-file-name) (org-agenda-files)))))
 
-(add-to-list 'display-buffer-alist
-             `("\\*Org Agenda\\*"
-               (display-buffer-in-tab  ;; Make sure to use the "agenda" tab
-                display-buffer-reuse-mode-window)
-               (ignore-current-tab . t)
-               (tab-name . "agenda")
-               (window-width . fill-column)
-               (dedicated . side)  ;; Make the agenda a dedicated side-window
-               (side . left)       ;; to the left so it always stays open.
-               (inhibit-same-window . nil)))
-(add-to-list 'display-buffer-alist
-             '(ct/display-buffer-org-agenda-managed-p
-               (display-buffer-reuse-mode-window  ;; Prioritize reuse of current window
-                display-buffer-in-tab)            ;; over switching to the Org tab.
-               (tab-name . "agenda")))
+;; these seem to do odd things to org mode windows, I think I need my org-agenda-files var to be
+;; more specific to make this stuff work? or maybe getting fancy with this in combination with
+;; tabspaces won't really work.
+;; (add-to-list 'display-buffer-alist
+;;              `("\\*Org Agenda\\*"
+;;                (display-buffer-in-tab  ;; Make sure to use the "agenda" tab
+;;                 display-buffer-reuse-mode-window)
+;;                (ignore-current-tab . t)
+;;                (tab-name . "agenda")
+;;                (window-width . fill-column)
+;;                (dedicated . side)  ;; Make the agenda a dedicated side-window
+;;                (side . left)       ;; to the left so it always stays open.
+;;                (inhibit-same-window . nil)))
+;; (add-to-list 'display-buffer-alist
+;;              '(ct/display-buffer-org-agenda-managed-p
+;;                (display-buffer-reuse-mode-window  ;; Prioritize reuse of current window
+;;                 display-buffer-in-tab)            ;; over switching to the Org tab.
+;;                (tab-name . "agenda")))
 #+end_src
 
 #+begin_src emacs-lisp
