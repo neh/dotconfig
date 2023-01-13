@@ -53,6 +53,7 @@
  ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-fish" . "d04478c0aba018cb789d77d591bfe315cb25132a")
  ("emacs-hcl-mode" . "e4d9eef631e8a386341ae8f94f7c2579586e65b5")
+ ("emacs-idle-highlight-mode" . "b3eed5553fe8d7b28bd95b5093e4174d859695ca")
  ("emacs-kv" . "721148475bce38a70e0b678ba8aa923652e8900e")
  ("emacs-libvterm" . "f14d113ee4618f052879509ec378feb9766b871b")
  ("emacs-reformatter" . "f454b179ab7d39dc8783b9f2a046cab353b272f5")

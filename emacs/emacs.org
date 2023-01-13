@@ -5102,6 +5102,14 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package idle-highlight-mode
+  :commands (idle-highlight-mode
+             global-idle-highlight-mode)
+  :init
+  (global-idle-highlight-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package aggressive-indent
   :disabled
   :hook (emacs-lisp-mode . aggressive-indent-mode))
