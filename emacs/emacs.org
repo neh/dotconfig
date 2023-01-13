@@ -1459,8 +1459,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 #+begin_src emacs-lisp
 (use-package consult
   :init
-  (fset 'multi-occur #'consult-multi-occur)
-
   (defun neh/roam-rg ()
     "Search org-roam notes with ripgrep."
     (interactive)
