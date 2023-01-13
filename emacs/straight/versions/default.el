@@ -48,6 +48,7 @@
  ("emacs-aio" . "da93523e235529fa97d6f251319d9e1d6fc24a41")
  ("emacs-ansible" . "d89ac0ee57742cca0f0e0a3453d9dcc521575690")
  ("emacs-async" . "10cedd8ac7173e92a6822317f1782550199d2d6d")
+ ("emacs-devdocs-browser" . "c316c93306527fcb4069adde94402a48605d42d5")
  ("emacs-diff-at-point" . "f9f5ea8a43f9065fbe39466f1d4ddce89a02bd3e")
  ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-fish" . "d04478c0aba018cb789d77d591bfe315cb25132a")

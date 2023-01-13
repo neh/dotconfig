@@ -4412,6 +4412,13 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package devdocs-browser
+  :commands (devdocs-browser-install-doc
+             devdocs-browser-open
+             devdocs-browser-open-in))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package just-mode
   :mode (("justfile" . just-mode))
   :commands (just-mode))
