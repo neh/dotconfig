@@ -4461,6 +4461,7 @@ Try out =org-noter=.
              sqlformat-buffer
              sqlformat-region
              sqlformat-on-save-mode)
+  :hook (sql-mode . sqlformat-on-save-mode)
   :custom
   (sqlformat-command 'pgformatter)
   (sqlformat-args '("-f1"
