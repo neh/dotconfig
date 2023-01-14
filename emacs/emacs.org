@@ -3614,6 +3614,9 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
     "ot" #'neh/project-vterm-toggle
     ;; "ot" #'neh/multi-vterm-project)
     )
+  (:keymaps 'vterm-mode-map
+   :states '(insert normal)
+   "C-'" #'neh/project-vterm-toggle)
 
   :init
   (defun neh/vterm-mode-p (buffer-name action)
