@@ -900,6 +900,8 @@ mode "system" {
         # reload the configuration file
         bindsym r reload, mode "default"
 
+        bindsym d exec ~/.local/bin/dark-toggle, mode "default"
+
         bindsym b exec "waybar", mode "default"
         bindsym Shift+b exec "killall waybar && waybar", mode "default"
 
