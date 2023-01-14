@@ -154,6 +154,7 @@
  ("org-pdftools" . "967f48fb5038bba32915ee9da8dc4e8b10ba3376")
  ("org-ql" . "5f70636556bffca92d8ef8297ba3002a4ab5b52d")
  ("org-roam" . "f9228ce31969cab9ca46ad4890e82e2ea7de3738")
+ ("org-roam-timestamps" . "c4ff1e2f5b0905b5caa917249aab56ddc1de1ab3")
  ("org-roam-ui" . "5ac74960231db0bf7783c2ba7a19a60f582e91ab")
  ("org-sidebar" . "288703b897449f5110c9c76e78eb9a928ffc0dcd")
  ("org-sticky-header" . "697875935b04b25c8229b9155a1ea0cab3ebe629")

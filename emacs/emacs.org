@@ -3209,6 +3209,13 @@ MimeType=x-scheme-handler/org-protocol;
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package org-roam-timestamps
+  :after org-roam
+  :config
+  (org-roam-timestamps-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package org-download
   :after org
   :hook (dired-mode . org-download-enable)
