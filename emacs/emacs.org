@@ -4554,7 +4554,12 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package websearch
   :commands (websearch
-             websearch-mode))
+             websearch-mode
+             websearch-define)
+  :general
+  (neh/leader-keys
+    "sw" #'websearch))
+#+end_src
 #+end_src
 
 #+begin_src emacs-lisp
