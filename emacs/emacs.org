@@ -3545,7 +3545,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (setq display-buffer-base-action
         '((display-buffer-reuse-window
            ace-display-buffer)))
-  (ace-window-display-mode t))
+  (ace-window-display-mode nil))
 #+end_src
 
 * Shells
