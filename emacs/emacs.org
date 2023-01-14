@@ -3282,6 +3282,8 @@ Let’s try to get some window behaviour under control.
     (display-buffer-below-selected))
    ("\\*Embark Actions\\*"
     (display-buffer-use-some-window))
+   ("magit-diff:"
+    (display-buffer-use-some-window))
    ("\\*helpful \\*"
     (display-buffer-reuse-mode-window display-buffer-pop-up-window)
     (mode . helpful-mode)
