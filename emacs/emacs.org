@@ -1946,6 +1946,7 @@ Of course, the great magit.
   (neh/leader-keys
     "gf" #'magit-file-dispatch
     "gg" #'magit-dispatch
+    "gc" #'magit-commit
     "gs" #'magit-status-here))
 #+end_src
 
