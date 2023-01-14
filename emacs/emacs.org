@@ -3611,6 +3611,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   :general
   (neh/leader-keys
+    "og" #'neh/global-vterm-toggle
     "ot" #'neh/project-vterm-toggle
     ;; "ot" #'neh/multi-vterm-project)
     )
@@ -3624,12 +3625,24 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
       (or (equal major-mode 'vterm-mode)
           (string-prefix-p vterm-buffer-name vterm-buffer-name))))
 
-  (defun neh/project-vterm-toggle ()
+  (defun neh/vterm-toggle-same-window (scope)
     (interactive)
-    (let ((vterm-toggle-scope 'project)
+    (let ((vterm-toggle-scope scope)
           (display-buffer-alist '((neh/vterm-mode-p
                                    (display-buffer-same-window)))))
       (vterm-toggle)))
+
+  (defun neh/project-vterm-toggle ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'project))
+
+  (defun neh/frame-vterm-toggle ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'frame))
+
+  (defun neh/global-vterm-toggle ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'dedicated))
   )
 #+end_src
 
