@@ -699,25 +699,37 @@ bindsym $Mod+6 workspace number 6
 bindsym $Mod+7 workspace number 7
 bindsym $Mod+8 workspace number 8
 bindsym $Mod+9 workspace number 9
-bindsym $Mod+0 workspace number 10
 
 bindsym $Mod+Tab workspace back_and_forth
 bindsym $Mod+Mod1+$left workspace prev
 bindsym $Mod+Mod1+$right workspace next
 bindsym $Mod+Mod1+Shift+$left move workspace to output left
 bindsym $Mod+Mod1+Shift+$right move workspace to output right
+bindsym --no-repeat $Mod+g workspace prev
+bindsym --no-repeat $Mod+l workspace next
+workspace_auto_back_and_forth no
 
-# move focused container to workspace
-bindsym $Mod+Shift+1 move container to workspace number 1
-bindsym $Mod+Shift+2 move container to workspace number 2
-bindsym $Mod+Shift+3 move container to workspace number 3
-bindsym $Mod+Shift+4 move container to workspace number 4
-bindsym $Mod+Shift+5 move container to workspace number 5
-bindsym $Mod+Shift+6 move container to workspace number 6
-bindsym $Mod+Shift+7 move container to workspace number 7
-bindsym $Mod+Shift+8 move container to workspace number 8
-bindsym $Mod+Shift+9 move container to workspace number 9
-bindsym $Mod+Shift+0 move container to workspace number 10
+# move focused container to workspace and go with it
+bindsym $Mod+Shift+1 move container to workspace number 1; workspace number 1
+bindsym $Mod+Shift+2 move container to workspace number 2; workspace number 2
+bindsym $Mod+Shift+3 move container to workspace number 3; workspace number 3
+bindsym $Mod+Shift+4 move container to workspace number 4; workspace number 4
+bindsym $Mod+Shift+5 move container to workspace number 5; workspace number 5
+bindsym $Mod+Shift+6 move container to workspace number 6; workspace number 6
+bindsym $Mod+Shift+7 move container to workspace number 7; workspace number 7
+bindsym $Mod+Shift+8 move container to workspace number 8; workspace number 8
+bindsym $Mod+Shift+9 move container to workspace number 9; workspace number 9
+
+# send focused container to workspace
+bindsym $Mod+Control+1 move container to workspace number 1
+bindsym $Mod+Control+2 move container to workspace number 2
+bindsym $Mod+Control+3 move container to workspace number 3
+bindsym $Mod+Control+4 move container to workspace number 4
+bindsym $Mod+Control+5 move container to workspace number 5
+bindsym $Mod+Control+6 move container to workspace number 6
+bindsym $Mod+Control+7 move container to workspace number 7
+bindsym $Mod+Control+8 move container to workspace number 8
+bindsym $Mod+Control+9 move container to workspace number 9
 #+end_src
 
 Window border handling.
@@ -945,7 +957,7 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-bindsym $Mod+l mode "resize"
+# bindsym $Mod+l mode "resize"
 #+end_src
 
 App-related keybindings.
@@ -964,7 +976,7 @@ mode "apps" {
 
         bindsym Escape mode "default"
 }
-bindsym $Mod+g mode "apps"
+# bindsym $Mod+g mode "apps"
 #+end_src
 
 #+begin_src conf
