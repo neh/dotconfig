@@ -3566,13 +3566,61 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
 #+begin_src emacs-lisp
 (use-package multi-vterm
+  :disabled t
   :commands (multi-vterm
              multi-vterm-next
              multi-vterm-prev)
+
+  :init
+  (defun neh/multi-vterm-project ()
+    "Create new vterm buffer."
+    (interactive)
+    (if (multi-vterm-project-root)
+        (if (buffer-live-p (get-buffer (multi-vterm-project-get-buffer-name)))
+            (if (string-equal (buffer-name (current-buffer)) (multi-vterm-project-get-buffer-name))
+                (bury-buffer)
+              (switch-to-buffer-other-window (multi-vterm-project-get-buffer-name)))
+          (let* ((vterm-buffer (multi-vterm-get-buffer 'project))
+                 (multi-vterm-buffer-list (nconc multi-vterm-buffer-list (list vterm-buffer))))
+            (set-buffer vterm-buffer)
+            (multi-vterm-internal)
+            (switch-to-buffer-other-window vterm-buffer)))
+      (message "This file is not in a project")))
+
   :general
   (neh/leader-keys
-    "ot" #'multi-vterm-dedicated-toggle
-    "oT" #'terminal-here-project-launch))
+    "oT" #'multi-vterm-dedicated-toggle
+    "ot" #'neh/multi-vterm-project))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package vterm-toggle
+  :after vterm
+  :commands (vterm-toggle)
+
+  :custom
+  (vterm-toggle-reset-window-configration-after-exit t)
+  (vterm-toggle-hide-method 'reset-window-configration)
+
+  :general
+  (neh/leader-keys
+    "ot" #'neh/project-vterm-toggle
+    ;; "ot" #'neh/multi-vterm-project)
+    )
+
+  :init
+  (defun neh/vterm-mode-p (buffer-name action)
+    (with-current-buffer buffer-name
+      (or (equal major-mode 'vterm-mode)
+          (string-prefix-p vterm-buffer-name vterm-buffer-name))))
+
+  (defun neh/project-vterm-toggle ()
+    (interactive)
+    (let ((vterm-toggle-scope 'project)
+          (display-buffer-alist '((neh/vterm-mode-p
+                                   (display-buffer-same-window)))))
+      (vterm-toggle)))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
