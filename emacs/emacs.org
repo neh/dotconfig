@@ -3582,13 +3582,14 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
   :general
   (neh/leader-keys
-    "og" #'neh/global-vterm-toggle
-    "ot" #'neh/project-vterm-toggle
-    ;; "ot" #'neh/multi-vterm-project)
+    "og" #'neh/global-vterm-toggle-cd
+    "ot" #'neh/project-vterm-toggle-cd
+    "oT" #'neh/project-vterm-toggle
     )
   (:keymaps 'vterm-mode-map
    :states '(insert normal)
-   "C-'" #'neh/project-vterm-toggle)
+   "C-'" #'neh/project-vterm-toggle
+   "C-." #'vterm-toggle-insert-cd)
 
   :init
   (defun neh/vterm-mode-p (buffer-name action)
@@ -3596,24 +3597,38 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
       (or (equal major-mode 'vterm-mode)
           (string-prefix-p vterm-buffer-name vterm-buffer-name))))
 
-  (defun neh/vterm-toggle-same-window (scope)
+  (defun neh/vterm-toggle-same-window (scope &optional cd)
     (interactive)
     (let ((vterm-toggle-scope scope)
           (display-buffer-alist '((neh/vterm-mode-p
                                    (display-buffer-same-window)))))
-      (vterm-toggle)))
+      (if cd
+          (vterm-toggle-cd)
+        (vterm-toggle))))
 
   (defun neh/project-vterm-toggle ()
     (interactive)
     (neh/vterm-toggle-same-window 'project))
 
+  (defun neh/project-vterm-toggle-cd ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'project t))
+
   (defun neh/frame-vterm-toggle ()
     (interactive)
     (neh/vterm-toggle-same-window 'frame))
 
+  (defun neh/frame-vterm-toggle-cd ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'frame t))
+
   (defun neh/global-vterm-toggle ()
     (interactive)
     (neh/vterm-toggle-same-window 'dedicated))
+
+  (defun neh/global-vterm-toggle-cd ()
+    (interactive)
+    (neh/vterm-toggle-same-window 'dedicated t))
   )
 #+end_src
 
