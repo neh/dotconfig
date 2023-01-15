@@ -2861,9 +2861,15 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 
   :general
   (neh/leader-keys
+    "cm" #'neh/org-capture-someday
+    "co" #'org-capture
     "k" 'org-capture)
 
   :init
+  (defun neh/org-capture-someday ()
+    (interactive)
+    (org-capture nil "m"))
+
   (defadvice org-capture-finalize
       (after delete-capture-frame activate)
     "Advise capture-finalize to close the frame"
@@ -3195,6 +3201,7 @@ MimeType=x-scheme-handler/org-protocol;
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   :general
   (neh/leader-keys
+    "cd" #'org-roam-dailies-capture-today
     "n." #'org-roam-dailies-goto-today)
   )
 #+end_src
