@@ -1425,13 +1425,16 @@ end
 <<fish_env>>
 #+end_src
 
-I use fish in vterm buffers in Emacs a lot, and there's no point to vi bindings there, so don't enable them if running in Emacs:
+I use fish in vterm buffers in Emacs a lot, and there's no point to vi bindings there, so don't enable them if running in Emacs. Also, load fish settings included with the vterm package:
 
 #+begin_src fish
 if set -q INSIDE_EMACS
     fish_default_key_bindings 2>/dev/null
 else
     fish_vi_key_bindings 2>/dev/null
+end
+if test "$INSIDE_EMACS" = "vterm" -a -n "$EMACS_VTERM_PATH" -a -f {$EMACS_VTERM_PATH}/etc/emacs-vterm.fish
+    source {$EMACS_VTERM_PATH}/etc/emacs-vterm.fish
 end
 #+end_src
 
