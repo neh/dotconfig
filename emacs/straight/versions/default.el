@@ -17,6 +17,8 @@
  ("cider" . "b029f5034d001ae2f1bbfd98e67cd5c89ef41847")
  ("clojure-mode" . "3717e449dded7c8d9f50369bd34a19c077c2c538")
  ("closql" . "820e95170acb79de0fb554577a0dc9b707e23aea")
+ ("company-mode" . "93b0284e5a6be8506d194aab00fb613be0f364fd")
+ ("company-org-block" . "aee601a2bfcc86d26e762eeb84e5e42573f8c5ca")
  ("compat" . "7ca7d300d1d256f674f83932d2918d8e70cd28f6")
  ("consult" . "201e46a911820d85db7670f93b2df50c4941303e")
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")

@@ -1564,12 +1564,27 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 (use-package cape
   :after corfu
   :commands (cape-dabbrev
-             cape-file)
+             cape-file
+             cape-company-to-capf)
   ;; :custom
   ;; (cape-dabbrev-min-length )
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package company-org-block
+  :after cape
+  :hook (org-mode . neh/corfu-org-block)
+  :custom
+  (company-org-block-auto-indent nil)
+  (company-org-block-explicit-lang-defaults nil)
+  :init
+  (defun neh/corfu-org-block ()
+    (add-to-list 'completion-at-point-functions
+                 (cape-company-to-capf #'company-org-block)))
   )
 #+end_src
 
@@ -2539,6 +2554,7 @@ Just always show images; I always want them.
 (org-src-window-setup 'current-window)
 (org-src-tab-acts-natively t)
 (org-src-preserve-indentation t)
+(org-edit-src-content-indentation 0)
 
 (org-fontify-whole-block-delimiter-line nil)
 (org-fontify-quote-and-verse-blocks t)
