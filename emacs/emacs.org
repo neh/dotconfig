@@ -3054,6 +3054,7 @@ MimeType=x-scheme-handler/org-protocol;
     "N" #'(lambda () (interactive) (neh/customize-this "neh/org-roam-context"))
     "nc" #'neh/org-roam-node-find
     "no" #'org-roam-node-find
+    "nR" #'org-roam-node-random
     "w" #'org-roam-node-find
     )
 
