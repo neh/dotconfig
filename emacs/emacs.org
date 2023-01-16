@@ -1448,6 +1448,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "i" #'consult-yank-from-kill-ring
     "l" #'consult-line
     "L" #'neh/consult-line-again
+    "spl" #'consult-line-multi
     "oo" #'consult-buffer
     "of" #'find-file
     "ha" #'consult-apropos
