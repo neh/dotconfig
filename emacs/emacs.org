@@ -1496,9 +1496,19 @@ Consult takes over for a lot of what counsel did, as well as swiper.
              consult-org-roam-search
              consult-org-roam-backlinks
              consult-org-roam-file-find)
+
   :custom
   (consult-org-roam-buffer-after-buffers t)
-  (consult-org-roam-grep-func #'consult-ripgrep))
+  (consult-org-roam-grep-func #'consult-ripgrep)
+
+  :general
+  (neh/leader-keys
+    "ns" #'consult-org-roam-search
+    "nB" #'consult-org-roam-backlinks
+    "nF" #'consult-org-roam-forward-links)
+
+  :init
+  (consult-org-roam-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
