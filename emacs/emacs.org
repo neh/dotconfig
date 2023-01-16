@@ -208,14 +208,18 @@ Collect all the global, non-package-specific settings here.
     (set-face-foreground face (face-attribute 'default :background)))
   (set-face-background 'fringe (face-attribute 'default :background))
 
-  (defun neh/customize-this (arg)
-    "Call customize-set-variable with a specific setting pre-selected."
+  (defun partially-apply-interactively (cmd arg)
     (interactive)
     (minibuffer-with-setup-hook
         (lambda ()
           (insert arg)
           (add-hook 'post-command-hook #'exit-minibuffer nil t))
-      (call-interactively #'customize-set-variable)))
+      (call-interactively cmd)))
+
+  (defun neh/customize-this (arg)
+    "Call customize-set-variable with a specific setting pre-selected."
+    (interactive)
+    (partially-apply-interactively #'customize-set-variable arg))
 
   (defun neh/update-packages (arg)
     "Set all packages to the versions in the straight.el lockfile."
