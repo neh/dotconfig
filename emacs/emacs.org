@@ -3588,8 +3588,8 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :commands (vterm-toggle)
 
   :custom
-  (vterm-toggle-reset-window-configration-after-exit t)
-  (vterm-toggle-hide-method 'reset-window-configration)
+  (vterm-toggle-reset-window-configration-after-exit nil)
+  (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :general
   (neh/leader-keys

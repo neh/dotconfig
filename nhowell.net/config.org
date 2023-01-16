@@ -1433,7 +1433,11 @@ if set -q INSIDE_EMACS
 else
     fish_vi_key_bindings 2>/dev/null
 end
-if test "$INSIDE_EMACS" = "vterm" -a -n "$EMACS_VTERM_PATH" -a -f {$EMACS_VTERM_PATH}/etc/emacs-vterm.fish
+
+if set -q INSIDE_EMACS
+    and test "$INSIDE_EMACS" = "vterm"
+    and test -n "$EMACS_VTERM_PATH"
+    and test -f {$EMACS_VTERM_PATH}/etc/emacs-vterm.fish
     source {$EMACS_VTERM_PATH}/etc/emacs-vterm.fish
 end
 #+end_src
@@ -1480,20 +1484,6 @@ end
 function magit ()
     set -l git_root (git rev-parse --show-toplevel)
     command emacsclient -c -e '(let ((magit-display-buffer-function \'magit-display-buffer-fullframe-status-v1)) (magit-status "'(echo -n $git_root)'"))'
-end
-#+end_src
-
-#+begin_src fish
-function vterm_prompt_end;
-    vterm_printf '51;A'(whoami)'@'(hostname)':'(pwd)
-end
-functions --copy fish_prompt vterm_old_fish_prompt
-function fish_prompt --description 'Write out the prompt; do not replace this. Instead, put this at end of your file.'
-    # Remove the trailing newline from the original prompt. This is done
-    # using the string builtin from fish, but to make sure any escape codes
-    # are correctly interpreted, use %b for printf.
-    printf "%b" (string join "\n" (vterm_old_fish_prompt))
-    vterm_prompt_end
 end
 #+end_src
 
