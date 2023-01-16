@@ -1906,6 +1906,32 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
      (inhibit-same-window . t)
      (window-parameters
       (no-other-window . t))))
+
+  :config
+  (transient-define-prefix roam-dailies-transient ()
+    "Navigate Roam Dailies"
+    ;; :transient-suffix 'transient--do-stay
+    ["Daily Notes"
+     :class transient-columns
+     ["Today"
+      ("." "Today" org-roam-dailies-goto-today)
+      ("c" "Capture" org-roam-dailies-capture-today)
+      ]
+     ["Nav"
+      ;; ("h" "Previous" neh/roam-dailies-previous)
+      ("h" "Previous" org-roam-dailies-goto-previous-note :transient t)
+      ;; (:key "h" "Previous" org-roam-dailies-goto-previous-note)
+      ;; ("s" "Next" neh/roam-dailies-next)
+      ("s" "Next" org-roam-dailies-goto-next-note :transient t)
+      ("n" "pgup" evil-scroll-page-up :transient t)
+      ("t" "pgdn" evil-scroll-page-down :transient t)
+      ]
+     ]
+    )
+
+  :general
+  (neh/leader-keys
+    "nn" #'roam-dailies-transient)
   )
 #+end_src
 
