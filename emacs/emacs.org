@@ -356,6 +356,11 @@ More options. I’m not sure where to put some things in this file yet. Here are
 
 ;; hide commands in M-x that don't work in the current mode
 (read-extended-command-predicate #'command-completion-default-include-p)
+
+(completions-header-format nil)
+(completion-show-help nil)
+(completion-auto-select 'second-tab)
+(completion-auto-help 'always)
 #+end_src
 
 Don’t warn me when I do these potentially confusing narrowing operations.
