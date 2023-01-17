@@ -46,6 +46,8 @@
  ("ef-themes" . "32a88b9688a672916dce82d46b78a419958a5c45")
  ("el-get" . "837fcbb8d22274f6c684a5e24ce12ce1efa18d9f")
  ("elf-mode" . "cd280d683cd3341d8bb31af6db7e3b74a133e6ab")
+ ("elfeed" . "162d7d545ed41c27967d108c04aa31f5a61c8e16")
+ ("elfeed-org" . "3242ec0519800a58f20480c8a6e3b3337d137084")
  ("elisp-refs" . "af73739084637c8ebadad337a8fe58ff4f1d2ec1")
  ("elisp-tree-sitter" . "3cfab8a0e945db9b3df84437f27945746a43cc71")
  ("emacs-aio" . "da93523e235529fa97d6f251319d9e1d6fc24a41")

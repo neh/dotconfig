@@ -4541,6 +4541,22 @@ Try out =org-noter=.
        (lambda (x) (listp x))))
 #+end_src
 
+* Feeds
+
+#+begin_src emacs-lisp
+(use-package elfeed
+  :commands (elfeed))
+
+(use-package elfeed-org
+  :after (elfeed
+          org)
+  :commands (elfeed-org)
+  :custom
+  (rmh-elfeed-org-files `(,(concat org-directory "/feeds.org")))
+  :init
+  (elfeed-org))
+#+end_src
+
 * Email
 
 #+begin_src emacs-lisp
