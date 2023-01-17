@@ -19,7 +19,7 @@
  ("closql" . "1aba69658061ae67d5e39e846aaa02ed2749940f")
  ("company-mode" . "93b0284e5a6be8506d194aab00fb613be0f364fd")
  ("company-org-block" . "aee601a2bfcc86d26e762eeb84e5e42573f8c5ca")
- ("compat" . "7ca7d300d1d256f674f83932d2918d8e70cd28f6")
+ ("compat" . "8885b1cd3f5a2833c727b4448583213deb2d1d76")
  ("consult" . "201e46a911820d85db7670f93b2df50c4941303e")
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")
  ("consult-git-log-grep" . "c58f16c77dfcad68f7768a3046c6260b4eaf3606")
