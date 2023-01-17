@@ -3649,6 +3649,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 
 #+begin_src emacs-lisp
 (use-package vterm
+  :defer 1
   :commands (vterm
              vterm-other-window)
   :custom
@@ -3658,6 +3659,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 #+begin_src emacs-lisp
 (use-package vterm-toggle
   :after vterm
+  :defer 2
   :commands (vterm-toggle)
 
   :custom
