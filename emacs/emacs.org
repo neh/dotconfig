@@ -3584,6 +3584,9 @@ Let’s try to get some window behaviour under control.
 
 #+begin_src emacs-lisp
 (use-package ace-window
+  :commands (aw-display-buffer
+             ace-window
+             neh/other-window-prefix)
   :custom
   (aw-scope 'frame)
   (aw-keys '(?a ?o ?e ?u ?h ?t ?s))
