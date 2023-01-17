@@ -3392,6 +3392,12 @@ Let’s try to get some window behaviour under control.
 ;;                (display-buffer-reuse-mode-window  ;; Prioritize reuse of current window
 ;;                 display-buffer-in-tab)            ;; over switching to the Org tab.
 ;;                (tab-name . "agenda")))
+
+(defun neh/toggle-window-dedication ()
+  "Toggles window dedication in the selected window."
+  (interactive)
+  (set-window-dedicated-p (selected-window)
+     (not (window-dedicated-p (selected-window)))))
 #+end_src
 
 #+begin_src emacs-lisp
