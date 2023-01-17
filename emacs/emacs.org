@@ -548,7 +548,10 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :demand t
   :straight nil
   :custom
-  (bookmark-fontify nil))
+  (bookmark-fontify nil)
+  :general
+  (neh/leader-nav
+    "b" #'bookmark-jump))
 
 (use-package saveplace
   :demand t
