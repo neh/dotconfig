@@ -5298,9 +5298,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+begin_src emacs-lisp
 (use-package idle-highlight-mode
   :commands (idle-highlight-mode
-             global-idle-highlight-mode)
-  :init
-  (global-idle-highlight-mode t))
+             global-idle-highlight-mode))
 #+end_src
 
 #+begin_src emacs-lisp
