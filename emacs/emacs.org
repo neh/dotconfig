@@ -3355,7 +3355,7 @@ Let’s try to get some window behaviour under control.
    ("magit-diff:"
     (display-buffer-below-selected)
     (window-height . 0.6))
-   ("\\*helpful \\*"
+   ("\\*helpful *"
     (display-buffer-reuse-mode-window display-buffer-pop-up-window)
     (mode . helpful-mode)
     (inhibit-same-window . t))))
