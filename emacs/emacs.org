@@ -3631,8 +3631,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :config
   (setq display-buffer-base-action
         '((display-buffer-reuse-window
-           ace-display-buffer)))
-  (ace-window-display-mode nil))
+           ace-display-buffer))))
 #+end_src
 
 * Shells
