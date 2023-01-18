@@ -24,6 +24,7 @@
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")
  ("consult-git-log-grep" . "c58f16c77dfcad68f7768a3046c6260b4eaf3606")
  ("consult-jump-project" . "f129b374baa7dc0297beb140c9c76a84293ef2f2")
+ ("consult-ls-git" . "f2398b354994e583ad22af324a129cf94d06009e")
  ("consult-notes" . "4d92996f676cecfebea6519dadf8cf185621a18a")
  ("consult-org-roam" . "0cca2a8d110252bf5deee3f071c47ea3c35b8643")
  ("corfu" . "9e28ab247bc6872e506578ef812110925b7fc014")

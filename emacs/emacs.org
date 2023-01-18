@@ -2059,6 +2059,13 @@ Handy package to browse to git repo web interfaces.
   (consult-git-log-grep-open-function #'magit-show-commit))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package consult-ls-git
+  :commands (consult-ls-git
+             consult-ls-git-other-window)
+  )
+#+end_src
+
 * Org
 
 My org config is pretty long, so I've broken it up for easier reading and explanation. The main structure of it is here, with the details following.
