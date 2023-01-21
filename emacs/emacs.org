@@ -4140,23 +4140,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   (dired-du-size-format t))
 #+end_src
 
-* Imenu
-
-#+begin_src emacs-lisp
-(use-package imenu-list
-  :general
-  (neh/leader-keys
-    "os" #'imenu-list-smart-toggle)
-
-  :custom
-  (imenu-list-focus-after-activation t))
-
-(use-package imenu-anywhere
-  :general
-  (neh/leader-keys
-    "sT" #'imenu-anywhere))
-#+end_src
-
 * Hydra
 
 #+begin_src emacs-lisp :noweb yes

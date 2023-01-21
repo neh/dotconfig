@@ -116,8 +116,6 @@
  ("hydra" . "317e1de33086637579a7aeb60f77ed0405bf359b")
  ("ibuffer-projectile" . "ecbe482804a217b1471593f6c7a8b3d64f3cdc47")
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")
- ("imenu-anywhere" . "06ec33d79e33edf01b9118aead1eabeae8ee08b1")
- ("imenu-list" . "76f2335ee6f2f066d87fe4e4729219d70c9bc70d")
  ("inheritenv" . "2102ed2d105a5c9f366cb6503d04794600985598")
  ("jinja2-mode" . "03e5430a7efe1d163a16beaf3c82c5fd2c2caee1")
  ("journalctl-mode" . "baaffdfd22a19afb1997ec3715d063186b80d3f5")
