@@ -4654,6 +4654,14 @@ Try out =org-noter=.
 
 * Misc packages
 
+Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/taking-code-screenshots-in-emacs/][Brain dump – Taking code screenshots in Emacs]]
+
+#+begin_src emacs-lisp
+(use-package screenshot
+  :straight (:type git :host github :repo "tecosaur/screenshot")
+  :commands (screenshot))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package smart-hungry-delete
   :bind (([remap backward-delete-char-untabify] . smart-hungry-delete-backward-char)

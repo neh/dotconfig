@@ -197,6 +197,7 @@
  ("rust-mode" . "22fff6a049402584e7120146c3db141c6f530bf6")
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("scratch" . "f000648c9663833a76a8de9b1e78c99a9d698e48")
+ ("screenshot" . "e2a364c1a1addbd1e557307da836b97bccb13889")
  ("sesman" . "e0f555f963c9f02f8e4a50e06fc353eb4c15ee77")
  ("shackle" . "f1467db75a8fa5d51c676181fb308ccbf7b05e6f")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
