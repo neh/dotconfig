@@ -2674,17 +2674,23 @@ Just always show images; I always want them.
 
   (org-modern-table nil)
 
-  (org-modern-todo-faces '(("SOMEDAY"
+  (org-modern-todo-faces '(
+                           ("SOMEDAY"
                             :weight semibold
-                            :background "OliveDrab4"
+                            :background "steel blue"
                             :foreground "white")
-                           ;; ("TODO"
-                           ;;  :background "red"
-                           ;;  :foreground "white")
+                           ("TODO"
+                            :weight semibold
+                            :background "orange1"
+                            :foreground "black")
                            ("NEXT"
                             :weight semibold
                             :background "gold"
                             :foreground "black")
+                           ("DOING"
+                            :weight semibold
+                            :background "OliveDrab4"
+                            :foreground "white")
                            ))
 
   :custom-face
