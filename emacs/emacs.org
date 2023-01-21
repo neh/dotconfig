@@ -2066,6 +2066,14 @@ Handy package to browse to git repo web interfaces.
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package blamer
+  :commands (blamer-show-commit-info
+             blamer-show-posframe-commit-info
+             global-blamer-mode)
+  )
+#+end_src
+
 * Org
 
 My org config is pretty long, so I've broken it up for easier reading and explanation. The main structure of it is here, with the details following.
