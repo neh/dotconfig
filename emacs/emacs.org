@@ -4602,7 +4602,12 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package elfeed
-  :commands (elfeed))
+  :commands (elfeed)
+  :general
+  (:keymaps 'elfeed-search-mode-map
+   :states 'normal
+   "o" #'elfeed-search-show-entry)
+  )
 
 (use-package elfeed-org
   :after (elfeed
