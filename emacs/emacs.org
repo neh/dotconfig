@@ -2286,6 +2286,55 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package d2-mode
+  :commands (d2-compile
+             d2-compile-file
+             d2-compile-buffer
+             d2-compile-region
+             d2-compile-file-and-browse
+             d2-compile-buffer-and-browse
+             d2-compile-region-and-browse
+             d2-open-browser
+             d2-view-current-svg
+             d2-open-doc)
+  :general
+  (:keymaps '(embark-org-src-block-map)
+   "F" #'neh/org-src-block-format)
+
+  :config
+  (add-to-list 'apheleia-formatters '(d2 "d2" "fmt" "-"))
+  (add-to-list 'apheleia-mode-alist '(d2-mode . d2))
+
+  ;; Ok, this works for different blocks as long as there's a <lang>format-buffer function for the
+  ;; language of the block. Good enough for d2 and sql for the moment.
+  ;; Ideally it would use apheleia so everything would work the same everywhere.
+  (defun neh/org-src-block-format ()
+    (interactive)
+    (when (org-in-src-block-p)
+      (let ((format-fun (intern (concat (car (org-babel-get-src-block-info))
+                                        "format-buffer"))))
+        (org-edit-special)
+        ;; (apheleia-format-buffer 'd2 #'org-edit-src-exit)
+        ;; (call-interactively #'(lambda () (apheleia-format-buffer 0 #'org-edit-src-exit)))
+        (funcall format-fun)
+        (org-edit-src-exit)
+        )))
+
+  ;; depends on emacs-reformatter, based on sqlformat-region
+  (reformatter-define d2format
+    :program "d2"
+    :args '("fmt" "-")
+    :lighter " D2Fmt"
+    :group 'd2format)
+  )
+
+;; need to sort out the load order here so this implementation is active on a restart
+(use-package ob-d2
+  :straight (ob-d2 :type git :host github :repo "xcapaldi/ob-d2")
+  :commands (org-babel-execute:d2))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package restclient
   :commands (restclient-mode
              restclient-http-send-current
