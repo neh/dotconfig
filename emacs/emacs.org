@@ -825,28 +825,24 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 #+begin_src emacs-lisp
 ;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
 
-(defun call-process-string (program &rest args)
-  "Call process`PROGRAM' with `ARGS' and return the output as string."
-  (with-temp-buffer
-    (apply #'call-process program nil t nil args)
-    (buffer-string)))
-
 (use-package dbus
   :straight nil
   :config
-  (defun set-dark-or-light (dark)
-    (cond ((= 1 dark)
-           (neh/set-dark-mode))
-          ((or (= 2 dark) (= 0 dark))
-           (neh/set-light-mode))))
+  (defun set-dark-or-light (value)
+    (message "color-scheme value is %s" value)
+    (if (equal value '1)
+        (progn (message "Switch to dark theme")
+               (neh/set-dark-mode))
+      (progn (message "Switch to light theme")
+             (neh/set-light-mode))))
 
   (defun handler (value)
+    (message "%s" value)
     (set-dark-or-light (car (car value))))
 
   (defun signal-handler (namespace key value)
-    (if (and
-         (string-equal namespace "org.freedesktop.appearance")
-         (string-equal key "color-scheme"))
+    (if (and (string-equal namespace "org.freedesktop.appearance")
+             (string-equal key "color-scheme"))
         (set-dark-or-light (car value))))
 
   (dbus-call-method-asynchronously
@@ -866,7 +862,6 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
    "org.freedesktop.portal.Settings"
    "SettingChanged"
    #'signal-handler)
-
   )
 #+end_src
 
@@ -3061,7 +3056,8 @@ Type=forking
 ExecStart=emacs --daemon --chdir %h
 # ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=emacsclient --eval "(kill-emacs)"
-Environment=SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
+Environment=SSH_AUTH_SOCK=/run/user/%U/ssh-agent.socket
+# Environment=SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
 # Environment=SSH_AUTH_SOCK=%t/keyring/ssh XDG_RUNTIME_DIR=/run/user/%U EMACS_SOCKET_NAME=/run/user/%U/emacs/server
 Restart=on-failure
 

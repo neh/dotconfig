@@ -217,7 +217,8 @@ current_scheme=$(gsettings get org.gnome.desktop.interface color-scheme | tr -d 
 
 if [[ "$current_scheme" == "prefer-dark" ]]; then
     # echo "Currently dark, going light"
-    gsettings set org.gnome.desktop.interface color-scheme "default"
+    gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+    darkman set light
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_DARK}$/colors: *${ALACRITTY_LIGHT}/" ~/.config/alacritty/schemes.yml
@@ -225,6 +226,7 @@ if [[ "$current_scheme" == "prefer-dark" ]]; then
 else
     # echo "Currently not dark, going dark"
     gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+    darkman set dark
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
         sed -i "s/colors: \*${ALACRITTY_LIGHT}$/colors: *${ALACRITTY_DARK}/" ~/.config/alacritty/schemes.yml
@@ -621,7 +623,7 @@ Import variables, register with dbus, set up polkit, etc. Needed for nice deskto
 #+begin_src conf
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK SSH_AUTH_SOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
-dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+    dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 #+end_src
 
