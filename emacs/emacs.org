@@ -1590,7 +1590,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package company-org-block
-  :after cape
+  :disabled t
   :hook (org-mode . neh/corfu-org-block)
   :custom
   (company-org-block-auto-indent nil)
@@ -1600,6 +1600,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     (add-to-list 'completion-at-point-functions
                  (cape-company-to-capf #'company-org-block)))
   )
+
+(use-package org-block-capf
+  :straight (:type git :host github :repo "xenodium/org-block-capf")
+  :hook (org-mode . org-block-capf-add-to-completion-at-point-functions))
 #+end_src
 
 ** Avy
