@@ -4665,6 +4665,19 @@ Try out =org-noter=.
 
 * Misc packages
 
+#+begin_src emacs-lisp
+(use-package proced
+  :straight nil
+  :custom
+  (proced-enable-color-flag t)
+  (proced-auto-update-flag t)
+  (proced-auto-update-interval 1)
+  :config
+  (add-to-list
+   'proced-format-alist
+   '(custom user pid ppid sess tree pcpu pmem rss start time state (args comm))))
+#+end_src
+
 Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/taking-code-screenshots-in-emacs/][Brain dump – Taking code screenshots in Emacs]]
 
 #+begin_src emacs-lisp
