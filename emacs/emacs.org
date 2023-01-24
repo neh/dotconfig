@@ -2555,17 +2555,6 @@ Org export.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package org-tanglesync
-  :disabled
-  :hook ((org-mode . org-tanglesync-mode)
-         ((prog-mode text-mode) . org-tanglesync-watch-mode))
-  :custom
-  (org-tanglesync-watch-files '("emacs.org"))
-  :general
-  (general-define-key
-   :keymaps 'org-mode-map
-    "C-c M-i" 'org-tanglesync-process-buffer-interactive
-    "C-c M-a" 'org-tanglesync-process-buffer-automatic))
 #+end_src
 
 ** Options
@@ -3940,12 +3929,6 @@ directory to make multiple eshell windows easier."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package sane-term
-  :disabled
-  :commands (sane-term
-             sane-term-create)
-  :custom
-  (sane-term-shell-command "/usr/bin/zsh"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5095,41 +5078,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package frames-only-mode
-  :disabled t
-  :commands (frames-only-mode)
-  :custom
-  (frames-only-mode-use-window-functions '(calendar
-                                           report-emacs-bug
-                                           checkdoc-show-diagnostics
-                                           checkdoc
-                                           org-sidebar
-                                           org-sidebar-tree
-                                           org-sidebar-toggle
-                                           org-compile-file
-                                           embark-act
-                                           embark-collect-live
-                                           embark-collect-snapshot))
-
-  (frames-only-mode-configuration-variables
-   '((pop-up-frames graphic-only)
-     (mouse-autoselect-window nil)
-     (focus-follows-mouse nil)
-     (frame-auto-hide-function delete-frame)
-     (org-agenda-window-setup other-frame)
-     (org-src-window-setup other-frame)
-     (ediff-window-setup-function ediff-setup-windows-plain)
-     (ido-default-buffer-method selected-window)
-     (magit-commit-show-diff t)
-     (magit-bury-buffer-function frames-only-mode-magit-bury-buffer-function)
-     ;; (magit-bury-buffer-function delete-frame)
-     (flycheck-display-errors-function frames-only-mode-flycheck-display-errors)))
-
-  :init
-  (frames-only-mode -1))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package hl-line-mode
   :straight nil
   :commands (hl-line-mode
@@ -5527,22 +5475,6 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 (use-package auto-virtualenv
   :commands (auto-virtualenv-set-virtualenv))
-
-(use-package lsp-mode
-  :disabled
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :commands (lsp
-             lsp-deferred))
-
-(use-package lsp-ui
-  :disabled
-  :after lsp-mode)
-
-(use-package lsp-pyright
-  :disabled
-  )
 #+end_src
 
 #+begin_src emacs-lisp
