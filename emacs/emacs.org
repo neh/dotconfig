@@ -478,6 +478,13 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     :non-normal-prefix "C-j"
     :prefix "j")
 
+  (general-create-definer
+    neh/leader-util
+    :keymaps 'override
+    :states '(emacs normal visual motion insert)
+    :non-normal-prefix "C-k"
+    :prefix "k")
+
   (general-override-mode)
 
   (general-define-key
@@ -1447,6 +1454,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :general
   ;; ([remap evil-search-forward] #'consult-line)
+  (neh/leader-util
+    "m" #'consult-buffer)
   (neh/leader-keys
     "i" #'consult-yank-from-kill-ring
     "l" #'consult-line
@@ -3337,6 +3346,8 @@ MimeType=x-scheme-handler/org-protocol;
    '(("d" "default" entry "* %<%k:%M> %?"
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   :general
+  (neh/leader-util
+    "d" #'org-roam-dailies-capture-today)
   (neh/leader-keys
     "cd" #'org-roam-dailies-capture-today
     "n." #'org-roam-dailies-goto-today)
@@ -3739,6 +3750,12 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :general
+  (neh/leader-util
+    "g" #'neh/global-vterm-toggle
+    "G" #'neh/global-vterm-toggle-cd
+    "t" #'neh/project-vterm-toggle
+    "T" #'neh/project-vterm-toggle-cd
+    )
   (neh/leader-keys
     "og" #'neh/global-vterm-toggle
     "oG" #'neh/global-vterm-toggle-cd
