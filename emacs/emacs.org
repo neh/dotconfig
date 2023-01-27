@@ -2679,7 +2679,7 @@ Just always show images; I always want them.
   :hook (org-mode . org-modern-mode)
 
   :custom
-  (org-modern-star ["" "‣" "•" "◦" "•" "◦" "•"])
+  (org-modern-star '("" "‣" "•" "◦" "•" "◦" "•"))
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
   (org-agenda-block-separator ?─)
   (org-agenda-time-grid
