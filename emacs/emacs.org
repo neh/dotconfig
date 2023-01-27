@@ -416,7 +416,9 @@ I view man pages in emacs sometimes, and want a fixed width for them.
   :straight nil
   :custom
   (Man-width fill-column)
-  (Man-notify-method 'newframe))
+  (Man-width-max fill-column)
+  (Man-columns fill-column)
+  (Man-notify-method 'aggressive))
 
 (use-package woman
   :straight nil
