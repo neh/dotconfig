@@ -2753,6 +2753,12 @@ Flycheck gives way too many errors when editing src blocks in their own buffer. 
 (org-src-mode . disable-flycheck-in-org-src-block)
 #+end_src
 
+Show the heading of a table when it's scrolled offscreen.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-mode . org-table-header-line-mode)
+#+end_src
+
 ** Keybindings
 
 General purpose org keybindings.
