@@ -5085,12 +5085,28 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package link-hint
+  :commands (link-hint-open-link
+             link-hint-define-type)
   :general
   (neh/leader-keys
-    :states '(normal)
-    :prefix "SPC"
-    :non-normal-prefix "C-SPC"
-    "F" #'link-hint-open-link))
+    "F" #'link-hint-open-link)
+  (neh/leader-nav
+    "f" #'link-hint-open-link
+    "F" #'neh/link-hint-open-in-eww)
+
+  :config
+  (link-hint-define-type 'text-url
+    :neh-open-eww #'eww)
+  (defun neh/link-hint-eww ()
+    (interactive)
+    (avy-with neh/link-hint-eww
+      (link-hint--one :neh-open-eww)))
+
+  (defun neh/link-hint-open-in-eww ()
+    (interactive)
+    (let ((browse-url-browser-function #'eww-browse-url))
+      (link-hint-open-link)))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
