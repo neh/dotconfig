@@ -4783,7 +4783,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 (use-package tabspaces
   :hook (after-init . tabspaces-mode)
   :commands (tabspaces-switch-or-create-workspace
-             tabspaces-open-or-create-project-and-workspace)
+             tabspaces-open-or-create-project-and-workspace
+             tabspaces--buffer-list)
 
   :custom
   (tabspaces-use-filtered-buffers-as-default t)
@@ -4791,7 +4792,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   (tabspaces-remove-to-default t)
   (tabspaces-include-buffers '("*scratch*"))
   ;; sessions
-  (tabspaces-session nil)
+  (tabspaces-session t)
   (tabspaces-session-auto-restore nil)
 
   :config
