@@ -325,6 +325,12 @@ Since I force there to be no file to store custom settings in, I get prompted fo
                               (org-download-image-dir)))
 #+end_src
 
+Thanks to the the discussion in [[https://github.com/doomemacs/doomemacs/issues/5219][this github issue for Doom emacs]], this seems to resolve issues with pasting into emacs from non-wayland apps.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING text/plain\;charset=utf-8))
+#+end_src
+
 I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, and I don't want customized settings accumulating in a file where they can be forgotten about and trip me up later. This seems like a sane way to use the customization system to me, so we'll see.
 
 #+begin_src emacs-lisp
