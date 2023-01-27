@@ -1671,9 +1671,17 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    "C-M-<tab>" 'nswbuff-switch-to-previous-buffer
    "C-M-<iso-lefttab>" 'nswbuff-switch-to-next-buffer
    )
+  (neh/leader-nav
+    "c" #'nswbuff-switch-to-next-buffer
+    "r" #'nswbuff-switch-to-previous-buffer)
+
+  :bind
+  (:repeat-map nswbuff-repeat-map
+   ("c" . nswbuff-switch-to-next-buffer)
+   ("r" . nswbuff-switch-to-previous-buffer))
 
   :custom
-  (nswbuff-buffer-list-function #'nswbuff-projectile-buffer-list)
+  (nswbuff-buffer-list-function #'tabspaces--buffer-list)
   (nswbuff-status-window-layout 'scroll)
   (nswbuff-display-intermediate-buffers t)
   (nswbuff-recent-buffers-first t)
