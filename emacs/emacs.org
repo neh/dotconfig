@@ -3723,7 +3723,30 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
   :commands (vterm
              vterm-other-window)
   :custom
-  (vterm-max-scrollback 10000))
+  (vterm-max-scrollback 10000)
+  :init
+  ;; wondering about the buffer-name param here... could be a buffer or a string and need to handle?
+  (defun neh/vterm-mode-p (buffer-name &optional action)
+    (with-current-buffer buffer-name
+      (or (equal major-mode 'vterm-mode)
+          (string-prefix-p vterm-buffer-name (buffer-name buffer-name)))))
+
+  (defun neh/vterm-list-buffers ()
+    (interactive)
+    (seq-filter #'neh/vterm-mode-p (buffer-list (current-buffer))))
+
+  ;; would be nice to have more info about vterm buffers in the list... marginalia time?
+  (with-eval-after-load 'consult
+    (defvar vterm-buffer-source
+      `(:name "vterm"
+        :hidden t
+        :narrow ?v
+        :category buffer
+        :state    ,#'consult--buffer-state
+        :items    ,(lambda () (mapcar #'buffer-name (neh/vterm-list-buffers)))))
+
+    (add-to-list 'consult-buffer-sources 'vterm-buffer-source 'append))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3755,11 +3778,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
    "C-." #'vterm-toggle-insert-cd)
 
   :init
-  (defun neh/vterm-mode-p (buffer-name action)
-    (with-current-buffer buffer-name
-      (or (equal major-mode 'vterm-mode)
-          (string-prefix-p vterm-buffer-name vterm-buffer-name))))
-
   (defun neh/vterm-toggle-same-window (scope &optional cd)
     (interactive)
     (let ((vterm-toggle-scope scope)
