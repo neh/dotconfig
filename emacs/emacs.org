@@ -186,7 +186,23 @@ Collect all the global, non-package-specific settings here.
   :hook
   (minibuffer-setup . cursor-intangible-mode)
 
+  :preface
+  ;; save a copy of the original recenter function, because I'm going to replace it
+  (fset 'original-recenter (symbol-function 'recenter))
+
   :init
+  (defcustom neh/recenter-window-eye-level 0.2
+    "The relative position of the line considered as eye level in the
+current window, as a ratio between 0 and 1.")
+
+  (defun neh/recenter-eye-level (&optional arg redisplay)
+    "Without args, recenter nearer the top of the window. With args, call original recenter."
+    (interactive)
+    (let ((line (or arg
+                    (round (* (window-height) neh/recenter-window-eye-level)))))
+      (original-recenter line redisplay)))
+  (fset 'recenter #'neh/recenter-eye-level)
+
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
                   (replace-regexp-in-string
