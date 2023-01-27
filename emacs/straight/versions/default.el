@@ -217,6 +217,7 @@
  ("terminal-here" . "4bf2a77e450b260570033afda463e178fdf34617")
  ("terraform-doc" . "16179e57ce290190c222b27961900657a1981330")
  ("terraform-mode" . "e67459fefc871fdbf20e27be8f85b98b10b97b1b")
+ ("topsy.el" . "8ae0976dfdbe4461c33ed44cf1dedc2c903b0bb0")
  ("transient" . "c6cf2f2705ab56cd89d807e723ce45b9fcdfb9e1")
  ("tree-sitter-langs" . "290190189c7a5afcbf23204e1a999fbc207ba8b9")
  ("treemacs" . "9986d6cd3d2822db7ae0e6d8a275db7057f3e828")
