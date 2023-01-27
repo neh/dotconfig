@@ -403,6 +403,12 @@ Set standard emacs completion to ignore case for files and buffers.
 (read-file-name-completion-ignore-case t)
 #+end_src
 
+Show position in the buffer as the percentage of both the top and bottom positions of the window.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(mode-line-percent-position '(6 "%q"))
+#+end_src
+
 I view man pages in emacs sometimes, and want a fixed width for them.
 
 #+begin_src emacs-lisp
