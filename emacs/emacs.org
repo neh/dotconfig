@@ -4630,6 +4630,18 @@ Try out =org-noter=.
        (lambda (x) (listp x))))
 #+end_src
 
+* Web
+
+#+begin_src emacs-lisp
+(use-package shrface
+  :commands (shrface-mode)
+  :hook ((eww-after-render . shrface-mode))
+  :custom
+  (shrface-bullets-bullet-list org-modern-star)
+  :config
+  (shrface-basic))
+#+end_src
+
 * Feeds
 
 #+begin_src emacs-lisp
