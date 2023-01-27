@@ -3858,6 +3858,7 @@ directory to make multiple eshell windows easier."
 
 #+begin_src emacs-lisp
 (use-package eshell-prompt-extras
+  :disabled t
   :init
   (defun epe-theme-neh ()
     ""

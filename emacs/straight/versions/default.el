@@ -80,7 +80,6 @@
  ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
  ("ement.el" . "28de42d653cc1e254cc3dccfcb685db947cdde4c")
  ("envrc" . "1954e8c0b5c8440ea9852eeb7c046a677fa544f6")
- ("eshell-prompt-extras" . "c2078093323206b91a1b1f5786d79faa00b76be7")
  ("esup" . "4b49c8d599d4cc0fbf994e9e54a9c78e5ab62a5f")
  ("esxml" . "7ac1fec0e45f12836b301fd9b8e7297434db2f70")
  ("evil" . "8a05eb99c6ee60eb502a2c586fa2e771a513c417")
