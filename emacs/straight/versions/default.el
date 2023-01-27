@@ -43,6 +43,7 @@
  ("doom-modeline" . "fb516af4369043811f98929d7fbe2e43d0847242")
  ("dumb-jump" . "0a783d1db610ff1dc4e1b7869589cff16ff92f7a")
  ("dwim-shell-command" . "39ce590191cb63e1f6b77b4419c6a6846c39a67e")
+ ("eat" . "d66c55a2855f6a60f6184135d95d2d5f4b64535e")
  ("edit-indirect" . "f80f63822ffae78de38dbe72cacaeb1aaa96c732")
  ("ef-themes" . "b849788f4c3f521a7d516f62ce8786c626dc8463")
  ("el-get" . "837fcbb8d22274f6c684a5e24ce12ce1efa18d9f")

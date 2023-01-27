@@ -3927,6 +3927,10 @@ directory to make multiple eshell windows easier."
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package eat
+  :commands (eat)
+  :hook ((eshell-load . eat-shell-mode)
+         (eshell-load . eat-eshell-visual-command-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
