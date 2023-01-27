@@ -3620,15 +3620,15 @@ Let’s try to get some window behaviour under control.
   :straight nil
   :general
   (neh/leader-nav
-    "h" #'windmove-left
-    "s" #'windmove-right
-    "n" #'windmove-up
-    "t" #'windmove-down
+    "m" #'windmove-left
+    "z" #'windmove-right
+    "v" #'windmove-up
+    "w" #'windmove-down
 
-    "H" #'windmove-swap-states-left
-    "S" #'windmove-swap-states-right
-    "N" #'windmove-swap-states-up
-    "T" #'windmove-swap-states-down
+    "M" #'windmove-swap-states-left
+    "Z" #'windmove-swap-states-right
+    "V" #'windmove-swap-states-up
+    "W" #'windmove-swap-states-down
 
     "g" #'tab-previous
     "l" #'tab-next
@@ -3640,22 +3640,22 @@ Let’s try to get some window behaviour under control.
   ;; add split-in-direction commands to this?
   (defvar windmove-repeat-map
     (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "h") 'windmove-left)
-      (define-key map (kbd "s") 'windmove-right)
-      (define-key map (kbd "n") 'windmove-up)
-      (define-key map (kbd "t") 'windmove-down)
+      (define-key map (kbd "m") 'windmove-left)
+      (define-key map (kbd "z") 'windmove-right)
+      (define-key map (kbd "v") 'windmove-up)
+      (define-key map (kbd "w") 'windmove-down)
 
-      (define-key map (kbd "H") 'windmove-swap-states-left)
-      (define-key map (kbd "S") 'windmove-swap-states-right)
-      (define-key map (kbd "N") 'windmove-swap-states-up)
-      (define-key map (kbd "T") 'windmove-swap-states-down)
+      (define-key map (kbd "M") 'windmove-swap-states-left)
+      (define-key map (kbd "Z") 'windmove-swap-states-right)
+      (define-key map (kbd "V") 'windmove-swap-states-up)
+      (define-key map (kbd "W") 'windmove-swap-states-down)
       map))
 
   (map-keymap
    (lambda (_key cmd)
      (when (symbolp cmd)
        (put cmd 'repeat-map 'windmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 0.6)
+       (put cmd 'repeat-exit-timeout 0.9)
        ))
    windmove-repeat-map)
 
