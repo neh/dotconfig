@@ -1710,7 +1710,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (nswbuff-exclude-buffer-regexps '("^ "
                                     "^\*.*\*"
                                     "^magit.*:.+"))
-  (nswbuff-include-buffer-regexps '("^*Org Src"))
+  (nswbuff-include-buffer-regexps '("^*Org Src"
+                                    "^*helpful"))
   )
 #+end_src
 
