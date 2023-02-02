@@ -2780,7 +2780,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
   (org-agenda-files '("~/org/"))
 
   (org-agenda-restore-windows t)
-  (org-agenda-window-setup 'other-window)
+  (org-agenda-window-setup 'current-window)
 
   (org-agenda-skip-deadline-if-done t)
   (org-agenda-skip-scheduled-if-done t)
