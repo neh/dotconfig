@@ -4880,16 +4880,12 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   (require 'dwim-shell-commands))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package tree-sitter
-  :hook
-  (tree-sitter-after-on . tree-sitter-hl-mode)
+#+begin_src emacs-lisp :lexical no
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
   :config
-  ;; activate tree-sitter on any buffer containing code for which it has a parser available
-  (global-tree-sitter-mode t))
-
-(use-package tree-sitter-langs
-  :after tree-sitter)
+  (global-treesit-auto-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
