@@ -3431,8 +3431,7 @@ Let’s try to get some window behaviour under control.
     (window-height . 0.6))
    ("\\*helpful *"
     (display-buffer-reuse-mode-window display-buffer-pop-up-window)
-    (mode . helpful-mode)
-    (inhibit-same-window . t))))
+    (mode . helpful-mode))))
 #+end_src
 
 #+begin_src emacs-lisp
