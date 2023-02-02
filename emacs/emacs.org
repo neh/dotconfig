@@ -5108,11 +5108,9 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :commands (link-hint-open-link
              link-hint-define-type)
   :general
-  (neh/leader-keys
-    "F" #'link-hint-open-link)
   (neh/leader-nav
     "f" #'link-hint-open-link
-    "F" #'neh/link-hint-open-in-eww)
+    "F" #'neh/link-hint-open-in-external)
 
   :config
   (link-hint-define-type 'text-url
@@ -5125,6 +5123,11 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (defun neh/link-hint-open-in-eww ()
     (interactive)
     (let ((browse-url-browser-function #'eww-browse-url))
+      (link-hint-open-link)))
+
+  (defun neh/link-hint-open-in-external ()
+    (interactive)
+    (let ((browse-url-browser-function #'browse-url-default-browser))
       (link-hint-open-link)))
   )
 #+end_src
