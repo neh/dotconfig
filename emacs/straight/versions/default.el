@@ -151,6 +151,7 @@
  ("org" . "dfcf500df5bbd9d2293cc7e1efd8acb41b8f0f65")
  ("org-appear" . "eb9f9db40aa529fe4b977235d86494b115281d17")
  ("org-block-capf" . "9342a5f756acec079ab8948083e24ea3e1ca781f")
+ ("org-chef" . "6a786e77e67a715b3cd4f5128b59d501614928af")
  ("org-d20" . "e6149dcfbb6302d10109dd792fd0ffae7bfe2595")
  ("org-download" . "19e166f0a8c539b4144cfbc614309d47a9b2a9b7")
  ("org-modern" . "f7cf2bb4a763472c6b90cabab779b18325b40f5b")
