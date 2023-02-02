@@ -19,7 +19,7 @@
  ("clojure-mode" . "3453cd229b412227aaffd1dc2870fa8fa213c5b1")
  ("closql" . "1aba69658061ae67d5e39e846aaa02ed2749940f")
  ("compat" . "8885b1cd3f5a2833c727b4448583213deb2d1d76")
- ("consult" . "fae9b50d88e991452d5a32a41c2b8452aa1a914d")
+ ("consult" . "c2858a52a186e71078b4d3a0116344702c470f01")
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")
  ("consult-git-log-grep" . "c58f16c77dfcad68f7768a3046c6260b4eaf3606")
  ("consult-jump-project" . "f129b374baa7dc0297beb140c9c76a84293ef2f2")
