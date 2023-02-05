@@ -1874,8 +1874,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
 
 #+begin_src emacs-lisp
 (use-package diff-hl
-  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
-         (dired-mode . diff-hl-dired-mode))
+  :hook ((dired-mode . diff-hl-dired-mode))
   :commands (diff-hl-mode
              global-diff-hl-mode
              diff-hl-flydiff-mode
