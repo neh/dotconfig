@@ -1297,7 +1297,9 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :after vertico
   :straight nil
   :hook (minibuffer-setup . vertico-repeat-save)
-  ;; needs a keybinding
+  :general
+  (neh/leader-util
+    "r" #'vertico-repeat)
   )
 
 (use-package vertico-reverse
