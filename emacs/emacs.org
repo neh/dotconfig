@@ -2311,6 +2311,9 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   (:keymaps '(embark-org-src-block-map)
    "F" #'neh/org-src-block-format)
 
+  :custom
+  (d2-flags "--sketch -t 103")
+
   :config
   (add-to-list 'apheleia-formatters '(d2 "d2" "fmt" "-"))
   (add-to-list 'apheleia-mode-alist '(d2-mode . d2))
@@ -2340,6 +2343,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
 
 ;; need to sort out the load order here so this implementation is active on a restart
 (use-package ob-d2
+  :disabled t
   :straight (ob-d2 :type git :host github :repo "xcapaldi/ob-d2")
   :commands (org-babel-execute:d2))
 #+end_src
