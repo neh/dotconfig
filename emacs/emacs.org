@@ -4006,8 +4006,10 @@ directory to make multiple eshell windows easier."
   (neh/leader-keys
     "cp" #'neh/dired-copy-full-path
     "cP" #'neh/dired-copy-full-path-quoted
-    "j" #'dired-jump
     "xx" #'neh/dired-open)
+
+  (neh/leader-nav
+    "u" #'dired-jump)
 
   :init
   (defun neh/dired-copy-full-path ()
