@@ -3666,14 +3666,9 @@ Let’s try to get some window behaviour under control.
   (aw-reverse-frame-list t)
 
   :general
-  (general-define-key
-   :states '(normal visual)
-   :prefix "j"
-   "w" #'ace-window
-   ;; only pops to window switched to with ace
-   "W" #'aw-flip-window
-   ;; "s" #'ace-swap-window
-   )
+  (neh/leader-nav
+    "o" #'ace-window
+    "O" #'aw-flip-window)
   (neh/leader-keys
     "ow" #'neh/other-window-prefix)
 
