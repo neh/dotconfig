@@ -188,7 +188,8 @@ Collect all the global, non-package-specific settings here.
 
   :preface
   ;; save a copy of the original recenter function, because I'm going to replace it
-  (fset 'original-recenter (symbol-function 'recenter))
+  (unless (fboundp 'original-recenter)
+    (fset 'original-recenter (symbol-function 'recenter)))
 
   :init
   (defcustom neh/recenter-window-eye-level 0.2
