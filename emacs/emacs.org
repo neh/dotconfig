@@ -3729,6 +3729,13 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
              vterm-other-window)
   :custom
   (vterm-max-scrollback 10000)
+
+  :general
+  (neh/leader-keys
+    :keymaps 'vterm-mode-map
+    :states '(normal insert)
+    "i" #'neh/consult-yank-from-kill-ring)
+
   :init
   ;; wondering about the buffer-name param here... could be a buffer or a string and need to handle?
   (defun neh/vterm-mode-p (buffer-name &optional action)
@@ -3750,7 +3757,19 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
         :state    ,#'consult--buffer-state
         :items    ,(lambda () (mapcar #'buffer-name (neh/vterm-list-buffers)))))
 
-    (add-to-list 'consult-buffer-sources 'vterm-buffer-source 'append))
+    (add-to-list 'consult-buffer-sources 'vterm-buffer-source 'append)
+
+    (defun vterm-consult-yank (orig-fun &rest args)
+      (if (equal major-mode 'vterm-mode)
+          (let ((inhibit-read-only t)
+                (yank-undo-function (lambda (_start _end) (vterm-undo))))
+            (cl-letf (((symbol-function 'insert-for-yank)
+                       (lambda (str) (vterm-send-string str t))))
+              (apply orig-fun args)))
+        (apply orig-fun args)))
+
+    (advice-add 'consult-yank-from-kill-ring :around #'vterm-consult-yank)
+    )
   )
 #+end_src
 
