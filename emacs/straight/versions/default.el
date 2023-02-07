@@ -97,6 +97,8 @@
  ("f.el" . "af7d37c619010b576fd22b50c62c71ff33093f3c")
  ("fontaine" . "2d0d66d23920e18e4f8a837120f51b6ada4ff953")
  ("forge" . "9fc07458edf446aed1d30a5360b780ba3b42c3c0")
+ ("frog-jump-buffer" . "ab830cb7a5af9429866ba88fb37589a0366d8bf2")
+ ("frog-menu" . "e4f404af19d8427f4540e55b1854ba569b66399e")
  ("gcode-mode.el" . "3b17b5ba85e5a05dac79b15b5231ad41f0a0fce5")
  ("general.el" . "9651024e7f40a8ac5c3f31f8675d3ebe2b667344")
  ("ghub" . "142b0dbe2b8e94db9489061813b703481566dfa1")

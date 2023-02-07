@@ -1751,6 +1751,18 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package frog-jump-buffer
+  :commands (frog-jump-buffer)
+  :custom
+  (frog-jump-buffer-filter-actions '(("W" "[workspace]"
+                                      my/frog-jump-buffer-filter-tabspaces)))
+  (frog-jump-buffer-default-filter #'my/frog-jump-buffer-filter-tabspaces)
+  :init
+  (defun my/frog-jump-buffer-filter-tabspaces (buffer)
+    (member buffer (tabspaces--buffer-list))))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package pulse
   :straight nil
   :defer 0.5
