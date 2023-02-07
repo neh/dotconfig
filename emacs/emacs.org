@@ -1423,7 +1423,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (:keymaps 'embark-url-map
    "." #'hydra-browse/body)
   (:keymaps 'embark-buffer-map
-   "F" #'switch-to-buffer-other-frame)
+   "F" #'switch-to-buffer-other-frame
+   "R" #'tabspaces-remove-selected-buffer)
   (:keymaps 'embark-heading-map
    "I" #'org-id-get-create
    "l" #'org-store-link)
