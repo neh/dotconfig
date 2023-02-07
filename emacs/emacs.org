@@ -3989,6 +3989,12 @@ directory to make multiple eshell windows easier."
          (eshell-load . eat-eshell-visual-command-mode)))
 #+end_src
 
+#+begin_src emacs-lisp :lexical no
+(use-package sticky-shell
+  :commands (sticky-shell-mode
+             sticky-shell-global-mode))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package fish-mode
   :commands (fish-mode))
