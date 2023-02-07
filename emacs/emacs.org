@@ -5519,11 +5519,23 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package expand-region
+  :disabled t
   :general
   (general-define-key
    :states 'visual
    "v" 'er/expand-region
    "V" 'er/contract-region))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
+(use-package expreg
+  :straight nil
+  :load-path "site-lisp"
+  :general
+  (general-define-key
+   :states 'visual
+   "v" #'expreg-expand
+   "V" #'expreg-contract))
 #+end_src
 
 #+begin_src emacs-lisp
