@@ -1668,7 +1668,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    )
 
   (neh/leader-keys
-    "cl" 'avy-copy-line)
+    "cl" #'avy-copy-line
+    "cr" #'avy-copy-region)
 
   :custom
   (avy-dispatch-alist '((?y . avy-action-copy)
