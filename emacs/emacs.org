@@ -1661,31 +1661,48 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package avy
   :general
   (neh/leader-nav
-   ;; "j" #'avy-goto-char-2
-   "j" #'avy-goto-char-timer
-   ;; "h" #'avy-org-goto-heading-timer
-   ;; "l" #'avy-goto-line
-   )
+    "j" #'avy-goto-char-timer
+    ;; "l" #'avy-goto-line
+    )
 
   (neh/leader-keys
     "cl" #'avy-copy-line
     "cr" #'avy-copy-region)
 
   :custom
-  (avy-dispatch-alist '((?y . avy-action-copy)
-                        (?m . avy-action-teleport)
-                        (?c . (lambda (pt)
-                                (avy-action-copy pt)
-                                (if (evil-insert-state-p)
-                                    (progn (evil-paste-before 1)
-                                           (evil-forward-char))
-                                  (evil-paste-after 1))))
-                        (?k . avy-action-kill-move)
-                        (?K . avy-action-kill-stay)
-                        (?M . avy-action-mark)))
+  (avy-dispatch-alist '((?x . avy-action-kill-move)
+                        (?X . avy-action-kill-stay)
+                        (?, . avy-action-embark)
+                        (?T . avy-action-teleport)
+                        (?m . avy-action-mark)
+                        (?c . avy-action-copy)
+                        (?C . my/avy-action-kill-whole-line)
+                        (?y . avy-action-yank)
+                        (?Y . avy-action-yank-line)
+                        (?i . avy-action-ispell)
+                        (?z . avy-action-zap-to-char)))
 
   (avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
-  (avy-line-insert-style 'below))
+  (avy-line-insert-style 'below)
+
+  :config
+  (defun avy-action-embark (pt)
+    (unwind-protect
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
+
+  (defun my/avy-action-kill-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (kill-whole-line))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t))
 #+end_src
 
 ** Buffers
