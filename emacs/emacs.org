@@ -5257,7 +5257,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
   (defun neh/deadgrep-here ()
     (interactive)
-      (deadgrep (deadgrep--read-search-term) default-directory))
+    (deadgrep (deadgrep--read-search-term) default-directory))
 
   :general
   (neh/leader-keys
