@@ -1651,7 +1651,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 (use-package org-block-capf
   :straight (:type git :host github :repo "xenodium/org-block-capf")
-  :hook (org-mode . org-block-capf-add-to-completion-at-point-functions))
+  :hook (org-mode . org-block-capf-add-to-completion-at-point-functions)
+  :custom
+  (org-block-capf-explicit-lang-defaults nil)
+  (org-block-capf-auto-indent nil))
 #+end_src
 
 ** Avy
