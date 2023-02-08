@@ -5248,6 +5248,13 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
                                           (if (< after 0) 0 after)))
       (deadgrep-restart)))
 
+  (defun neh/deadgrep-context-more ()
+    (interactive)
+    (neh/deadgrep-context-adjust 2))
+  (defun neh/deadgrep-context-less ()
+    (interactive)
+    (neh/deadgrep-context-adjust -2))
+
   (defun neh/deadgrep-here ()
     (interactive)
       (deadgrep (deadgrep--read-search-term) default-directory))
@@ -5268,12 +5275,8 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
    "M-s" #'deadgrep-forward-filename
    "D" #'deadgrep-search-directory
    "S" #'deadgrep-search-term
-   "+" (lambda ()
-         (interactive)
-         (neh/deadgrep-context-adjust 2))
-   "-" (lambda ()
-         (interactive)
-         (neh/deadgrep-context-adjust -2)))
+   "+" #'neh/deadgrep-context-more
+   "-" #'neh/deadgrep-context-less)
 
   :config
   (general-add-advice (list #'deadgrep-backward-filename
