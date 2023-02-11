@@ -3604,16 +3604,6 @@ Let’s try to get some window behaviour under control.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package shackle
-  :hook (after-init . shackle-mode)
-  :custom
-  (shackle-rules
-   '(
-     ;; (magit-diff-mode :align 'below :size 0.8)
-     (compilation-mode :noselect t))))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package popper
   :bind
   (:repeat-map popper-repeat-map
