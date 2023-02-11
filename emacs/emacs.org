@@ -818,7 +818,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
                            :slant italic)))))
 
 (use-package poet-theme)
+#+end_src
 
+#+begin_src emacs-lisp
 (defun neh/set-dark-mode ()
   "Load dark theme."
   (interactive)
