@@ -213,7 +213,7 @@
  ("swiper" . "b8be4913a661b557e0d3275726e36871556569d3")
  ("symbol-overlay" . "37de0a1c81c79d5a4bba417b545516122024ca12")
  ("tablist" . "faab7a035ef2258cc4ea2182f67e3aedab7e2af9")
- ("tabspaces" . "cf48657fbdb322bb059051737a2515e6f648b12c")
+ ("tabspaces" . "fe7f2795b8de723c4056852b034cf1efab68883b")
  ("taxy" . "b222226f9e1057490150c1a8a98e8b471df88302")
  ("taxy-magit-section" . "08899d283264b6c0a8931f3074b32217d5dc85e1")
  ("terminal-here" . "4bf2a77e450b260570033afda463e178fdf34617")
