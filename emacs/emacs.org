@@ -802,6 +802,14 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 
 (use-package ef-themes)
 
+(use-package stimmung-themes
+  :commands (stimmung-themes-load-light
+             stimmung-themes-load-dark
+             stimmung-themes-toggle)
+  :config
+  (set-face-foreground 'terraform--resource-name-face "dark orchid")
+  (set-face-foreground 'terraform--resource-type-face "green"))
+
 (use-package gruvbox-theme
   :custom-face
   (org-block-begin-line ((t (:inherit fixed-pitch
@@ -843,6 +851,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
         ((equal value "autumn-operandi")
          (setq neh/dark-theme 'ef-autumn
                neh/light-theme 'modus-operandi-tinted))
+        ((equal value "stimmung")
+         (setq neh/dark-theme 'stimmung-themes-dark
+               neh/light-theme 'stimmung-themes-light))
         ((equal value "mix")
          (setq neh/dark-theme 'gruvbox-dark-hard
                neh/light-theme 'modus-operandi)))
@@ -857,6 +868,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
           (const "modus")
           (const "modus-tinted")
           (const "autumn-operandi")
+          (const "stimmung")
           (const "mix"))
   :set 'neh/setthemeset
   :initialize 'custom-initialize-set)

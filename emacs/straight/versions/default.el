@@ -206,6 +206,7 @@
  ("spinner" . "634529bb3173e09b37499f636de70abf29d9fa8a")
  ("sqlformat" . "3fa86085de8a4e70954d4b3346fb228016b5bbb9")
  ("sticky-shell" . "60fa3cbf17572426eca4bc970f597fc31e5369c3")
+ ("stimmung-themes" . "8bdfa423929e45e4c6ad9b5158f6714e1731bfea")
  ("straight.el" . "3eca39dfc6797243ec7d1c6a7d45142407f73f88")
  ("string-inflection" . "50ad54970b3cc79b6b83979bde9889ad9a9e1a9c")
  ("sudo-edit" . "74eb1e6986461baed9a9269566ff838530b4379b")
