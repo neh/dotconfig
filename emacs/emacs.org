@@ -5707,6 +5707,69 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 * Misc functions
 
 #+begin_src emacs-lisp
+(defvar my/elfeed-last-update-time nil
+  "Last time elfeed-update ran.")
+(defvar my/elfeed-idle-update-timer nil
+  "Timer object for elfeed idle updates.")
+(defcustom my/elfeed-idle-update-interval 3600
+  "Run elfeed-update this long after the last time.")
+(defcustom my/elfeed-idle-update-idle-time 60
+  "Emacs should be idle for this long before running elfeed-update.")
+
+(defun my/elfeed-idle-save-last-update-time ()
+  (setq my/elfeed-last-update-time (current-time)))
+(advice-add #'elfeed-update :after #'my/elfeed-idle-save-last-update-time)
+
+(defun my/elfeed-idle-update-elfeed-active-p ()
+  (or (get-buffer-window "*elfeed-search*")
+      (get-buffer "*elfeed-entry*")))
+
+(defun my/elfeed-idle-update ()
+  (let* ((now (current-time))
+         (elfeed-inactive (not (my/elfeed-idle-update-elfeed-active-p)))
+         (idle (>= (time-convert (current-idle-time) 'integer) my/elfeed-idle-update-idle-time))
+         (since-last-update (time-convert (time-subtract now
+                                                         my/elfeed-last-update-time)
+                                          'integer))
+         (long-enough (or (not my/elfeed-last-update-time)
+                          (>= since-last-update my/elfeed-idle-update-interval)))
+         )
+    ;; (message "%s Feed update check: %s %s [Last update: %s (Interval: %s)]"
+    ;;          (format-time-string "%F %T" now)
+    ;;          (if elfeed-inactive "[Elfeed inactive]" "[Elfeed active]")
+    ;;          (if idle "[Idle]" "[Not idle]")
+    ;;          since-last-update my/elfeed-idle-update-interval)
+    (when (and (daemonp) elfeed-inactive idle long-enough)
+      (progn
+        (message "%s Updating feeds" (format-time-string "%F %T" now))
+        (elfeed-update)
+        ))))
+
+(defun my/elfeed-idle-update-custom-toggle (sym value)
+  (if (and (daemonp) value)
+      (progn (unless (timerp my/elfeed-idle-update-timer)
+               (setq my/elfeed-idle-update-timer (run-with-timer 30 60 #'my/elfeed-idle-update)))
+             (setq my/elfeed-idle-update-enabled t))
+    (when (timerp my/elfeed-idle-update-timer)
+      (cancel-timer my/elfeed-idle-update-timer)
+      (setq my/elfeed-idle-update-timer nil
+            my/elfeed-idle-update-enabled nil))))
+
+(defcustom my/elfeed-idle-update-enabled nil
+  "Enable or disable automatic idle updates for elfeed."
+  :type 'boolean
+  :set 'my/elfeed-idle-update-custom-toggle
+  :initialize 'custom-initialize-set)
+
+;; doesn't work on startup, the -enabled var isn't defined on start
+;; I need to actually learn how customs work
+(defun my/elfeed-idle-update-toggle ()
+  (interactive)
+  (if my/elfeed-idle-update-enabled
+      (customize-set-variable 'my/elfeed-idle-update-enabled nil)
+    (customize-set-variable 'my/elfeed-idle-update-enabled t)))
+#+end_src
+#+begin_src emacs-lisp
 ;; from https://www.reddit.com/r/emacs/comments/l51ocx/what_is_the_most_useful_part_of_your_emacs_config/gkrz1di
 (defun insert-date ()
   "Insert today's date at point"
