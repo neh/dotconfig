@@ -4969,6 +4969,10 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (websearch
              websearch-mode
              websearch-define)
+  :config
+  (websearch-define "mdn"
+      :query-separator "+"
+      :query-url "developer.mozilla.org/en-US/search?q=")
   :general
   (neh/leader-keys
     "sw" #'websearch))
