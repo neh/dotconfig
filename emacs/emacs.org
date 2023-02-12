@@ -1516,8 +1516,9 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :general
   ;; ([remap evil-search-forward] #'consult-line)
-  (neh/leader-util
-    "m" #'consult-buffer)
+  (neh/leader-nav
+    "h" #'consult-buffer
+    "k" #'find-file)
   (neh/leader-keys
     "i" #'consult-yank-from-kill-ring
     "l" #'consult-line
