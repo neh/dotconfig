@@ -5767,9 +5767,42 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 * Misc functions
 
-#+begin_src emacs-lisp
-      (progn
+Originally this came from [[https://karthinks.com/software/more-less-emacs/][more < less < emacs | Karthinks]], but I had to make some changes to make it work with evil and blink-cursor-mode. There's a little bit of relevant config in with the evil-collection package as well.
+[[https://emacs.stackexchange.com/questions/18374/persistently-hide-cursor-evil-mode-problem][buffers - Persistently hide cursor [evil-mode problem] - Emacs Stack Exchange]]
+[[https://github.com/emacs-evil/evil/issues/592][Evil makes hidden cursor reappear on window configuration changes · Issue #592 · emacs-evil/evil · GitHub]]
 
+#+begin_src emacs-lisp
+(define-minor-mode hide-cursor-mode
+  "Hide or show the cursor.
+
+When the cursor is hidden `scroll-lock-mode' is enabled, so that
+the buffer works like a pager."
+  :global nil
+  :lighter "H"
+  (if hide-cursor-mode
+      (progn
+        (scroll-lock-mode 1)
+        (blink-cursor-mode -1)
+        (internal-show-cursor nil nil)
+        )
+    (scroll-lock-mode -1)
+    (blink-cursor-mode t)
+    (internal-show-cursor nil t)))
+
+(add-hook 'elfeed-show-mode-hook #'hide-cursor-mode-enable)
+;; (remove-hook 'elfeed-show-mode-hook #'hide-cursor-mode)
+
+;; advice runs, but something fails with the kill
+;; (advice-add 'elfeed-kill-buffer :before #'hide-cursor-mode)
+;; (advice-remove 'elfeed-kill-buffer #'hide-cursor-mode)
+
+(defun hide-cursor-mode-enable ()
+  (hide-cursor-mode 1)
+  (add-hook 'kill-buffer-hook #'hide-cursor-mode-disable 0 t))
+
+(defun hide-cursor-mode-disable ()
+  (hide-cursor-mode -1))
+#+end_src
   (interactive)
 #+end_src
 #+begin_src emacs-lisp
