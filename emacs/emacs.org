@@ -5821,8 +5821,45 @@ the buffer works like a pager."
 (defun hide-cursor-mode-disable ()
   (hide-cursor-mode -1))
 #+end_src
+
+#+begin_src emacs-lisp
+;; from https://www.reddit.com/r/emacs/comments/z5r75b/how_to_open_a_file_with_external_program_with/
+;; it works well, but the launched process will die with emacs
+
+(defun async/open-with-zathura (files)
+  "
+It can be used programatically
+
+  (it \"~/a.pdf\" \"~/b.pdf\")
+
+interactively, or via #'embark-act.
+"
+  (interactive "sOpen file with zathura: ")
+  (when (stringp files) (setf files (list files)))
+  (let ((buf (current-buffer))
+        (command `("zathura"
+                   ,@(mapcar (lambda (x)
+                               (format "%s" x))
+                             files))))
+    (message (format "Running command: %S" command))
+    (make-process
+     :name     "dired/async/open-with-zathura"
+     :command  command
+     :buffer   (get-buffer "*Messages*")
+     :sentinel (lambda (proc type)
+                 (declare (ignore (proc type)))
+                 (with-current-buffer buf
+                   (revert-buffer))))))
+
+(define-key embark-file-map "z" #'async/open-with-zathura)
+
+;; this doesn't work, because I don't have dired/funcall-on-marked-files
+(defun dired/async/open-with-zathura ()
+  "Open selected files with zathura."
   (interactive)
+  (dired/funcall-on-marked-files #'async/open-with-zathura))
 #+end_src
+
 #+begin_src emacs-lisp
 ;; from https://www.reddit.com/r/emacs/comments/l51ocx/what_is_the_most_useful_part_of_your_emacs_config/gkrz1di
 (defun insert-date ()
