@@ -62,6 +62,7 @@
  ("emacs-idle-highlight-mode" . "0f135a6b5bb3a55dafacbd885535edfcb35a04d5")
  ("emacs-kv" . "721148475bce38a70e0b678ba8aa923652e8900e")
  ("emacs-libvterm" . "f14d113ee4618f052879509ec378feb9766b871b")
+ ("emacs-magit-commit-mark" . "9075f9499e653051ca8a86ad17ee704b6171e14f")
  ("emacs-reformatter" . "f454b179ab7d39dc8783b9f2a046cab353b272f5")
  ("emacs-request" . "6ddb4fc4d8a0746ee2dfd8473af315ebe8f6215b")
  ("emacs-run-command" . "0ac25bc1acae652ffb58c48a3853cd1dcd7b40a4")
