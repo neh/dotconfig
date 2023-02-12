@@ -3711,7 +3711,7 @@ Let’s try to get some window behaviour under control.
    (lambda (_key cmd)
      (when (symbolp cmd)
        (put cmd 'repeat-map 'windmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 0.9)
+       (put cmd 'repeat-exit-timeout 3)
        ))
    windmove-repeat-map)
 
@@ -3728,7 +3728,7 @@ Let’s try to get some window behaviour under control.
    (lambda (_key cmd)
      (when (symbolp cmd)
        (put cmd 'repeat-map 'tabmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 0.9)
+       (put cmd 'repeat-exit-timeout 3)
        ))
    tabmove-repeat-map)
   )
