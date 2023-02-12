@@ -1921,7 +1921,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (neh/leader-keys
     "op" #'projectile-switch-project
     "oh" #'projectile-find-file-dwim
-    "pg" #'projectile-ripgrep)
+    )
 
   :config
   (setq frame-title-format
