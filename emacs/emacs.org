@@ -4758,6 +4758,18 @@ Try out =org-noter=.
   (:keymaps 'elfeed-search-mode-map
    :states 'normal
    "o" #'elfeed-search-show-entry)
+  (:keymaps 'elfeed-show-mode-map
+   :states 'normal
+   "U" #'my/elfeed-mark-unread-and-exit)
+
+  :config
+  (defun my/elfeed-mark-unread-and-exit ()
+    "Add unread tag and exit entry."
+    (interactive)
+    (elfeed-show-tag--unread)
+    (elfeed-kill-buffer))
+
+
   (defvar my/elfeed-last-update-time nil
     "Last time elfeed-update ran.")
   (defvar my/elfeed-idle-update-timer nil
