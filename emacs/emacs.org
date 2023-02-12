@@ -3630,6 +3630,7 @@ Let’s try to get some window behaviour under control.
   :bind
   (:repeat-map popper-repeat-map
    ("c" . popper-cycle)
+   ("k" . popper-kill-latest-popup)
    ("p" . popper-toggle-latest))
 
   :general
@@ -3638,15 +3639,31 @@ Let’s try to get some window behaviour under control.
     "P" #'popper-toggle-type)
 
   :custom
-  (popper-display-control nil)
+  (popper-group-function #'my/popper-group-by-tabspace)
+  ;; (popper-group-function nil)
+  (popper-display-control t)
+  (popper-display-function #'display-buffer-below-selected)
   (popper-reference-buffers
    '("\\*Messages\\*$"
      compilation-mode
+     help-mode
+     "\\*helpful"
+     "Output\\*"
      ("\\*Shell Command Output\\*" . hide)
      ))
 
   :init
-  (popper-mode t))
+  (defun my/current-tab-name ()
+    (let* ((tabs (frame-parameter nil 'tabs))
+           (current-tab (tab-bar--current-tab-find tabs))
+           (current-tab-name (assq 'name current-tab)))
+      (cdr current-tab-name)))
+
+  (defun my/popper-group-by-tabspace ()
+    (my/current-tab-name))
+
+  (popper-mode t)
+  (popper-echo-mode t))
 #+end_src
 
 * Window Navigation
