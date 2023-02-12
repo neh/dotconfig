@@ -3232,6 +3232,9 @@ MimeType=x-scheme-handler/org-protocol;
     :keymaps 'org-mode-map
     "ni" #'org-roam-node-insert)
 
+  (neh/leader-nav
+    "n" #'org-roam-node-find)
+
   (:keymaps '(org-roam-mode-map
               org-roam-node-map)
    "n" nil
