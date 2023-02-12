@@ -1220,7 +1220,17 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   :config
   (evil-collection-init)
-  (add-hook 'evil-collection-setup-hook #'neh/evil-key-translations))
+  (add-hook 'evil-collection-setup-hook #'neh/evil-key-translations)
+
+  (evil-collection-define-key 'normal 'scroll-lock-mode-map
+    [remap evil-next-line] 'evil-collection-scroll-lock-next-line
+    [remap evil-previous-line] 'evil-collection-scroll-lock-previous-line
+    (kbd "c") #'evil-scroll-page-down
+    (kbd "r") #'evil-scroll-page-up
+    (kbd "w") #'evil-scroll-down
+    (kbd "v") #'evil-scroll-up
+    )
+  )
 #+end_src
 
 #+begin_src emacs-lisp
