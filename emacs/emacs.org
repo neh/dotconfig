@@ -1476,6 +1476,11 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
              avy-embark-collect-choose))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package embark-vc
+  :after embark)
+#+end_src
+
 ** Consult
 
 Consult takes over for a lot of what counsel did, as well as swiper.

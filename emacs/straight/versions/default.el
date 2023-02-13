@@ -78,6 +78,7 @@
  ("emacsmirror-mirror" . "a2d65d0360ab541ff189dc7b8ba8a25ea7aeb6c2")
  ("emacsql" . "6b2e65bdf785364cf7c34c31fea5812e1e58c657")
  ("embark" . "8960e450ac3b1bb085d85c41fc5ae1080ad8f7bb")
+ ("embark-vc" . "070666b0de8fc2832aa2510b9ba492565cb5e35e")
  ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
  ("ement.el" . "28de42d653cc1e254cc3dccfcb685db947cdde4c")
  ("envrc" . "1954e8c0b5c8440ea9852eeb7c046a677fa544f6")
