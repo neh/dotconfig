@@ -67,6 +67,7 @@
  ("emacs-request" . "6ddb4fc4d8a0746ee2dfd8473af315ebe8f6215b")
  ("emacs-run-command" . "0ac25bc1acae652ffb58c48a3853cd1dcd7b40a4")
  ("emacs-scad-mode" . "749b11df1d3041aa0a90542cba0fe5d9563c3a1f")
+ ("emacs-scroll-on-jump" . "110dc1fbdd02bbf501311639aa63b2d1b59391bd")
  ("emacs-smart-hungry-delete" . "e06525cc1841805ebe470c876d6b966de90bc275")
  ("emacs-theme-gruvbox" . "736729265bfe5e247cf1b48bcf996e56516b0d89")
  ("emacs-undo-fu" . "0e22308de8337a9291ddd589edae167d458fbe77")
