@@ -4910,6 +4910,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package hl-todo
+  :commands (hl-todo-mode
+             global-hl-todo-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package proced
   :straight nil
   :custom
