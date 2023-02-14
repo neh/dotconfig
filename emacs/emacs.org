@@ -5966,6 +5966,9 @@ the buffer works like a pager."
 
 (defun hide-cursor-mode-disable ()
   (hide-cursor-mode -1))
+
+(neh/leader-util
+  "v" #'hide-cursor-mode)
 #+end_src
 
 #+begin_src emacs-lisp
