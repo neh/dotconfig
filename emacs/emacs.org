@@ -3520,9 +3520,9 @@ Let’s try to get some window behaviour under control.
    ("\\*Capture\\*"
     (display-buffer-below-selected))
    ("\\*Embark Actions\\*"
-    (display-buffer-use-some-window))
+    (my/display-buffer-to-right-or-left))
    ("\\*Embark Collect:"
-    (display-buffer-use-some-window))
+    (my/display-buffer-to-right-or-left))
    ("\\*Messages\\*$"
     (display-buffer-use-some-window))
    ("magit-diff:"
@@ -3531,6 +3531,60 @@ Let’s try to get some window behaviour under control.
    ("\\*helpful"
     (display-buffer-reuse-mode-window display-buffer-pop-up-window)
     (mode . helpful-mode))))
+#+end_src
+
+Came from: [[https://stackoverflow.com/questions/50857088/emacs-auto-display-of-things-at-point-in-a-right-window][Emacs auto-display of things at point in a right window - Stack Overflow]]
+#+begin_src emacs-lisp
+(defun my/non-minibuffer-current-window ()
+  (if (minibuffer-window-active-p (selected-window))
+      (get-buffer-window (nth 1 (buffer-list)))
+    (selected-window)))
+
+(defun my-display-buffer (buffer-or-name alist direction &optional size pixelwise)
+  "BUFFER:  The buffer that will be displayed.
+ALIST:  See the doc-string of `display-buffer' for more information.
+DIRECTION:  Must use one of these symbols:  'left 'right 'below 'above
+SIZE:  See the doc-string for `split-window'.
+PIXELWISE:  See the doc-string for `split-window'.
+There are three possibilities:
+-  (1) If a window on the frame already displays the target buffer,
+then just reuse the same window.
+-  (2) If there is already a window in the specified direction in relation
+to the selected window, then display the target buffer in said window.
+-  (3) If there is no window in the specified direction, then create one
+in that direction and display the target buffer in said window."
+  (let* ((buffer
+          (if (bufferp buffer-or-name)
+              buffer-or-name
+            (get-buffer buffer-or-name)))
+         (window
+          (cond
+           ((get-buffer-window buffer (selected-frame)))
+           ((if (minibuffer-window-active-p (selected-window))
+                (with-selected-window (my/non-minibuffer-current-window)
+                  (window-in-direction direction))
+              (window-in-direction direction)))
+           (t
+            (split-window (my/non-minibuffer-current-window) size direction pixelwise)))))
+    (window--display-buffer buffer window 'reuse alist)
+    window))
+
+(defun my/display-buffer-to-right (buffer alist)
+  (my-display-buffer buffer alist 'right)
+  )
+
+(defun my/find-window-direction ()
+  (with-selected-window (if (minibuffer-window-active-p (selected-window))
+                            (get-buffer-window (nth 1 (buffer-list)))
+                          (selected-window))
+    (let ((right (window-in-direction 'right))
+          (left (window-in-direction 'left)))
+      (cond ((windowp right) 'right)
+            ((windowp left) 'left)
+            (t 'right)))))
+
+(defun my/display-buffer-to-right-or-left (buffer alist)
+  (my-display-buffer buffer alist (my/find-window-direction)))
 #+end_src
 
 #+begin_src emacs-lisp
