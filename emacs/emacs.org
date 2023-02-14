@@ -3706,6 +3706,7 @@ in that direction and display the target buffer in said window."
    '("\\*Messages\\*$"
      compilation-mode
      help-mode
+     "\\*Warnings\\*"
      "\\*helpful"
      "Output\\*"
      ("\\*Shell Command Output\\*" . hide)
