@@ -4967,7 +4967,9 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package hl-todo
   :commands (hl-todo-mode
-             global-hl-todo-mode))
+             global-hl-todo-mode)
+  :config
+  (global-hl-todo-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
