@@ -1805,34 +1805,9 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package pulse
-  :straight nil
-  :defer 0.5
-  :custom
-  (pulse-flag t)
-  :config
-  ;; stolen from https://blog.meain.io/2020/emacs-highlight-yanked/
-  (defun meain/evil-yank-advice (orig-fn beg end &rest args)
-    (pulse-momentary-highlight-region beg end)
-    (apply orig-fn beg end args))
-  (advice-add 'evil-yank :around 'meain/evil-yank-advice))
-#+end_src
-
-#+begin_src emacs-lisp
 ;; doesn't seem to work in src blocks unless re-enabled?
 (use-package topsy
   :hook (prog-mode . topsy-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package highlight-parentheses
-  :hook (prog-mode . highlight-parentheses-mode)
-  :custom
-  (highlight-parentheses-colors '("red2" "DarkOrange1" "goldenrod2" "IndianRed4"))
-  (highlight-parentheses-attributes '((:weight ultra-bold)
-                                      (:weight ultra-bold)
-                                      (:weight ultra-bold)
-                                      (:weight ultra-bold))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3927,6 +3902,100 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (load "org-phscroll.el"))
 #+end_src
 
+* Highlighting
+
+#+begin_src emacs-lisp
+(use-package pulse
+  :straight nil
+  :defer 0.5
+  :custom
+  (pulse-flag t)
+  :config
+  ;; stolen from https://blog.meain.io/2020/emacs-highlight-yanked/
+  (defun meain/evil-yank-advice (orig-fn beg end &rest args)
+    (pulse-momentary-highlight-region beg end)
+    (apply orig-fn beg end args))
+  (advice-add 'evil-yank :around 'meain/evil-yank-advice))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package idle-highlight-mode
+  :commands (idle-highlight-mode
+             global-idle-highlight-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package highlight-parentheses
+  :hook (prog-mode . highlight-parentheses-mode)
+  :custom
+  (highlight-parentheses-colors '("red2" "DarkOrange1" "goldenrod2" "IndianRed4"))
+  (highlight-parentheses-attributes '((:weight ultra-bold)
+                                      (:weight ultra-bold)
+                                      (:weight ultra-bold)
+                                      (:weight ultra-bold))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :commands (hl-todo-mode
+             global-hl-todo-mode)
+  :config
+  (global-hl-todo-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hl-line-mode
+  :straight nil
+  :commands (hl-line-mode
+             global-hl-line-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package hi-lock
+  :straight nil
+  :general
+  (neh/leader-keys
+    :infix "h"
+    "l" #'highlight-lines-matching-regexp
+    "r" #'highlight-regexp
+    "u" #'unhighlight-regexp)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package symbol-overlay
+  :general
+  (general-def
+    :keymaps 'symbol-overlay-map
+    "i" nil
+    "n" nil
+    "p" nil
+    "t" nil
+    "s" nil
+    "h" nil
+
+    "?" 'symbol-overlay-map-help
+
+    "S" 'symbol-overlay-toggle-in-scope
+
+    "M-n" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
+    "M-t" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
+    "M-<up>" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
+    "M-<down>" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
+    "M-N" '(lambda () (interactive) (symbol-overlay-switch-backward) (recenter))
+    "M-T" '(lambda () (interactive) (symbol-overlay-switch-forward) (recenter))
+
+    "c" 'symbol-overlay-put
+    "C" 'symbol-overlay-remove-all)
+
+  (neh/leader-keys
+    "hs" #'symbol-overlay-put
+    "hn" #'symbol-overlay-switch-backward
+    "ht" #'symbol-overlay-switch-forward
+    "hc" #'symbol-overlay-remove-all
+    "hM" #'symbol-overlay-mode))
+#+end_src
+
 * Shells
 
 #+begin_src emacs-lisp :lexical no
@@ -5030,14 +5099,6 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
-(use-package hl-todo
-  :commands (hl-todo-mode
-             global-hl-todo-mode)
-  :config
-  (global-hl-todo-mode t))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package proced
   :straight nil
   :custom
@@ -5462,13 +5523,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package hl-line-mode
-  :straight nil
-  :commands (hl-line-mode
-             global-hl-line-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package buffer-move
   :commands (buf-move-left
              buf-move-down
@@ -5689,58 +5743,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
                   evil-window-down))
     (add-to-list 'pulsar-pulse-functions item))
   )
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package hi-lock
-  :straight nil
-  :general
-  (neh/leader-keys
-    :infix "h"
-    "l" #'highlight-lines-matching-regexp
-    "r" #'highlight-regexp
-    "u" #'unhighlight-regexp)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package symbol-overlay
-  :general
-  (general-def
-    :keymaps 'symbol-overlay-map
-    "i" nil
-    "n" nil
-    "p" nil
-    "t" nil
-    "s" nil
-    "h" nil
-
-    "?" 'symbol-overlay-map-help
-
-    "S" 'symbol-overlay-toggle-in-scope
-
-    "M-n" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
-    "M-t" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
-    "M-<up>" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
-    "M-<down>" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
-    "M-N" '(lambda () (interactive) (symbol-overlay-switch-backward) (recenter))
-    "M-T" '(lambda () (interactive) (symbol-overlay-switch-forward) (recenter))
-
-    "c" 'symbol-overlay-put
-    "C" 'symbol-overlay-remove-all)
-
-  (neh/leader-keys
-    "hs" #'symbol-overlay-put
-    "hn" #'symbol-overlay-switch-backward
-    "ht" #'symbol-overlay-switch-forward
-    "hc" #'symbol-overlay-remove-all
-    "hM" #'symbol-overlay-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package idle-highlight-mode
-  :commands (idle-highlight-mode
-             global-idle-highlight-mode))
 #+end_src
 
 #+begin_src emacs-lisp
