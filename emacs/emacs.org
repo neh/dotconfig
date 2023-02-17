@@ -1501,6 +1501,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   ;; ([remap evil-search-forward] #'consult-line)
   (neh/leader-nav
     "h" #'consult-buffer
+    "f" #'consult-find
     "k" #'find-file)
   (neh/leader-keys
     "i" #'consult-yank-from-kill-ring
