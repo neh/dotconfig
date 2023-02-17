@@ -203,6 +203,7 @@
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("scratch" . "f000648c9663833a76a8de9b1e78c99a9d698e48")
  ("screenshot" . "e2a364c1a1addbd1e557307da836b97bccb13889")
+ ("scrollkeeper.el" . "3c4ac6b6b44686d31c260ee0b19daaee59bdccd6")
  ("sesman" . "e0f555f963c9f02f8e4a50e06fc353eb4c15ee77")
  ("shrface" . "443db59086a1b0d9ab6e61f5830026881cea5dd2")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")

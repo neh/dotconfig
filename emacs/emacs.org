@@ -1839,21 +1839,21 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package scrollkeeper
-  :disabled
   :custom
-  (scrollkeeper-scroll-steps 1)
-  (scrollkeeper-scroll-distance 0.85)
-  (scrollkeeper-guideline-pulse-interval 0.07)
+  (scrollkeeper-scroll-steps 6)
+  (scrollkeeper-scroll-distance 0.80)
+  (scrollkeeper-guideline-pulse-interval 0.06)
   (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
   :custom-face
-  (scrollkeeper-guideline-highlight ((t (:background "Orange" :extend t))))
+  (scrollkeeper-guideline-highlight ((t (:background "#ffffaa" :extend t))))
   :general
-  ([remap scroll-up-command] #'scrollkeeper-down)
-  ([remap scroll-down-command] #'scrollkeeper-up)
-  ([remap evil-scroll-up] #'scrollkeeper-up)
-  ([remap evil-scroll-down] #'scrollkeeper-down)
-  ([remap evil-scroll-page-up] #'scrollkeeper-up)
-  ([remap evil-scroll-page-down] #'scrollkeeper-down))
+  ([remap scroll-up-command] #'scrollkeeper-down
+   [remap scroll-down-command] #'scrollkeeper-up
+   [remap evil-scroll-up] #'scrollkeeper-up
+   [remap evil-scroll-down] #'scrollkeeper-down
+   [remap evil-scroll-page-up] #'scrollkeeper-up
+   [remap evil-scroll-page-down] #'scrollkeeper-down)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5188,7 +5188,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   :custom
   (pixel-scroll-precision-interpolate-page t)
   (pixel-scroll-precision-interpolation-factor 2.0)
-  (pixel-scroll-precision-large-scroll-height nil)
+  (pixel-scroll-precision-large-scroll-height 20)
   :init
   (pixel-scroll-precision-mode t))
 #+end_src
