@@ -277,28 +277,6 @@ Log but don't pop up a buffer for warnings during native compilation of packages
 (native-comp-async-report-warnings-errors nil)
 #+end_src
 
-Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(mouse-wheel-scroll-amount '(2 ((shift) . 1)))
-(mouse-wheel-progressive-speed nil)
-(mouse-wheel-follow-mouse 't)
-(scroll-step 1)
-(scroll-margin 3)
-(hscroll-step 3)
-(hscroll-margin 3)
-(scroll-preserve-screen-position 'always)
-(scroll-up-aggressively 0.01)
-(scroll-down-aggressively 0.01)
-(scroll-conservatively 101)
-#+end_src
-
-And let’s try out the new single-line-horizontal-scroll option in emacs 26.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(auto-hscroll-mode 'current-line)
-#+end_src
-
 from https://www.wisdomandwonder.com/programming/13521/automatically-open-read-only-files-in-view-mode
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
 (view-read-only t)
@@ -1838,25 +1816,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package scrollkeeper
-  :custom
-  (scrollkeeper-scroll-steps 6)
-  (scrollkeeper-scroll-distance 0.80)
-  (scrollkeeper-guideline-pulse-interval 0.06)
-  (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
-  :custom-face
-  (scrollkeeper-guideline-highlight ((t (:background "#ffffaa" :extend t))))
-  :general
-  ([remap scroll-up-command] #'scrollkeeper-down
-   [remap scroll-down-command] #'scrollkeeper-up
-   [remap evil-scroll-up] #'scrollkeeper-up
-   [remap evil-scroll-down] #'scrollkeeper-down
-   [remap evil-scroll-page-up] #'scrollkeeper-up
-   [remap evil-scroll-page-down] #'scrollkeeper-down)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
 ;; doesn't seem to work in src blocks unless re-enabled?
 (use-package topsy
   :hook (prog-mode . topsy-mode))
@@ -2312,18 +2271,6 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     "End up in normal state after editing a src block."
     (evil-normal-state)))
 #+end_src
-
-Finally found a package that lets org tables horizontally scroll while leaving the rest of the text alone.
-
-#+begin_src emacs-lisp :lexical no
-(use-package phscroll
-  :straight (phscroll :type git :host github :repo "misohena/phscroll")
-  :after org
-  :hook (org-mode . org-phscroll-mode)
-  :init
-  (setq org-startup-truncated nil)
-  :config
-  (load "org-phscroll.el"))
 #+end_src
 
 Org-mouse enables nice mouse interaction with bits of org like headings and checkboxes.
@@ -3862,6 +3809,121 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
            ace-display-buffer))))
 #+end_src
 
+* Scrolling
+
+Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(mouse-wheel-scroll-amount '(2 ((shift) . 1)))
+(mouse-wheel-progressive-speed nil)
+(mouse-wheel-follow-mouse 't)
+(scroll-step 1)
+(scroll-margin 3)
+(hscroll-step 3)
+(hscroll-margin 3)
+(scroll-preserve-screen-position 'always)
+(scroll-up-aggressively 0.01)
+(scroll-down-aggressively 0.01)
+(scroll-conservatively 101)
+#+end_src
+
+And let’s try out the new single-line-horizontal-scroll option in emacs 26.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
+(auto-hscroll-mode 'current-line)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package scrollkeeper
+  :custom
+  (scrollkeeper-scroll-steps 6)
+  (scrollkeeper-scroll-distance 0.80)
+  (scrollkeeper-guideline-pulse-interval 0.06)
+  (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
+  :custom-face
+  (scrollkeeper-guideline-highlight ((t (:background "#ffffaa" :extend t))))
+  :general
+  ([remap scroll-up-command] #'scrollkeeper-down
+   [remap scroll-down-command] #'scrollkeeper-up
+   [remap evil-scroll-up] #'scrollkeeper-up
+   [remap evil-scroll-down] #'scrollkeeper-down
+   [remap evil-scroll-page-up] #'scrollkeeper-up
+   [remap evil-scroll-page-down] #'scrollkeeper-down)
+  )
+#+end_src
+
+New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
+
+#+begin_src emacs-lisp
+(use-package pixel-scroll
+  :straight nil
+  :if (>= emacs-major-version 29)
+  :commands (pixel-scroll-precision-mode)
+  :custom
+  (pixel-scroll-precision-interpolate-page t)
+  (pixel-scroll-precision-interpolation-factor 2.0)
+  (pixel-scroll-precision-large-scroll-height 20)
+  :init
+  (pixel-scroll-precision-mode t))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
+(use-package scroll-on-jump
+  :commands (scroll-on-jump
+              scroll-on-jump-interactive
+              scroll-on-jump-advice-add
+              scroll-on-jump-advice-remove)
+
+  :config
+  (with-eval-after-load 'evil
+    ;; (scroll-on-jump-advice-add evil-undo)
+    ;; (scroll-on-jump-advice-add evil-redo)
+    ;; (scroll-on-jump-advice-add evil-jump-item)
+    ;; (scroll-on-jump-advice-add evil-jump-forward)
+    ;; (scroll-on-jump-advice-add evil-jump-backward)
+    (scroll-on-jump-advice-add evil-ex-search-next)
+    (scroll-on-jump-advice-add evil-ex-search-previous)
+    (scroll-on-jump-advice-add evil-search-next)
+    (scroll-on-jump-advice-add evil-search-previous)
+    (scroll-on-jump-advice-add evil-forward-paragraph)
+    (scroll-on-jump-advice-add evil-backward-paragraph)
+    (scroll-on-jump-advice-add evil-goto-mark)
+    (scroll-on-jump-advice-add evil-goto-line)
+    (scroll-on-jump-advice-add evil-goto-first-line)
+
+    ;; Actions that themselves scroll.
+    ;; (scroll-on-jump-with-scroll-advice-add scrollkeeper-down)
+    ;; (scroll-on-jump-with-scroll-advice-add scrollkeeper-up)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
+
+  ;; (with-eval-after-load 'goto-chg
+  ;;   (scroll-on-jump-advice-add goto-last-change)
+  ;;   (scroll-on-jump-advice-add goto-last-change-reverse))
+
+  ;; (global-set-key (kbd "<C-M-next>") (scroll-on-jump-interactive 'diff-hl-next-hunk))
+  ;; (global-set-key (kbd "<C-M-prior>") (scroll-on-jump-interactive 'diff-hl-previous-hunk))
+  )
+#+end_src
+
+Finally found a package that lets org tables horizontally scroll while leaving the rest of the text alone.
+
+#+begin_src emacs-lisp
+(use-package phscroll
+  :straight (phscroll :type git :host github :repo "misohena/phscroll")
+  :after org
+  :hook (org-mode . org-phscroll-mode)
+  :init
+  (setq org-startup-truncated nil)
+  :config
+  (load "org-phscroll.el"))
+#+end_src
+
 * Shells
 
 #+begin_src emacs-lisp :lexical no
@@ -5178,61 +5240,12 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
              org-web-tools-read-url-as-org))
 #+end_src
 
-New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
 
 #+begin_src emacs-lisp
-(use-package pixel-scroll
-  :straight nil
-  :if (>= emacs-major-version 29)
-  :commands (pixel-scroll-precision-mode)
   :custom
-  (pixel-scroll-precision-interpolate-page t)
-  (pixel-scroll-precision-interpolation-factor 2.0)
-  (pixel-scroll-precision-large-scroll-height 20)
-  :init
-  (pixel-scroll-precision-mode t))
-#+end_src
-
-#+begin_src emacs-lisp :lexical no
-(use-package scroll-on-jump
-  :commands (scroll-on-jump
-              scroll-on-jump-interactive
-              scroll-on-jump-advice-add
-              scroll-on-jump-advice-remove)
-
   :config
-  (with-eval-after-load 'evil
-    ;; (scroll-on-jump-advice-add evil-undo)
-    ;; (scroll-on-jump-advice-add evil-redo)
-    ;; (scroll-on-jump-advice-add evil-jump-item)
-    ;; (scroll-on-jump-advice-add evil-jump-forward)
-    ;; (scroll-on-jump-advice-add evil-jump-backward)
-    (scroll-on-jump-advice-add evil-ex-search-next)
-    (scroll-on-jump-advice-add evil-ex-search-previous)
-    (scroll-on-jump-advice-add evil-search-next)
-    (scroll-on-jump-advice-add evil-search-previous)
-    (scroll-on-jump-advice-add evil-forward-paragraph)
-    (scroll-on-jump-advice-add evil-backward-paragraph)
-    (scroll-on-jump-advice-add evil-goto-mark)
-    (scroll-on-jump-advice-add evil-goto-line)
-    (scroll-on-jump-advice-add evil-goto-first-line)
 
-    ;; Actions that themselves scroll.
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
 
-  ;; (with-eval-after-load 'goto-chg
-  ;;   (scroll-on-jump-advice-add goto-last-change)
-  ;;   (scroll-on-jump-advice-add goto-last-change-reverse))
-
-  ;; (global-set-key (kbd "<C-M-next>") (scroll-on-jump-interactive 'diff-hl-next-hunk))
-  ;; (global-set-key (kbd "<C-M-prior>") (scroll-on-jump-interactive 'diff-hl-previous-hunk))
-  )
 #+end_src
 
 #+begin_src emacs-lisp
