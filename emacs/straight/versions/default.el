@@ -21,7 +21,7 @@
  ("compat" . "8885b1cd3f5a2833c727b4448583213deb2d1d76")
  ("consult" . "c2858a52a186e71078b4d3a0116344702c470f01")
  ("consult-dir" . "ed8f0874d26f10f5c5b181ab9f2cf4107df8a0eb")
- ("consult-git-log-grep" . "c58f16c77dfcad68f7768a3046c6260b4eaf3606")
+ ("consult-git-log-grep" . "30dfcad5745a6b9882d94fec75d38c345a1eff89")
  ("consult-jump-project" . "f129b374baa7dc0297beb140c9c76a84293ef2f2")
  ("consult-ls-git" . "f2398b354994e583ad22af324a129cf94d06009e")
  ("consult-notes" . "4d92996f676cecfebea6519dadf8cf185621a18a")
