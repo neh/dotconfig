@@ -5434,7 +5434,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (link-hint-open-link
              link-hint-define-type)
   :general
-  (neh/leader-nav
+  (neh/leader-util
     "f" #'link-hint-open-link
     "F" #'neh/link-hint-open-in-external)
 
