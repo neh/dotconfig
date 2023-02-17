@@ -1807,6 +1807,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package pulse
   :straight nil
   :defer 0.5
+  :custom
+  (pulse-flag t)
   :config
   ;; stolen from https://blog.meain.io/2020/emacs-highlight-yanked/
   (defun meain/evil-yank-advice (orig-fn beg end &rest args)
