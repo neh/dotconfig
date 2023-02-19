@@ -3919,6 +3919,23 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package pulsar
+  :hook (focus-in . pulsar-pulse-line)
+  :custom
+  (pulsar-delay 0.08)
+  :init
+  (pulsar-global-mode t)
+
+  :config
+  (dolist (item '(evil-window-left
+                  evil-window-right
+                  evil-window-up
+                  evil-window-down))
+    (add-to-list 'pulsar-pulse-functions item))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package idle-highlight-mode
   :commands (idle-highlight-mode
              global-idle-highlight-mode))
@@ -5726,23 +5743,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :general
   (neh/leader-keys
     "vc" #'rainbow-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package pulsar
-  :hook (focus-in . pulsar-pulse-line)
-  :custom
-  (pulsar-delay 0.08)
-  :init
-  (pulsar-global-mode t)
-
-  :config
-  (dolist (item '(evil-window-left
-                  evil-window-right
-                  evil-window-up
-                  evil-window-down))
-    (add-to-list 'pulsar-pulse-functions item))
-  )
 #+end_src
 
 #+begin_src emacs-lisp
