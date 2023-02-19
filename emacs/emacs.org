@@ -3980,6 +3980,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package highlight-thing
+  :commands (highlight-thing-mode
+             global-highlight-thing-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package symbol-overlay
   :general
   (general-def

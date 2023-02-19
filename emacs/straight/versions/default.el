@@ -114,6 +114,7 @@
  ("groovy-emacs-modes" . "c612ac1e9f742856914ad6e8eb9e9dc169f489ab")
  ("helpful" . "94c25337b2de2f9da60914a7c0c6cca9584c0231")
  ("highlight-parentheses.el" . "438a1cb2563e2a2496be4678cc0df8d5b22caf5d")
+ ("highlight-thing.el" . "ad788d7a7ee9eb287a8cca3adb21510b89270dca")
  ("hl-todo" . "29106498307788c58fdd59e05735b4d983cb45d8")
  ("ht.el" . "e83fdb8bc0a3cc8cd2687a947e2610b20b68b7d3")
  ("hydra" . "317e1de33086637579a7aeb60f77ed0405bf359b")
