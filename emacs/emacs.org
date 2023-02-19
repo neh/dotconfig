@@ -4013,6 +4013,102 @@ Finally found a package that lets org tables horizontally scroll while leaving t
     "hM" #'symbol-overlay-mode))
 #+end_src
 
+* Languages
+
+#+begin_src emacs-lisp
+(use-package jinja2-mode
+  :mode (("\\.j2\\'" . jinja2-mode)))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lispy
+  :commands (lispy-mode))
+
+(use-package lispyville
+  :hook (lispy-mode . lispyville-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package clojure-mode
+  :mode (("\\.clj\\'" . clojure-mode)))
+
+(use-package cider
+  :commands (cider
+             cider-mode
+             cider-jack-in)
+  )
+
+(use-package ob-clojure
+  :straight nil
+  :after org
+  :custom
+  (org-babel-clojure-backend 'cider)
+  :commands
+  (org-babel-execute:clojure))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lua-mode
+  :mode ("\\.lua\\'" . lua-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun neh/python-mode-hook ()
+  "My python mode settings."
+  (setq-local fill-column 80)
+  ;; (auto-virtualenv-set-virtualenv)
+  ;; (lsp-deferred)
+  )
+
+(use-package python-mode
+  :straight nil
+  :hook (python-mode . neh/python-mode-hook)
+  :custom
+  (python-shell-interpreter "python3")
+  (org-babel-python-command "python3"))
+
+(use-package pyvenv
+  :commands (pyvenv-activate))
+
+(use-package auto-virtualenv
+  :commands (auto-virtualenv-set-virtualenv))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package eglot
+  :straight nil
+  :config
+  (add-to-list 'eglot-server-programs
+               '(terraform-mode . ("terraform-ls" "serve"))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :mode ("\\.rs\\'" . rust-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package groovy-mode
+  :mode ("Jenkinsfile\\'" . groovy-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package go-mode
+  :mode "\\.go\\'")
+
+(use-package go-eldoc
+  :commands go-eldoc-setup
+  :hook (go-mode . go-eldoc-setup))
+#+end_src
+
 * Shells
 
 #+begin_src emacs-lisp :lexical no
@@ -5301,14 +5397,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   (require 'dwim-shell-commands))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (global-treesit-auto-mode t))
-#+end_src
-
 #+begin_src emacs-lisp
 (use-package apheleia
   :config
@@ -5402,14 +5490,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package docker
   :commands (docker))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package lispy
-  :commands (lispy-mode))
-
-(use-package lispyville
-  :hook (lispy-mode . lispyville-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5758,30 +5838,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package jinja2-mode
-  :mode (("\\.j2\\'" . jinja2-mode)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package clojure-mode
-  :mode (("\\.clj\\'" . clojure-mode)))
-
-(use-package cider
-  :commands (cider
-             cider-mode
-             cider-jack-in)
-  )
-
-(use-package ob-clojure
-  :straight nil
-  :after org
-  :custom
-  (org-babel-clojure-backend 'cider)
-  :commands
-  (org-babel-execute:clojure))
-#+end_src
-
-#+begin_src emacs-lisp
 (defun my-evil-indent-setup ()
   "Set evil-shift-width to the relevant language indent level (but yaml only, so far)."
   (setq evil-shift-width yaml-indent-offset))
@@ -5853,46 +5909,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package lua-mode
-  :mode ("\\.lua\\'" . lua-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun neh/python-mode-hook ()
-  "My python mode settings."
-  (setq-local fill-column 80)
-  ;; (auto-virtualenv-set-virtualenv)
-  ;; (lsp-deferred)
-  )
-
-(use-package python-mode
-  :straight nil
-  :hook (python-mode . neh/python-mode-hook)
-  :custom
-  (python-shell-interpreter "python3")
-  (org-babel-python-command "python3"))
-
-(use-package pyvenv
-  :commands (pyvenv-activate))
-
-(use-package auto-virtualenv
-  :commands (auto-virtualenv-set-virtualenv))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package eglot
-  :straight nil
-  :config
-  (add-to-list 'eglot-server-programs
-               '(terraform-mode . ("terraform-ls" "serve"))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package rust-mode
-  :mode ("\\.rs\\'" . rust-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package hcl-mode
   :commands hcl-mode)
 
@@ -5918,22 +5934,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package groovy-mode
-  :mode ("Jenkinsfile\\'" . groovy-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package go-mode
-  :mode "\\.go\\'")
-
-(use-package go-eldoc
-  :commands go-eldoc-setup
-  :hook (go-mode . go-eldoc-setup))
 #+end_src
 
 #+begin_src emacs-lisp
