@@ -4115,6 +4115,29 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :hook (go-mode . go-eldoc-setup))
 #+end_src
 
+* Formatters
+
+#+begin_src emacs-lisp
+(use-package sqlformat
+  :commands (sqlformat
+             sqlformat-buffer
+             sqlformat-region
+             sqlformat-on-save-mode)
+  :hook (sql-mode . sqlformat-on-save-mode)
+  :custom
+  (sqlformat-command 'pgformatter)
+  (sqlformat-args '("-f1"
+                    "-u1"
+                    "--spaces=2"))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package apheleia
+  :config
+  (apheleia-global-mode t))
+#+end_src
+
 * Shells
 
 #+begin_src emacs-lisp :lexical no
@@ -5291,21 +5314,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package sqlformat
-  :commands (sqlformat
-             sqlformat-buffer
-             sqlformat-region
-             sqlformat-on-save-mode)
-  :hook (sql-mode . sqlformat-on-save-mode)
-  :custom
-  (sqlformat-command 'pgformatter)
-  (sqlformat-args '("-f1"
-                    "-u1"
-                    "--spaces=2"))
-  )
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package x509-mode
   :commands (x509-dwim))
 #+end_src
@@ -5404,23 +5412,9 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package apheleia
-  :config
-  (apheleia-global-mode t))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package org-web-tools
   :commands (org-web-tools-insert-web-page-as-entry
              org-web-tools-read-url-as-org))
-#+end_src
-
-
-#+begin_src emacs-lisp
-  :custom
-  :config
-
-
 #+end_src
 
 #+begin_src emacs-lisp
