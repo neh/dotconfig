@@ -4295,7 +4295,9 @@ Finally found a package that lets org tables horizontally scroll while leaving t
       "M-n" #'eshell-previous-input
       "M-t" #'eshell-next-input
       "M-<up>" #'eshell-previous-input
-      "M-<down>" #'eshell-next-input)
+      "M-<down>" #'eshell-next-input
+
+      "C-r" #'consult-history)
 
     (general-def
       :keymaps 'eshell-mode-map
