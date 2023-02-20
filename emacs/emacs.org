@@ -4578,6 +4578,11 @@ Version 2017-09-01"
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package dired-imenu
+  :after dired)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package dired-git-info
   :commands (dired-git-info-mode))
 #+end_src

@@ -37,6 +37,7 @@
  ("dired-du" . "e5a2aa64849aae14fd6d1973919ec7e13ed76dd0")
  ("dired-git-info" . "9461476a28a5fec0784260f6e318237c662c3430")
  ("dired-hacks" . "41d3eb42195d9f0894c20d18cc8e722b099aa1c1")
+ ("dired-imenu" . "610e21fe0988c85931d34894d3eee2442c79ab0a")
  ("docker.el" . "cc0046e6a557dce0ccc4108dd22e04f21ba8b0dc")
  ("dockerfile-mode" . "52c6c00da1d31c0b6c29c74335b3af63ed6bf06c")
  ("doct" . "69bfe30317c7fa7a5a51f2763515dfe9c989ebf1")
