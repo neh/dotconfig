@@ -4097,6 +4097,16 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package comint
+  :straight nil
+  :custom
+  (comint-scroll-to-bottom-on-input t)
+  (comint-scroll-to-bottom-on-output t)
+  (comint-move-point-for-output t)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package eglot
   :straight nil
   :config
