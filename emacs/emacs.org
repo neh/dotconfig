@@ -4296,6 +4296,11 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (eshell-save-history-on-exit t)
   (eshell-destroy-buffer-when-process-dies t)
   (eshell-banner-message "")
+  (eshell-prompt-function
+   (lambda ()
+     (concat (abbreviate-file-name (eshell/pwd))
+             (if (= (user-uid) 0) " # " "  "))))
+  (eshell-prompt-regexp "^[^#$\n]* [#] ")
 
   :hook (eshell-mode . neh/eshell-mode-hook)
 
@@ -4306,6 +4311,8 @@ Finally found a package that lets org tables horizontally scroll while leaving t
     (add-to-list 'eshell-visual-commands "ssh")
 
     (add-to-list 'eshell-modules-list 'eshell-tramp)
+
+    (setq-local imenu-generic-expression '(("Prompt" "^[^#$\n]* [#] \\(.*\\)$" 1)))
 
     (general-def
       :keymaps 'eshell-mode-map
