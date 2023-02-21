@@ -58,6 +58,7 @@ This setting makes the straight bootstrap /much/ faster. See the discussion [[ht
 And now bootstrap straight, using the snippet from the docs.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-straight
+(defvar native-comp-deferred-compilation-deny-list)
 ;; (setq native-comp-deferred-compilation-deny-list ()
       ;; comp-deferred-compilation-deny-list ())
 ;; (setq straight-repository-branch "develop")

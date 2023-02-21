@@ -3,6 +3,7 @@
 (let ((file-name-handler-alist nil))
   (setq gc-cons-threshold most-positive-fixnum)
   (setq straight-check-for-modifications '(check-on-save))
+  (defvar native-comp-deferred-compilation-deny-list)
   ;; (setq native-comp-deferred-compilation-deny-list ()
         ;; comp-deferred-compilation-deny-list ())
   ;; (setq straight-repository-branch "develop")
