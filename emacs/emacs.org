@@ -465,6 +465,13 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (browse-url-browser-function 'browse-url-firefox))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package delsel
+  :straight nil
+  :config
+  (delete-selection-mode t))
+#+end_src
+
 * Keybindings
 
 [[https://github.com/noctuid/general.el][General.el]] handles keybinding management.
