@@ -1531,8 +1531,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "sg" #'consult-git-grep
     "sn" #'neh/roam-rg
     "so" #'consult-org-heading
-    "sT" #'consult-imenu-multi
-    "st" #'consult-imenu)
+    "U" #'consult-imenu-multi
+    "u" #'consult-imenu)
   (:keymaps 'embark-buffer-map
    "F" #'consult-buffer-other-frame)
   (:keymaps 'embark-file-map
