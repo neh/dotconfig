@@ -793,8 +793,14 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
              stimmung-themes-load-dark
              stimmung-themes-toggle)
   :config
-  (set-face-foreground 'terraform--resource-name-face "dark orchid")
-  (set-face-foreground 'terraform--resource-type-face "green"))
+  (defun my/stimmung-themes-dark-tweaks ()
+    (set-face-background 'avy-lead-face "forest green")
+    (set-face-foreground 'avy-lead-face "white"))
+  (defun my/stimmung-themes-light-tweaks ()
+    (set-face-background 'avy-lead-face "red")
+    (set-face-foreground 'avy-lead-face "white")
+    (set-face-foreground 'terraform--resource-name-face "dark orchid")
+    (set-face-foreground 'terraform--resource-type-face "green")))
 
 (use-package gruvbox-theme
   :custom-face
@@ -997,6 +1003,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   ;; (set-face-attribute 'mode-line nil :height 1.0)
   ;; (set-face-attribute 'mode-line-inactive nil :height 1.0)
+  ;; Apply custom theme tweaks if there are any
+  ;; Add a global dark/light tweaks mechanism too?
+  (dolist (theme custom-enabled-themes)
+    (let ((tweaks-fun (intern (concat "my/" (symbol-name theme) "-tweaks"))))
+      (when (fboundp tweaks-fun)
+        (funcall tweaks-fun))))
 
   (save-current-buffer
     (mapc (lambda (b)
