@@ -162,6 +162,7 @@
  ("org-chef" . "6a786e77e67a715b3cd4f5128b59d501614928af")
  ("org-d20" . "e6149dcfbb6302d10109dd792fd0ffae7bfe2595")
  ("org-download" . "19e166f0a8c539b4144cfbc614309d47a9b2a9b7")
+ ("org-menu" . "9cd10161c2b50dfef581f3d0441683eeeae6be59")
  ("org-modern" . "f7cf2bb4a763472c6b90cabab779b18325b40f5b")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "967f48fb5038bba32915ee9da8dc4e8b10ba3376")

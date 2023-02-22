@@ -2576,6 +2576,14 @@ Org export.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package org-menu
+  :after (org
+          transient)
+  :straight (org-menu
+             :type git
+             :host github
+             :repo "sheijk/org-menu")
+  :commands (org-menu))
 #+end_src
 
 ** Options
