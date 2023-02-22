@@ -978,11 +978,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (when (fboundp 'pgtk-use-im-context)
     (pgtk-use-im-context nil))
 
-  ;; from https://tech.toryanderson.com/2021/09/20/swapping-chords-in-dvorak-or-why-does-emacs-keyboard-translate-fail-with-wrong-type-argument-characterp-134217845/
-  ;;https://www.reddit.com/r/emacs/comments/xuc4km/switching_cu_and_cx/
-  ;; (keyboard-translate ?\C-u ?\C-x)
-  ;; (keyboard-translate ?\C-x ?\C-u)
-
   ;; Set the default text size based on the monitor DPI
   (let* ((dpi (monitor-dpi))
          (size (cond ((< dpi 110) 125)
@@ -1001,8 +996,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; for org-modern
   (set-face-background 'fringe (face-attribute 'default :background))
 
-  ;; (set-face-attribute 'mode-line nil :height 1.0)
-  ;; (set-face-attribute 'mode-line-inactive nil :height 1.0)
   ;; Apply custom theme tweaks if there are any
   ;; Add a global dark/light tweaks mechanism too?
   (dolist (theme custom-enabled-themes)
