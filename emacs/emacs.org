@@ -1517,7 +1517,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "f" #'consult-find
     "k" #'find-file)
   (neh/leader-keys
-    "i" #'consult-yank-from-kill-ring
+    "i" #'consult-yank-pop
     "l" #'consult-line
     "L" #'neh/consult-line-again
     "spl" #'consult-line-multi
