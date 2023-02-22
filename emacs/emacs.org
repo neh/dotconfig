@@ -3963,6 +3963,11 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package region-occurrences-highlighter
+  :commands (region-occurrences-highlighter-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package highlight-parentheses
   :hook (prog-mode . highlight-parentheses-mode)
   :custom
