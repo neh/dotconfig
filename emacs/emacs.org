@@ -5447,6 +5447,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (iedit-mode
              iedit-rectangle-mode)
   :general
+  (neh/leader-util
+    "i" #'iedit-mode)
   (general-define-key
    :states '(normal visual)
    "C-;" #'iedit-mode)
