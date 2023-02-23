@@ -996,6 +996,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; for org-modern
   (set-face-background 'fringe (face-attribute 'default :background))
 
+  (set-face-attribute 'shr-text nil :height (face-attribute 'default :height))
+
   ;; Apply custom theme tweaks if there are any
   ;; Add a global dark/light tweaks mechanism too?
   (dolist (theme custom-enabled-themes)
