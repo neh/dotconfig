@@ -1766,7 +1766,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (defun my/tabspaces-buffer-list ()
     (seq-remove #'popper-popup-p (tabspaces--buffer-list)))
   )
-  )
 #+end_src
 
 #+begin_src emacs-lisp
