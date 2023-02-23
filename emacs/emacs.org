@@ -32,6 +32,7 @@ Right up front, enable [[https://www.emacswiki.org/emacs/DynamicBindingVsLexical
 Next, we wrap the whole init file in a block that sets =file-name-handler-alist= to =nil= to prevent any special-filename parsing of files loaded from the init file (e.g. remote files loaded through tramp, etc.). Rather than having a block that closes this later, let's pull in the rest of the init file bits with noweb references.
 
 #+begin_src emacs-lisp :noweb yes
+(defvar native-comp-deferred-compilation-deny-list nil)
 (let ((file-name-handler-alist nil))
   <<init-gc-init>>
   <<init-straight>>
@@ -58,7 +59,6 @@ This setting makes the straight bootstrap /much/ faster. See the discussion [[ht
 And now bootstrap straight, using the snippet from the docs.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-straight
-(defvar native-comp-deferred-compilation-deny-list)
 ;; (setq native-comp-deferred-compilation-deny-list ()
       ;; comp-deferred-compilation-deny-list ())
 ;; (setq straight-repository-branch "develop")
