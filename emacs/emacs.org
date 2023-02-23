@@ -2348,12 +2348,11 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
     (when (org-in-src-block-p)
       (let ((format-fun (intern (concat (car (org-babel-get-src-block-info))
                                         "format-buffer"))))
-        (org-edit-special)
-        ;; (apheleia-format-buffer 'd2 #'org-edit-src-exit)
-        ;; (call-interactively #'(lambda () (apheleia-format-buffer 0 #'org-edit-src-exit)))
-        (funcall format-fun)
-        (org-edit-src-exit)
-        )))
+        (if (not (fboundp format-fun))
+            (message "No format function defined")
+          (org-edit-special)
+          (funcall format-fun)
+          (org-edit-src-exit)))))
 
   ;; depends on emacs-reformatter, based on sqlformat-region
   (reformatter-define d2format
