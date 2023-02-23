@@ -1457,10 +1457,11 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :config
   (require 'embark-org)
 
-  (embark-define-keymap embark-org-timestamp-map
-    "Actions for org mode timestamps."
+  (defvar-keymap embark-org-timestamp-map
+    :doc "Actions for org timestamps"
     :parent embark-general-map
-    ("T" org-toggle-timestamp-type))
+    "T" #'org-toggle-timestamp-type)
+
   (add-to-list 'embark-keymap-alist '(org-timestamp . embark-org-timestamp-map))
   )
 
