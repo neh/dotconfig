@@ -1424,8 +1424,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
   :custom
   (prefix-help-command #'embark-prefix-help-command)
-  (embark-help-key (kbd "?"))
-  (embark-cycle-key (kbd "C-,"))
+  (embark-help-key "?")
+  (embark-cycle-key "C-,")
   (embark-mixed-indicator-delay 0.8)
   (y-or-n-p-use-read-key t)
 
