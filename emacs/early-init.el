@@ -41,6 +41,6 @@
   (setq gc-cons-threshold (* 3200 1000)
         gc-cons-percentage 0.6)
   
-  (defvar neh/gc-idle-timer nil)
-  (unless (timerp neh/gc-idle-timer)
-    (setq neh/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect))))
+  (defvar my/gc-idle-timer nil)
+  (unless (timerp my/gc-idle-timer)
+    (setq my/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect))))

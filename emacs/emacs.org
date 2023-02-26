@@ -116,9 +116,9 @@ Then reset the value of =gc-cons-threshold=, not to its original value; we still
 (setq gc-cons-threshold (* 3200 1000)
       gc-cons-percentage 0.6)
 
-(defvar neh/gc-idle-timer nil)
-(unless (timerp neh/gc-idle-timer)
-  (setq neh/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect)))
+(defvar my/gc-idle-timer nil)
+(unless (timerp my/gc-idle-timer)
+  (setq my/gc-idle-timer (run-with-idle-timer 5 t #'garbage-collect)))
 #+end_src
 
 Another interesting option here, gc when unfocusing a frame, from https://news.ycombinator.com/item?id=31394001
@@ -164,14 +164,14 @@ Set up ESUP for startup profiling.
 
 * Base settings
 
-Load any host-specific configuration. Anything set here will just get overridden by deferred package loads so the way I’m dealing with that is to set vars here with different (=neh/…=) names, then set the real vars conditionally in package configurations elsewhere.
+Load any host-specific configuration. Anything set here will just get overridden by deferred package loads so the way I’m dealing with that is to set vars here with different (=my/…=) names, then set the real vars conditionally in package configurations elsewhere.
 
 #+begin_src emacs-lisp
-(setq neh/local-conf-file (expand-file-name
+(setq my/local-conf-file (expand-file-name
                            (concat system-name ".el")
                            user-emacs-directory))
-(when (file-readable-p neh/local-conf-file)
-  (load-file neh/local-conf-file))
+(when (file-readable-p my/local-conf-file)
+  (load-file my/local-conf-file))
 #+end_src
 
 Collect all the global, non-package-specific settings here.
@@ -190,17 +190,17 @@ Collect all the global, non-package-specific settings here.
     (fset 'original-recenter (symbol-function 'recenter)))
 
   :init
-  (defcustom neh/recenter-window-eye-level 0.2
+  (defcustom my/recenter-window-eye-level 0.2
     "The relative position of the line considered as eye level in the
 current window, as a ratio between 0 and 1.")
 
-  (defun neh/recenter-eye-level (&optional arg redisplay)
+  (defun my/recenter-eye-level (&optional arg redisplay)
     "Without args, recenter nearer the top of the window. With args, call original recenter."
     (interactive)
     (let ((line (or arg
-                    (round (* (window-height) neh/recenter-window-eye-level)))))
+                    (round (* (window-height) my/recenter-window-eye-level)))))
       (original-recenter line redisplay)))
-  (fset 'recenter #'neh/recenter-eye-level)
+  (fset 'recenter #'my/recenter-eye-level)
 
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
@@ -231,20 +231,20 @@ current window, as a ratio between 0 and 1.")
           (add-hook 'post-command-hook #'exit-minibuffer nil t))
       (call-interactively cmd)))
 
-  (defun neh/customize-this (arg)
+  (defun my/customize-this (arg)
     "Call customize-set-variable with a specific setting pre-selected."
     (interactive)
     (partially-apply-interactively #'customize-set-variable arg))
 
-  (defun neh/update-packages (arg)
+  (defun my/update-packages (arg)
     "Set all packages to the versions in the straight.el lockfile."
     (straight-pull-recipe-repositories)
     (straight-fetch-all)
     (straight-thaw-versions)
     (straight-rebuild-all))
-  (add-to-list 'command-switch-alist '("--update-packages" . neh/update-packages))
+  (add-to-list 'command-switch-alist '("--update-packages" . my/update-packages))
 
-  (defun neh/recenter-after (&rest args)
+  (defun my/recenter-after (&rest args)
     "A function to use as :after advice for recentering wherever."
     (recenter 10))
 
@@ -479,21 +479,21 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   :config
   (general-create-definer
-    neh/leader-keys
+    my/leader-keys
     :keymaps 'override
     :states '(emacs normal visual motion insert)
     :non-normal-prefix "C-SPC"
     :prefix "SPC")
 
   (general-create-definer
-    neh/leader-nav
+    my/leader-nav
     :keymaps 'override
     :states '(emacs normal visual motion insert)
     :non-normal-prefix "C-j"
     :prefix "j")
 
   (general-create-definer
-    neh/leader-util
+    my/leader-util
     :keymaps 'override
     :states '(emacs normal visual motion insert)
     :non-normal-prefix "C-k"
@@ -509,10 +509,10 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
    "C-M-<down>" 'scroll-other-window
    "C-M-<up>" 'scroll-other-window-down
 
-   "<C-mouse-5>" '(lambda () (interactive) (neh/adjust-text-height -5))
-   "<C-mouse-4>" '(lambda () (interactive) (neh/adjust-text-height 5)))
+   "<C-mouse-5>" '(lambda () (interactive) (my/adjust-text-height -5))
+   "<C-mouse-4>" '(lambda () (interactive) (my/adjust-text-height 5)))
 
-  (neh/leader-keys
+  (my/leader-keys
     "<SPC>" #'save-buffer
 
     "e" #'execute-extended-command
@@ -523,17 +523,17 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     )
 
   ;; ???
-  ;; (neh/leader-keys
+  ;; (my/leader-keys
   ;;   :keymaps 'override
   ;;   :states '(normal)
   ;;   "u" (general-key "C-x"))
 
-  (neh/leader-keys
+  (my/leader-keys
     :infix "c"
     "c" #'comment-or-uncomment-region-or-line
     "q" #'quick-calc)
 
-  (neh/leader-keys
+  (my/leader-keys
     :infix "f"
     "a" #'auto-fill-mode
     "i" #'indent-region
@@ -542,11 +542,11 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "t" #'toggle-truncate-lines
     "f" '(lambda () (interactive) (set-frame-width nil fill-column)))
 
-  (neh/leader-keys
+  (my/leader-keys
     :infix "h"
     "m" #'describe-mode)
 
-  (neh/leader-keys
+  (my/leader-keys
     :infix "x"
     "b" #'eval-buffer
     "e" #'eval-expression
@@ -563,7 +563,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package color
   :demand t
   :config
-  (defun neh/dark-p ()
+  (defun my/dark-p ()
     (let ((bg (face-background 'default)))
       (if (>= (color-distance "black" bg)
               (color-distance "white" bg))
@@ -576,7 +576,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (bookmark-fontify nil)
   :general
-  (neh/leader-nav
+  (my/leader-nav
     "b" #'bookmark-jump))
 
 (use-package saveplace
@@ -630,7 +630,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package whitespace
   :commands (whitespace-mode)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "vw" #'whitespace-mode)
   :custom
   (whitespace-line-column 80)
@@ -647,7 +647,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (helpful-max-buffers 5)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "h." #'helpful-at-point
     "hf" #'helpful-callable
     "hk" #'helpful-key
@@ -711,7 +711,7 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   :straight nil
   :after general
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "hC" #'finder-commentary))
 #+end_src
 
@@ -724,13 +724,13 @@ General settings when in text editing modes.
   :straight nil
   :hook ((text-mode prog-mode) . visual-line-mode)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "fv" #'visual-line-mode))
 
 (use-package visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "fc" #'visual-fill-column-mode)
 
   :custom
@@ -810,49 +810,49 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 #+end_src
 
 #+begin_src emacs-lisp
-(defun neh/set-dark-mode ()
+(defun my/set-dark-mode ()
   "Load dark theme."
   (interactive)
-  (setq neh/dark-mode t)
-  (load-theme neh/dark-theme t))
+  (setq my/dark-mode t)
+  (load-theme my/dark-theme t))
 
-(defun neh/set-light-mode ()
+(defun my/set-light-mode ()
   "Load light theme."
   (interactive)
-  (setq neh/dark-mode nil)
-  (load-theme neh/light-theme t))
+  (setq my/dark-mode nil)
+  (load-theme my/light-theme t))
 
-(defun neh/toggle-dark-mode ()
+(defun my/toggle-dark-mode ()
   "Toggle dark/light theme."
   (interactive)
-  (if (neh/dark-p)
-      (neh/set-light-mode)
-    (neh/set-dark-mode)))
+  (if (my/dark-p)
+      (my/set-light-mode)
+    (my/set-dark-mode)))
 
-(defun neh/setthemeset (sym value)
+(defun my/setthemeset (sym value)
   (cond ((equal value "gruvbox")
-         (setq neh/dark-theme 'gruvbox-dark-hard
-               neh/light-theme 'gruvbox-light-hard))
+         (setq my/dark-theme 'gruvbox-dark-hard
+               my/light-theme 'gruvbox-light-hard))
         ((equal value "modus")
-         (setq neh/dark-theme 'modus-vivendi
-               neh/light-theme 'modus-operandi))
+         (setq my/dark-theme 'modus-vivendi
+               my/light-theme 'modus-operandi))
         ((equal value "modus-tinted")
-         (setq neh/dark-theme 'modus-vivendi-tinted
-               neh/light-theme 'modus-operandi-tinted))
+         (setq my/dark-theme 'modus-vivendi-tinted
+               my/light-theme 'modus-operandi-tinted))
         ((equal value "autumn-operandi")
-         (setq neh/dark-theme 'ef-autumn
-               neh/light-theme 'modus-operandi-tinted))
+         (setq my/dark-theme 'ef-autumn
+               my/light-theme 'modus-operandi-tinted))
         ((equal value "stimmung")
-         (setq neh/dark-theme 'stimmung-themes-dark
-               neh/light-theme 'stimmung-themes-light))
+         (setq my/dark-theme 'stimmung-themes-dark
+               my/light-theme 'stimmung-themes-light))
         ((equal value "mix")
-         (setq neh/dark-theme 'gruvbox-dark-hard
-               neh/light-theme 'modus-operandi)))
-  (if (neh/dark-p)
-      (neh/set-dark-mode)
-    (neh/set-light-mode)))
+         (setq my/dark-theme 'gruvbox-dark-hard
+               my/light-theme 'modus-operandi)))
+  (if (my/dark-p)
+      (my/set-dark-mode)
+    (my/set-light-mode)))
 
-(defcustom neh/themeset "mix"
+(defcustom my/themeset "mix"
   "Indicates which set of themes (dark and light) to use."
   :type '(choice
           (const "gruvbox")
@@ -861,10 +861,10 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
           (const "autumn-operandi")
           (const "stimmung")
           (const "mix"))
-  :set 'neh/setthemeset
+  :set 'my/setthemeset
   :initialize 'custom-initialize-set)
 
-(customize-set-variable 'neh/themeset "autumn-operandi")
+(customize-set-variable 'my/themeset "autumn-operandi")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -877,9 +877,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     (message "color-scheme value is %s" value)
     (if (equal value '1)
         (progn (message "Switch to dark theme")
-               (neh/set-dark-mode))
+               (my/set-dark-mode))
       (progn (message "Switch to light theme")
-             (neh/set-light-mode))))
+             (my/set-light-mode))))
 
   (defun handler (value)
     (message "%s" value)
@@ -919,10 +919,10 @@ But I like some things to be set no matter the theme. For example, I always like
   "Run `after-load-theme-hook'."
   (run-hooks 'after-load-theme-hook))
 
-(add-hook 'after-load-theme-hook #'neh/theme-tweaks)
+(add-hook 'after-load-theme-hook #'my/theme-tweaks)
 (if (daemonp)
-    (add-hook 'server-after-make-frame-hook #'neh/theme-tweaks)
-  (add-hook 'after-init-hook #'neh/theme-tweaks))
+    (add-hook 'server-after-make-frame-hook #'my/theme-tweaks)
+  (add-hook 'after-init-hook #'my/theme-tweaks))
 #+end_src
 
 Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
@@ -945,24 +945,24 @@ Handy functions to calculate the DPI of the display that current frame is on. Bi
     (/ pixel-width (/ mm-width 25.4))))
 #+end_src
 
-Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =neh/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
+Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =my/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
 
 #+begin_src emacs-lisp
-(defun neh/adjust-text-height (adjustment)
+(defun my/adjust-text-height (adjustment)
   "Adjust text size up or down by ADJUSTMENT."
   (interactive)
 
   (if (= adjustment 0)
-      (setq neh/current-text-size neh/default-text-size)
-    (setq neh/current-text-size (+ neh/current-text-size adjustment)))
-  (neh/theme-tweaks)
+      (setq my/current-text-size my/default-text-size)
+    (setq my/current-text-size (+ my/current-text-size adjustment)))
+  (my/theme-tweaks)
   (visual-fill-column-adjust))
 #+end_src
 
 And here’s the function where I collect my tweaks to the theme and set up fonts.
 
 #+begin_src emacs-lisp
-(defun neh/theme-tweaks ()
+(defun my/theme-tweaks ()
   "Apply my catchall set of mostly appearance tweaks."
   (interactive)
 
@@ -979,10 +979,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (let* ((dpi (monitor-dpi))
          (size (cond ((< dpi 110) 125)
                      ((< dpi 160) 150))))
-    (setq neh/default-text-size size))
+    (setq my/default-text-size size))
 
-  (when (not (boundp 'neh/current-text-size))
-    (setq neh/current-text-size neh/default-text-size))
+  (when (not (boundp 'my/current-text-size))
+    (setq my/current-text-size my/default-text-size))
 
   (fontaine-set-preset 'normal)
 
@@ -1022,17 +1022,17 @@ And here’s the function where I collect my tweaks to the theme and set up font
                             (variable-pitch "Noto Sans" "ETBembo")))
   (fontaine-presets `(
                       (normal
-                       :default-height ,(round (* neh/current-text-size 1.04))
-                       :fixed-pitch-height ,(round (* neh/current-text-size 1.04))
-                       :variable-pitch-height ,(round (* neh/current-text-size 1.04)))
+                       :default-height ,(round (* my/current-text-size 1.04))
+                       :fixed-pitch-height ,(round (* my/current-text-size 1.04))
+                       :variable-pitch-height ,(round (* my/current-text-size 1.04)))
                       (large
-                       :default-height ,(round (* neh/current-text-size 1.5))
-                       :fixed-pitch-height ,(round (* neh/current-text-size 1.5))
-                       :variable-pitch-height ,(round (* neh/current-text-size 1.5)))
+                       :default-height ,(round (* my/current-text-size 1.5))
+                       :fixed-pitch-height ,(round (* my/current-text-size 1.5))
+                       :variable-pitch-height ,(round (* my/current-text-size 1.5)))
                       (double
-                       :default-height ,(round (* neh/current-text-size 2))
-                       :fixed-pitch-height ,(round (* neh/current-text-size 2))
-                       :variable-pitch-height ,(round (* neh/current-text-size 2)))
+                       :default-height ,(round (* my/current-text-size 2))
+                       :fixed-pitch-height ,(round (* my/current-text-size 2))
+                       :variable-pitch-height ,(round (* my/current-text-size 2)))
                       (t
                        :default-family "Iosevka"
                        :default-weight normal
@@ -1153,7 +1153,7 @@ I'm one of those strange people that not only uses a dvorak keyboard layout and 
 And here are just general evil-related bindings.
 
 #+begin_src emacs-lisp :noweb-ref evil-general :tangle no
-(neh/leader-keys
+(my/leader-keys
   "q" #'kill-current-buffer)
 #+end_src
 
@@ -1202,7 +1202,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
   (evil-collection-setup-minibuffer t)
 
   :init
-  (defun neh/evil-key-translations (_mode mode-keymaps &rest _rest)
+  (defun my/evil-key-translations (_mode mode-keymaps &rest _rest)
     (evil-collection-translate-key 'normal mode-keymaps
       "t" "j"
       "n" "k"
@@ -1210,7 +1210,7 @@ Evil-collection helps with setting up evil-friendly bindings all over the place,
 
   :config
   (evil-collection-init)
-  (add-hook 'evil-collection-setup-hook #'neh/evil-key-translations)
+  (add-hook 'evil-collection-setup-hook #'my/evil-key-translations)
 
   (evil-collection-define-key 'normal 'scroll-lock-mode-map
     [remap evil-next-line] 'evil-collection-scroll-lock-next-line
@@ -1275,13 +1275,13 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
   :general
   (:keymaps 'vertico-map
-   "TAB" #'neh/file-or-not
+   "TAB" #'my/file-or-not
    "RET" #'vertico-directory-enter
    "DEL" #'vertico-directory-delete-char
    "M-DEL" #'vertico-directory-delete-word)
 
   :init
-  (defun neh/file-or-not ()
+  (defun my/file-or-not ()
     (interactive)
     (when (eq 'file (vertico--metadata-get 'category))
       (minibuffer-complete))
@@ -1313,7 +1313,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :straight nil
   :hook (minibuffer-setup . vertico-repeat-save)
   :general
-  (neh/leader-util
+  (my/leader-util
     "r" #'vertico-repeat)
   )
 
@@ -1429,9 +1429,9 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :general
   ("C-," #'embark-act)
   (:keymaps 'embark-file-map
-   "s" #'neh/consult-ripgrep-from-dir
+   "s" #'my/consult-ripgrep-from-dir
    "F" #'find-file-other-frame
-   "x" #'neh/dired-open)
+   "x" #'my/dired-open)
   (:keymaps 'embark-symbol-map
    "g" #'consult-ripgrep)
   (:keymaps 'embark-url-map
@@ -1446,7 +1446,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :init
   ;; stolen from https://github.com/oantolin/embark/issues/252
   ;; and an assist from https://github.com/oantolin/embark/issues/42
-  (defun neh/consult-ripgrep-from-dir (file)
+  (defun my/consult-ripgrep-from-dir (file)
     "Jump into consult-ripgrep from embark."
     (interactive "fRipgrep from dir:")
     (consult-ripgrep (file-name-directory file)))
@@ -1479,7 +1479,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 #+begin_src emacs-lisp
 (use-package consult
   :init
-  (defun neh/roam-rg ()
+  (defun my/roam-rg ()
     "Search org-roam notes with ripgrep."
     (interactive)
     (if (boundp 'org-roam-directory)
@@ -1489,12 +1489,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
           (consult-ripgrep org-roam-directory initial))
       (message "Org-roam notes are not available.")))
 
-  (defun neh/consult-buffer-dwim ()
+  (defun my/consult-buffer-dwim ()
     "Narrow consult-buffer to current project if there is one."
     (when (eq this-command #'consult-buffer)
       (when (consult--project-root)
         (setq unread-command-events (append unread-command-events (list ?p 32))))))
-  ;; (add-hook 'minibuffer-setup-hook #'neh/consult-buffer-dwim)
+  ;; (add-hook 'minibuffer-setup-hook #'my/consult-buffer-dwim)
 
   (defun consult-line-thing-at-point ()
     "Start consult-line with thing-at-point as initial input."
@@ -1505,21 +1505,21 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                      (thing-at-point 'symbol))))
       (consult-line initial)))
 
-  (defun neh/consult-line-again ()
+  (defun my/consult-line-again ()
     "Repeat the last consult-line search."
     (interactive)
     (consult-line (car consult--line-history)))
 
   :general
   ;; ([remap evil-search-forward] #'consult-line)
-  (neh/leader-nav
+  (my/leader-nav
     "h" #'consult-buffer
     "f" #'consult-find
     "k" #'find-file)
-  (neh/leader-keys
+  (my/leader-keys
     "i" #'consult-yank-pop
     "l" #'consult-line
-    "L" #'neh/consult-line-again
+    "L" #'my/consult-line-again
     "spl" #'consult-line-multi
     "oo" #'consult-buffer
     "of" #'find-file
@@ -1529,7 +1529,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     "sa" #'consult-org-agenda
     "sf" #'consult-ripgrep
     "sg" #'consult-git-grep
-    "sn" #'neh/roam-rg
+    "sn" #'my/roam-rg
     "so" #'consult-org-heading
     "U" #'consult-imenu-multi
     "u" #'consult-imenu)
@@ -1553,7 +1553,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (consult-dir
              consult-dir-jump-file)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "d" #'consult-dir)
   (:keymaps 'vertico-map
    "M-d" #'consult-dir
@@ -1576,7 +1576,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-org-roam-grep-func #'consult-ripgrep)
 
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "ns" #'consult-org-roam-search
     "nB" #'consult-org-roam-backlinks
     "nF" #'consult-org-roam-forward-links)
@@ -1662,12 +1662,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 #+begin_src emacs-lisp
 (use-package company-org-block
   :disabled t
-  :hook (org-mode . neh/corfu-org-block)
+  :hook (org-mode . my/corfu-org-block)
   :custom
   (company-org-block-auto-indent nil)
   (company-org-block-explicit-lang-defaults nil)
   :init
-  (defun neh/corfu-org-block ()
+  (defun my/corfu-org-block ()
     (add-to-list 'completion-at-point-functions
                  (cape-company-to-capf #'company-org-block)))
   )
@@ -1687,12 +1687,12 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+begin_src emacs-lisp
 (use-package avy
   :general
-  (neh/leader-nav
+  (my/leader-nav
     "j" #'avy-goto-char-timer
     ;; "l" #'avy-goto-line
     )
 
-  (neh/leader-keys
+  (my/leader-keys
     "cl" #'avy-copy-line
     "cr" #'avy-copy-region)
 
@@ -1742,7 +1742,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    "C-M-<tab>" 'nswbuff-switch-to-previous-buffer
    "C-M-<iso-lefttab>" 'nswbuff-switch-to-next-buffer
    )
-  (neh/leader-nav
+  (my/leader-nav
     "c" #'nswbuff-switch-to-next-buffer
     "r" #'nswbuff-switch-to-previous-buffer)
 
@@ -1797,7 +1797,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                       (ibuffer-projectile-set-filter-groups)
                       )))
   :init
-  (defun neh/ibuffer-magit ()
+  (defun my/ibuffer-magit ()
     "Open `magit-status' for the current buffer."
     (interactive)
     (let ((buf (ibuffer-current-buffer t)))
@@ -1872,7 +1872,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (projectile-completion-system 'auto)
 
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "op" #'projectile-switch-project
     "oh" #'projectile-find-file-dwim
     )
@@ -1906,7 +1906,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              diff-hl-flydiff-mode
              diff-hl-update)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "vD" #'diff-hl-mode)
   (general-define-key
    :states '(normal visual)
@@ -1960,8 +1960,8 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
   (global-git-gutter-mode -1)
 
   :config
-  (advice-add 'git-gutter:previous-hunk :after #'neh/after-jump)
-  (advice-add 'git-gutter:next-hunk :after #'neh/after-jump))
+  (advice-add 'git-gutter:previous-hunk :after #'my/after-jump)
+  (advice-add 'git-gutter:next-hunk :after #'my/after-jump))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1985,10 +1985,10 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
       ("c" "Capture" org-roam-dailies-capture-today)
       ]
      ["Nav"
-      ;; ("h" "Previous" neh/roam-dailies-previous)
+      ;; ("h" "Previous" my/roam-dailies-previous)
       ("h" "Previous" org-roam-dailies-goto-previous-note :transient t)
       ;; (:key "h" "Previous" org-roam-dailies-goto-previous-note)
-      ;; ("s" "Next" neh/roam-dailies-next)
+      ;; ("s" "Next" my/roam-dailies-next)
       ("s" "Next" org-roam-dailies-goto-next-note :transient t)
       ("n" "pgup" evil-scroll-page-up :transient t)
       ("t" "pgdn" evil-scroll-page-down :transient t)
@@ -1997,7 +1997,7 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
     )
 
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "nn" #'roam-dailies-transient)
   )
 #+end_src
@@ -2036,7 +2036,7 @@ Of course, the great magit.
    "l" 'evil-search-next
    "L" 'evil-search-previous)
 
-  (neh/leader-keys
+  (my/leader-keys
     "gf" #'magit-file-dispatch
     "gg" #'magit-dispatch
     "gc" #'magit-commit
@@ -2057,7 +2057,7 @@ Handy package to browse to git repo web interfaces.
              git-link-commit
              git-link-homepage)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "gB" 'git-link
     "gC" 'git-link-commit
     "gH" 'git-link-homepage)
@@ -2123,23 +2123,23 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   :general
   <<org-keys>>
   (:keymaps 'org-mode-map
-   "C-c C-l" #'neh/org-insert-link-dwim)
+   "C-c C-l" #'my/org-insert-link-dwim)
 
   :custom
   <<org-custom>>
 
   :init
   <<org-init>>
-  (defun neh/org-hide-all-drawers ()
+  (defun my/org-hide-all-drawers ()
     (org-cycle-hide-drawers 'all))
 
-  (defun neh/config-tangle ()
+  (defun my/config-tangle ()
     (interactive)
     (let ((gc-cons-threshold most-positive-fixnum))
       (org-babel-tangle)))
 
   ;; stolen from https://xenodium.com/emacs-dwim-do-what-i-mean/
-  (defun neh/org-insert-link-dwim ()
+  (defun my/org-insert-link-dwim ()
     (interactive)
     (let* ((point-in-link (org-in-regexp org-link-any-re 1))
            (clipboard-url (when (string-match-p "^http" (current-kill 0))
@@ -2168,7 +2168,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (add-to-list 'org-modules 'org-id)
 
   ;; Original version stolen from https://emacs.stackexchange.com/questions/23870/org-babel-result-to-a-separate-buffer
-  (defun neh/babel-to-buffer ()
+  (defun my/babel-to-buffer ()
     "A function to efficiently feed babel code block result to a separate buffer"
     (interactive)
     (let ((revert-without-query '(".*"))
@@ -2178,12 +2178,12 @@ My org config is pretty long, so I've broken it up for easier reading and explan
       (sleep-for 0.1)
       (select-frame-set-input-focus myframe)))
 
-  (defun neh/babel-to-buffer-from-narrow ()
+  (defun my/babel-to-buffer-from-narrow ()
     (interactive)
-    (org-src-do-at-code-block '(neh/babel-to-buffer))
+    (org-src-do-at-code-block '(my/babel-to-buffer))
     )
 
-  (defun neh/toggle-local-emphasis-markers ()
+  (defun my/toggle-local-emphasis-markers ()
     "Toggle visibility of org emphasis markers."
     (interactive)
     (setq-local org-hide-emphasis-markers (if org-hide-emphasis-markers nil t))
@@ -2331,7 +2331,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
              d2-open-doc)
   :general
   (:keymaps '(embark-org-src-block-map)
-   "F" #'neh/org-src-block-format)
+   "F" #'my/org-src-block-format)
 
   :custom
   (d2-flags "--sketch -t 103")
@@ -2343,7 +2343,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   ;; Ok, this works for different blocks as long as there's a <lang>format-buffer function for the
   ;; language of the block. Good enough for d2 and sql for the moment.
   ;; Ideally it would use apheleia so everything would work the same everywhere.
-  (defun neh/org-src-block-format ()
+  (defun my/org-src-block-format ()
     (interactive)
     (when (org-in-src-block-p)
       (let ((format-fun (intern (concat (car (org-babel-get-src-block-info))
@@ -2387,7 +2387,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :hook ((org-mode . evil-org-mode)
          (evil-org-mode . (lambda ()
                             (evil-org-set-key-theme)))
-         (org-agenda-mode . neh/evil-org-agenda-set-keys))
+         (org-agenda-mode . my/evil-org-agenda-set-keys))
 
   :custom
   (evil-org-movement-bindings '((up . "n")
@@ -2404,7 +2404,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   (require 'evil-org-agenda)
 
   ;; This is just a copy/paste/modify of the default evil-org-agenda-set-keys function
-  (defun neh/evil-org-agenda-set-keys ()
+  (defun my/evil-org-agenda-set-keys ()
     "Set motion state keys for `org-agenda'."
     (evil-set-initial-state 'org-agenda-mode 'motion)
 
@@ -2536,7 +2536,7 @@ A basic start at making different kinds of links look usefully different (eg. it
 #+begin_src emacs-lisp
 ;; defface won't update an existing face (fixed in 28.1?), it has to be done like this:
 ;; (face-spec-set
-;;  'neh/org-link
+;;  'my/org-link
 ;;  '((t :inherit org-link
 ;;       :weight normal
 ;;       :slant italic
@@ -2544,12 +2544,12 @@ A basic start at making different kinds of links look usefully different (eg. it
 ;;  'face-defface-spec
 ;;  )
 
-(defface neh/org-link
+(defface my/org-link
   '((t (:inherit org-link :slant italic)))
-  "A neh-style link.")
+  "A my-style link.")
 
-(org-link-set-parameters "http" :face 'neh/org-link)
-(org-link-set-parameters "https" :face 'neh/org-link)
+(org-link-set-parameters "http" :face 'my/org-link)
+(org-link-set-parameters "https" :face 'my/org-link)
 
 ;; (org-link-set-parameters "http" :face 'org-link)
 ;; (org-link-set-parameters "https" :face 'org-link)
@@ -2596,8 +2596,8 @@ Org file locations.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
 (org-directory "~/org")
-(org-default-notes-file (if (boundp 'neh/org-default-notes-file)
-                            neh/org-default-notes-file
+(org-default-notes-file (if (boundp 'my/org-default-notes-file)
+                            my/org-default-notes-file
                           "~/org/incoming.org"))
 #+end_src
 
@@ -2675,7 +2675,7 @@ Just always show images; I always want them.
 (use-package org-appear
   :commands (org-appear-mode)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     :keymaps 'org-mode-map
     "vE" #'org-appear-mode))
 #+end_src
@@ -2721,7 +2721,7 @@ Just always show images; I always want them.
   (org-modern-symbol ((t (:family "Iosevka"))))
 
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "vm" #'org-modern-mode))
 #+end_src
 
@@ -2745,7 +2745,7 @@ I want to go straight into =evil-insert-states= in some modes so I can just star
 I want all drawers hidden on file load.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-(org-mode . neh/org-hide-all-drawers)
+(org-mode . my/org-hide-all-drawers)
 #+end_src
 
 I use plantuml to generate various images, and this makes sure that generated images are redisplayed after re-processing diagram source code in a block.
@@ -2771,11 +2771,11 @@ Show the heading of a table when it's scrolled offscreen.
 General purpose org keybindings.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-(neh/leader-keys
+(my/leader-keys
   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
   "o." #'org-open-at-point
 
-  "ve" #'neh/toggle-local-emphasis-markers
+  "ve" #'my/toggle-local-emphasis-markers
   "vi" #'org-toggle-inline-images
   "vl" #'org-toggle-link-display)
 #+end_src
@@ -2794,8 +2794,8 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 (general-def
   :keymaps 'org-mode-map
   :states '(normal emacs)
-  "<RET>" 'neh/org-ret
-  "S-<return>" 'neh/org-shift-ret
+  "<RET>" 'my/org-ret
+  "S-<return>" 'my/org-shift-ret
   "ze" 'outline-show-branches)
 #+end_src
 
@@ -2833,11 +2833,11 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
   (:keymaps 'org-mode-map
    "C-'" nil
    "C-," nil)
-  (neh/leader-keys
+  (my/leader-keys
     "a" #'org-agenda)
 
   :init
-  (defun neh/agenda-current-window ()
+  (defun my/agenda-current-window ()
     (interactive)
     (let ((org-agenda-window-setup 'only-window))
       (org-agenda)
@@ -3023,15 +3023,15 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
            )))
 
   :hook ((org-capture-mode . evil-insert-state)
-         (org-capture-mode . neh/full-frame-capture))
+         (org-capture-mode . my/full-frame-capture))
 
   :general
-  (neh/leader-keys
-    "cm" #'neh/org-capture-someday
+  (my/leader-keys
+    "cm" #'my/org-capture-someday
     "co" #'org-capture)
 
   :init
-  (defun neh/org-capture-someday ()
+  (defun my/org-capture-someday ()
     (interactive)
     (org-capture nil "m"))
 
@@ -3049,13 +3049,13 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
                (not (eq this-command 'org-capture-refile)))
       (delete-frame)))
 
-  (defun neh/capture-full-frame ()
+  (defun my/capture-full-frame ()
     "Start org-capture in a frame by itself."
     (interactive)
     (org-capture)
     (delete-other-windows))
 
-  (defun neh/full-frame-capture ()
+  (defun my/full-frame-capture ()
     (if (string= (frame-parameter nil 'name) "capture")
         (delete-other-windows)))
 
@@ -3168,19 +3168,19 @@ MimeType=x-scheme-handler/org-protocol;
   :general
   (:keymaps '(normal)
    "S-SPC" #'org-roam-node-find)
-  (neh/leader-keys
-    "N" #'(lambda () (interactive) (neh/customize-this "neh/org-roam-context"))
-    "nc" #'neh/org-roam-node-find
+  (my/leader-keys
+    "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
+    "nc" #'my/org-roam-node-find
     "no" #'org-roam-node-find
     "nR" #'org-roam-node-random
     "w" #'org-roam-node-find
     )
 
-  (neh/leader-keys
+  (my/leader-keys
     :keymaps 'org-mode-map
     "ni" #'org-roam-node-insert)
 
-  (neh/leader-nav
+  (my/leader-nav
     "n" #'org-roam-node-find)
 
   (:keymaps '(org-roam-mode-map
@@ -3197,52 +3197,52 @@ MimeType=x-scheme-handler/org-protocol;
 
   :init
 
-  (defun neh/dnd-only (node)
-    (neh/by-tag "d&d" node))
+  (defun my/dnd-only (node)
+    (my/by-tag "d&d" node))
 
-  (defun neh/projects-only (node)
-    (neh/by-tag "project" node))
+  (defun my/projects-only (node)
+    (my/by-tag "project" node))
 
-  (defun neh/by-tag (tag node)
+  (defun my/by-tag (tag node)
     (member tag (org-roam-node-tags node)))
 
 
-  (defun neh/org-roam-node-find ()
+  (defun my/org-roam-node-find ()
     (interactive)
-    (org-roam-node-find t nil #'neh/notes-by-context))
+    (org-roam-node-find t nil #'my/notes-by-context))
 
-  (defun neh/set-org-roam-context (sym value)
-    (setq neh/org-roam-context value))
+  (defun my/set-org-roam-context (sym value)
+    (setq my/org-roam-context value))
 
-  (defcustom neh/org-roam-context "personal"
+  (defcustom my/org-roam-context "personal"
     "Set org roam context."
     :type '(choice
             (const "personal")
             (const "work")
             (const "d&d"))
-    :set 'neh/set-org-roam-context
+    :set 'my/set-org-roam-context
     :initialize 'custom-initialize-set)
 
-  (defun neh/notes-by-context (node)
+  (defun my/notes-by-context (node)
     (let ((tags (org-roam-node-tags node)))
-      (cond ((equal neh/org-roam-context "personal")
+      (cond ((equal my/org-roam-context "personal")
              ;; '(notes-not-tagged "work"))
              (not (member "work" tags)))
-            ((equal neh/org-roam-context "work")
+            ((equal my/org-roam-context "work")
              ;; '(notes-by-tag "work"))
              (member "work" tags))
-            ((equal neh/org-roam-context "d&d")
+            ((equal my/org-roam-context "d&d")
              (member "d&d" tags))
              ;; '(notes-by-tag "d&d"))
             (t '(lambda (node) t))
             )))
 
   (defmacro notes-by-context ()
-    (cond ((equal neh/org-roam-context "personal")
+    (cond ((equal my/org-roam-context "personal")
            (notes-not-tagged "work"))
-          ((equal neh/org-roam-context "work")
+          ((equal my/org-roam-context "work")
            (notes-by-tag "work"))
-          ((equal neh/org-roam-context "d&d")
+          ((equal my/org-roam-context "d&d")
            (notes-by-tag "d&d"))
           (t '(lambda (node) t))
           ))
@@ -3264,12 +3264,12 @@ MimeType=x-scheme-handler/org-protocol;
        (not (member ,tag (org-roam-node-tags node)))))
 
 
-  (defun neh/check-org-files ()
+  (defun my/check-org-files ()
     (when (> (length (directory-files org-directory nil "\\.org$")) 0)
       (org-roam-db-autosync-mode t)
-      (cancel-function-timers #'neh/check-org-files)))
+      (cancel-function-timers #'my/check-org-files)))
 
-  (run-with-timer 0 5 #'neh/check-org-files)
+  (run-with-timer 0 5 #'my/check-org-files)
 
   :config
   (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
@@ -3306,7 +3306,7 @@ MimeType=x-scheme-handler/org-protocol;
         (concat "${type:8} ${hierarchy:*} "
                 (propertize "${tags:10}" 'face 'org-tag)))
 
-  (defun neh/org-roam-ref-add-dwim ()
+  (defun my/org-roam-ref-add-dwim ()
     (interactive)
     (let* ((point-in-link (org-in-regexp org-link-any-re 1))
            (clipboard-url (when (string-match-p "^http" (current-kill 0))
@@ -3320,14 +3320,14 @@ MimeType=x-scheme-handler/org-protocol;
              (call-interactively #'org-roam-ref-add)))))
 
   ;; https://org-roam.discourse.group/t/opening-url-in-roam-refs-field/2564/3
-  (defun neh/open-node-roam-ref-url ()
+  (defun my/open-node-roam-ref-url ()
     "Open the URL in this node's ROAM_REFS property, if one exists"
     (interactive)
     (when-let ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
       (browse-url ref-url)))
 
   ;; https://ag91.github.io/blog/2021/03/12/find-org-roam-notes-via-their-relations/
-  (defun neh/navigate-note (arg &optional node choices)
+  (defun my/navigate-note (arg &optional node choices)
     "Navigate notes by link. With universal ARG tries to use only to navigate the tags of the current note. Optionally takes a selected NOTE and filepaths CHOICES."
     (interactive "P")
     (let* ((depth (if (numberp arg) arg 1))
@@ -3358,7 +3358,7 @@ MimeType=x-scheme-handler/org-protocol;
            )
       (if (equal node next-node)
           (org-roam-node-visit node)
-        (neh/navigate-note nil next-node (cons next-node (-map #'org-roam-backlink-source-node (org-roam-backlinks-get next-node)))))))
+        (my/navigate-note nil next-node (cons next-node (-map #'org-roam-backlink-source-node (org-roam-backlinks-get next-node)))))))
   )
 
 (use-package org-roam-dailies
@@ -3370,9 +3370,9 @@ MimeType=x-scheme-handler/org-protocol;
    '(("d" "default" entry "* %<%k:%M> %?"
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   :general
-  (neh/leader-util
+  (my/leader-util
     "d" #'org-roam-dailies-capture-today)
-  (neh/leader-keys
+  (my/leader-keys
     "cd" #'org-roam-dailies-capture-today
     "n." #'org-roam-dailies-goto-today)
   )
@@ -3400,7 +3400,7 @@ MimeType=x-scheme-handler/org-protocol;
   :after org
   :hook (dired-mode . org-download-enable)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     :keymaps 'org-mode-map
     "nS" #'org-download-screenshot
     "nD" #'org-download-yank)
@@ -3426,7 +3426,7 @@ MimeType=x-scheme-handler/org-protocol;
   (org-sticky-header-prefix "🦜 ")
   (org-sticky-header-full-path 'reversed)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     :keymaps 'org-mode-map
     "vH" #'org-sticky-header-mode))
 #+end_src
@@ -3557,7 +3557,7 @@ in that direction and display the target buffer in said window."
 ;;                 display-buffer-in-tab)            ;; over switching to the Org tab.
 ;;                (tab-name . "agenda")))
 
-(defun neh/toggle-window-dedication ()
+(defun my/toggle-window-dedication ()
   "Toggles window dedication in the selected window."
   (interactive)
   (set-window-dedicated-p (selected-window)
@@ -3575,7 +3575,7 @@ in that direction and display the target buffer in said window."
 (use-package tab-bar
   :straight nil
   :custom
-  (tab-bar-tab-name-format-function #'neh/tab-bar-tab-name-format-default)
+  (tab-bar-tab-name-format-function #'my/tab-bar-tab-name-format-default)
   (tab-bar-format '(tab-bar-format-history
                     tab-bar-format-tabs-groups
                     tab-bar-separator
@@ -3607,7 +3607,7 @@ in that direction and display the target buffer in said window."
    )
 
   :init
-  (defun neh/tab-bar-tab-name-format-default (tab i)
+  (defun my/tab-bar-tab-name-format-default (tab i)
     (let ((current-p (eq (car tab) 'current-tab)))
       (propertize
        (concat
@@ -3636,7 +3636,7 @@ in that direction and display the target buffer in said window."
    ("p" . popper-toggle-latest))
 
   :general
-  (neh/leader-nav
+  (my/leader-nav
     "p" #'popper-toggle-latest
     "P" #'popper-toggle-type)
 
@@ -3699,7 +3699,7 @@ in that direction and display the target buffer in said window."
 (use-package windmove
   :straight nil
   :general
-  (neh/leader-nav
+  (my/leader-nav
     "m" #'windmove-left
     "z" #'windmove-right
     "v" #'windmove-up
@@ -3762,21 +3762,21 @@ in that direction and display the target buffer in said window."
 (use-package ace-window
   :commands (aw-display-buffer
              ace-window
-             neh/other-window-prefix)
+             my/other-window-prefix)
   :custom
   (aw-scope 'frame)
   (aw-keys '(?a ?o ?e ?u ?h ?t ?s))
   (aw-reverse-frame-list t)
 
   :general
-  (neh/leader-nav
+  (my/leader-nav
     "o" #'ace-window
     "O" #'aw-flip-window)
-  (neh/leader-keys
-    "ow" #'neh/other-window-prefix)
+  (my/leader-keys
+    "ow" #'my/other-window-prefix)
 
   :init
-  (defun neh/other-window-prefix ()
+  (defun my/other-window-prefix ()
     "Display the buffer of the next command in a new window.
 The next buffer is the buffer displayed by the next command invoked
 immediately after this command (ignoring reading from the minibuffer).
@@ -3994,7 +3994,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 (use-package hi-lock
   :straight nil
   :general
-  (neh/leader-keys
+  (my/leader-keys
     :infix "h"
     "l" #'highlight-lines-matching-regexp
     "r" #'highlight-regexp
@@ -4034,7 +4034,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
     "c" 'symbol-overlay-put
     "C" 'symbol-overlay-remove-all)
 
-  (neh/leader-keys
+  (my/leader-keys
     "hs" #'symbol-overlay-put
     "hn" #'symbol-overlay-switch-backward
     "ht" #'symbol-overlay-switch-forward
@@ -4090,7 +4090,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
-(defun neh/python-mode-hook ()
+(defun my/python-mode-hook ()
   "My python mode settings."
   (setq-local fill-column 80)
   ;; (auto-virtualenv-set-virtualenv)
@@ -4099,7 +4099,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 (use-package python-mode
   :straight nil
-  :hook (python-mode . neh/python-mode-hook)
+  :hook (python-mode . my/python-mode-hook)
   :custom
   (python-shell-interpreter "python3")
   (org-babel-python-command "python3"))
@@ -4180,7 +4180,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :custom
   (terminal-here-linux-terminal-command 'alacritty)
   ;; :general
-  ;; (neh/leader-keys
+  ;; (my/leader-keys
   ;;   "ot" #'terminal-here-launch
   ;;   "oT" #'terminal-here-project-launch)
   )
@@ -4195,21 +4195,21 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-max-scrollback 10000)
 
   :general
-  (neh/leader-keys
     :keymaps 'vterm-mode-map
     :states '(normal insert)
     "i" #'neh/consult-yank-from-kill-ring)
+  (my/leader-keys
 
   :init
   ;; wondering about the buffer-name param here... could be a buffer or a string and need to handle?
-  (defun neh/vterm-mode-p (buffer-name &optional action)
+  (defun my/vterm-mode-p (buffer-name &optional action)
     (with-current-buffer buffer-name
       (or (equal major-mode 'vterm-mode)
           (string-prefix-p vterm-buffer-name (buffer-name buffer-name)))))
 
-  (defun neh/vterm-list-buffers ()
+  (defun my/vterm-list-buffers ()
     (interactive)
-    (seq-filter #'neh/vterm-mode-p (buffer-list (current-buffer))))
+    (seq-filter #'my/vterm-mode-p (buffer-list (current-buffer))))
 
   ;; would be nice to have more info about vterm buffers in the list... marginalia time?
   (with-eval-after-load 'consult
@@ -4219,7 +4219,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
         :narrow ?v
         :category buffer
         :state    ,#'consult--buffer-state
-        :items    ,(lambda () (mapcar #'buffer-name (neh/vterm-list-buffers)))))
+        :items    ,(lambda () (mapcar #'buffer-name (my/vterm-list-buffers)))))
 
     (add-to-list 'consult-buffer-sources 'vterm-buffer-source 'append)
 
@@ -4248,56 +4248,56 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :general
-  (neh/leader-util
-    "g" #'neh/global-vterm-toggle
-    "G" #'neh/global-vterm-toggle-cd
-    "t" #'neh/project-vterm-toggle
-    "T" #'neh/project-vterm-toggle-cd
+  (my/leader-util
+    "g" #'my/global-vterm-toggle
+    "G" #'my/global-vterm-toggle-cd
+    "t" #'my/project-vterm-toggle
+    "T" #'my/project-vterm-toggle-cd
     )
-  (neh/leader-keys
-    "og" #'neh/global-vterm-toggle
-    "oG" #'neh/global-vterm-toggle-cd
-    "ot" #'neh/project-vterm-toggle
-    "oT" #'neh/project-vterm-toggle-cd
+  (my/leader-keys
+    "og" #'my/global-vterm-toggle
+    "oG" #'my/global-vterm-toggle-cd
+    "ot" #'my/project-vterm-toggle
+    "oT" #'my/project-vterm-toggle-cd
     )
   (:keymaps 'vterm-mode-map
    :states '(insert normal)
-   "C-'" #'neh/project-vterm-toggle
+   "C-'" #'my/project-vterm-toggle
    "C-." #'vterm-toggle-insert-cd)
 
   :init
-  (defun neh/vterm-toggle-same-window (scope &optional cd)
+  (defun my/vterm-toggle-same-window (scope &optional cd)
     (interactive)
     (let ((vterm-toggle-scope scope)
-          (display-buffer-alist '((neh/vterm-mode-p
+          (display-buffer-alist '((my/vterm-mode-p
                                    (display-buffer-same-window)))))
       (if cd
           (vterm-toggle-cd)
         (vterm-toggle))))
 
-  (defun neh/project-vterm-toggle ()
+  (defun my/project-vterm-toggle ()
     (interactive)
-    (neh/vterm-toggle-same-window 'project))
+    (my/vterm-toggle-same-window 'project))
 
-  (defun neh/project-vterm-toggle-cd ()
+  (defun my/project-vterm-toggle-cd ()
     (interactive)
-    (neh/vterm-toggle-same-window 'project t))
+    (my/vterm-toggle-same-window 'project t))
 
-  (defun neh/frame-vterm-toggle ()
+  (defun my/frame-vterm-toggle ()
     (interactive)
-    (neh/vterm-toggle-same-window 'frame))
+    (my/vterm-toggle-same-window 'frame))
 
-  (defun neh/frame-vterm-toggle-cd ()
+  (defun my/frame-vterm-toggle-cd ()
     (interactive)
-    (neh/vterm-toggle-same-window 'frame t))
+    (my/vterm-toggle-same-window 'frame t))
 
-  (defun neh/global-vterm-toggle ()
+  (defun my/global-vterm-toggle ()
     (interactive)
-    (neh/vterm-toggle-same-window 'dedicated))
+    (my/vterm-toggle-same-window 'dedicated))
 
-  (defun neh/global-vterm-toggle-cd ()
+  (defun my/global-vterm-toggle-cd ()
     (interactive)
-    (neh/vterm-toggle-same-window 'dedicated t))
+    (my/vterm-toggle-same-window 'dedicated t))
   )
 #+end_src
 
@@ -4317,10 +4317,10 @@ Finally found a package that lets org tables horizontally scroll while leaving t
              (if (= (user-uid) 0) " # " "  "))))
   (eshell-prompt-regexp "^[^#$\n]* [#] ")
 
-  :hook (eshell-mode . neh/eshell-mode-hook)
+  :hook (eshell-mode . my/eshell-mode-hook)
 
   :init
-  (defun neh/eshell-mode-hook ()
+  (defun my/eshell-mode-hook ()
     (add-to-list 'eshell-visual-commands "htop")
     (add-to-list 'eshell-visual-commands "tail")
     (add-to-list 'eshell-visual-commands "ssh")
@@ -4396,7 +4396,7 @@ any directory proferred by `consult-dir'."
 (use-package eshell-prompt-extras
   :disabled t
   :init
-  (defun epe-theme-neh ()
+  (defun epe-theme-my ()
     ""
     (setq eshell-prompt-regexp "^[^#\n]*[#]* ")
 
@@ -4405,27 +4405,27 @@ any directory proferred by `consult-dir'."
      (if (epe-remote-p)
          (progn
            (concat
-            (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
-            (epe-colorize-with-face (epe-remote-user) 'epe-neh-user-face)
-            (epe-colorize-with-face "@" 'epe-neh-delimiter-face)
-            (epe-colorize-with-face (epe-remote-host) 'epe-neh-host-face)
+            (epe-colorize-with-face "─ " 'epe-my-delimiter-face)
+            (epe-colorize-with-face (epe-remote-user) 'epe-my-user-face)
+            (epe-colorize-with-face "@" 'epe-my-delimiter-face)
+            (epe-colorize-with-face (epe-remote-host) 'epe-my-host-face)
             ""))
        (progn
          (when (not (string= user-login-name "nathan"))
            (concat
-            (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
-            (epe-colorize-with-face (user-login-name) 'epe-neh-user-face)
-            (epe-colorize-with-face (system-name) 'epe-neh-host-face)
+            (epe-colorize-with-face "─ " 'epe-my-delimiter-face)
+            (epe-colorize-with-face (user-login-name) 'epe-my-user-face)
+            (epe-colorize-with-face (system-name) 'epe-my-host-face)
             " "))))
 
      (concat
-      (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+      (epe-colorize-with-face "─ " 'epe-my-delimiter-face)
       (epe-colorize-with-face (concat (eshell/pwd)) 'epe-dir-face)
       " "
 
       (when (epe-git-p)
         (concat
-         (epe-colorize-with-face "─ " 'epe-neh-delimiter-face)
+         (epe-colorize-with-face "─ " 'epe-my-delimiter-face)
          (epe-colorize-with-face " " 'epe-git-face)
          (epe-colorize-with-face
           (concat (epe-git-branch)
@@ -4436,7 +4436,7 @@ any directory proferred by `consult-dir'."
                       (concat ":" (number-to-string unpushed)))))
           'epe-git-face)))
 
-      (epe-colorize-with-face  "\n" 'epe-neh-delimiter-face))
+      (epe-colorize-with-face  "\n" 'epe-my-delimiter-face))
 
      (when (> 0 eshell-last-command-status)
        (epe-colorize-with-face eshell-last-command-status 'epe-symbol-face))
@@ -4450,9 +4450,9 @@ any directory proferred by `consult-dir'."
      " "))
 
   :custom-face
-  (epe-neh-delimiter-face ((t (:inherit 'shadow))))
-  (epe-neh-user-face ((t (:inherit 'default))))
-  (epe-neh-host-face ((t (:inherit 'default))))
+  (epe-my-delimiter-face ((t (:inherit 'shadow))))
+  (epe-my-user-face ((t (:inherit 'default))))
+  (epe-my-host-face ((t (:inherit 'default))))
 
   :custom
   (epe-show-python-info t)
@@ -4460,7 +4460,7 @@ any directory proferred by `consult-dir'."
   (epe-git-untracked-char "?")
   (epe-git-detached-HEAD-char "D:")
   (epe-path-style 'fish)
-  (eshell-prompt-function 'epe-theme-neh))
+  (eshell-prompt-function 'epe-theme-my))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4503,38 +4503,38 @@ any directory proferred by `consult-dir'."
     :states '(normal)
     "t" nil)
 
-  (neh/leader-keys
-    "cp" #'neh/dired-copy-full-path
-    "cP" #'neh/dired-copy-full-path-quoted
-    "xx" #'neh/dired-open)
+  (my/leader-keys
+    "cp" #'my/dired-copy-full-path
+    "cP" #'my/dired-copy-full-path-quoted
+    "xx" #'my/dired-open)
 
-  (neh/leader-nav
+  (my/leader-nav
     "u" #'dired-jump)
 
   :init
-  (defun neh/dired-copy-full-path ()
+  (defun my/dired-copy-full-path ()
     "Copy full path of entries that are marked or at point."
     (interactive)
     (let ((current-prefix-arg 0))
       (call-interactively #'dired-copy-filename-as-kill)))
 
-  (defun neh/dired-copy-full-path-shell-quoted ()
+  (defun my/dired-copy-full-path-shell-quoted ()
     "Copy quoted full path of entries that are marked or at point."
     (interactive)
-    (kill-new (shell-quote-argument (neh/dired-copy-full-path))))
+    (kill-new (shell-quote-argument (my/dired-copy-full-path))))
 
 
-  (defun neh/dired-copy-full-path-quoted ()
+  (defun my/dired-copy-full-path-quoted ()
     "Copy quoted full path of entries that are marked or at point."
     (interactive)
-    (neh/copy-file-path nil nil t))
+    (my/copy-file-path nil nil t))
 
-  (defun neh/dired-copy-full-path-quoted-list ()
+  (defun my/dired-copy-full-path-quoted-list ()
     "Copy quoted full path of entries that are marked or at point."
     (interactive)
-    (neh/copy-file-path nil "\n" t))
+    (my/copy-file-path nil "\n" t))
 
-  (defun neh/copy-file-path (&optional @dir-path-only-p separator shell-quote-p)
+  (defun my/copy-file-path (&optional @dir-path-only-p separator shell-quote-p)
     "Copy the current buffer's file path or dired path to `kill-ring'.
 Result is full path.
 If `universal-argument' is called first, copy only the dir path.
@@ -4632,7 +4632,7 @@ Version 2017-09-01"
   :after dired
   :commands (dired-subtree-toggle
              dired-subtree-cycle)
-  :hook (after-load-theme . neh/set-dired-subtree-background)
+  :hook (after-load-theme . my/set-dired-subtree-background)
 
   :general
   (general-define-key
@@ -4641,10 +4641,10 @@ Version 2017-09-01"
    "<tab>" 'dired-subtree-toggle)
 
   :init
-  (defun neh/set-dired-subtree-background ()
+  (defun my/set-dired-subtree-background ()
     (if (featurep 'dired-subtree)
         (let* ((bg (face-background 'default))
-               (lighten-or-darken (if (neh/dark-p)
+               (lighten-or-darken (if (my/dark-p)
                                       #'color-lighten-name
                                     #'color-darken-name))
                (even (funcall lighten-or-darken bg 6))
@@ -4657,7 +4657,7 @@ Version 2017-09-01"
           (set-face-attribute 'dired-subtree-depth-6-face nil :background even :extend t))))
 
   :config
-  (neh/set-dired-subtree-background))
+  (my/set-dired-subtree-background))
 #+end_src
 
 This seems useful, especially in combination with =dired-subtree=, as then it's active in the buffer as you view subtrees.
@@ -4737,7 +4737,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 #+begin_src emacs-lisp :noweb yes
 (use-package hydra
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "rc" #'hydra-codereading/body
     "rg" #'hydra-git-gutter/body
     "ro" #'hydra-org/body
@@ -4797,9 +4797,9 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
   ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
 
-  ("+" (neh/adjust-text-height 7) "bigger")
-  ("-" (neh/adjust-text-height -7) "smaller")
-  ("0" (neh/adjust-text-height 0) "reset")
+  ("+" (my/adjust-text-height 7) "bigger")
+  ("-" (my/adjust-text-height -7) "smaller")
+  ("0" (my/adjust-text-height 0) "reset")
   ("q" nil "quit"))
 #+end_src
 
@@ -4872,11 +4872,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :after hydra
   :commands (pretty-hydra-define)
   :general
-  (neh/leader-keys
-    "," #'neh/toggles/body
-    "'" #'neh/movement/body
+  (my/leader-keys
+    "," #'my/toggles/body
+    "'" #'my/movement/body
     "G" 'hydra-git/body
-    "rR" 'neh/reading/body)
+    "rR" 'my/reading/body)
 
   :config
   <<pretty-hydras>>
@@ -4893,11 +4893,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
            ("b" ibuffer "ibuffer" :exit t)
            ("e" execute-extended-command "command" :exit t)
            ("n" org-roam-node-find "notes" :exit t)
-           ("a" neh/agenda-current-window "agenda" :exit t)
-           ("c" neh/capture-full-frame "capture" :exit t)
+           ("a" my/agenda-current-window "agenda" :exit t)
+           ("c" my/capture-full-frame "capture" :exit t)
            ("f" find-file "file" :exit t))
 
-   "search" (("N" neh/roam-rg "notes" :exit t)
+   "search" (("N" my/roam-rg "notes" :exit t)
              ("F" consult-find "files" :exit t)
              ("A" consult-org-agenda "agenda" :exit t)
              ("5" hydra-5e/body "5e" :exit t))
@@ -4916,7 +4916,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
            ("o" consult-buffer "buffer" :exit t)
            ("f" find-file "file" :exit t))
 
-   "search" (("N" neh/roam-rg "notes" :exit t)
+   "search" (("N" my/roam-rg "notes" :exit t)
              ("F" consult-find "files" :exit t)
              ("A" consult-org-agenda "agenda" :exit t))
    ))
@@ -4981,7 +4981,7 @@ Working on a =git= hydra to replace all or most of my usual git keybinds. This i
 Another work-in-progress hydra, this one for a general reading/browsing set of commands. Not sure exactly what it will be yet.
 
 #+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
-(pretty-hydra-define neh/reading (:hint nil
+(pretty-hydra-define my/reading (:hint nil
                                   :foreign-keys warn
                                   :quit-key "q")
   ("move up/down" (("N" scroll-down "pg up")
@@ -4993,14 +4993,14 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
                    ("Z" (evil-scroll-line-to-center (line-number-at-pos)) "to center")
                    ("S" (evil-scroll-line-to-bottom (line-number-at-pos)) "to bottom"))
 
-   "text size" (("+" (neh/adjust-text-height 7) "bigger")
-                ("-" (neh/adjust-text-height -7) "smaller")
-                ("0" (neh/adjust-text-height 0) "reset"))
+   "text size" (("+" (my/adjust-text-height 7) "bigger")
+                ("-" (my/adjust-text-height -7) "smaller")
+                ("0" (my/adjust-text-height 0) "reset"))
    ))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
-(defun neh/set-frame-width (multiple)
+(defun my/set-frame-width (multiple)
   "Sets frame width to MULTIPLE of FILL-COLUMN."
   (interactive)
   (message "%s %i" "setting frame width to " (+ (* multiple fill-column) 2))
@@ -5014,7 +5014,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
   (message "%s %i" "frame width is " (frame-parameter nil 'width))
   (message "%s %i" "fill-column is " fill-column))
 
-(pretty-hydra-define neh/toggles
+(pretty-hydra-define my/toggles
   (:color amaranth
    :quit-key ("q" "<escape>")
    :title (format " %s Options"
@@ -5030,21 +5030,21 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("d" rainbow-delimiters-mode "delimiters" :toggle t))
    "UI"
    (("l" global-hl-line-mode "highlight line" :toggle t)
-    ("k" neh/toggle-dark-mode "dark mode" :toggle neh/dark-mode :exit t)
-    ("T" (neh/customize-this "neh/themeset") "themeset" :exit t)
+    ("k" my/toggle-dark-mode "dark mode" :toggle my/dark-mode :exit t)
+    ("T" (my/customize-this "my/themeset") "themeset" :exit t)
     ("D" auto-dim-other-buffers-mode "dimmer" :toggle t)
     ("O" olivetti-mode "olivetti" :toggle t)
     ("W" writeroom-mode "writeroom" :toggle t)
-    ("+" (neh/adjust-text-height 7) "bigger text")
-    ("-" (neh/adjust-text-height -7) "smaller text")
-    ("0" (neh/adjust-text-height 0) "reset text size"))
+    ("+" (my/adjust-text-height 7) "bigger text")
+    ("-" (my/adjust-text-height -7) "smaller text")
+    ("0" (my/adjust-text-height 0) "reset text size"))
    "Window"
-   (("1" (neh/set-frame-width 1) "single width")
-    ;; ("z" (neh/set-frame-width 2) "double width")
+   (("1" (my/set-frame-width 1) "single width")
+    ;; ("z" (my/set-frame-width 2) "double width")
     ("2" (set-frame-width nil (* fill-column 2)) "double width")
-    ("3" (neh/set-frame-width 3) "triple width"))))
+    ("3" (my/set-frame-width 3) "triple width"))))
 
-(pretty-hydra-define neh/movement
+(pretty-hydra-define my/movement
   (:color amaranth
    :quit-key ("q" "<escape>")
    :title (format " %s Movement"
@@ -5082,7 +5082,7 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
 #+begin_src emacs-lisp :noweb yes
 (use-package major-mode-hydra
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "." #'major-mode-hydra)
 
   :custom
@@ -5396,7 +5396,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
       :query-separator "+"
       :query-url "developer.mozilla.org/en-US/search?q=")
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "sw" #'websearch))
 #+end_src
 #+end_src
@@ -5444,7 +5444,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (iedit-mode
              iedit-rectangle-mode)
   :general
-  (neh/leader-util
+  (my/leader-util
     "i" #'iedit-mode)
   (general-define-key
    :states '(normal visual)
@@ -5519,7 +5519,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (literate-calc-mode
              literate-calc-minor-mode)
   :general
-  (neh/leader-keys
+  (my/leader-keys
     :keymaps 'org-mode-map
     "vC" #'literate-calc-minor-mode))
 #+end_src
@@ -5665,24 +5665,24 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   :commands (link-hint-open-link
              link-hint-define-type)
   :general
-  (neh/leader-util
+  (my/leader-util
     "f" #'link-hint-open-link
-    "F" #'neh/link-hint-open-in-external)
+    "F" #'my/link-hint-open-in-external)
 
   :config
   (link-hint-define-type 'text-url
-    :neh-open-eww #'eww)
-  (defun neh/link-hint-eww ()
+    :my-open-eww #'eww)
+  (defun my/link-hint-eww ()
     (interactive)
-    (avy-with neh/link-hint-eww
-      (link-hint--one :neh-open-eww)))
+    (avy-with my/link-hint-eww
+      (link-hint--one :my-open-eww)))
 
-  (defun neh/link-hint-open-in-eww ()
+  (defun my/link-hint-open-in-eww ()
     (interactive)
     (let ((browse-url-browser-function #'eww-browse-url))
       (link-hint-open-link)))
 
-  (defun neh/link-hint-open-in-external ()
+  (defun my/link-hint-open-in-external ()
     (interactive)
     (let ((browse-url-browser-function #'browse-url-default-browser))
       (link-hint-open-link)))
@@ -5719,7 +5719,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package deadgrep
   :init
-  (defun neh/deadgrep-context-adjust (amount)
+  (defun my/deadgrep-context-adjust (amount)
     (let* ((old-before (or (car deadgrep--context) 0))
            (old-after (or (cdr deadgrep--context) 0))
            (before (+ old-before amount))
@@ -5729,21 +5729,21 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
                                           (if (< after 0) 0 after)))
       (deadgrep-restart)))
 
-  (defun neh/deadgrep-context-more ()
+  (defun my/deadgrep-context-more ()
     (interactive)
-    (neh/deadgrep-context-adjust 2))
-  (defun neh/deadgrep-context-less ()
+    (my/deadgrep-context-adjust 2))
+  (defun my/deadgrep-context-less ()
     (interactive)
-    (neh/deadgrep-context-adjust -2))
+    (my/deadgrep-context-adjust -2))
 
-  (defun neh/deadgrep-here ()
+  (defun my/deadgrep-here ()
     (interactive)
     (deadgrep (deadgrep--read-search-term) default-directory))
 
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "sr" #'deadgrep
-    "sR" #'neh/deadgrep-here)
+    "sR" #'my/deadgrep-here)
 
   (general-define-key
    :keymaps 'deadgrep-mode-map
@@ -5756,15 +5756,15 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
    "M-s" #'deadgrep-forward-filename
    "D" #'deadgrep-search-directory
    "S" #'deadgrep-search-term
-   "+" #'neh/deadgrep-context-more
-   "-" #'neh/deadgrep-context-less)
+   "+" #'my/deadgrep-context-more
+   "-" #'my/deadgrep-context-less)
 
   :config
   (general-add-advice (list #'deadgrep-backward-filename
                             #'deadgrep-forward-filename)
-                      :after #'neh/recenter-after)
+                      :after #'my/recenter-after)
 
-  (defun neh/deadgrep--include-args (rg-args)
+  (defun my/deadgrep--include-args (rg-args)
     (if (string= (projectile-project-name) ".config")
         ;; (push "--hidden" rg-args) ;; consider hidden folders/files
         ;; (push "--follow" rg-args) ;; follow symlink
@@ -5772,7 +5772,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
       rg-args
       ))
 
-  (advice-add 'deadgrep--arguments :filter-return #'neh/deadgrep--include-args)
+  (advice-add 'deadgrep--arguments :filter-return #'my/deadgrep--include-args)
   )
 #+end_src
 
@@ -5796,7 +5796,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "vd" #'rainbow-delimiters-mode)
 
   :custom-face
@@ -5891,7 +5891,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package rainbow-mode
   :general
-  (neh/leader-keys
+  (my/leader-keys
     "vc" #'rainbow-mode))
 #+end_src
 
@@ -6057,7 +6057,7 @@ the buffer works like a pager."
 (defun hide-cursor-mode-disable ()
   (hide-cursor-mode -1))
 
-(neh/leader-util
+(my/leader-util
   "v" #'hide-cursor-mode)
 #+end_src
 
@@ -6112,12 +6112,12 @@ interactively, or via #'embark-act.
 #+end_src
 
 #+begin_src emacs-lisp :lexical no
-(defun neh/indent-buffer ()
+(defun my/indent-buffer ()
   "Indent the current buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
 
-(defun neh/indent-region-or-block-or-buffer ()
+(defun my/indent-region-or-block-or-buffer ()
   "Indent the active region, org src block, or the current buffer."
   (interactive)
   (save-excursion
@@ -6128,19 +6128,19 @@ interactively, or via #'embark-act.
            (let ((context (org-element-context)))
              (indent-region (plist-get (cl-second context) :begin)
                             (plist-get (cl-second context) :end))))
-          (t (neh/indent-buffer)))))
+          (t (my/indent-buffer)))))
 
-(defun neh/indent-region-or-buffer ()
+(defun my/indent-region-or-buffer ()
   "Indent the active region or the current buffer."
   (interactive)
   (save-excursion
     (if (region-active-p)
         (indent-region (region-beginning) (region-end))
-      (neh/indent-buffer))))
+      (my/indent-buffer))))
 
 (general-define-key
  :states 'normal
- "=" #'neh/indent-region-or-block-or-buffer)
+ "=" #'my/indent-region-or-block-or-buffer)
 #+end_src
 
 A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
@@ -6156,7 +6156,7 @@ A nice couple of functions for opening files from dired asynchronously. Handy us
      (format "nohup 1>/dev/null 2>/dev/null xdg-open %s"
              (expand-file-name file)))))
 
-(defun neh/dired-open()
+(defun my/dired-open()
   (interactive)
   (cond
    ;; use dired-find-file if it is a directory
@@ -6175,13 +6175,13 @@ A nice couple of functions for opening files from dired asynchronously. Handy us
 This function gives me a quicker way to edit src blocks in org mode, as well as making indirect buffer cloning a bit /less/ accessible (only on headings), since I do it relatively infrequently and have actually been ending up in indirect buffers a bit /too/ easily. I just bind this to =enter= in org mode.
 
 #+begin_src emacs-lisp
-(defun neh/org-ret ()
+(defun my/org-ret ()
   "Make RET either narrow to the heading at point or edit the src block at point."
   (interactive)
   (cond ((org-at-heading-p) (org-tree-to-indirect-buffer))
         ((org-in-src-block-p) (org-edit-src-code))))
 
-(defun neh/org-shift-ret ()
+(defun my/org-shift-ret ()
   "Make S-RET either narrow to the heading at point or edit the src block at point."
   (interactive)
   (cond ((org-at-heading-p) (org-tree-to-indirect-buffer-other-frame))
@@ -6210,7 +6210,7 @@ With prefix arg move subtree to the end of its parent."
 Ending up at the bottom of the window and not being able see enough context when jumping around is annoying, so I have this to help deal with that by recentering after jumps.
 
 #+begin_src emacs-lisp
-(defun neh/after-jump (&optional arg)
+(defun my/after-jump (&optional arg)
   "Center text at point after jumping."
   (evil-scroll-line-to-center (line-number-at-pos)))
 #+end_src
