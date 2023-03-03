@@ -1760,6 +1760,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                                     "^\*.*\*"
                                     "^magit.*:.+"))
   (nswbuff-include-buffer-regexps '("^*Org Src"
+                                    "*elfeed"
                                     "^*helpful"))
 
   :init
