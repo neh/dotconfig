@@ -980,7 +980,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   ;; for org-modern
   (modify-all-frames-parameters
-   '((right-divider-width . 10)
+   '((right-divider-width . 15)
      (internal-border-width . 15)
      ))
   (dolist (face '(window-divider
