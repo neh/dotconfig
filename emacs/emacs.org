@@ -211,18 +211,6 @@ current window, as a ratio between 0 and 1.")
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-  ;; for org-modern
-  (modify-all-frames-parameters
-   '((right-divider-width . 3)
-     (internal-border-width . 0)
-     ))
-  (dolist (face '(window-divider
-                  window-divider-first-pixel
-                  window-divider-last-pixel))
-    (face-spec-reset-face face)
-    (set-face-foreground face (face-attribute 'default :background)))
-  (set-face-background 'fringe (face-attribute 'default :background))
-
   (defun partially-apply-interactively (cmd arg)
     (interactive)
     (minibuffer-with-setup-hook
@@ -991,7 +979,17 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (set-face-foreground 'org-hide (face-background 'default))
 
   ;; for org-modern
+  (modify-all-frames-parameters
+   '((right-divider-width . 10)
+     (internal-border-width . 15)
+     ))
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
   (set-face-background 'fringe (face-attribute 'default :background))
+
 
   (set-face-attribute 'shr-text nil :height (face-attribute 'default :height))
 
