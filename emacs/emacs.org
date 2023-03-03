@@ -5285,18 +5285,18 @@ Try out =org-noter=.
 * Chat
 
 #+begin_src emacs-lisp
-(use-package plz
-  :straight (plz
-             :type git
-             :host github
-             :repo "alphapapa/plz.el"))
-
 (use-package ement
-  :straight (ement
-             :type git
-             :host github
-             :repo "alphapapa/ement.el")
-  :commands (ement-connect))
+  :commands (ement-connect)
+  :custom
+  (ement-room-prism nil)
+  (ement-room-prism-message-desaturation 1)
+  (ement-room-prism-minimum-contrast 6)
+  (ement-room-sender-in-left-margin nil)
+  (ement-room-message-format-spec "%B%r%R%t")
+  (ement-notify-notification-predicates
+   '(ement-notify--event-mentions-session-user-p
+     ement-notify--event-mentions-room-p
+     ement-notify--room-unread-p)))
 #+end_src
 
 #+begin_src emacs-lisp
