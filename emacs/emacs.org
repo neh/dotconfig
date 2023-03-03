@@ -1438,7 +1438,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    "." #'hydra-browse/body)
   (:keymaps 'embark-buffer-map
    "F" #'switch-to-buffer-other-frame
-   "R" #'tabspaces-remove-selected-buffer)
+   ;; "R" #'tabspaces-remove-selected-buffer
+   )
   (:keymaps 'embark-heading-map
    "I" #'org-id-get-create
    "l" #'org-store-link)
@@ -1752,7 +1753,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    ("r" . nswbuff-switch-to-previous-buffer))
 
   :custom
-  (nswbuff-buffer-list-function #'my/tabspaces-buffer-list)
+  (nswbuff-buffer-list-function #'my/local-buffer-list)
   (nswbuff-status-window-layout 'scroll)
   (nswbuff-display-intermediate-buffers t)
   (nswbuff-recent-buffers-first t)
@@ -1764,8 +1765,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                                     "^*helpful"))
 
   :init
-  (defun my/tabspaces-buffer-list ()
-    (seq-remove #'popper-popup-p (tabspaces--buffer-list)))
+  (defun my/local-buffer-list ()
+    (seq-remove #'popper-popup-p (beframe--buffer-list)))
   )
 #+end_src
 
@@ -1810,11 +1811,11 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :commands (frog-jump-buffer)
   :custom
   (frog-jump-buffer-filter-actions '(("W" "[workspace]"
-                                      my/frog-jump-buffer-filter-tabspaces)))
-  (frog-jump-buffer-default-filter #'my/frog-jump-buffer-filter-tabspaces)
+                                      my/frog-jump-buffer-filter-local)))
+  (frog-jump-buffer-default-filter #'my/frog-jump-buffer-filter-local)
   :init
-  (defun my/frog-jump-buffer-filter-tabspaces (buffer)
-    (member buffer (tabspaces--buffer-list))))
+  (defun my/frog-jump-buffer-filter-local (buffer)
+    (member buffer (beframe--buffer-list))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3624,8 +3625,9 @@ in that direction and display the target buffer in said window."
         )
        'face (funcall tab-bar-tab-face-function tab))))
 
-  :config
-  (tab-bar-mode t))
+  ;; :config
+  ;; (tab-bar-mode t)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3642,7 +3644,7 @@ in that direction and display the target buffer in said window."
     "P" #'popper-toggle-type)
 
   :custom
-  (popper-group-function #'my/popper-group-by-tabspace)
+  (popper-group-function #'my/popper-group)
   ;; (popper-group-function nil)
   (popper-display-control t)
   (popper-display-function #'display-buffer-below-selected)
@@ -3663,8 +3665,10 @@ in that direction and display the target buffer in said window."
            (current-tab-name (assq 'name current-tab)))
       (cdr current-tab-name)))
 
-  (defun my/popper-group-by-tabspace ()
-    (my/current-tab-name))
+  (defun my/popper-group ()
+    (frame-parameter nil 'name)
+    ;; (my/current-tab-name)
+    )
 
   (popper-mode t)
   (popper-echo-mode t))
@@ -5443,6 +5447,32 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
       "Set workspace buffer list for consult-buffer.")
     (add-to-list 'consult-buffer-sources 'consult--source-workspace))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package beframe
+  :hook (after-init . beframe-mode)
+  :config
+  (defvar consult-buffer-sources)
+  (declare-function consult--buffer-state "consult")
+
+  (with-eval-after-load 'consult
+    (defface beframe-buffer
+      '((t :inherit font-lock-string-face))
+      "Face for `consult' framed buffers.")
+
+    (defvar beframe--consult-source
+      `( :name     "Frame-specific buffers (current frame)"
+         :narrow   ?F
+         :category buffer
+         :face     beframe-buffer
+         :history  beframe-history
+         :items    ,#'beframe--buffer-names
+         :action   ,#'switch-to-buffer
+         :state    ,#'consult--buffer-state))
+
+    (add-to-list 'consult-buffer-sources 'beframe--consult-source))
   )
 #+end_src
 
