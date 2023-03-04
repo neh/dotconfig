@@ -1839,6 +1839,13 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
              burly-open-last-bookmark))
 #+end_src
 
+** Within buffers
+
+#+begin_src emacs-lisp
+(use-package beginend
+  :commands (beginend-global-mode))
+#+end_src
+
 * Snippets
 
 #+begin_src emacs-lisp
@@ -3670,6 +3677,12 @@ in that direction and display the target buffer in said window."
 
   (popper-mode t)
   (popper-echo-mode t))
+#+end_src
+
+** Sway
+
+#+begin_src emacs-lisp
+(use-package sway)
 #+end_src
 
 * Window Navigation
@@ -5934,6 +5947,12 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 (use-package aggressive-indent
   :disabled
   :hook (emacs-lisp-mode . aggressive-indent-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dtrt-indent
+  :commands (dtrt-indent-mode
+             dtrt-indent-global-mode))
 #+end_src
 
 #+begin_src emacs-lisp :lexical no
