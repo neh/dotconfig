@@ -155,7 +155,6 @@
  ("nongnu-elpa" . "9e236b82a2da24bb9983e2f63061323354d6ecfe")
  ("nov.el" . "cb5f45cbcfbcf263cdeb2d263eb15edefc8b07cb")
  ("nswbuff" . "7633674c89e3dbfc0c07cd7fd8b1d206ed4859d3")
- ("ob-d2" . "52a48cb0e05090dadc27b4cbfbb711b5bd88079f")
  ("ob-restclient.el" . "1b021ce1c67c97fa1aa4d2c0816edb7add129e48")
  ("olivetti" . "8d287a80c5e3d72ac01b56c8afe60b01f18500b4")
  ("orderless" . "e6784026717a8a6a7dcd0bf31fd3414f148c542e")
