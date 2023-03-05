@@ -827,8 +827,8 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
         ((equal value "modus-tinted")
          (setq my/dark-theme 'modus-vivendi-tinted
                my/light-theme 'modus-operandi-tinted))
-        ((equal value "autumn-operandi")
-         (setq my/dark-theme 'ef-autumn
+        ((equal value "bio-operandi")
+         (setq my/dark-theme 'ef-bio
                my/light-theme 'modus-operandi-tinted))
         ((equal value "stimmung")
          (setq my/dark-theme 'stimmung-themes-dark
@@ -846,13 +846,13 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
           (const "gruvbox")
           (const "modus")
           (const "modus-tinted")
-          (const "autumn-operandi")
+          (const "bio-operandi")
           (const "stimmung")
           (const "mix"))
   :set 'my/setthemeset
   :initialize 'custom-initialize-set)
 
-(customize-set-variable 'my/themeset "autumn-operandi")
+(customize-set-variable 'my/themeset "bio-operandi")
 #+end_src
 
 #+begin_src emacs-lisp
