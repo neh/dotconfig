@@ -4487,6 +4487,7 @@ any directory proferred by `consult-dir'."
 
 #+begin_src emacs-lisp
 (use-package eat
+  :disabled t
   :commands (eat)
   :hook ((eshell-load . eat-shell-mode)
          (eshell-load . eat-eshell-visual-command-mode)))
@@ -5182,6 +5183,8 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package shrface
+  ;; this breaks link recognition in eww/elfeed somehow
+  :disabled t
   :commands (shrface-mode)
   :hook ((eww-after-render . shrface-mode))
   :custom
@@ -5425,6 +5428,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
 #+begin_src emacs-lisp
 (use-package tabspaces
+  :disabled t
   :hook (after-init . tabspaces-mode)
   :commands (tabspaces-switch-or-create-workspace
              tabspaces-open-or-create-project-and-workspace
