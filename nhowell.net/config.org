@@ -1455,6 +1455,16 @@ function ec --description 'emacsclient'
 end
 #+end_src
 
+#+begin_src fish :tangle no
+function firefox --description 'firefox flatpak'
+    command flatpak run org.mozilla.firefox $argv
+end
+#+end_src
+
+#+begin_src shell :tangle ~/.local/bin/firefox :shebang #!/bin/bash
+flatpak run org.mozilla.firefox $@
+#+end_src
+
 =fzf= can be used to do some really handy stuff. Here are aliases from [[https://wiki.archlinux.org/title/Fzf#Arch_specific_fzf_uses][the Arch wiki]] that do useful things with pacman data. More in [[https://www.reddit.com/r/archlinux/comments/ndduvm/recommendation_start_using_pacman_yay_and_paru/][this reddit thread]].
 
 Search packages, with info in a preview window, and install selected packages.
