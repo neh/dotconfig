@@ -4216,12 +4216,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :custom
   (vterm-max-scrollback 10000)
 
-  :general
-    :keymaps 'vterm-mode-map
-    :states '(normal insert)
-    "i" #'neh/consult-yank-from-kill-ring)
-  (my/leader-keys
-
   :init
   ;; wondering about the buffer-name param here... could be a buffer or a string and need to handle?
   (defun my/vterm-mode-p (buffer-name &optional action)
