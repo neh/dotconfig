@@ -5468,6 +5468,9 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package beframe
   :hook (after-init . beframe-mode)
+  :custom
+  (beframe-rename-function #'my/beframe-rename-frame)
+
   :config
   (defvar consult-buffer-sources)
   (declare-function consult--buffer-state "consult")
@@ -5488,6 +5491,65 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
          :state    ,#'consult--buffer-state))
 
     (add-to-list 'consult-buffer-sources 'beframe--consult-source))
+
+  (defun my/beframe-rename-frame (frame &optional name)
+    "Rename FRAME per `beframe-rename-function'.
+
+When called interactively, prompt for FRAME.  Else accept FRAME
+if it is an object that satisfies `framep'.
+
+With optional NAME as a string, use it to name the given FRAME.
+When called interactively, prompt for NAME when a prefix argument
+is given.
+
+With no NAME argument try to infer a name based on the following:
+
+- If the current window has a buffer that visits a file, name the
+  FRAME after the file's name and its `default-directory'.
+
+- If the current window has a non-file-visiting buffer, use the
+  `buffer-name' as the FRAME name.
+
+- Else use the `default-directory'.
+
+Remember that this function doubles as an example for
+`beframe-rename-function': copy it and modify it accordingly."
+    (interactive
+     (let ((select-frame (beframe--frame-prompt)))
+       (list
+        (beframe--frame-object select-frame)
+        (when current-prefix-arg
+          (read-string
+           (format "Rename the frame now called `%s' to: "
+                   select-frame)
+           nil 'beframe--rename-frame-history select-frame)))))
+    (modify-frame-parameters
+     frame
+     (list (cons 'name (my/beframe--infer-frame-name frame name)))))
+
+  (defun my/beframe--infer-frame-name (frame name)
+    "Infer a suitable name for FRAME with given NAME.
+See `beframe-rename-frame'."
+    (let* ((buffer (car (frame-parameter frame 'buffer-list)))
+           (file-name (when (bufferp buffer)
+                        (buffer-file-name buffer)))
+           (project (projectile-project-name))
+           (buf-name (buffer-name buffer))
+           (dir (with-current-buffer buffer
+                  default-directory)))
+      ;; (message "Project: %s" project)
+      ;; (message "Name: %s" name)
+      (cond
+       ((and name (stringp name))
+        name)
+       ((stringp project)
+        project)
+       ((and (not (minibufferp)) file-name)
+        (format "%s  %s" buf-name dir))
+       ((not (minibufferp))
+        buf-name)
+       (t
+        dir))))
   )
 #+end_src
 
