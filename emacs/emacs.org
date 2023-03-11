@@ -414,7 +414,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(line-spacing 0.2)
+(line-spacing nil)
 #+end_src
 
 How to make display buffer names.
@@ -1035,7 +1035,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                        :default-family "Iosevka"
                        :default-weight normal
                        :variable-pitch-family "Noto Sans"
-                       :line-spacing 0.2)
+                       :line-spacing nil)
                       )))
 #+end_src
 
@@ -2725,6 +2725,24 @@ Just always show images; I always want them.
   :general
   (my/leader-keys
     "vm" #'org-modern-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-indent
+  :straight nil
+  :after org
+  :hook (org-mode . org-indent-mode)
+  :custom
+  (org-indent-mode-turns-on-hiding-stars nil)
+  (org-indent-indentation-per-level 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-modern-indent
+  :straight (org-modern-indent :type git :host github :repo "jdtsmith/org-modern-indent")
+  :after org-modern
+  :config ; add late to hook
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
 #+end_src
 
 ** Hooks
