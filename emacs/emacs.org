@@ -1536,10 +1536,19 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    "F" #'consult-buffer-other-frame)
   (:keymaps 'embark-file-map
    "X" #'consult-file-externally)
+  (:keymaps 'minibuffer-mode-map
+   "C-c r" #'consult-history)
+
   :custom
   (consult-narrow-key "<")
   :config
-  (setq consult-project-root-function #'projectile-project-root))
+  (setq consult-project-root-function #'projectile-project-root)
+
+  (consult-customize consult-line
+                     consult-ripgrep
+                     :initial (when (use-region-p)
+                                (buffer-substring-no-properties
+                                 (region-beginning) (region-end)))))
 
 (use-package embark-consult
   :general
