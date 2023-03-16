@@ -4656,6 +4656,18 @@ Version 2017-09-01"
     ("r" revert-buffer "revert"))))
 #+end_src
 
+#+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
+(major-mode-hydra-define markdown-mode
+  (:color amaranth :quit-key ("q" "<escape>"))
+  ("View"
+   (("v" markdown-view-mode "view mode" :exit t)
+    ("g" gfm-view-mode "gfm view mode" :exit t)
+    ("p" markdown-preview "preview in browser")
+    )
+   )
+  )
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package dired-imenu
   :after dired)
