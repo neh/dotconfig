@@ -785,7 +785,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     (set-face-background 'avy-lead-face "red")
     (set-face-foreground 'avy-lead-face "white")
     (set-face-foreground 'terraform--resource-name-face "dark orchid")
-    (set-face-foreground 'terraform--resource-type-face "green")))
+    (set-face-foreground 'terraform--resource-type-face "dark green")))
 
 (use-package gruvbox-theme
   :custom-face
