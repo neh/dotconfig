@@ -3953,6 +3953,16 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :straight (phscroll :type git :host github :repo "misohena/phscroll")
   :after org
   :hook (org-mode . org-phscroll-mode)
+  :custom
+  ;; (mouse-wheel-tilt-scroll t)
+  ;; (mouse-wheel-flip-direction t)
+  ;; (mouse-wheel-scroll-amount-horizontal 10)
+  (phscroll-mwheel-scroll-amount-horizontal 10)
+  :general
+  (:keymaps 'phscroll-keymap
+   "<wheel-left>" #'phscroll-mwheel-scroll-left
+   "<wheel-right>" #'phscroll-mwheel-scroll-right
+   )
   :init
   (setq org-startup-truncated nil)
   :config
