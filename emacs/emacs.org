@@ -5363,6 +5363,18 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package powershell
+  :commands (powershell-mode)
+  :mode (("\\.ps1\\'" . powershell-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ob-powershell
+  :commands
+  (org-babel-execute:powershell))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package proced
   :straight nil
   :custom
