@@ -167,7 +167,7 @@
  ("org-download" . "19e166f0a8c539b4144cfbc614309d47a9b2a9b7")
  ("org-menu" . "11c164ee2051cb22b7f9fca6c8a166659e339f9d")
  ("org-modern" . "42fdbd2d27f5a8652593577a200eeea96555d018")
- ("org-modern-indent" . "e4ba473d3e6a31e8e663ecedb9832b1c3ac29d39")
+ ("org-modern-indent" . "c5a50f302dc1053d5b498e0ea2bc0ee233e8e1b8")
  ("org-noter" . "9ead81d42dd4dd5074782d239b2efddf9b8b7b3d")
  ("org-pdftools" . "967f48fb5038bba32915ee9da8dc4e8b10ba3376")
  ("org-ql" . "29533525c39e0e243912bb3c807412e4bc3e804e")
