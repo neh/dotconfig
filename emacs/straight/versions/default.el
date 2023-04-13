@@ -226,6 +226,7 @@
  ("svg-lib" . "da72b81d8589d045731140a836cfbc2891e4ebf3")
  ("sway.el" . "117eb40691e7a4d2dcd6b5a7fd9f803c7d42c32c")
  ("swiper" . "b8be4913a661b557e0d3275726e36871556569d3")
+ ("switchy-window" . "b147d01df9fcd2b85a7e733a27379e7e576aaaf7")
  ("symbol-overlay" . "ed007230378b03f384b5a2b643dd857010ef21d3")
  ("tablist" . "faab7a035ef2258cc4ea2182f67e3aedab7e2af9")
  ("taxy" . "b222226f9e1057490150c1a8a98e8b471df88302")
