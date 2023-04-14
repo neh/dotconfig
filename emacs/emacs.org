@@ -3405,7 +3405,45 @@ MimeType=x-scheme-handler/org-protocol;
   (my/leader-keys
     "cd" #'org-roam-dailies-capture-today
     "n." #'org-roam-dailies-goto-today)
+
+  :config
+  ;; deps: org, org-roam, org-transclusion, ts
+  (defun my/org-roam-dailies-review (&optional start-date end-date)
+    (interactive)
+    (let* ((all-nodes (org-roam-db-query [:select [id file title] :from nodes :order-by [title]]))
+           (beg (ts-parse (or start-date
+                              (org-read-date nil nil nil "Review start date: "))))
+           (end (ts-parse (or end-date
+                              (org-read-date nil nil nil "Review end date: "))))
+           (nodes
+            (mapcar (lambda (node)
+                      (concat "#+transclude: [[id:" (nth 0 node) "][" (nth 2 node) "]]"))
+                    (cl-delete-if-not (lambda (node)
+                                        (and (org-roam-dailies--daily-note-p (nth 1 node))
+                                             (ts-in beg end (ts-parse (nth 2 node)))))
+                                      all-nodes))))
+
+      (switch-to-buffer (get-buffer-create "*Review*"))
+      (org-mode)
+      (insert (string-join nodes "\n\n\n"))
+      (org-roam-update-org-id-locations)
+      (org-transclusion-mode t)
+      (goto-char (point-min))))
+
+  (defun my/org-roam-dailies-review-week-current ()
+    (interactive)
+    (let* ((now (ts-now))
+           (adjust-beg-day (- (ts-dow now)))
+           (adjust-end-day (+ (- 6 (ts-dow now))))
+           (beg (ts-adjust 'day adjust-beg-day now))
+           (end (ts-adjust 'day adjust-end-day now))
+           (ts-default-format "%Y-%m-%d"))
+      (my/org-roam-dailies-review (ts-format beg) (ts-format end))))
   )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ts)
 #+end_src
 
 #+begin_src emacs-lisp
