@@ -3407,10 +3407,11 @@ MimeType=x-scheme-handler/org-protocol;
     "n." #'org-roam-dailies-goto-today)
 
   :config
-  ;; deps: org, org-roam, org-transclusion, ts
+  ;; deps: org, org-roam, org-transclusion, ts, s
   (defun my/org-roam-dailies-review (&optional start-date end-date)
     (interactive)
     (let* ((all-nodes (org-roam-db-query [:select [id file title] :from nodes :order-by [title]]))
+           (daily-path (expand-file-name org-roam-dailies-directory org-roam-directory))
            (beg (ts-parse (or start-date
                               (org-read-date nil nil nil "Review start date: "))))
            (end (ts-parse (or end-date
@@ -3419,7 +3420,7 @@ MimeType=x-scheme-handler/org-protocol;
             (mapcar (lambda (node)
                       (concat "#+transclude: [[id:" (nth 0 node) "][" (nth 2 node) "]]"))
                     (cl-delete-if-not (lambda (node)
-                                        (and (org-roam-dailies--daily-note-p (nth 1 node))
+                                        (and (s-starts-with? daily-path (nth 1 node))
                                              (ts-in beg end (ts-parse (nth 2 node)))))
                                       all-nodes))))
 
