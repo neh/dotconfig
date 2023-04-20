@@ -125,6 +125,7 @@
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")
  ("inheritenv" . "2102ed2d105a5c9f366cb6503d04794600985598")
  ("jinja2-mode" . "03e5430a7efe1d163a16beaf3c82c5fd2c2caee1")
+ ("jinx" . "2f7f4ac9ce3f69a0d086e2600406c36f46ff3a07")
  ("journalctl-mode" . "baaffdfd22a19afb1997ec3715d063186b80d3f5")
  ("json-mode" . "eedb4560034f795a7950fa07016bd4347c368873")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")

@@ -4153,6 +4153,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 * Languages
 
 #+begin_src emacs-lisp
+(use-package jinx
+  :hook (emacs-startup . global-jinx-mode)
+  :bind ([remap ispell-word] . jinx-correct))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package jinja2-mode
   :mode (("\\.j2\\'" . jinja2-mode)))
 #+end_src
