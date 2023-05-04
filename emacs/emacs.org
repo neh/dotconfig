@@ -1469,6 +1469,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
 #+begin_src emacs-lisp
 (use-package embark-vc
+  :disabled t
   :after embark)
 #+end_src
 
@@ -2059,7 +2060,10 @@ Of course, the great magit.
 
 #+begin_src emacs-lisp
 (use-package forge
-  :after magit)
+  :disabled t
+  :after magit
+  :init
+  (setq forge-bug-reference-hooks nil))
 #+end_src
 
 Handy package to browse to git repo web interfaces.
