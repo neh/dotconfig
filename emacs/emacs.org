@@ -4320,11 +4320,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-max-scrollback 10000)
 
   :init
-  ;; wondering about the buffer-name param here... could be a buffer or a string and need to handle?
-  (defun my/vterm-mode-p (buffer-name &optional action)
-    (with-current-buffer buffer-name
+  (defun my/vterm-mode-p (buffer-or-name &optional action)
+    (with-current-buffer buffer-or-name
       (or (equal major-mode 'vterm-mode)
-          (string-prefix-p vterm-buffer-name (buffer-name buffer-name)))))
+          (string-prefix-p vterm-buffer-name (if (bufferp buffer-or-name)
+                                                 (buffer-name buffer-or-name)
+                                               buffer-or-name)))))
 
   (defun my/vterm-list-buffers ()
     (interactive)
