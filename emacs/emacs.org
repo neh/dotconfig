@@ -1403,6 +1403,7 @@ There's plenty of useful extra information that can be attached to each candidat
 
 #+begin_src emacs-lisp
 (use-package all-the-icons-completion
+  :disabled
   :after (marginalia
           all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
@@ -2926,9 +2927,10 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 
      ("w" "Work"
       ((agenda "" ((org-super-agenda-groups
-                    `((:name ,(format "%s  Schedule"
-                                      (all-the-icons-faicon "clock-o"
-                                                            :v-adjust -0.04))
+                    `((:name ,(format "Schedule"
+                                      ;; (all-the-icons-faicon "clock-o"
+                                      ;;                       :v-adjust -0.04)
+                                      )
                        :time-grid t
                        :deadline t
                        :scheduled t
@@ -2938,21 +2940,25 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
                            (ts-active))
                      ((org-ql-block-header "Notes To Process")))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     `((:name ,(format "%s  Interruptions"
-                                                       (all-the-icons-faicon "bomb"
-                                                                             :v-adjust 0.06))
+                                     `((:name ,(format "Interruptions"
+                                                       ;; (all-the-icons-faicon "bomb"
+                                                       ;;                       :v-adjust 0.06)
+                                                       )
                                         :todo "INTERRUPT")
-                                       (:name ,(format "%s  Doing"
-                                                       (all-the-icons-faicon "cogs"
-                                                                             :v-adjust 0.00))
+                                       (:name ,(format "Doing"
+                                                       ;; (all-the-icons-faicon "cogs"
+                                                       ;;                       :v-adjust 0.00)
+                                                       )
                                         :todo "DOING")
-                                       (:name ,(format "%s  Waiting/Testing"
-                                                       (all-the-icons-faicon "repeat"
-                                                                             :v-adjust 0.00))
+                                       (:name ,(format "Waiting/Testing"
+                                                       ;; (all-the-icons-faicon "repeat"
+                                                       ;;                       :v-adjust 0.00)
+                                                       )
                                         :todo ("WAITING" "TESTING"))
-                                       (:name ,(format "%s  Next"
-                                                       (all-the-icons-faicon "list"
-                                                                             :v-adjust -0.06))
+                                       (:name ,(format "Next"
+                                                       ;; (all-the-icons-faicon "list"
+                                                       ;;                       :v-adjust -0.06)
+                                                       )
                                         :todo "NEXT")
                                        (:discard (:anything t)))))))
       ((org-agenda-files '("~/org/work-tveon.org"))
@@ -4704,6 +4710,7 @@ Version 2017-09-01"
 
 #+begin_src emacs-lisp
 (use-package all-the-icons-dired
+  :disabled
   :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
@@ -5211,14 +5218,14 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
   (my/leader-keys
     "." #'major-mode-hydra)
 
-  :custom
-  (major-mode-hydra-title-generator
-   '(lambda (mode)
-      (s-concat (s-repeat 1 " ")
-                (all-the-icons-icon-for-mode mode :v-adjust 0.05)
-                " "
-                (symbol-name mode)
-                " commands")))
+  ;; :custom
+  ;; (major-mode-hydra-title-generator
+  ;;  '(lambda (mode)
+  ;;     (s-concat (s-repeat 1 " ")
+  ;;               (all-the-icons-icon-for-mode mode :v-adjust 0.05)
+  ;;               " "
+  ;;               (symbol-name mode)
+  ;;               " commands")))
 
   :config
   (major-mode-hydra-define emacs-lisp-mode
@@ -5435,6 +5442,19 @@ Try out =org-noter=.
 #+end_src
 
 * Misc packages
+
+#+begin_src emacs-lisp
+(use-package nerd-icons)
+
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-completion
+  :after nerd-icons
+  :config
+  (nerd-icons-completion-mode))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package powershell
