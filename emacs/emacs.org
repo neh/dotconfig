@@ -1707,6 +1707,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package avy
+  :demand t
   :general
   (my/leader-nav
     "j" #'avy-goto-char-timer
