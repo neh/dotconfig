@@ -979,6 +979,16 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   (set-face-foreground 'org-hide (face-background 'default))
 
+  ;; Trying out styling src blocks with a line at the top/bottom
+  (set-face-attribute 'org-block-begin-line nil
+                      :background (face-background 'default)
+                      :underline t
+                      :extend t)
+  (set-face-attribute 'org-block-end-line nil
+                      :background (face-background 'default)
+                      :overline t
+                      :extend t)
+
   ;; for org-modern
   (modify-all-frames-parameters
    '((right-divider-width . 15)
@@ -2680,7 +2690,8 @@ Just always show images; I always want them.
 (org-src-preserve-indentation t)
 (org-edit-src-content-indentation 0)
 
-(org-fontify-whole-block-delimiter-line nil)
+(x-underline-at-descent-line t)
+(org-fontify-whole-block-delimiter-line t)
 (org-fontify-quote-and-verse-blocks t)
 
 (org-plantuml-jar-path "~/bin/plantuml.jar")
@@ -2706,6 +2717,14 @@ Just always show images; I always want them.
   (org-modern-hide-stars " ")
   (org-modern-star '("" "‣" "•" "◦" "•" "◦" "•"))
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
+
+  (org-modern-block-name '(("src" . ("𝝺" " "))
+                           ("quote" . ("〃" " "))
+                           (t . t)
+                           ;; (t . (t " "))
+                           ;; (t . ("beg" "eNd"))
+                           ))
+
   (org-agenda-block-separator ?─)
   (org-agenda-time-grid
    '((daily today require-timed)
@@ -2755,6 +2774,7 @@ Just always show images; I always want them.
 
 #+begin_src emacs-lisp
 (use-package org-modern-indent
+  :disabled t
   :straight (org-modern-indent :type git :host github :repo "jdtsmith/org-modern-indent")
   :after org-modern
   :config ; add late to hook
