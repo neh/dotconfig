@@ -980,14 +980,19 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (set-face-foreground 'org-hide (face-background 'default))
 
   ;; Trying out styling src blocks with a line at the top/bottom
-  (set-face-attribute 'org-block-begin-line nil
-                      :background (face-background 'default)
-                      :underline t
-                      :extend t)
-  (set-face-attribute 'org-block-end-line nil
-                      :background (face-background 'default)
-                      :overline t
-                      :extend t)
+  (let* ((bg (face-background 'default))
+         (block (face-background 'org-block))
+         (lc (if (my/dark-p)
+                 (color-lighten-name block 70)
+               (color-darken-name block 20))))
+    (set-face-attribute 'org-block-begin-line nil
+                        :background bg
+                        :underline lc
+                        :extend t)
+    (set-face-attribute 'org-block-end-line nil
+                        :background bg
+                        :overline lc
+                        :extend t))
 
   ;; for org-modern
   (modify-all-frames-parameters
