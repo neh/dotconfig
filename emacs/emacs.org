@@ -987,7 +987,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                (color-darken-name block 20))))
     (set-face-attribute 'org-block-begin-line nil
                         :background bg
-                        :underline lc
+                        :underline `(:color ,lc :position t)
                         :extend t)
     (set-face-attribute 'org-block-end-line nil
                         :background bg
@@ -2696,7 +2696,6 @@ Just always show images; I always want them.
 (org-src-preserve-indentation t)
 (org-edit-src-content-indentation 0)
 
-(x-underline-at-descent-line t)
 (org-fontify-whole-block-delimiter-line t)
 (org-fontify-quote-and-verse-blocks t)
 
