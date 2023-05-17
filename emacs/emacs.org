@@ -991,6 +991,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                         :extend t)
     (set-face-attribute 'org-block-end-line nil
                         :background bg
+                        :foreground lc
                         :overline lc
                         :extend t))
 
