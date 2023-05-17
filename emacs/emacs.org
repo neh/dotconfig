@@ -2723,8 +2723,8 @@ Just always show images; I always want them.
   (org-modern-star '("" "‣" "•" "◦" "•" "◦" "•"))
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
 
-  (org-modern-block-name '(("src" . ("𝝺" " "))
-                           ("quote" . ("〃" " "))
+  (org-modern-block-name '(("src" . ("𝝺" "⧟"))
+                           ("quote" . ("〃" "⧟"))
                            (t . t)
                            ;; (t . (t " "))
                            ;; (t . ("beg" "eNd"))
