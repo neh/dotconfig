@@ -1417,16 +1417,6 @@ There's plenty of useful extra information that can be attached to each candidat
   (marginalia-mode t))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package all-the-icons-completion
-  :disabled
-  :after (marginalia
-          all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init
-  (all-the-icons-completion-mode))
-#+end_src
-
 ** Embark
 
 One of the really nice bits here is embark. I haven't really exploited it yet, but it's a great way to launch different actions on candidates in vertico, or pretty much anywhere in emacs.
@@ -2928,7 +2918,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 
      ("p" "Personal"
       ((agenda "" ((org-super-agenda-groups
-                    '((:name " Schedule"
+                    '((:name " Schedule"
                        :time-grid t
                        :deadline t
                        :scheduled t
@@ -2940,11 +2930,11 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
                         :tag "refile")
                        (:discard (:anything t))))))
        (tags-todo "-archive -work" ((org-super-agenda-groups
-                                     '((:name " Doing"
+                                     '((:name " Doing"
                                         :todo "DOING")
                                        (:name " Waiting/Testing"
                                         :todo ("WAITING" "TESTING"))
-                                       (:name " Next"
+                                       (:name " Next"
                                         :todo "NEXT")
                                        (:discard (:anything t)))))))
       ((org-agenda-files '("~/org"))
@@ -2953,10 +2943,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 
      ("w" "Work"
       ((agenda "" ((org-super-agenda-groups
-                    `((:name ,(format "Schedule"
-                                      ;; (all-the-icons-faicon "clock-o"
-                                      ;;                       :v-adjust -0.04)
-                                      )
+                    `((:name ,(format " Schedule")
                        :time-grid t
                        :deadline t
                        :scheduled t
@@ -2966,25 +2953,13 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
                            (ts-active))
                      ((org-ql-block-header "Notes To Process")))
        (tags-todo "-archive +work" ((org-super-agenda-groups
-                                     `((:name ,(format "Interruptions"
-                                                       ;; (all-the-icons-faicon "bomb"
-                                                       ;;                       :v-adjust 0.06)
-                                                       )
+                                     `((:name ,(format " Interruptions")
                                         :todo "INTERRUPT")
-                                       (:name ,(format "Doing"
-                                                       ;; (all-the-icons-faicon "cogs"
-                                                       ;;                       :v-adjust 0.00)
-                                                       )
+                                       (:name ,(format " Doing")
                                         :todo "DOING")
-                                       (:name ,(format "Waiting/Testing"
-                                                       ;; (all-the-icons-faicon "repeat"
-                                                       ;;                       :v-adjust 0.00)
-                                                       )
+                                       (:name ,(format " Waiting/Testing")
                                         :todo ("WAITING" "TESTING"))
-                                       (:name ,(format "Next"
-                                                       ;; (all-the-icons-faicon "list"
-                                                       ;;                       :v-adjust -0.06)
-                                                       )
+                                       (:name ,(format " Next")
                                         :todo "NEXT")
                                        (:discard (:anything t)))))))
       ((org-agenda-files '("~/org/work-tveon.org"))
@@ -4736,12 +4711,6 @@ Version 2017-09-01"
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package all-the-icons-dired
-  :disabled
-  :hook (dired-mode . all-the-icons-dired-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package ls-lisp
   :straight nil
   :custom
@@ -5177,9 +5146,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 (pretty-hydra-define my/toggles
   (:color amaranth
    :quit-key ("q" "<escape>")
-   :title (format " %s Options"
-                  (all-the-icons-faicon "sliders"
-                                        :v-adjust 0.02)))
+   :title (format "  Options"))
 
   ("Formatting"
    (("v" global-visual-line-mode "visual lines" :toggle t)
@@ -5207,9 +5174,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 (pretty-hydra-define my/movement
   (:color amaranth
    :quit-key ("q" "<escape>")
-   :title (format " %s Movement"
-                  (all-the-icons-faicon "arrows"
-                                        :v-adjust 0.02)))
+   :title (format "  Movement"))
   ("Move Buffer"
    (("H" buf-move-left "left")
     ("T" buf-move-down "down")
@@ -5244,15 +5209,6 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
   :general
   (my/leader-keys
     "." #'major-mode-hydra)
-
-  ;; :custom
-  ;; (major-mode-hydra-title-generator
-  ;;  '(lambda (mode)
-  ;;     (s-concat (s-repeat 1 " ")
-  ;;               (all-the-icons-icon-for-mode mode :v-adjust 0.05)
-  ;;               " "
-  ;;               (symbol-name mode)
-  ;;               " commands")))
 
   :config
   (major-mode-hydra-define emacs-lisp-mode
