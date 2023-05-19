@@ -414,7 +414,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(line-spacing nil)
+(line-spacing 0.2)
 #+end_src
 
 How to make display buffer names.
@@ -1052,7 +1052,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                        :default-family "Iosevka"
                        :default-weight normal
                        :variable-pitch-family "Noto Sans"
-                       :line-spacing nil)
+                       :line-spacing 0.2)
                       )))
 #+end_src
 
