@@ -2123,6 +2123,14 @@ Handy package to browse to git repo web interfaces.
   :commands (blamer-show-commit-info
              blamer-show-posframe-commit-info
              global-blamer-mode)
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                   :background nil
+                   :height 140
+                   :italic t)))
   )
 #+end_src
 
