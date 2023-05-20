@@ -5327,7 +5327,7 @@ Try out =org-noter=.
   (advice-add #'elfeed-update :after #'my/elfeed-idle-save-last-update-time)
 
   (defun my/elfeed-idle-update-elfeed-active-p ()
-    (or (get-buffer-window "*elfeed-search*")
+    (or (get-buffer-window "*elfeed-search*" t)
         (get-buffer "*elfeed-entry*")))
 
   (defun my/elfeed-idle-update ()
