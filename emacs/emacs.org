@@ -5657,7 +5657,6 @@ See `beframe-rename-frame'."
     (let* ((buffer (car (frame-parameter frame 'buffer-list)))
            (file-name (when (bufferp buffer)
                         (buffer-file-name buffer)))
-           (project (projectile-project-name))
            (buf-name (buffer-name buffer))
            (dir (with-current-buffer buffer
                   default-directory)))
@@ -5666,8 +5665,6 @@ See `beframe-rename-frame'."
       (cond
        ((and name (stringp name))
         name)
-       ((stringp project)
-        project)
        ((and (not (minibufferp)) file-name)
         (format "%s  %s" buf-name dir))
        ((not (minibufferp))
