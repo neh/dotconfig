@@ -3753,9 +3753,7 @@ in that direction and display the target buffer in said window."
       (cdr current-tab-name)))
 
   (defun my/popper-group ()
-    (frame-parameter nil 'name)
-    ;; (my/current-tab-name)
-    )
+    (selected-frame))
 
   (popper-mode t)
   (popper-echo-mode t))
