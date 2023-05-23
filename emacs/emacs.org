@@ -4037,8 +4037,8 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (phscroll-mwheel-scroll-amount-horizontal 10)
   :general
   (:keymaps 'phscroll-keymap
-   "<wheel-left>" #'phscroll-mwheel-scroll-left
-   "<wheel-right>" #'phscroll-mwheel-scroll-right
+   "<wheel-left>" #'phscroll-mwheel-scroll-right
+   "<wheel-right>" #'phscroll-mwheel-scroll-left
    )
   :init
   (setq org-startup-truncated nil)
