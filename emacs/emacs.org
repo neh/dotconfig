@@ -2162,6 +2162,12 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   :init
   <<org-init>>
+  (defun my/log-line ()
+    (interactive)
+    (evil-open-below 1)
+    (org-time-stamp-inactive '(16))
+    (insert " "))
+
   (defun my/org-hide-all-drawers ()
     (org-cycle-hide-drawers 'all))
 
