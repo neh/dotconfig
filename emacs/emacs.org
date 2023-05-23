@@ -5593,7 +5593,9 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 (use-package beframe
   :hook (after-init . beframe-mode)
   :custom
+  ;; (beframe-rename-function #'beframe-rename-frame)
   (beframe-rename-function #'my/beframe-rename-frame)
+  (beframe-create-frame-scratch-buffer nil)
 
   :config
   (defvar consult-buffer-sources)
@@ -5657,20 +5659,24 @@ See `beframe-rename-frame'."
     (let* ((buffer (car (frame-parameter frame 'buffer-list)))
            (file-name (when (bufferp buffer)
                         (buffer-file-name buffer)))
+           (id (frame-parameter frame 'window-id))
            (buf-name (buffer-name buffer))
            (dir (with-current-buffer buffer
                   default-directory)))
-      ;; (message "Project: %s" project)
-      ;; (message "Name: %s" name)
-      (cond
-       ((and name (stringp name))
-        name)
-       ((and (not (minibufferp)) file-name)
-        (format "%s  %s" buf-name dir))
-       ((not (minibufferp))
-        buf-name)
-       (t
-        dir))))
+
+      ;; completely avoid naming issues; use the window-id as the frame name
+      id
+
+      ;; (cond
+      ;;  ((and name (stringp name))
+      ;;   name)
+      ;;  ((and (not (minibufferp)) file-name)
+      ;;   (format "%s  %s" buf-name dir))
+      ;;  ((not (minibufferp))
+      ;;   buf-name)
+      ;;  (t
+      ;;   dir))
+      ))
   )
 #+end_src
 
