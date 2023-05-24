@@ -6,7 +6,7 @@
  ("auto-virtualenv" . "1e1542f5eb34ec5f415553bc8ddbb7f3c3ee6943")
  ("autothemer" . "6277b086ec2d0a17f5722caf6a0ec5ca16cb5486")
  ("avy" . "be612110cb116a38b8603df367942e2bb3d9bdbe")
- ("beframe" . "224e2f8d5004e01982292bdeaf9ba883e9b32ee1")
+ ("beframe" . "8ca1402ea8a467c1ec11431588b642ba6ae5cca2")
  ("beginend" . "61f1eb22718fcd9796b47a98702d161ff323a532")
  ("blamer.el" . "3d9d12f5a7f31018efdb17a77da8277a3f5da0a6")
  ("buffer-move" . "e7800b3ab1bd76ee475ef35507ec51ecd5a3f065")
