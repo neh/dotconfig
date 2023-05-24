@@ -973,7 +973,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (when (not (boundp 'my/current-text-size))
     (setq my/current-text-size my/default-text-size))
 
-  (fontaine-apply-current-preset)
+  (if (bound-and-true-p fontaine-current-preset)
+      (fontaine-apply-current-preset)
+    (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal)))
 
   (set-face-italic 'font-lock-comment-face t)
 
@@ -1030,7 +1032,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 #+begin_src emacs-lisp
 (use-package fontaine
-  :commands (fontaine-set-preset)
+  :commands (fontaine-set-preset
+             fontaine-apply-current-preset
+             fontaine-restore-latest-preset)
+  :hook (kill-emacs . fontaine-store-latest-preset)
   :custom
   (fontaine-font-families '((default "Iosevka")
                             (fixed-pitch)
