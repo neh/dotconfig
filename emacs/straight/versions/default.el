@@ -194,6 +194,7 @@
  ("popup-el" . "71cede0588c10526f88dd0375bce776ec2eed05e")
  ("posframe" . "3b97dc180b03498103cfcc7f44e64150df440bf0")
  ("powershell.el" . "f2da15857e430206e215a3c65289b4058ae3c976")
+ ("prism.el" . "676be005284f2d9da7d507987c79a9b4b1049e9f")
  ("project" . "33511939473551b5cfa42de9a12d606b3d60a2cf")
  ("projectile" . "271007c6611fcb08ddd326d7de9727c2ad5ef265")
  ("pulsar" . "ce093b70c6e58961b1c80cf44fa23c726f7a9cef")
