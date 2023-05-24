@@ -6076,6 +6076,13 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package wgrep-deadgrep
+  :after (wgrep
+          deadgrep)
+  :hook (deadgrep-finished . wgrep-deadgrep-setup))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package elec-pair
   :ensure nil
   :hook (prog-mode . electric-pair-mode)
