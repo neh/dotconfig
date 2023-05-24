@@ -2770,7 +2770,7 @@ Just always show images; I always want them.
                            ))
 
   :custom-face
-  (org-modern-symbol ((t (:family "Iosevka"))))
+  (org-modern-symbol ((t (:family "Iosevka" :height 1.13))))
 
   :general
   (my/leader-keys
