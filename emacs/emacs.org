@@ -6271,7 +6271,9 @@ See `beframe-rename-frame'."
                'terraform-error))
 
 (use-package terraform-doc
-  :commands (terraform-doc))
+  :commands (terraform-doc)
+  :custom
+  (terraform-doc-markdown-mode-function #'gfm-view-mode))
 #+end_src
 
 #+begin_src emacs-lisp

@@ -229,7 +229,7 @@
  ("taxy" . "b222226f9e1057490150c1a8a98e8b471df88302")
  ("taxy-magit-section" . "00e1e41341cbc71fcc8f4d4c98b2cc5c371c4f54")
  ("terminal-here" . "4bf2a77e450b260570033afda463e178fdf34617")
- ("terraform-doc" . "16179e57ce290190c222b27961900657a1981330")
+ ("terraform-doc" . "8a6ffd5ac133ced5afd07b9d963272e4208f8b1e")
  ("terraform-mode" . "56f19abae95afb7e13e48ec3e6aeba3820d31307")
  ("topsy.el" . "86d4234e4a0e9d2f5bf0f1114ea9893da48e77d1")
  ("transient" . "6efa9fadf8ba670c3919fdecbc10a20577893fba")
