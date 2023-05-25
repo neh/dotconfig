@@ -4098,7 +4098,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package prism
   :commands (prism-mode
-             prism-whitespace-mode))
+             prism-whitespace-mode)
+  :hook
+  (yaml-mode . prism-whitespace-mode)
+  (yaml-ts-mode . prism-whitespace-mode)
+  :config
+  (add-to-list 'prism-whitespace-mode-indents '(yaml-mode . yaml-indent-offset)))
 #+end_src
 
 #+begin_src emacs-lisp
