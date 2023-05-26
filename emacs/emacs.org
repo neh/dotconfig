@@ -6299,6 +6299,42 @@ See `beframe-rename-frame'."
 
 * Misc functions
 
+From: [[https://xenodium.com/deleting-from-emacs-sequence-vars/][Deleting from Emacs sequence vars]]. Magic. Did this not exist before? How? Modified slightly to accept an argument for usage with embark.
+
+#+begin_src emacs-lisp
+(defun my/remove-from-list-variable (&optional seqvar)
+  (interactive)
+  (let* ((var (or seqvar
+                  (intern
+                   (completing-read "From variable: "
+                                    (let (symbols)
+                                      (mapatoms
+                                       (lambda (sym)
+                                         (when (and (boundp sym)
+                                                    (seqp (symbol-value sym)))
+                                           (push sym symbols))))
+                                      symbols) nil t))))
+         (values (mapcar (lambda (item)
+                           (setq item (prin1-to-string item))
+                           (concat (truncate-string-to-width
+                                    (nth 0 (split-string item "\n"))
+                                    (window-body-width))
+                                   (propertize item 'invisible t)))
+                         (symbol-value var)))
+         (index (progn
+                  (when (seq-empty-p values) (error "Already empty"))
+                  (seq-position values (completing-read "Delete: " values nil t)))))
+    (unless index (error "Eeek. Something's up."))
+    (set var (append (seq-take (symbol-value var) index)
+                     (seq-drop (symbol-value var) (1+ index))))
+    (message "Deleted: %s" (truncate-string-to-width
+                            (seq-elt values index)
+                            (- (window-body-width) 9)))))
+
+(with-eval-after-load 'embark
+  (keymap-set embark-variable-map "R" #'my/remove-from-list-variable))
+#+end_src
+
 Originally this came from [[https://karthinks.com/software/more-less-emacs/][more < less < emacs | Karthinks]], but I had to make some changes to make it work with evil and blink-cursor-mode. There's a little bit of relevant config in with the evil-collection package as well.
 [[https://emacs.stackexchange.com/questions/18374/persistently-hide-cursor-evil-mode-problem][buffers - Persistently hide cursor [evil-mode problem] - Emacs Stack Exchange]]
 [[https://github.com/emacs-evil/evil/issues/592][Evil makes hidden cursor reappear on window configuration changes · Issue #592 · emacs-evil/evil · GitHub]]
