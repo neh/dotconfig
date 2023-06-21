@@ -831,6 +831,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
         ((equal value "bio-operandi")
          (setq my/dark-theme 'ef-bio
                my/light-theme 'modus-operandi-tinted))
+        ((equal value "duo")
+         (setq my/dark-theme 'ef-night
+               my/light-theme 'ef-duo-light))
         ((equal value "stimmung")
          (setq my/dark-theme 'stimmung-themes-dark
                my/light-theme 'stimmung-themes-light))
@@ -848,12 +851,13 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
           (const "modus")
           (const "modus-tinted")
           (const "bio-operandi")
+          (const "duo")
           (const "stimmung")
           (const "mix"))
   :set 'my/setthemeset
   :initialize 'custom-initialize-set)
 
-(customize-set-variable 'my/themeset "bio-operandi")
+(customize-set-variable 'my/themeset "duo")
 #+end_src
 
 #+begin_src emacs-lisp
