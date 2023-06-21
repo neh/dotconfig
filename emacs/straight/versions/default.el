@@ -44,7 +44,7 @@
  ("dumb-jump" . "0a783d1db610ff1dc4e1b7869589cff16ff92f7a")
  ("dwim-shell-command" . "5481fdb70f4bf13c0bad03b9b889f5a316690548")
  ("edit-indirect" . "f80f63822ffae78de38dbe72cacaeb1aaa96c732")
- ("ef-themes" . "d5b23c14dd396c0d86c179f94721956e0da1d035")
+ ("ef-themes" . "ec7288d0d11ceda66f7b1211e2a6461ba7ddbcd7")
  ("el-get" . "22c83206bab10100fdee03cb2d5b97c8c24eff0e")
  ("elf-mode" . "cd280d683cd3341d8bb31af6db7e3b74a133e6ab")
  ("elfeed" . "162d7d545ed41c27967d108c04aa31f5a61c8e16")
