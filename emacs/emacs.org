@@ -379,6 +379,7 @@ Some text fill options.
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
 (fill-column 100)
 (default-frame-alist '((width  . 100)))
+(frame-resize-pixelwise t)
 (comment-auto-fill-only-comments t)
 #+end_src
 
