@@ -3729,9 +3729,8 @@ in that direction and display the target buffer in said window."
         )
        'face (funcall tab-bar-tab-face-function tab))))
 
-  ;; :config
-  ;; (tab-bar-mode t)
-  )
+  :config
+  (tab-bar-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
