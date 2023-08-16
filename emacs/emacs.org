@@ -1277,7 +1277,6 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
   :init
   (vertico-mode t)
-  (vertico-mouse-mode t)
 
   :custom
   (vertico-count 20)
@@ -1294,6 +1293,13 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    "<backtab>" #'vertico-insert
    )
   )
+
+(use-package vertico-mouse
+  :after vertico
+  :straight nil
+
+  :init
+  (vertico-mouse-mode t))
 
 (use-package vertico-directory
   :after vertico
