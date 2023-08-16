@@ -992,7 +992,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   ;; Trying out styling src blocks with a line at the top/bottom
   (let* ((bg (face-background 'default))
-         (block (face-background 'org-block))
+         (block (face-background 'org-block nil 'default))
          (lc (if (my/dark-p)
                  (color-lighten-name block 70)
                (color-darken-name block 20))))
