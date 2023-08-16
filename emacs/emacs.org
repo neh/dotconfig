@@ -5537,6 +5537,11 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package justl
+  :commands (justl))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package goto-addr
   :straight nil
   :hook ((compilation-mode . goto-address-mode)

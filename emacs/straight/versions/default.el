@@ -123,6 +123,7 @@
  ("json-mode" . "481d5d9f4003fc14d116bf31d1bf71d14960d7d9")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")
  ("just-mode.el" . "d7f52eab8fa3828106f80acb1e2176e5877b7191")
+ ("justl.el" . "d8fae037a873b51e0b14b137f1c2b813dc89b853")
  ("kind-icon" . "a09fd7597a4bb7f7e5b6a5e8b7108eabd9b6a226")
  ("kubedoc.el" . "26586e519b5aca5d81afaf8f7f066369dacd4764")
  ("kubel" . "aa6040d2aff9b8b99eb6692a0227357258622ddb")
