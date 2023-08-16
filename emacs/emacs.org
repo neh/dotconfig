@@ -834,6 +834,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
         ((equal value "duo")
          (setq my/dark-theme 'ef-night
                my/light-theme 'ef-duo-light))
+        ((equal value "maris")
+         (setq my/dark-theme 'ef-maris-dark
+               my/light-theme 'ef-maris-light))
         ((equal value "stimmung")
          (setq my/dark-theme 'stimmung-themes-dark
                my/light-theme 'stimmung-themes-light))
@@ -852,6 +855,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
           (const "modus-tinted")
           (const "bio-operandi")
           (const "duo")
+          (const "maris")
           (const "stimmung")
           (const "mix"))
   :set 'my/setthemeset
