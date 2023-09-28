@@ -871,15 +871,13 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   :straight nil
   :config
   (defun set-dark-or-light (value)
-    (message "color-scheme value is %s" value)
     (if (equal value '1)
-        (progn (message "Switch to dark theme")
+        (progn (message "Switching to dark theme")
                (my/set-dark-mode))
-      (progn (message "Switch to light theme")
+      (progn (message "Switching to light theme")
              (my/set-light-mode))))
 
   (defun handler (value)
-    (message "%s" value)
     (set-dark-or-light (car (car value))))
 
   (defun signal-handler (namespace key value)
