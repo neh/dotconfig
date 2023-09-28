@@ -2086,10 +2086,13 @@ Of course, the great magit.
 
 #+begin_src emacs-lisp
 (use-package forge
-  :disabled t
-  :after magit
+  :after (magit
+          emacsql-sqlite-builtin)
   :init
-  (setq forge-bug-reference-hooks nil))
+  (setq forge-add-default-bindings nil)
+  (setq forge-database-connector 'sqlite-builtin)
+  ;; (setq forge-bug-reference-hooks nil)
+  )
 #+end_src
 
 Handy package to browse to git repo web interfaces.
