@@ -5473,6 +5473,18 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package age
+  :demand t
+  :custom
+  (age-program "rage")
+  (age-default-identity "~/.ssh/age_identities")
+  (age-default-recipient "~/.ssh/age_recipients")
+  :config
+  (age-file-enable)
+  (add-to-list 'auth-sources "~/.authinfo.age"))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package nerd-icons)
 
 (use-package nerd-icons-dired
