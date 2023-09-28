@@ -2342,7 +2342,9 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
   :straight nil
   :after org
   :custom
-  (org-attach-id-dir (concat org-directory "/data")))
+  (org-attach-id-dir (concat org-directory "/data"))
+  :config
+  (require 'org-attach-git))
 #+end_src
 
 https://github.com/alphapapa/org-sidebar
