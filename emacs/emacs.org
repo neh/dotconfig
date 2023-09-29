@@ -2755,7 +2755,7 @@ Just always show images; I always want them.
   (org-modern-star '("" "‣" "•" "◦" "•" "◦" "•"))
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
 
-  (org-modern-block-name '(("src" . ("𝝺" "⧟"))
+  (org-modern-block-name '(("src" . ("" "⧟"))
                            ("quote" . ("〃" "⧟"))
                            (t . t)
                            ;; (t . (t " "))
