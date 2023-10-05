@@ -111,6 +111,7 @@
  ("go-mode.el" . "f21347ae9cf68ea33031bf5125896e8f16c8183c")
  ("goto-chg" . "278cd3e6d5107693aa2bb33189ca503f22f227d0")
  ("groovy-emacs-modes" . "7b8520b2e2d3ab1d62b35c426e17ac25ed0120bb")
+ ("hammy.el" . "cc885461c6f7cb4bb08e563f0324ebd2b415b17c")
  ("hcl-mode" . "751b79247f326ab52e00032e805775c37ad9f080")
  ("helpful" . "c57ff0d284b50ff430fe1f13fd48deaa0d1a910e")
  ("highlight-parentheses.el" . "438a1cb2563e2a2496be4678cc0df8d5b22caf5d")
