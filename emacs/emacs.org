@@ -3953,7 +3953,7 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(mouse-wheel-scroll-amount '(2 ((shift) . 1)))
+(mouse-wheel-scroll-amount '(4 ((shift) . 1)))
 (mouse-wheel-progressive-speed nil)
 (mouse-wheel-follow-mouse 't)
 (scroll-step 1)
