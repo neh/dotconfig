@@ -2736,6 +2736,12 @@ Just always show images; I always want them.
 (org-special-ctrl-a/e t)
 #+end_src
 
+Indent subitems in lists a bit more so they're clearer.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-custom
+(org-list-indent-offset 2)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package org-appear
   :commands (org-appear-mode)
