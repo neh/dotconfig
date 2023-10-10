@@ -199,10 +199,10 @@ This file lists configuration paths to ignore when running =dconfd=. Not sure it
 ** Dark mode toggle
 
 #+begin_src bash :tangle ~/.local/bin/dark-toggle :shebang #!/bin/bash
-if [[ "$USER" == "nhowell" ]]; then
+if [[ $(hostname) == "nathan-edl" ]]; then
     # work
-    GTK_THEME_LIGHT='Yaru-light'
-    GTK_THEME_DARK='Yaru-dark'
+    GTK_THEME_LIGHT='Pop'
+    GTK_THEME_DARK='Pop-dark'
 else
     # home
     GTK_THEME_LIGHT='Adwaita'
