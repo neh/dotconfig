@@ -687,7 +687,7 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   (exec-path-from-shell-arguments '("-l")))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package isearch
   :straight nil
   :custom
@@ -1647,7 +1647,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 ** Corfu
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package corfu
   :load-path "straight/build/corfu/extensions"
 
@@ -1868,7 +1868,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
              bufler-workspace-frame-set))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package burly
   :commands (burly-bookmark-frames
              burly-bookmark-windows
@@ -2342,7 +2342,7 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package org-attach
   :straight nil
   :after org
@@ -2354,7 +2354,7 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
 
 https://github.com/alphapapa/org-sidebar
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package org-sidebar
   :commands (org-sidebar-tree
              org-sidebar-tree-toggle
@@ -4013,7 +4013,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (pixel-scroll-precision-mode t))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package scroll-on-jump
   :commands (scroll-on-jump
               scroll-on-jump-interactive
@@ -4232,7 +4232,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :mode (("\\.j2\\'" . jinja2-mode)))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package treesit-auto
   :custom
   (treesit-auto-install 'prompt)
@@ -4356,7 +4356,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 * Shells
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package terminal-here
   :commands (terminal-here-launch
              terminal-here-project-launch)
@@ -4649,7 +4649,7 @@ any directory proferred by `consult-dir'."
          (eshell-load . eat-eshell-visual-command-mode)))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package sticky-shell
   :commands (sticky-shell-mode
              sticky-shell-global-mode))
@@ -5094,7 +5094,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
    ))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no :noweb-ref pretty-hydras :tangle no
+#+begin_src emacs-lisp :noweb-ref pretty-hydras :tangle no
 (pretty-hydra-define hydra-5e (:hint nil
                                :quit-key "q")
 
@@ -5321,7 +5321,7 @@ Try out =org-noter=.
 
 * Gaming
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package org-d20
   :commands (org-d20-mode)
   :init
@@ -5343,7 +5343,7 @@ Try out =org-noter=.
   (shrface-basic))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package org-chef
   :commands (org-chef-insert-recipe
              org-chef-get-recipe-from-url))
@@ -5849,12 +5849,12 @@ See `beframe-rename-frame'."
           magit))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package evil-string-inflection
   :after evil)
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package literate-calc-mode
   :commands (literate-calc-mode
              literate-calc-minor-mode)
@@ -5864,7 +5864,7 @@ See `beframe-rename-frame'."
     "vC" #'literate-calc-minor-mode))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package journalctl-mode
   :commands (journalctl
              journalctl-boot
@@ -5872,7 +5872,7 @@ See `beframe-rename-frame'."
              journalctl-user-unit))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package no-littering)
 #+end_src
 
@@ -5881,7 +5881,7 @@ See `beframe-rename-frame'."
   :commands (kubedoc))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package kubernetes
   :commands (kubernetes-overview))
 
@@ -6254,7 +6254,7 @@ See `beframe-rename-frame'."
              dtrt-indent-global-mode))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package envrc
   :hook (after-init . envrc-global-mode)
   :ensure-system-package (direnv))
@@ -6314,7 +6314,7 @@ See `beframe-rename-frame'."
    "V" 'er/contract-region))
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (use-package expreg
   :straight nil
   :load-path "site-lisp"
@@ -6502,7 +6502,7 @@ interactively, or via #'embark-act.
   "C-c C-." #'insert-date)
 #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (defun my/indent-buffer ()
   "Indent the current buffer."
   (interactive)
@@ -6536,7 +6536,7 @@ interactively, or via #'embark-act.
 
 A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp
 (defun open-file-external (file)
   "Open a file externally with xdg-open."
   (interactive "f")
