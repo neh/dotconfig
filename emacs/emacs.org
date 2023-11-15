@@ -5483,6 +5483,13 @@ Try out =org-noter=.
 
 * Misc packages
 
+Device tree is the format used by ZMK keyboard firmware.
+
+#+begin_src emacs-lisp
+(use-package dts-mode
+  :commands (dts-mode))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package hammy
   :commands (hammy-start

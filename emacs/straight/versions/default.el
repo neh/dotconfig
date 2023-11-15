@@ -43,6 +43,7 @@
  ("doct" . "5cab660dab653ad88c07b0493360252f6ed1d898")
  ("doom-modeline" . "d739ab51d58b76c1d9cc29e7a0e4abe9c30370dc")
  ("dtrt-indent" . "e0630f74f915c6cded05f76f66d66e540fcc37c3")
+ ("dts-mode" . "cd1847d0e7162c1ecab772c6ca7ef4f3c5d2214d")
  ("dumb-jump" . "d9503c157ab88f0ed2fa1301aeb57e95ac564760")
  ("dwim-shell-command" . "3ad3db9155bdde0dc050690b2d50a57a3ac99aa4")
  ("edit-indirect" . "f80f63822ffae78de38dbe72cacaeb1aaa96c732")
