@@ -1,6 +1,5 @@
 ;; -*- lexical-binding: t -*-
 
-(defvar native-comp-deferred-compilation-deny-list nil)
 (let ((file-name-handler-alist nil))
   (setq gc-cons-threshold most-positive-fixnum)
   (setq straight-check-for-modifications '(check-on-save))
