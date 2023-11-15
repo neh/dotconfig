@@ -46,6 +46,7 @@
  ("dts-mode" . "cd1847d0e7162c1ecab772c6ca7ef4f3c5d2214d")
  ("dumb-jump" . "d9503c157ab88f0ed2fa1301aeb57e95ac564760")
  ("dwim-shell-command" . "3ad3db9155bdde0dc050690b2d50a57a3ac99aa4")
+ ("eat" . "5aaad960c8f0caa2bc4c8b2f9da4dc0c809550fe")
  ("edit-indirect" . "f80f63822ffae78de38dbe72cacaeb1aaa96c732")
  ("ef-themes" . "4722d52002e52812d52b8f064aa5b3d2e7818937")
  ("el-get" . "05bb836e3dfac8ffe4b8a10ec332aa2f661523ce")
