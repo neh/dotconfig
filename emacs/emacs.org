@@ -5463,8 +5463,9 @@ Try out =org-noter=.
 (use-package ement
   :commands (ement-connect)
   :custom
-  (ement-room-prism nil)
-  (ement-room-prism-message-desaturation 1)
+  (ement-save-sessions t)
+  (ement-room-prism t)
+  (ement-room-prism-message-desaturation 25)
   (ement-room-prism-minimum-contrast 6)
   (ement-room-sender-in-left-margin nil)
   (ement-room-message-format-spec "%B%r%R%t")
