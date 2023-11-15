@@ -793,7 +793,17 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (org-block-begin-line ((t (:inherit fixed-pitch
                              :slant italic))))
   (org-block-end-line ((t (:inherit fixed-pitch
-                           :slant italic)))))
+                           :slant italic))))
+  :config
+  (defun my/match-border-to-background ()
+    (custom-theme-set-faces
+     'user
+     `(internal-border ((t (:background ,(face-background 'default)))))))
+  (defun my/gruvbox-dark-hard-tweaks ()
+    (my/match-border-to-background))
+  (defun my/gruvbox-light-hard-tweaks ()
+    (my/match-border-to-background))
+  )
 
 (use-package poet-theme)
 #+end_src
