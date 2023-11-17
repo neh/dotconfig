@@ -83,6 +83,7 @@
  ("embrace.el" . "dd5da196e5bcc5e6d87e1937eca0c21da4334ef2")
  ("ement" . "c2bb93d97d2e8731609185774551c7a6218beec2")
  ("envrc" . "33d01388ce7ff14cb209015ce6f0d1a5bda6eb07")
+ ("eshell-syntax-highlighting" . "4ac27eec6595ba116a6151dfaf0b0e0440101e10")
  ("esup" . "4b49c8d599d4cc0fbf994e9e54a9c78e5ab62a5f")
  ("esxml" . "225693096a587492d76bf696d1f0c25c61f7d531")
  ("evil" . "d28206ccff74bc07ba335b8ff77805564f6928d7")

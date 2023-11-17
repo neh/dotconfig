@@ -4660,6 +4660,14 @@ any directory proferred by `consult-dir'."
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package eshell-syntax-highlighting
+  :commands (eshell-syntax-highlighting-mode
+             eshell-syntax-highlighting-global-mode)
+  :config
+  (eshell-syntax-highlighting-global-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package eat
   :commands (eat)
   :hook ((eshell-load . eat-shell-mode)
