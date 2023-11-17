@@ -1014,10 +1014,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
                         :extend t))
 
   ;; for org-modern
-  (modify-all-frames-parameters
-   '((right-divider-width . 15)
-     (internal-border-width . 15)
-     ))
   (dolist (face '(window-divider
                   window-divider-first-pixel
                   window-divider-last-pixel))
@@ -1079,6 +1075,19 @@ And here’s the function where I collect my tweaks to the theme and set up font
                        :variable-pitch-family "Noto Sans"
                        :line-spacing 0.2)
                       )))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package spacious-padding
+  :config
+  (setq spacious-padding-widths
+        '(:internal-border-width 15
+          :header-line-width 4
+          :mode-line-width 6
+          :tab-width 4
+          :right-divider-width 15
+          :scroll-bar-width 8))
+  (spacious-padding-mode 1))
 #+end_src
 
 * Modeline

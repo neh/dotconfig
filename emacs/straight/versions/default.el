@@ -220,6 +220,7 @@
  ("scrollkeeper.el" . "3c4ac6b6b44686d31c260ee0b19daaee59bdccd6")
  ("sesman" . "e0f555f963c9f02f8e4a50e06fc353eb4c15ee77")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
+ ("spacious-padding" . "25dc905aea6d325f5c615739b423761d35584eb7")
  ("spinner" . "67681b8f1580a7cd7a1aa49d78eaa30d11f7c178")
  ("sqlformat" . "ce8f5ea74c260ff0b8353a2df62d36aa39141403")
  ("sticky-shell" . "5fb253b7479b7da957fd0e8fdb001c9a7185c82a")
