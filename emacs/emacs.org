@@ -4678,7 +4678,7 @@ any directory proferred by `consult-dir'."
 #+begin_src emacs-lisp
 (use-package eat
   :commands (eat)
-  :hook ((eshell-load . eat-shell-mode)
+  :hook ((eshell-load . eat-eshell-mode)
          (eshell-load . eat-eshell-visual-command-mode))
   )
 #+end_src
