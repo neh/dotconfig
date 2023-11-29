@@ -1449,6 +1449,16 @@ eval (direnv hook fish)
 #+end_src
 
 *** Aliases
+With a normal nvm install (which doesn't support fish), install bass to wrap the bash support to make everything work in fish. It's all nice and transparent once this alias is in place.
+
+Install bass with =fisher add edc/bass= ([[https://github.com/edc/bass][GitHub - edc/bass: Make Bash utilities usable in Fish shell]]).
+
+#+begin_src fish :tangle ~/.config/fish/functions/nvm.fish
+function nvm
+    bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
+end
+#+end_src
+
 #+begin_src fish :tangle ~/.config/fish/functions/ec.fish
 function ec --description 'emacsclient'
     command emacsclient --create-frame --alternate-editor="emacs" $argv
