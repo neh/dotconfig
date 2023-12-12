@@ -1445,7 +1445,9 @@ end
 #+end_src
 
 #+begin_src fish
-eval (direnv hook fish)
+if type -q direnv
+    eval (direnv hook fish)
+end
 #+end_src
 
 *** Aliases
