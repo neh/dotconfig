@@ -3789,11 +3789,11 @@ in that direction and display the target buffer in said window."
   (:repeat-map popper-repeat-map
    ("c" . popper-cycle)
    ("k" . popper-kill-latest-popup)
-   ("p" . popper-toggle-latest))
+   ("p" . popper-toggle))
 
   :general
   (my/leader-nav
-    "p" #'popper-toggle-latest
+    "p" #'popper-toggle
     "P" #'popper-toggle-type)
 
   :custom
