@@ -217,7 +217,7 @@ current_scheme=$(gsettings get org.gnome.desktop.interface color-scheme | tr -d 
 
 if [[ "$current_scheme" == "prefer-dark" ]]; then
     # echo "Currently dark, going light"
-    gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+    gsettings set org.gnome.desktop.interface color-scheme "default"
     darkman set light
     gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
     if [[ -e ~/.config/alacritty/schemes.yml ]]; then
