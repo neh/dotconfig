@@ -1087,6 +1087,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
           :tab-width 4
           :right-divider-width 15
           :scroll-bar-width 8))
+  (setq spacious-padding-subtle-mode-line
+        '(:mode-line-active error :mode-line-inactive shadow))
   (spacious-padding-mode 1))
 #+end_src
 
