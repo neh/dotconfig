@@ -3842,12 +3842,12 @@ in that direction and display the target buffer in said window."
   (repeat-mode t))
 
 (use-package repeat-help
-  :disabled
   ;; this package seems to break repeat-mode in weird ways
   :hook (repeat-mode . repeat-help-mode)
-  :custom
+  ;; :custom
   ;; (repeat-help-key "")
-  (repeat-help-auto nil))
+  ;; (repeat-help-auto nil)
+  )
 #+end_src
 
 #+begin_src emacs-lisp

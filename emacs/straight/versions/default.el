@@ -212,6 +212,7 @@
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("rainbow-mode" . "70ed10d410ef00c82c49b2ba41647930626d6218")
  ("region-occurrences-highlighter" . "3abf6c85846a7862a3378c895b75d3ba3ba9ad6c")
+ ("repeat-help" . "41dea6fba2edd6ac748d0ca7a6da4058290feede")
  ("restclient.el" . "e2a2b13482d72634f8e49864cd9e5c907a5fe137")
  ("rfc-mode" . "ab09db78d9d1baa4da4f926930833598e1e978ce")
  ("rust-mode" . "9c26dc1195ec05309ee15c014631fb9abd6cf5d2")
