@@ -1013,6 +1013,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
                         :overline lc
                         :extend t))
 
+  (let* ((color (face-foreground 'default))
+         (ucolor (if (my/dark-p)
+                     (color-darken-name color 60)
+                   (color-lighten-name color 400))))
+    (set-face-attribute 'org-level-1 nil :underline ucolor))
+
   ;; for org-modern
   (dolist (face '(window-divider
                   window-divider-first-pixel
