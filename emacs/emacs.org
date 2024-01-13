@@ -1106,6 +1106,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
          (after-change-major-mode . doom-modeline-conditional-buffer-encoding))
 
   :custom-face
+  (mode-line ((nil (:inherit variable-pitch))))
+  (mode-line-active ((nil (:inherit variable-pitch))))
+  (mode-line-inactive ((nil (:inherit variable-pitch))))
+
   (doom-modeline-evil-emacs-state
    ((t (:background "DarkMagenta" :foreground "#ffd700"))))
   (doom-modeline-evil-insert-state
