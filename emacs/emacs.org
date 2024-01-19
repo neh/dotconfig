@@ -4003,7 +4003,7 @@ Set scrolling options. These stop the half-page jumps while scrolling, and make 
 (mouse-wheel-scroll-amount '(4 ((shift) . 1)))
 (mouse-wheel-progressive-speed nil)
 (mouse-wheel-follow-mouse 't)
-(mouse-autoselect-window t)
+(mouse-autoselect-window nil)
 (scroll-step 1)
 (scroll-margin 3)
 (hscroll-step 3)
