@@ -74,12 +74,11 @@ And now bootstrap straight, using the snippet from the docs.
   (load bootstrap-file nil 'nomessage))
 #+end_src
 
-And then make [[https://github.com/jwiegley/use-package][use-package]] use straight, and install use-package using straight:
+I'm using emacs 29 everywhere, which has =use-package= built in, so just assume it's there and do a little configuration. Also, require =org-mode= as early as possible to (hopefully) avoid version mismatch issues.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-use-package
 (straight-use-package 'org)
 (setq straight-use-package-by-default t)
-(straight-use-package 'use-package)
 (setq use-package-verbose nil)
 #+end_src
 

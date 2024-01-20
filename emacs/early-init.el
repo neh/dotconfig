@@ -21,7 +21,6 @@
   (setq straight-vc-git-auto-fast-forward nil)
   (straight-use-package 'org)
   (setq straight-use-package-by-default t)
-  (straight-use-package 'use-package)
   (setq use-package-verbose nil)
   (use-package org
     :demand t
