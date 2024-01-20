@@ -965,7 +965,7 @@ Change global text sizes with this function. This is the function I bind to a ke
 
 And here’s the function where I collect my tweaks to the theme and set up fonts.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
 (defun my/theme-tweaks ()
   "Apply my catchall set of mostly appearance tweaks."
   (interactive)
@@ -1045,6 +1045,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
           (buffer-list)))
 
   (set-scroll-bar-mode nil)
+
+  <<graphical-tweaks>>
   )
 #+end_src
 
@@ -1092,10 +1094,15 @@ And here’s the function where I collect my tweaks to the theme and set up font
           :mode-line-width 8
           :tab-width 4
           :right-divider-width 20
-          :scroll-bar-width 8))
-  (setq spacious-padding-subtle-mode-line
-        '(:mode-line-active error :mode-line-inactive shadow))
-  (spacious-padding-mode 1))
+          :scroll-bar-width 8)
+
+        spacious-padding-subtle-mode-line
+        '(:mode-line-active error
+          :mode-line-inactive shadow)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref graphical-tweaks
+(spacious-padding-mode t)
 #+end_src
 
 * Modeline
