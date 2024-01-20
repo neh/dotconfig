@@ -3793,6 +3793,8 @@ in that direction and display the target buffer in said window."
                   (window-in-direction direction))
               (window-in-direction direction)))
            (t
+            (with-current-buffer buffer
+              (add-hook 'kill-buffer-hook #'delete-window 0 t))
             (split-window (my/non-minibuffer-current-window) size direction pixelwise)))))
     (window--display-buffer buffer window 'reuse alist)
     window))
