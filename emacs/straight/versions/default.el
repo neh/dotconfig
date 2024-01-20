@@ -231,6 +231,7 @@
  ("string-inflection" . "50ad54970b3cc79b6b83979bde9889ad9a9e1a9c")
  ("sudo-edit" . "74eb1e6986461baed9a9269566ff838530b4379b")
  ("svg-lib" . "718d0f76d842919c8bf7fb23dd9cceca69ce9500")
+ ("svg-tag-mode" . "03989f66b45944271faa6dd8eb977d623561de86")
  ("sway.el" . "84eae5e16a643eb00b0a422ded751cceb17cc8f0")
  ("swiper" . "8c30f4cab5948aa8d942a3b2bbf5fb6a94d9441d")
  ("switchy-window" . "e1569d801b2e84b2d31785a7c412760613285256")

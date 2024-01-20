@@ -3617,6 +3617,49 @@ MimeType=x-scheme-handler/org-protocol;
                                  org-transclusion-indent-mode)))
 #+end_src
 
+* SVG Prettiness
+
+Built-in SVG rendering provides some nice potential for some pretty, so let's set that up here. First, add the [[https://github.com/rougier/svg-lib][svg-lib]] package. Due to [[https://github.com/rougier/svg-lib/issues/18][issue 18]], we need a [[https://github.com/rougier/svg-lib/issues/18#issuecomment-1278132701][workaround]] for this to work when emacs is running as a daemon.
+
+#+begin_src emacs-lisp
+(use-package svg-lib
+  :init
+  (when (daemonp)
+    (defun first-graphical-frame-hook-function ()
+      (remove-hook 'server-after-make-frame-hook #'first-graphical-frame-hook-function)
+      (setq svg-lib-style-default (svg-lib-style-compute-default)))
+    (add-hook 'server-after-make-frame-hook #'first-graphical-frame-hook-function)))
+#+end_src
+
+Then we add [[https://github.com/rougier/svg-tag-mode][svg-tag-mode]], which makes it easy to replace some text elements with generated SVG images.
+
+#+begin_src emacs-lisp
+(use-package svg-tag-mode
+  :commands (svg-tag-make
+             svg-tag-mode)
+  :config
+  (setq svg-tag-tags
+        '(("TODO" . ((lambda (tag) (svg-tag-make "TODO"
+                                                 :face '(:weight semibold
+                                                         :background "orange1"
+                                                         :foreground "black")))))
+          ("SOMEDAY" . ((lambda (tag) (svg-tag-make "SOMEDAY"
+                                                    :face '(:weight semibold
+                                                            :background "steel blue"
+                                                            :foreground "white")))))
+          ("DOING" . ((lambda (tag) (svg-tag-make "DOING"
+                                                  :face '(:weight semibold
+                                                          :background "OliveDrab4"
+                                                          :foreground "white")))))
+          ("DONE" . ((lambda (tag) (svg-tag-make "DONE"
+                                                 :face 'org-done))))
+          ("NEXT" . ((lambda (tag) (svg-tag-make "NEXT"
+                                                 :face '(:weight semibold
+                                                         :background "gold"
+                                                         :foreground "black")))))))
+  )
+#+end_src
+
 * Window management
 
 Let’s try to get some window behaviour under control.
