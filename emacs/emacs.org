@@ -920,6 +920,7 @@ But I like some things to be set no matter the theme. For example, I always like
   (run-hooks 'after-load-theme-hook))
 
 (add-hook 'after-load-theme-hook #'my/theme-tweaks)
+(setq my/first-frame-created nil)
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'my/theme-tweaks)
   (add-hook 'after-init-hook #'my/theme-tweaks))
@@ -1043,6 +1044,11 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (set-scroll-bar-mode nil)
 
   <<graphical-tweaks>>
+
+  (unless my/first-frame-created
+    (setq my/first-frame-created t)
+    (message "Applying first frame tweaks")
+    <<first-frame-tweaks>>)
   )
 #+end_src
 
@@ -1083,6 +1089,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 #+begin_src emacs-lisp
 (use-package spacious-padding
+  :commands (spacious-padding-mode)
   :config
   (setq spacious-padding-widths
         '(:internal-border-width 20
@@ -1097,7 +1104,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
           :mode-line-inactive shadow)))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no :noweb-ref graphical-tweaks
+#+begin_src emacs-lisp :tangle no :noweb-ref first-frame-tweaks
 (spacious-padding-mode t)
 #+end_src
 
