@@ -53,6 +53,7 @@
  ("elf-mode" . "cd280d683cd3341d8bb31af6db7e3b74a133e6ab")
  ("elfeed" . "55fb162fa27e71b88effa59a83c57842e262b00f")
  ("elfeed-org" . "d62d23e25c5e3be3d70b7fbe1eaeb6e43f93a061")
+ ("elisp-demos" . "1a108d1c5011f9ced58be2ca98bea1fbd4130a2f")
  ("elisp-refs" . "541a064c3ce27867872cf708354a65d83baf2a6d")
  ("emacs-aio" . "da93523e235529fa97d6f251319d9e1d6fc24a41")
  ("emacs-ansible" . "d89ac0ee57742cca0f0e0a3453d9dcc521575690")

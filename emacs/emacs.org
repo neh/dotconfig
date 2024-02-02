@@ -659,6 +659,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
     (define-button-type 'apropos-variable :supertype 'apropos-variable 'action do-variable)
     (define-button-type 'apropos-user-option :supertype 'apropos-user-option 'action do-variable)))
 
+(use-package elisp-demos
+  :init
+  (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+  (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
+
 (use-package autorevert
   :demand t
   :straight nil
