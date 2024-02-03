@@ -2877,6 +2877,9 @@ Indent subitems in lists a bit more so they're clearer.
 
   (org-modern-table nil)
 
+  (org-modern-todo nil)
+  (org-modern-timestamp nil)
+
   (org-modern-todo-faces '(
                            ("SOMEDAY"
                             :weight semibold
