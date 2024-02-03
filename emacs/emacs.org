@@ -1385,12 +1385,21 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
           ;; (t reverse)
           ))
   (setq vertico-multiform-commands
-        '(
-          ;; (consult-ripgrep
-           ;; buffer
-           ;; (vertico-buffer-display-action . (display-buffer-same-window))
-           ;; )
-          ))
+        '((consult-line
+           posframe
+           (vertico-posframe-poshandler . posframe-poshandler-frame-bottom-center)
+           (vertico-posframe-border-width . 10)
+           ;; NOTE: This is useful when emacs is used in both in X and
+           ;; terminal, for posframe do not work well in terminal, so
+           ;; vertico-buffer-mode will be used as fallback at the
+           ;; moment.
+           (vertico-posframe-fallback-mode . vertico-buffer-mode))
+          (t posframe))
+        ;; (consult-ripgrep
+        ;; buffer
+        ;; (vertico-buffer-display-action . (display-buffer-same-window))
+        ;; )
+        )
   )
 
 (use-package vertico-repeat
@@ -1413,6 +1422,16 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    "C-S-n" #'vertico-next-group
    "C-S-t" #'vertico-previous-group
    ))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package vertico-posframe
+  :after (vertico)
+  :custom
+  (vertico-posframe-parameters '((left-fringe . 20)
+                                 (right-fringe . 20)))
+  :config
+  (vertico-posframe-mode t))
 #+end_src
 
 ** Orderless
@@ -2108,6 +2127,13 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
   (my/leader-keys
     "nn" #'roam-dailies-transient)
   )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package transient-posframe
+  :after (transient)
+  :config
+  (transient-posframe-mode t))
 #+end_src
 
 Of course, the great magit.
