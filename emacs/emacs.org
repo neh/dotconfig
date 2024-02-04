@@ -3745,8 +3745,8 @@ Then we add [[https://github.com/rougier/svg-tag-mode][svg-tag-mode]], which mak
   :config
   (plist-put svg-lib-style-default :font-family (face-attribute 'default :family))
   (plist-put svg-lib-style-default :font-size (/ (face-attribute 'default :height) 10))
-  (plist-put svg-lib-style-default :height 1.0)
-  (plist-put svg-lib-style-default :scale 1.0)
+  (plist-put svg-lib-style-default :height 0.9)
+  (plist-put svg-lib-style-default :scale 0.75)
 
   (defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
   (defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
