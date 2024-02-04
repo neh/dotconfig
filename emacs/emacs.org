@@ -2419,10 +2419,14 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      (sqlite . t)
      (python . t)))
 
-  (define-advice org-edit-src-exit (:after (&rest _args))
-    "End up in normal state after editing a src block."
-    (evil-normal-state)))
-#+end_src
+  (defun my/normal-mode-after-src-edit (&rest args)
+    ;; (apply orig-fun args)
+    (message "Setting evil state back to %s" my/current-evil-state)
+    (evil-change-state "normal")
+    )
+  (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
+  ;; (advice-remove 'org-edit-src-exit 'my/normal-mode-after-src-edit)
+  )
 #+end_src
 
 Org-mouse enables nice mouse interaction with bits of org like headings and checkboxes.
