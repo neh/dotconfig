@@ -3766,8 +3766,14 @@ Then we add [[https://github.com/rougier/svg-tag-mode][svg-tag-mode]], which mak
                                                   :face '(:weight semibold
                                                           :background "OliveDrab4"
                                                           :foreground "white")))))
+          ("WAITING" . ((lambda (tag) (svg-tag-make "WAITING"
+                                                    :face '(:weight semibold
+                                                            :background "OliveDrab4"
+                                                            :foreground "white")))))
           ("DONE" . ((lambda (tag) (svg-tag-make "DONE"
                                                  :face 'org-done))))
+          ("CANCELED" . ((lambda (tag) (svg-tag-make "CANCELED"
+                                                     :face 'org-done))))
           ("NEXT" . ((lambda (tag) (svg-tag-make "NEXT"
                                                  :face '(:weight semibold
                                                          :background "gold"
@@ -3786,13 +3792,13 @@ Then we add [[https://github.com/rougier/svg-tag-mode][svg-tag-mode]], which mak
           ;; Inactive date  (with or without day name, with or without time)
           (,(format "\\(\\[%s\\]\\)" date-re) .
            ((lambda (tag)
-              (svg-tag-make tag :beg 1 :end -1 :margin 0 :face 'org-date))))
+              (svg-tag-make tag :beg 1 :end -1 :margin 0 :face 'org-modern-date-inactive))))
           (,(format "\\(\\[%s \\)%s\\]" date-re day-time-re) .
            ((lambda (tag)
-              (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-date))))
+              (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-modern-date-inactive))))
           (,(format "\\[%s \\(%s\\]\\)" date-re day-time-re) .
            ((lambda (tag)
-              (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))
+              (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-modern-date-inactive))))
           ))
 
   ;; (setq tab-bar-tab-name-format-function #'my/tab-bar-tab-name-with-svg)
