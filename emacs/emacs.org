@@ -579,7 +579,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :demand t
   :custom
-  (savehist-additional-variables '(evil-jumps-history
+  (savehist-additional-variables '(;;evil-jumps-history
                                    projectile-project-command-history
                                    command-history
                                    ))
@@ -592,12 +592,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :custom
   (eldoc-echo-area-use-multiline-p nil))
-
-(use-package undo-fu
-  :after (evil)
-  :defer 0.5
-  :custom
-  (evil-undo-system 'undo-fu))
 
 (use-package undo-fu-session
   :hook (after-init . global-undo-fu-session-mode)
@@ -1160,146 +1154,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (setq-default doom-modeline-column-zero-based nil))
 #+end_src
 
-* Eeeeevil
-
-I come from vim, so evil is a necessity.
-
-#+begin_src emacs-lisp :noweb yes
-(use-package evil
-  :demand t
-  :after general
-
-  :custom
-  (evil-move-cursor-back t)
-  (evil-vsplit-window-right t)
-
-  :init
-  (setq evil-want-integration t
-        evil-want-keybinding nil
-        evil-want-minibuffer t
-        evil-respect-visual-line-mode nil)
-
-  :general
-  <<evil-general>>
-
-  :config
-  (evil-mode 1)
-  <<evil-config>>
-
-  (use-package evil-surround
-    :config
-    (global-evil-surround-mode t))
-
-  (use-package evil-embrace
-    :after (evil
-            evil-surround
-            org)
-    :hook (org-mode . embrace-org-mode-hook)
-    :config
-    (evil-embrace-enable-evil-surround-integration))
-
-  (use-package evil-indent-plus
-    :config
-    (evil-indent-plus-default-bindings))
-
-  (use-package evil-textobj-line)
-  (use-package evil-textobj-syntax)
-  (use-package evil-ex-fasd))
-#+end_src
-
-I'm one of those strange people that not only uses a dvorak keyboard layout and vim-style navigation, but also moves =hjkl= to =htns=, because I like the physical location. In practice, I don't have to adjust /that/ many other keys for this to work. Here I set up the basic navigation keys and make related adjustments.
-
-#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
-(general-define-key
- :states '(normal visual motion)
- "j" nil
- "k" nil
-
- "h" 'evil-backward-char
- "t" 'evil-next-visual-line
- "n" 'evil-previous-visual-line
- "s" 'evil-forward-char
-
- "<down>" 'evil-next-visual-line
- "<up>" 'evil-previous-visual-line
-
- "l" 'evil-search-next
- "L" 'evil-search-previous
- "S" 'evil-window-bottom
- )
-#+end_src
-
-And here are just general evil-related bindings.
-
-#+begin_src emacs-lisp :noweb-ref evil-general :tangle no
-(my/leader-keys
-  "q" #'kill-current-buffer)
-#+end_src
-
-Put some whitespace around the evil state modeline labels just so they look better.
-
-#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
-(setq evil-normal-state-tag   (propertize " N ")
-      evil-emacs-state-tag    (propertize " E ")
-      evil-insert-state-tag   (propertize " I ")
-      evil-replace-state-tag  (propertize " R ")
-      evil-motion-state-tag   (propertize " M ")
-      evil-visual-state-tag   (propertize " V ")
-      evil-operator-state-tag (propertize " O "))
-#+end_src
-
-So many searches leave the cursor at the bottom of the window, and I want to see more context. So this recenters the cursor when jumping to a search result. I've been using swiper a lot more though, so I'm not sure how much I care about this any more (at least in this context).
-
-#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
-;; (general-add-advice (list #'evil-search-next
-;;                           #'evil-search-previous)
-;;                     :after #'recenter)
-#+end_src
-
-This defines an evil operator I can use to highlight some text and quickly get an indirect buffer narrowed to that text.
-
-#+begin_src emacs-lisp :noweb-ref evil-config :tangle no
-(evil-define-operator evil-narrow-indirect (beg end type)
-  "Indirectly narrow the region from BEG to END."
-  (interactive "<R>")
-  (evil-normal-state)
-  (narrow-to-region-indirect beg end))
-
-(general-define-key
- :keymaps 'narrow-map
- "i" #'evil-narrow-indirect)
-#+end_src
-
-Evil-collection helps with setting up evil-friendly bindings all over the place, including the handy key translation feature I use here for my crazy =hjkl =-> =htns= ways.
-
-#+begin_src emacs-lisp
-(use-package evil-collection
-  :after evil
-
-  :custom
-  (evil-collection-outline-bind-tab-p nil)
-  (evil-collection-setup-minibuffer t)
-
-  :init
-  (defun my/evil-key-translations (_mode mode-keymaps &rest _rest)
-    (evil-collection-translate-key 'normal mode-keymaps
-      "t" "j"
-      "n" "k"
-      "s" "l"))
-
-  :config
-  (evil-collection-init)
-  (add-hook 'evil-collection-setup-hook #'my/evil-key-translations))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package evil-owl
-  :commands (evil-owl-mode)
-  :custom
-  (evil-owl-extra-posframe-args '(:internal-border-width 2
-                                  :internal-border-color "grey"))
-  (evil-owl-idle-delay 0.5))
-#+end_src
 
 * Navigation?
 
@@ -1598,7 +1452,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     (consult-line (car consult--line-history)))
 
   :general
-  ;; ([remap evil-search-forward] #'consult-line)
   (my/leader-nav
     "h" #'consult-buffer
     "f" #'consult-find
@@ -2076,9 +1929,10 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
   :init
   (global-git-gutter-mode -1)
 
-  :config
-  (advice-add 'git-gutter:previous-hunk :after #'my/after-jump)
-  (advice-add 'git-gutter:next-hunk :after #'my/after-jump))
+  ;; :config
+  ;; (advice-add 'git-gutter:previous-hunk :after #'my/after-jump)
+  ;; (advice-add 'git-gutter:next-hunk :after #'my/after-jump)
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2107,8 +1961,8 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
       ;; (:key "h" "Previous" org-roam-dailies-goto-previous-note)
       ;; ("s" "Next" my/roam-dailies-next)
       ("s" "Next" org-roam-dailies-goto-next-note :transient t)
-      ("n" "pgup" evil-scroll-page-up :transient t)
-      ("t" "pgdn" evil-scroll-page-down :transient t)
+      ;; ("n" "pgup" evil-scroll-page-up :transient t)
+      ;; ("t" "pgdn" evil-scroll-page-down :transient t)
       ]
      ]
     )
@@ -2132,8 +1986,8 @@ Of course, the great magit.
 (straight-use-package 'magit)
 (use-package magit
   :straight nil
-  :hook
-  (git-commit-mode . evil-insert-state)
+  ;; :hook
+  ;; (git-commit-mode . evil-insert-state)
 
   :custom
   (magit-commit-show-diff t)
@@ -2143,22 +1997,23 @@ Of course, the great magit.
   :general
   (general-define-key
    :keymaps 'magit-mode-map
-   "C-b" 'evil-scroll-page-up
-   "C-f" 'evil-scroll-page-down
+   ;; "C-b" 'evil-scroll-page-up
+   ;; "C-f" 'evil-scroll-page-down
    "M-h" 'magit-section-up
    "M-s" 'magit-section-goto-successor
    "M-t" 'magit-section-forward-sibling
    "M-n" 'magit-section-backward-sibling
    "M-<down>" 'magit-section-forward-sibling
    "M-<up>" 'magit-section-backward-sibling
-   "t" 'evil-next-visual-line
-   "n" 'evil-previous-visual-line)
+   ;; "t" 'evil-next-visual-line
+   ;; "n" 'evil-previous-visual-line
+   )
 
-  (general-define-key
-   :keymaps 'magit-diff-mode-map
-   "/" 'evil-search-forward
-   "l" 'evil-search-next
-   "L" 'evil-search-previous)
+  ;; (general-define-key
+  ;;  :keymaps 'magit-diff-mode-map
+  ;;  "/" 'evil-search-forward
+  ;;  "l" 'evil-search-next
+  ;;  "L" 'evil-search-previous)
 
   (my/leader-keys
     "gf" #'magit-file-dispatch
@@ -2278,7 +2133,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   <<org-init>>
   (defun my/log-line ()
     (interactive)
-    (evil-open-below 1)
+    ;; (evil-open-below 1)
     (org-time-stamp-inactive '(16))
     (insert " "))
 
@@ -2409,12 +2264,12 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      (sqlite . t)
      (python . t)))
 
-  (defun my/normal-mode-after-src-edit (&rest args)
+  ;; (defun my/normal-mode-after-src-edit (&rest args)
     ;; (apply orig-fun args)
-    (message "Setting evil state back to %s" my/current-evil-state)
-    (evil-change-state "normal")
-    )
-  (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
+    ;; (message "Setting evil state back to %s" my/current-evil-state)
+    ;; (evil-change-state "normal")
+    ;; )
+  ;; (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
   ;; (advice-remove 'org-edit-src-exit 'my/normal-mode-after-src-edit)
   )
 #+end_src
@@ -2539,155 +2394,6 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   (org-babel-execute:restclient))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package evil-org
-  :after (evil org)
-  :hook ((org-mode . evil-org-mode)
-         (evil-org-mode . (lambda ()
-                            (evil-org-set-key-theme)))
-         (org-agenda-mode . my/evil-org-agenda-set-keys))
-
-  :custom
-  (evil-org-movement-bindings '((up . "n")
-                                (down . "t")
-                                (left . "h")
-                                (right . "s")))
-  (evil-org-key-theme '(navigation
-                        insert
-                        textobjects
-                        additional
-                        calendar))
-
-  :config
-  (require 'evil-org-agenda)
-
-  ;; This is just a copy/paste/modify of the default evil-org-agenda-set-keys function
-  (defun my/evil-org-agenda-set-keys ()
-    "Set motion state keys for `org-agenda'."
-    (evil-set-initial-state 'org-agenda-mode 'motion)
-
-    ;; Horizontal movements have little use, thus we can override "f" and "t".
-    ;; "w", "b", "e", "ge" and their upcase counterparts are preserved.
-    (evil-define-key 'motion org-agenda-mode-map
-      ;; Unused keys: D, X
-
-      ;; open
-      (kbd "<tab>") 'org-agenda-goto
-      (kbd "S-<return>") 'org-agenda-goto
-      (kbd "g TAB") 'org-agenda-goto
-      (kbd "RET") 'org-agenda-switch-to
-      (kbd "M-RET") 'org-agenda-recenter
-
-      (kbd "SPC") 'org-agenda-show-and-scroll-up
-      (kbd "<delete>") 'org-agenda-show-scroll-down
-      (kbd "<backspace>") 'org-agenda-show-scroll-down
-
-      ;; motion
-      "t" 'org-agenda-next-line
-      "n" 'org-agenda-previous-line
-      "gt" 'org-agenda-next-item
-      "gn" 'org-agenda-previous-item
-      (kbd "C-t") 'org-agenda-next-item
-      (kbd "C-n") 'org-agenda-previous-item
-      (kbd "C-h") 'org-agenda-earlier
-      (kbd "C-s") 'org-agenda-later
-
-      ;; manipulation
-      ;; We follow standard org-mode bindings (not org-agenda bindings):
-      ;; <HJKL> change todo items and priorities.
-      ;; M-<jk> drag lines.
-      ;; M-<hl> cannot demote/promote, we use it for "do-date".
-      "T" 'org-agenda-priority-down
-      "N" 'org-agenda-priority-up
-      "H" 'org-agenda-do-date-earlier
-      "S" 'org-agenda-do-date-later
-      "!" 'org-agenda-todo
-      (kbd "M-t") 'org-agenda-drag-line-forward
-      (kbd "M-n") 'org-agenda-drag-line-backward
-      (kbd "C-S-h") 'org-agenda-todo-previousset ; Original binding "C-S-<left>"
-      (kbd "C-S-s") 'org-agenda-todo-nextset ; Original binding "C-S-<right>"
-
-      ;; undo
-      "u" 'org-agenda-undo
-
-      ;; actions
-      "dd" 'org-agenda-kill
-      "dA" 'org-agenda-archive
-      "da" 'org-agenda-archive-default-with-confirmation
-      "ct" 'org-agenda-set-tags
-      "ce" 'org-agenda-set-effort
-      "cT" 'org-timer-set-timer
-      "i" 'org-agenda-diary-entry
-      "a" 'org-agenda-add-note
-      "A" 'org-agenda-append-agenda
-      "C" 'org-agenda-capture
-
-      ;; mark
-      "m" 'org-agenda-bulk-toggle
-      "~" 'org-agenda-bulk-toggle-all
-      "*" 'org-agenda-bulk-mark-all
-      "%" 'org-agenda-bulk-mark-regexp
-      "M" 'org-agenda-bulk-remove-all-marks
-      "x" 'org-agenda-bulk-action
-
-      ;; refresh
-      "gr" 'org-agenda-redo
-      "gR" 'org-agenda-redo-all
-
-      ;; quit
-      "ZQ" 'org-agenda-exit
-      "ZZ" 'org-agenda-quit
-
-      ;; display
-      ;; "Dispatch" can prefix the following:
-      ;; 'org-agenda-toggle-deadlines
-      ;; 'org-agenda-toggle-diary
-      ;; 'org-agenda-follow-mode
-      ;; 'org-agenda-log-mode
-      ;; 'org-agenda-entry-text-mode
-      ;; 'org-agenda-toggle-time-grid
-      ;; 'org-agenda-day-view
-      ;; 'org-agenda-week-view
-      ;; 'org-agenda-year-view
-      "z" 'org-agenda-view-mode-dispatch
-      "ZD" 'org-agenda-dim-blocked-tasks
-
-      ;; filter
-      "sc" 'org-agenda-filter-by-category
-      "sr" 'org-agenda-filter-by-regexp
-      "se" 'org-agenda-filter-by-effort
-      "st" 'org-agenda-filter-by-tag
-      "s^" 'org-agenda-filter-by-top-headline
-      "ss" 'org-agenda-limit-interactively
-      "S" 'org-agenda-filter-remove-all
-
-      ;; clock
-      "I" 'org-agenda-clock-in ; Original binding
-      "O" 'org-agenda-clock-out ; Original binding
-      "cg" 'org-agenda-clock-goto
-      "cc" 'org-agenda-clock-cancel
-      "cr" 'org-agenda-clockreport-mode
-
-      ;; go and show
-      "." 'org-agenda-goto-today ; TODO: What about evil-repeat?
-      "gc" 'org-agenda-goto-calendar
-      "gC" 'org-agenda-convert-date
-      "gd" 'org-agenda-goto-date
-      "gh" 'org-agenda-holidays
-      "gm" 'org-agenda-phases-of-moon
-      "gs" 'org-agenda-sunrise-sunset
-      "gt" 'org-agenda-show-tags
-
-      "p" 'org-agenda-date-prompt
-      "P" 'org-agenda-show-the-flagging-note
-
-      ;; 'org-save-all-org-buffers ; Original binding "C-x C-s"
-      "sa" 'org-save-all-org-buffers
-
-      ;; Others
-      "+" 'org-agenda-manipulate-query-add
-      "-" 'org-agenda-manipulate-query-subtract)))
-#+end_src
 
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
 
@@ -2944,15 +2650,6 @@ For a bit more org mode prettiness: =variable-pitch-mode=, which sets up differe
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
 (org-mode . variable-pitch-mode)
-#+end_src
-
-I want to go straight into =evil-insert-states= in some modes so I can just start typing.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-(org-log-buffer-setup . evil-insert-state)
-(org-src-mode . (lambda ()
-                  (when (<= (buffer-size) 1)
-                    (evil-insert-state))))
 #+end_src
 
 I want all drawers hidden on file load.
@@ -3225,7 +2922,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
             :prepend t)
            )))
 
-  :hook ((org-capture-mode . evil-insert-state)
+  :hook (;;(org-capture-mode . evil-insert-state)
          (org-capture-mode . my/full-frame-capture))
 
   :general
@@ -4239,10 +3936,11 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
   :general
   ([remap scroll-up-command] #'scrollkeeper-down
    [remap scroll-down-command] #'scrollkeeper-up
-   [remap evil-scroll-up] #'scrollkeeper-up
-   [remap evil-scroll-down] #'scrollkeeper-down
-   [remap evil-scroll-page-up] #'scrollkeeper-up
-   [remap evil-scroll-page-down] #'scrollkeeper-down)
+   ;; [remap evil-scroll-up] #'scrollkeeper-up
+   ;; [remap evil-scroll-down] #'scrollkeeper-down
+   ;; [remap evil-scroll-page-up] #'scrollkeeper-up
+   ;; [remap evil-scroll-page-down] #'scrollkeeper-down
+   )
   )
 #+end_src
 
@@ -4352,12 +4050,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :init
   (pulsar-global-mode t)
 
-  :config
-  (dolist (item '(evil-window-left
-                  evil-window-right
-                  evil-window-up
-                  evil-window-down))
-    (add-to-list 'pulsar-pulse-functions item))
+  ;; :config
+  ;; (dolist (item '(evil-window-left
+  ;;                 evil-window-right
+  ;;                 evil-window-up
+  ;;                 evil-window-down))
+  ;;   (add-to-list 'pulsar-pulse-functions item))
   )
 #+end_src
 
@@ -5227,17 +4925,17 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   _T_ pg dn
 
 "
-  ("n" (evil-scroll-up 0))
-  ("t" (evil-scroll-down 0))
+  ;; ("n" (evil-scroll-up 0))
+  ;; ("t" (evil-scroll-down 0))
   ("T" (scroll-up))
   ("N" (scroll-down))
 
-  ("gg" evil-goto-first-line)
-  ("G" evil-goto-line)
+  ;; ("gg" evil-goto-first-line)
+  ;; ("G" evil-goto-line)
 
-  ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
-  ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
-  ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
+  ;; ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
+  ;; ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
+  ;; ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
 
   ("+" (my/adjust-text-height 7) "bigger")
   ("-" (my/adjust-text-height -7) "smaller")
@@ -5248,10 +4946,10 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 #+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
 (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1))
   "Browse/stage/revert git hunks"
-  ("n" (progn (git-gutter:previous-hunk 1)
-              (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
-  ("t" (progn (git-gutter:next-hunk 1)
-              (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
+  ;; ("n" (progn (git-gutter:previous-hunk 1)
+  ;;             (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
+  ;; ("t" (progn (git-gutter:next-hunk 1)
+  ;;             (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
   ("H" (progn (goto-char (point-min))
               (git-gutter:next-hunk 1)) "first hunk")
   ("S" (progn (goto-char (point-min))
@@ -5402,10 +5100,10 @@ Working on a =git= hydra to replace all or most of my usual git keybinds. This i
 
   ("go" (("gg" (progn (goto-char (point-min))
                       (git-gutter:next-hunk 1)) "first hunk")
-         ("n" (progn (git-gutter:previous-hunk 1)
-                     (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
-         ("t" (progn (git-gutter:next-hunk 1)
-                     (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
+         ;; ("n" (progn (git-gutter:previous-hunk 1)
+         ;;             (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
+         ;; ("t" (progn (git-gutter:next-hunk 1)
+         ;;             (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
          ("G" (progn (goto-char (point-min))
                      (git-gutter:previous-hunk 1)) "last hunk"))
 
@@ -5427,13 +5125,13 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
                                   :foreign-keys warn
                                   :quit-key "q")
   ("move up/down" (("N" scroll-down "pg up")
-                   ("n" (evil-scroll-up 0) "1/2 pg up")
-                   ("t" (evil-scroll-down 0) "1/2 pg dn")
+                   ;; ("n" (evil-scroll-up 0) "1/2 pg up")
+                   ;; ("t" (evil-scroll-down 0) "1/2 pg dn")
                    ("T" scroll-up "pg down"))
 
-   "current line" (("H" (evil-scroll-line-to-top (line-number-at-pos)) "to top")
-                   ("Z" (evil-scroll-line-to-center (line-number-at-pos)) "to center")
-                   ("S" (evil-scroll-line-to-bottom (line-number-at-pos)) "to bottom"))
+   ;; "current line" (("H" (evil-scroll-line-to-top (line-number-at-pos)) "to top")
+   ;;                 ("Z" (evil-scroll-line-to-center (line-number-at-pos)) "to center")
+   ;;                 ("S" (evil-scroll-line-to-bottom (line-number-at-pos)) "to bottom"))
 
    "text size" (("+" (my/adjust-text-height 7) "bigger")
                 ("-" (my/adjust-text-height -7) "smaller")
@@ -5499,19 +5197,20 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("n" windmove-up "up")
     ("s" windmove-right "right"))
    "Split Window"
-   (("|" evil-window-vsplit "vertical")
-    ("-" evil-window-split "horizontal")
+   (;;("|" evil-window-vsplit "vertical")
+    ;; ("-" evil-window-split "horizontal")
     ("=" balance-windows "balance")
     ("o" delete-other-windows "delete others"))
-   "Move Window"
-   (("M-h" evil-window-move-far-left "far left")
-    ("M-t" evil-window-move-very-bottom "bottom")
-    ("M-n" evil-window-move-very-top "top")
-    ("M-s" evil-window-move-far-right "far right"))
+   ;; "Move Window"
+   ;; (("M-h" evil-window-move-far-left "far left")
+   ;;  ("M-t" evil-window-move-very-bottom "bottom")
+   ;;  ("M-n" evil-window-move-very-top "top")
+   ;;  ("M-s" evil-window-move-far-right "far right"))
    "Close"
    (("x" bury-buffer "bury buffer")
     ("X" kill-current-buffer "delete buffer")
-    ("c" evil-window-delete "close window"))
+    ;;("c" evil-window-delete "close window")
+    )
    ))
 #+end_src
 
@@ -6124,10 +5823,6 @@ See `beframe-rename-frame'."
    "t" #'treemacs-next-line
    "n" #'treemacs-previous-line))
 
-(use-package treemacs-evil
-  :after (treemacs
-          evil))
-
 (use-package treemacs-projectile
   :after (treemacs
           projectile))
@@ -6135,11 +5830,6 @@ See `beframe-rename-frame'."
 (use-package treemacs-magit
   :after (treemacs
           magit))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package evil-string-inflection
-  :after evil)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6172,9 +5862,6 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package kubernetes
   :commands (kubernetes-overview))
-
-(use-package kubernetes-evil
-  :after kubernetes)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6549,13 +6236,8 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
-(defun my-evil-indent-setup ()
-  "Set evil-shift-width to the relevant language indent level (but yaml only, so far)."
-  (setq evil-shift-width yaml-indent-offset))
-
 (use-package yaml-mode
   :disabled
-  :gfhook #'my-evil-indent-setup
   :commands yaml-mode
   :mode (("\\(host\\|group\\)_vars.*" . yaml-mode)
          ("\\.*cloud-\\(init\\|config\\).*" . yaml-mode)
@@ -6900,14 +6582,6 @@ With prefix arg move subtree to the end of its parent."
      (let ((err-msg (cadr err)))
        (unless (string-match "Cannot move past superior level or buffer limit" err-msg)
          (signal 'user-error (list err-msg)))))))
-#+end_src
-
-Ending up at the bottom of the window and not being able see enough context when jumping around is annoying, so I have this to help deal with that by recentering after jumps.
-
-#+begin_src emacs-lisp
-(defun my/after-jump (&optional arg)
-  "Center text at point after jumping."
-  (evil-scroll-line-to-center (line-number-at-pos)))
 #+end_src
 
 Attaching this next one to =org-src-mode= will disable the annoying flycheck warnings that are really only relevant to complete files.
