@@ -5567,6 +5567,13 @@ Try out =org-noter=.
        (lambda (x) (listp x))))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package random-table
+  :straight (:host github :repo "jeremyf/random-table.el")
+  :commands (random-table/roll
+             random-table/register))
+#+end_src
+
 * Web
 
 #+begin_src emacs-lisp

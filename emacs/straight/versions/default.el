@@ -212,6 +212,7 @@
  ("quick-peek" . "03a276086795faad46a142454fc3e28cab058b70")
  ("rainbow-delimiters" . "f40ece58df8b2f0fb6c8576b527755a552a5e763")
  ("rainbow-mode" . "70ed10d410ef00c82c49b2ba41647930626d6218")
+ ("random-table.el" . "2d89b636cc6aafdfb29849314d28de6293e3825d")
  ("region-occurrences-highlighter" . "3abf6c85846a7862a3378c895b75d3ba3ba9ad6c")
  ("repeat-help" . "41dea6fba2edd6ac748d0ca7a6da4058290feede")
  ("restclient.el" . "e2a2b13482d72634f8e49864cd9e5c907a5fe137")
