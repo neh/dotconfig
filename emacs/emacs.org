@@ -6680,6 +6680,7 @@ From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improve
 #+end_src
 
 From: [[https://xenodium.com/deleting-from-emacs-sequence-vars/][Deleting from Emacs sequence vars]]. Magic. Did this not exist before? How? Modified slightly to accept an argument for usage with embark.
+TODO would be great if this showed something useful for keys when deleting from a keymap
 
 #+begin_src emacs-lisp
 (defun my/remove-from-list-variable (&optional seqvar)
