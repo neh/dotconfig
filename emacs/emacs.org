@@ -4916,31 +4916,31 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
-(defhydra hydra-reading (:color red
-                         :hint nil)
-  "
-  _N_ pg up         _gg_ go to top        _zt_ line to top
-  _n_ ½ pg up       _G_  go to bottom     _zz_ line to center
-  _t_ ½ pg dn       ^ ^                   _zb_ line to bottom
-  _T_ pg dn
+;; (defhydra hydra-reading (:color red
+;;                          :hint nil)
+;;   "
+;;   _N_ pg up         _gg_ go to top        _zt_ line to top
+;;   _n_ ½ pg up       _G_  go to bottom     _zz_ line to center
+;;   _t_ ½ pg dn       ^ ^                   _zb_ line to bottom
+;;   _T_ pg dn
 
-"
-  ;; ("n" (evil-scroll-up 0))
-  ;; ("t" (evil-scroll-down 0))
-  ("T" (scroll-up))
-  ("N" (scroll-down))
+;; "
+;; ("n" (evil-scroll-up 0))
+;; ("t" (evil-scroll-down 0))
+;; ("T" (scroll-up))
+;; ("N" (scroll-down))
 
-  ;; ("gg" evil-goto-first-line)
-  ;; ("G" evil-goto-line)
+;; ("gg" evil-goto-first-line)
+;; ("G" evil-goto-line)
 
-  ;; ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
-  ;; ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
-  ;; ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
+;; ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
+;; ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
+;; ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
 
-  ("+" (my/adjust-text-height 7) "bigger")
-  ("-" (my/adjust-text-height -7) "smaller")
-  ("0" (my/adjust-text-height 0) "reset")
-  ("q" nil "quit"))
+;; ("+" (my/adjust-text-height 7) "bigger")
+;; ("-" (my/adjust-text-height -7) "smaller")
+;; ("0" (my/adjust-text-height 0) "reset")
+;; ("q" nil "quit"))
 #+end_src
 
 #+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
