@@ -2742,6 +2742,24 @@ Org export.
   :commands (org-menu))
 #+end_src
 
+** Functions
+
+I was sure I had a function for this, but can't find it anywhere, which means two things: I probably named it badly, and I hardly ever use it. But this was in the systemcrafters newsletter, and I do want that functionality sometimes, so here we go.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-config
+(defun my/org-move-done-tasks-to-bottom ()
+  "Sort all tasks in the topmost heading by TODO state."
+  (interactive)
+  (save-excursion
+    (while (org-up-heading-safe))
+    (org-sort-entries nil ?o))
+
+  ;; Reset the view of TODO items
+  (org-overview)
+  (org-show-entry)
+  (org-show-children))
+#+end_src
+
 ** Options
 
 When using =C-c C-t=, allow todo state selection using single letters instead of cycling through choices. Also, don't let the options appear in a new window. Temporary org windows like this tend to be difficult to position sanely.
