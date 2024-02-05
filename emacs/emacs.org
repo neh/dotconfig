@@ -5925,6 +5925,16 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   (my/leader-keys
     "sw" #'websearch))
 #+end_src
+
+#+begin_src emacs-lisp
+(use-package annotate
+  :commands (annotate-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-mpv-notes
+  :commands (org-mpv-notes-open
+             org-mpv-notes-mode))
 #+end_src
 
 #+begin_src emacs-lisp
