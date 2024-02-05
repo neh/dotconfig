@@ -6664,6 +6664,21 @@ See `beframe-rename-frame'."
 
 * Misc functions
 
+From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improved_emacs_search/][reddit thread]].
+
+#+begin_src emacs-lisp
+(defun my/delete-visited-file (buffer-name)
+  "Delete the file visited by the buffer named BUFFER-NAME."
+  (interactive "bDelete file visited by buffer ")
+  (let* ((buffer (get-buffer buffer-name))
+         (filename (buffer-file-name buffer)))
+    (when buffer
+      (when (and filename
+                 (file-exists-p filename))
+        (delete-file filename))
+      (kill-buffer buffer))))
+#+end_src
+
 From: [[https://xenodium.com/deleting-from-emacs-sequence-vars/][Deleting from Emacs sequence vars]]. Magic. Did this not exist before? How? Modified slightly to accept an argument for usage with embark.
 
 #+begin_src emacs-lisp
