@@ -5375,6 +5375,11 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package surround
+  :bind-keymap ("M-'" . surround-keymap))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package etrace
   :straight (:type git :host github :repo "aspiers/etrace")
   :commands (etrace-clear
