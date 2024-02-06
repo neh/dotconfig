@@ -459,43 +459,9 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
 #+begin_src emacs-lisp
 (use-package general
-  :demand t
+  :disabled t
 
   :config
-  (general-create-definer
-    my/leader-keys
-    :keymaps 'override
-    :states '(emacs normal visual motion insert)
-    :non-normal-prefix "C-SPC"
-    :prefix "SPC")
-
-  (general-create-definer
-    my/leader-nav
-    :keymaps 'override
-    :states '(emacs normal visual motion insert)
-    :non-normal-prefix "C-j"
-    :prefix "j")
-
-  (general-create-definer
-    my/leader-util
-    :keymaps 'override
-    :states '(emacs normal visual motion insert)
-    :non-normal-prefix "C-k"
-    :prefix "k")
-
-  (general-override-mode)
-
-  (general-define-key
-   :keymaps 'override
-   :states '(emacs normal insert)
-   "C-M-t" 'scroll-other-window
-   "C-M-n" 'scroll-other-window-down
-   "C-M-<down>" 'scroll-other-window
-   "C-M-<up>" 'scroll-other-window-down
-
-   "<C-mouse-5>" '(lambda () (interactive) (my/adjust-text-height -5))
-   "<C-mouse-4>" '(lambda () (interactive) (my/adjust-text-height 5)))
-
   (my/leader-keys
     "<SPC>" #'save-buffer
 
@@ -505,12 +471,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
     "y" #'clipboard-yank
     )
-
-  ;; ???
-  ;; (my/leader-keys
-  ;;   :keymaps 'override
-  ;;   :states '(normal)
-  ;;   "u" (general-key "C-x"))
 
   (my/leader-keys
     :infix "c"
@@ -525,10 +485,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "r" #'fill-region
     "t" #'toggle-truncate-lines
     "f" '(lambda () (interactive) (set-frame-width nil fill-column)))
-
-  (my/leader-keys
-    :infix "h"
-    "m" #'describe-mode)
 
   (my/leader-keys
     :infix "x"
