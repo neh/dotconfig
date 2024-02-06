@@ -654,6 +654,8 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
                                        (beacon . "B")
                                        (search . "S")))
 
+  (add-to-list 'meow-mode-state-list '(vterm-mode . insert))
+
   (meow-setup)
   (meow-global-mode 1)
   )
