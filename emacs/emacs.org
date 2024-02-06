@@ -637,6 +637,12 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("'" . repeat)
      '("<escape>" . ignore)))
 
+  ;; TODO move these somewhere that makes sense
+  (setq my/main-map (make-sparse-keymap))
+  (keymap-set my/main-map "e" #'find-file)
+
+  :custom
+  (meow-keypad-leader-dispatch my/main-map)
   :config
   (setq meow-replace-state-name-list '((normal . "N")
                                        (motion . "M")
@@ -670,9 +676,9 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :custom
   (bookmark-fontify nil)
-  :general
-  (my/leader-nav
-    "b" #'bookmark-jump))
+  :bind
+  (:map my/main-map
+   ("j b" . bookmark-jump)))
 
 (use-package saveplace
   :demand t
@@ -718,9 +724,9 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 (use-package whitespace
   :commands (whitespace-mode)
-  :general
-  (my/leader-keys
-    "vw" #'whitespace-mode)
+  :bind
+  (:map my/main-map
+   ("k w" . whitespace-mode))
   :custom
   (whitespace-line-column 80)
   (whitespace-style '(face trailing tabs lines-tail)))
@@ -735,15 +741,17 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :after (apropos)
   :custom
   (helpful-max-buffers 5)
-  :general
-  (my/leader-keys
-    "h." #'helpful-at-point
-    "hf" #'helpful-callable
-    "hk" #'helpful-key
-    "ho" #'helpful-symbol
-    "hv" #'helpful-variable)
-  (:keymaps 'embark-symbol-map
-   "h" #'helpful-symbol)
+
+  :bind
+  (:map my/main-map
+   ("h ." . helpful-at-point)
+   ("h c" . helpful-callable)
+   ("h k" . helpful-key)
+   ("h s" . helpful-symbol)
+   ("h v" . helpful-variable)
+   :map embark-symbol-map
+   ("h" . helpful-symbol))
+
   :init
   ;; https://github.com/Wilfred/elisp-refs/issues/35
   (when (>= emacs-major-version 29)
@@ -803,10 +811,9 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+begin_src emacs-lisp
 (use-package finder
   :straight nil
-  :after general
-  :general
-  (my/leader-keys
-    "hC" #'finder-commentary))
+  :bind
+  (:map my/main-map
+   ("h C" . finder-commentary)))
 #+end_src
 
 * Text mode
@@ -817,15 +824,16 @@ General settings when in text editing modes.
 (use-package simple
   :straight nil
   :hook ((text-mode prog-mode) . visual-line-mode)
-  :general
-  (my/leader-keys
-    "fv" #'visual-line-mode))
+  :bind
+  (:map my/main-map
+   ("k v" . visual-line-mode))
+  )
 
 (use-package visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
-  :general
-  (my/leader-keys
-    "fc" #'visual-fill-column-mode)
+  :bind
+  (:map my/main-map
+   ("k c" . visual-fill-column-mode))
 
   :custom
   (split-window-preferred-function #'visual-fill-column-split-window-sensibly)
@@ -1286,17 +1294,15 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :custom
   (vertico-count 20)
 
-  :general
-  (:keymaps 'vertico-map
-   :states '(insert normal)
-   "C-t" #'vertico-next
-   "C-n" #'vertico-previous
-   "C-S-t" #'vertico-next-group
-   "C-S-n" #'vertico-previous-group
-   "C-S-<down>" #'vertico-next-group
-   "C-S-<up>" #'vertico-previous-group
-   "<backtab>" #'vertico-insert
-   )
+  :bind
+  (:map vertico-map
+   ("C-t" . vertico-next)
+   ("C-n" . vertico-previous)
+   ("C-S-t" . vertico-next-group)
+   ("C-S-n" . vertico-previous-group)
+   ("C-S-<down>" . vertico-next-group)
+   ("C-S-<up>" . vertico-previous-group)
+   ("<backtab>" . vertico-insert))
   )
 
 (use-package vertico-mouse
@@ -1313,12 +1319,12 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
 
-  :general
-  (:keymaps 'vertico-map
-   "TAB" #'my/file-or-not
-   "RET" #'vertico-directory-enter
-   "DEL" #'vertico-directory-delete-char
-   "M-DEL" #'vertico-directory-delete-word)
+  :bind
+  (:map vertico-map
+   ("TAB" . my/file-or-not)
+   ("RET" . vertico-directory-enter)
+   ("DEL" . vertico-directory-delete-char)
+   ("M-DEL" . vertico-directory-delete-word))
 
   :init
   (defun my/file-or-not ()
@@ -1361,22 +1367,19 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :after vertico
   :straight nil
   :hook (minibuffer-setup . vertico-repeat-save)
-  :general
-  (my/leader-util
-    "r" #'vertico-repeat)
-  )
+  :bind
+  (:map my/main-map
+   ("r" . vertico-repeat)))
 
 (use-package vertico-reverse
   :after vertico
   :straight nil
-  :general
-  (:keymaps 'vertico-reverse-map
-   :states '(insert normal)
-   "C-n" #'vertico-next
-   "C-t" #'vertico-previous
-   "C-S-n" #'vertico-next-group
-   "C-S-t" #'vertico-previous-group
-   ))
+  :bind
+  (:map vertico-reverse-map
+   ("C-n" . vertico-next)
+   ("C-t" . vertico-previous)
+   ("C-S-n" . vertico-next-group)
+   ("C-S-t" . vertico-previous-group)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1476,23 +1479,22 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   (embark-mixed-indicator-delay 0.8)
   (y-or-n-p-use-read-key t)
 
-  :general
-  ("C-," #'embark-act)
-  (:keymaps 'embark-file-map
-   "s" #'my/consult-ripgrep-from-dir
-   "F" #'find-file-other-frame
-   "x" #'my/dired-open)
-  (:keymaps 'embark-symbol-map
-   "g" #'consult-ripgrep)
-  (:keymaps 'embark-url-map
-   "." #'hydra-browse/body)
-  (:keymaps 'embark-buffer-map
-   "F" #'switch-to-buffer-other-frame
-   ;; "R" #'tabspaces-remove-selected-buffer
-   )
-  (:keymaps 'embark-heading-map
-   "I" #'org-id-get-create
-   "l" #'org-store-link)
+  :bind
+  (("C-," . embark-act)
+   :map embark-file-map
+   ("s" . my/consult-ripgrep-from-dir)
+   ("F" . find-file-other-frame)
+   ("x" . my/dired-open)
+   :map embark-symbol-map
+   ("g" . consult-ripgrep)
+   :map embark-url-map
+   ("." . hydra-browse/body)
+   :map embark-buffer-map
+   ("F" . switch-to-buffer-other-frame)
+   ;; ("R" . tabspaces-remove-selected-buffer)
+   :map embark-heading-map
+   ("I" . org-id-get-create)
+   ("l" . org-store-link))
 
   :init
   ;; stolen from https://github.com/oantolin/embark/issues/252
@@ -1562,34 +1564,25 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     (interactive)
     (consult-line (car consult--line-history)))
 
-  :general
-  (my/leader-nav
-    "h" #'consult-buffer
-    "f" #'consult-find
-    "k" #'find-file)
-  (my/leader-keys
-    "i" #'consult-yank-pop
-    "l" #'consult-line
-    "L" #'my/consult-line-again
-    "spl" #'consult-line-multi
-    "oo" #'consult-buffer
-    "of" #'find-file
-    "ha" #'consult-apropos
-    "hi" #'consult-info
-    "s*" #'consult-line-thing-at-point
-    "sa" #'consult-org-agenda
-    "sf" #'consult-ripgrep
-    "sg" #'consult-git-grep
-    "sn" #'my/roam-rg
-    "so" #'consult-org-heading
-    "U" #'consult-imenu-multi
-    "u" #'consult-imenu)
-  (:keymaps 'embark-buffer-map
-   "F" #'consult-buffer-other-frame)
-  (:keymaps 'embark-file-map
-   "X" #'consult-file-externally)
-  (:keymaps 'minibuffer-mode-map
-   "C-c r" #'consult-history)
+  :bind
+  (([remap goto-line] . consult-goto-line)
+   (:map my/main-map
+    ("h i" . consult-info)
+    ("i y" . consult-yank-pop)
+    ("j i" . consult-imenu)
+    ("j o" . consult-org-heading)
+    ("o" . consult-buffer)
+    ("s f" . consult-find)
+    ("s l" . consult-line)
+    ("s g" . consult-ripgrep)
+    ("s v" . consult-git-grep)
+    )
+   :map embark-buffer-map
+   ("F" . consult-buffer-other-frame)
+   :map embark-file-map
+   ("X" . consult-file-externally)
+   :map minibuffer-mode-map
+   ("C-c r" . consult-history))
 
   :custom
   (consult-narrow-key "<")
@@ -1603,21 +1596,19 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                                  (region-beginning) (region-end)))))
 
 (use-package embark-consult
-  :general
-  (:keymaps 'embark-become-match-map
-   "k" #'consult-keep-lines))
+  :bind
+  (:map embark-become-match-map
+   ("k" . consult-keep-lines)))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package consult-dir
   :commands (consult-dir
              consult-dir-jump-file)
-  :general
-  (my/leader-keys
-    "d" #'consult-dir)
-  (:keymaps 'vertico-map
-   "M-d" #'consult-dir
-   "M-j" #'consult-dir-jump-file)
+  :bind
+  (:map vertico-map
+   ("M-d" . consult-dir)
+   ("M-j" . consult-dir-jump-file))
   :custom
   (consult-dir-project-list-function #'consult-dir-projectile-dirs))
 #+end_src
@@ -1635,11 +1626,11 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-org-roam-buffer-after-buffers t)
   (consult-org-roam-grep-func #'consult-ripgrep)
 
-  :general
-  (my/leader-keys
-    "ns" #'consult-org-roam-search
-    "nB" #'consult-org-roam-backlinks
-    "nF" #'consult-org-roam-forward-links)
+  :bind
+  (:map my/main-map
+   ("s n" . consult-org-roam-search)
+   ("n B" . consult-org-roam-backlinks)
+   ("n F" . consult-org-roam-forward-links))
 
   :init
   (consult-org-roam-mode t))
@@ -1671,13 +1662,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 (use-package corfu
   :load-path "straight/build/corfu/extensions"
 
-  :general
-  (:keymaps 'corfu-map
-   :states 'insert
-   "C-t" #'corfu-next
-   "C-n" #'corfu-previous
+  :bind
+  (:map corfu-map
+   ("C-t" . corfu-next)
+   ("C-n" . corfu-previous)
 
-   "M-m" #'corfu-move-to-minibuffer)
+   ("M-m" . corfu-move-to-minibuffer))
 
   :init
   (defun corfu-move-to-minibuffer ()
@@ -1747,12 +1737,14 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+begin_src emacs-lisp
 (use-package avy
   :demand t
-  :general
-  (my/leader-nav
-    "j" #'avy-goto-char-timer
-    "q" #'avy-pop-mark
-    ;; "l" #'avy-goto-line
-    )
+  :bind
+  (:map my/main-map
+   ("a j" . avy-goto-char-timer)
+   ("a q" . avy-pop-mark)
+   ;; "l" #'avy-goto-line
+   ("a l" . avy-copy-line)
+   ("a r" . avy-copy-region)
+   )
 
   ;; TODO might need a little avy transient/hydra for visibility/accessibility of all this good stuff
   ;; avy-next/prev
@@ -1761,10 +1753,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   ;; avy-move-line
   ;; avy-push/pop-mark
   ;; avy-kill/move-region
-
-  (my/leader-keys
-    "cl" #'avy-copy-line
-    "cr" #'avy-copy-region)
 
   :custom
   (avy-dispatch-alist '((?x . avy-action-kill-move)
@@ -1814,10 +1802,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package nswbuff
-  :general
-  (my/leader-nav
-    "c" #'nswbuff-switch-to-next-buffer
-    "r" #'nswbuff-switch-to-previous-buffer)
+  :bind
+  (:map my/main-map
+   ("j c" . nswbuff-switch-to-next-buffer)
+   ("j r" . nswbuff-switch-to-previous-buffer))
 
   :bind
   (:repeat-map nswbuff-repeat-map
@@ -1859,11 +1847,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
      (mark " "
            (name 16 -1)
            " " filename)))
-  :general
-  (:keymaps 'ibuffer-mode-map
-   :states 'normal
+  :bind
+  (:map ibuffer-mode-map
    ;; a cheap hack to keep me from leaving ibuffer buffers open in the background
-   "q" #'kill-current-buffer))
+   ("q" . kill-current-buffer)))
 
 (use-package ibuffer-projectile
   :commands (ibuffer-projectile-set-filter-groups)
@@ -1952,11 +1939,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :custom
   (projectile-completion-system 'auto)
 
-  :general
-  (my/leader-keys
-    "op" #'projectile-switch-project
-    "oh" #'projectile-find-file-dwim
-    )
+  :bind
+  (:map my/main-map
+   ("j p" . projectile-switch-project)
+   ("j h" . projectile-find-file-dwim))
 
   :config
   (setq frame-title-format
@@ -1986,17 +1972,6 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              global-diff-hl-mode
              diff-hl-flydiff-mode
              diff-hl-update)
-  :general
-  (my/leader-keys
-    "vD" #'diff-hl-mode)
-  (general-define-key
-   :states '(normal visual)
-    "gG" #'diff-at-point-open-and-goto-hunk
-    ;; find better hunk nav bindings, these conflict/get overridden
-    "gp" #'diff-hl-previous-hunk
-    "gn" #'diff-hl-next-hunk
-    "gs" #'diff-hl-show-hunk
-    "gS" #'diff-hl-stage-current-hunk)
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
@@ -2015,14 +1990,6 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 (use-package git-gutter
   :disabled
   :hook (prog-mode . git-gutter-mode)
-  :general
-  (general-define-key
-   :states '(normal visual)
-   "gp" 'git-gutter:previous-hunk
-   "gn" 'git-gutter:next-hunk
-   "gs" 'git-gutter:popup-hunk
-   "gS" 'git-gutter:stage-hunk
-   "gU" 'git-gutter:revert-hunk)
 
   :custom-face
   (git-gutter:modified ((t (:foreground "DeepSkyBlue2"))))
@@ -2078,10 +2045,9 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
      ]
     )
 
-  :general
-  (my/leader-keys
-    "nn" #'roam-dailies-transient)
-  )
+  :bind
+  (:map my/main-map
+   ("nn" . roam-dailies-transient)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2105,32 +2071,18 @@ Of course, the great magit.
   (magit-diff-refine-hunk t)
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 
-  :general
-  (general-define-key
-   :keymaps 'magit-mode-map
-   ;; "C-b" 'evil-scroll-page-up
-   ;; "C-f" 'evil-scroll-page-down
-   "M-h" 'magit-section-up
-   "M-s" 'magit-section-goto-successor
-   "M-t" 'magit-section-forward-sibling
-   "M-n" 'magit-section-backward-sibling
-   "M-<down>" 'magit-section-forward-sibling
-   "M-<up>" 'magit-section-backward-sibling
-   ;; "t" 'evil-next-visual-line
-   ;; "n" 'evil-previous-visual-line
-   )
+  :bind
+  (:map my/main-map
+   ("v s" . magit-status-here)
+   ("v f" . magit-file-dispatch)
+   ("v g" . magit-dispatch))
 
   ;; (general-define-key
   ;;  :keymaps 'magit-diff-mode-map
   ;;  "/" 'evil-search-forward
   ;;  "l" 'evil-search-next
   ;;  "L" 'evil-search-previous)
-
-  (my/leader-keys
-    "gf" #'magit-file-dispatch
-    "gg" #'magit-dispatch
-    "gc" #'magit-commit
-    "gs" #'magit-status-here))
+  )
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
@@ -2152,11 +2104,11 @@ Handy package to browse to git repo web interfaces.
   :commands (git-link
              git-link-commit
              git-link-homepage)
-  :general
-  (my/leader-keys
-    "gB" 'git-link
-    "gC" 'git-link-commit
-    "gH" 'git-link-homepage)
+  :bind
+  (:map my/main-map
+   ("v B" . git-link)
+   ("v C" . git-link-commit)
+   ("v H" . git-link-homepage))
   :custom
   (git-link-open-in-browser t))
 #+end_src
@@ -2232,10 +2184,20 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   :hook (
          <<org-hooks>>)
 
-  :general
+  :bind
+  (:map org-mode-map
+   ("C-c C-l" . my/org-insert-link-dwim))
   <<org-keys>>
-  (:keymaps 'org-mode-map
-   "C-c C-l" #'my/org-insert-link-dwim)
+
+  (:map org-read-date-minibuffer-local-map
+   ("n" . my-org-in-calendar-calendar-backward-day)
+   ("t" . my-org-in-calendar-calendar-forward-day)
+   ("h" . my-org-in-calendar-calendar-backward-week)
+   ("s" . my-org-in-calendar-calendar-forward-week)
+   ("N" . my-org-in-calendar-calendar-backward-month)
+   ("T" . my-org-in-calendar-calendar-forward-month)
+   ("H" . my-org-in-calendar-calendar-backward-year)
+   ("S" . my-org-in-calendar-calendar-forward-year))
 
   :custom
   <<org-custom>>
@@ -2345,15 +2307,14 @@ My org config is pretty long, so I've broken it up for easier reading and explan
            (org-eval-in-calendar '(call-interactively #',command)))
          #',name)))
 
-  (general-def org-read-date-minibuffer-local-map
-    "n" (my-org-in-calendar calendar-backward-day)
-    "t" (my-org-in-calendar calendar-forward-day)
-    "h" (my-org-in-calendar calendar-backward-week)
-    "s" (my-org-in-calendar calendar-forward-week)
-    "N" (my-org-in-calendar calendar-backward-month)
-    "T" (my-org-in-calendar calendar-forward-month)
-    "H" (my-org-in-calendar calendar-backward-year)
-    "S" (my-org-in-calendar calendar-forward-year))
+  (my-org-in-calendar calendar-backward-day)
+  (my-org-in-calendar calendar-forward-day)
+  (my-org-in-calendar calendar-backward-week)
+  (my-org-in-calendar calendar-forward-week)
+  (my-org-in-calendar calendar-backward-month)
+  (my-org-in-calendar calendar-forward-month)
+  (my-org-in-calendar calendar-backward-year)
+  (my-org-in-calendar calendar-forward-year)
 
   :config
   <<org-config>>
@@ -2453,9 +2414,9 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
              d2-open-browser
              d2-view-current-svg
              d2-open-doc)
-  :general
-  (:keymaps '(embark-org-src-block-map)
-   "F" #'my/org-src-block-format)
+  :bind
+  (:map embark-org-src-block-map
+   ("F" . my/org-src-block-format))
 
   :custom
   (d2-flags "--sketch -t 103")
@@ -2673,10 +2634,8 @@ Indent subitems in lists a bit more so they're clearer.
 #+begin_src emacs-lisp
 (use-package org-appear
   :commands (org-appear-mode)
-  :general
-  (my/leader-keys
-    :keymaps 'org-mode-map
-    "vE" #'org-appear-mode))
+  :bind
+   ("k E" . org-appear-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2731,9 +2690,9 @@ Indent subitems in lists a bit more so they're clearer.
   :custom-face
   (org-modern-symbol ((t (:family "Iosevka" :height 1.13))))
 
-  :general
-  (my/leader-keys
-    "vm" #'org-modern-mode))
+  :bind
+  (:map my/main-map
+   ("vm" . org-modern-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2792,38 +2751,40 @@ Show the heading of a table when it's scrolled offscreen.
 General purpose org keybindings.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-(my/leader-keys
-  "oC" '(lambda () (interactive) (find-file org-default-notes-file))
-  "o." #'org-open-at-point
+;; (my/leader-keys
+;;   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
+;;   "o." #'org-open-at-point
 
-  "ve" #'my/toggle-local-emphasis-markers
-  "vi" #'org-toggle-inline-images
-  "vl" #'org-toggle-link-display)
+;;   "ve" #'my/toggle-local-emphasis-markers
+;;   "vi" #'org-toggle-inline-images
+;;   "vl" #'org-toggle-link-display)
 #+end_src
 
 Add a binding for =org-open-at-point=. I need to look into whether this is worth it, and the differences between this and =browse-url-at-point=.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-(general-def
-  :keymaps 'org-mode-map
-  :states '(normal emacs)
-  :prefix  "g"
-  "." 'org-open-at-point)
+;; (general-def
+;;   :keymaps 'org-mode-map
+;;   :states '(normal emacs)
+;;   :prefix  "g"
+;;   "." 'org-open-at-point)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-(general-def
-  :keymaps 'org-mode-map
-  :states '(normal emacs)
-  "<RET>" 'my/org-ret
-  "S-<return>" 'my/org-shift-ret
-  "ze" 'outline-show-branches)
+;; (general-def
+;;   :keymaps 'org-mode-map
+;;   :states '(normal emacs)
+;;   "<RET>" 'my/org-ret
+;;   "S-<return>" 'my/org-shift-ret
+;;   "ze" 'outline-show-branches)
+(:map org-mode-map
+ ("<RET>" . my/org-ret)
+ ("S-<return>" . my/org-shift-ret))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-(general-def
-  :keymaps 'org-src-mode-map
-  "C-c C-c" #'org-edit-src-exit)
+(:map org-src-mode-map
+ ("C-c C-c" . org-edit-src-exit))
 #+end_src
 
 ** Org agenda
@@ -2850,12 +2811,12 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
                         nil
                         ""))
 
-  :general
-  (:keymaps 'org-mode-map
-   "C-'" nil
-   "C-," nil)
-  (my/leader-keys
-    "a" #'org-agenda)
+  :bind
+  (:map org-mode-map
+   ("C-'" . nil)
+   ("C-," . nil)
+   :map my/main-map
+   ("A" . org-agenda))
 
   :init
   (defun my/agenda-current-window ()
@@ -2869,10 +2830,10 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 (use-package org-super-agenda
   :after (org org-agenda)
   :hook (org-agenda-mode . org-super-agenda-mode)
-  :general
-  (:keymaps 'org-super-agenda-header-map
-   "n" nil
-   "t" nil)
+  :bind
+  (:map org-super-agenda-header-map
+   ("n" . nil)
+   ("t" . nil))
   :custom-face
   (org-super-agenda-header ((t (:inherit 'org-level-1 :extend t))))
   :custom
@@ -3036,11 +2997,6 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
   :hook (;;(org-capture-mode . evil-insert-state)
          (org-capture-mode . my/full-frame-capture))
 
-  :general
-  (my/leader-keys
-    "cm" #'my/org-capture-someday
-    "co" #'org-capture)
-
   :init
   (defun my/org-capture-someday ()
     (interactive)
@@ -3176,35 +3132,11 @@ MimeType=x-scheme-handler/org-protocol;
      ))
   ;; (org-roam-buffer-window-parameters '((no-other-window . t)))
 
-  :general
-  (:keymaps '(normal)
-   "S-SPC" #'org-roam-node-find)
-  (my/leader-keys
-    "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
-    "nc" #'my/org-roam-node-find
-    "no" #'org-roam-node-find
-    "nR" #'org-roam-node-random
-    "w" #'org-roam-node-find
-    )
-
-  (my/leader-keys
-    :keymaps 'org-mode-map
-    "ni" #'org-roam-node-insert)
-
-  (my/leader-nav
-    "n" #'org-roam-node-find)
-
-  (:keymaps '(org-roam-mode-map
-              org-roam-node-map)
-   "n" nil
-   "SPC" nil
-   "S-SPC" nil
-
-   "M-t" #'magit-section-forward
-   "M-n" #'magit-section-backward
-   "M-<down>" #'magit-section-forward
-   "M-<up>" #'magit-section-backward
-   )
+  :bind
+  (:map my/main-map
+   ("n n" . org-roam-node-find)
+   :map org-mode-map
+   ("n i" . org-roam-node-insert))
 
   :init
 
@@ -3380,12 +3312,13 @@ MimeType=x-scheme-handler/org-protocol;
   (org-roam-dailies-capture-templates
    '(("d" "default" entry "* %<%k:%M> %?"
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
-  :general
-  (my/leader-util
-    "d" #'org-roam-dailies-capture-today)
-  (my/leader-keys
-    "cd" #'org-roam-dailies-capture-today
-    "n." #'org-roam-dailies-goto-today)
+
+  :bind
+  (:map my/main-map
+   ("n d" . org-roam-dailies-capture-today)
+   ("n D" . org-roam-dailies-capture-date)
+   ("n ." . org-roam-dailies-goto-today)
+   ("n >" . org-roam-dailies-goto-date))
 
   :config
   ;; deps: org, org-roam, org-transclusion, ts, s
@@ -3449,11 +3382,8 @@ MimeType=x-scheme-handler/org-protocol;
 (use-package org-download
   :after org
   :hook (dired-mode . org-download-enable)
-  :general
-  (my/leader-keys
-    :keymaps 'org-mode-map
-    "nS" #'org-download-screenshot
-    "nD" #'org-download-yank)
+  :commands (org-download-screenshot
+             org-download-yank)
   :custom
   (org-download-method 'attach))
 #+end_src
@@ -3475,10 +3405,6 @@ MimeType=x-scheme-handler/org-protocol;
   :custom
   (org-sticky-header-prefix "🦜 ")
   (org-sticky-header-full-path 'reversed)
-  :general
-  (my/leader-keys
-    :keymaps 'org-mode-map
-    "vH" #'org-sticky-header-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3782,14 +3708,12 @@ in that direction and display the target buffer in said window."
                              )))
                         )
 
-  :general
-  (general-define-key
-   :keymaps 'tab-bar-map
-   "<mouse-4>" #'tab-next
-   "<mouse-5>" #'tab-previous
-   "<wheel-up>" #'tab-next
-   "<wheel-down>" #'tab-previous
-   )
+  :bind
+  (:map tab-bar-map
+   ("<mouse-4>" . tab-next)
+   ("<mouse-5>" . tab-previous)
+   ("<wheel-up>" . tab-next)
+   ("<wheel-down>" . tab-previous))
 
   :init
   (defun my/tab-bar-tab-name-format-default (tab i)
@@ -3818,12 +3742,11 @@ in that direction and display the target buffer in said window."
   (:repeat-map popper-repeat-map
    ("c" . popper-cycle)
    ("k" . popper-kill-latest-popup)
-   ("p" . popper-toggle))
+   ("p" . popper-toggle)
 
-  :general
-  (my/leader-nav
-    "p" #'popper-toggle
-    "P" #'popper-toggle-type)
+   :map my/main-map
+   ("p" . popper-toggle)
+   ("P" . popper-toggle-type))
 
   :custom
   (popper-group-function #'my/popper-group)
@@ -3889,24 +3812,24 @@ in that direction and display the target buffer in said window."
 #+begin_src emacs-lisp
 (use-package windmove
   :straight nil
-  :general
-  (my/leader-nav
-    "m" #'windmove-left
-    "z" #'windmove-right
-    "v" #'windmove-up
-    "w" #'windmove-down
+  :bind
+  (:map my/main-map
+   ("j m" . windmove-left)
+   ("j z" . windmove-right)
+   ("j v" . windmove-up)
+   ("j w" . windmove-down)
 
-    "M" #'windmove-swap-states-left
-    "Z" #'windmove-swap-states-right
-    "V" #'windmove-swap-states-up
-    "W" #'windmove-swap-states-down
+   ("j M" . windmove-swap-states-left)
+   ("j Z" . windmove-swap-states-right)
+   ("j V" . windmove-swap-states-up)
+   ("j W" . windmove-swap-states-down)
 
-    "g" #'tab-previous
-    "l" #'tab-next
+   ("j g" . tab-previous)
+   ("j l" . tab-next)
 
-    "G" #'tab-bar-move-tab-backward
-    "L" #'tab-move
-    )
+   ("j G" . tab-bar-move-tab-backward)
+   ("j L" . tab-move))
+
   :config
   ;; add split-in-direction commands to this?
   (defvar windmove-repeat-map
@@ -3959,12 +3882,11 @@ in that direction and display the target buffer in said window."
   (aw-keys '(?a ?o ?e ?u ?h ?t ?s))
   (aw-reverse-frame-list t)
 
-  :general
-  (my/leader-nav
-    "o" #'ace-window
-    "O" #'aw-flip-window)
-  (my/leader-keys
-    "ow" #'my/other-window-prefix)
+  :bind
+  (:map my/main-map
+   ("w j" . ace-window)
+   ("W j" . aw-flip-window)
+   ("z w" . my/other-window-prefix))
 
   :init
   (defun my/other-window-prefix ()
@@ -3999,12 +3921,11 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
 #+begin_src emacs-lisp
 (use-package switchy-window
   :after pulsar
-  :general
-  (my/leader-nav
-    "a" #'switchy-window)
   :bind
-  (:repeat-map switchy-window-repeat-map
-   ("a" . switchy-window))
+  (:map my/main-map
+   ("w w" . switchy-window)
+   :repeat-map switchy-window-repeat-map
+   ("w" . switchy-window))
   :config
   (add-to-list 'pulsar-pulse-functions 'switchy-window)
   (switchy-window-minor-mode t))
@@ -4044,9 +3965,9 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
   (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
   :custom-face
   (scrollkeeper-guideline-highlight ((t (:background "#ffffaa" :extend t))))
-  :general
-  ([remap scroll-up-command] #'scrollkeeper-down
-   [remap scroll-down-command] #'scrollkeeper-up
+  :bind
+  (([remap scroll-up-command] . scrollkeeper-down)
+   ([remap scroll-down-command] . scrollkeeper-up)
    ;; [remap evil-scroll-up] #'scrollkeeper-up
    ;; [remap evil-scroll-down] #'scrollkeeper-down
    ;; [remap evil-scroll-page-up] #'scrollkeeper-up
@@ -4126,11 +4047,10 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   ;; (mouse-wheel-flip-direction t)
   ;; (mouse-wheel-scroll-amount-horizontal 10)
   (phscroll-mwheel-scroll-amount-horizontal 10)
-  :general
-  (:keymaps 'phscroll-keymap
-   "<wheel-left>" #'phscroll-mwheel-scroll-right
-   "<wheel-right>" #'phscroll-mwheel-scroll-left
-   )
+  :bind
+  (:map phscroll-keymap
+   ("<wheel-left>" . phscroll-mwheel-scroll-right)
+   ("<wheel-right>" . phscroll-mwheel-scroll-left))
   :init
   (setq org-startup-truncated nil)
   :config
@@ -4227,12 +4147,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package hi-lock
   :straight nil
-  :general
-  (my/leader-keys
-    :infix "h"
-    "l" #'highlight-lines-matching-regexp
-    "r" #'highlight-regexp
-    "u" #'unhighlight-regexp)
   )
 #+end_src
 
@@ -4244,36 +4158,28 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package symbol-overlay
-  :general
-  (general-def
-    :keymaps 'symbol-overlay-map
-    "i" nil
-    "n" nil
-    "p" nil
-    "t" nil
-    "s" nil
-    "h" nil
+  :bind
+  (:map symbol-overlay-map
+   ("i" . nil)
+   ("n" . nil)
+   ("p" . nil)
+   ("t" . nil)
+   ("s" . nil)
+   ("h" . nil)
 
-    "?" 'symbol-overlay-map-help
+   ("?" . symbol-overlay-map-help)
 
-    "S" 'symbol-overlay-toggle-in-scope
+   ("S" . symbol-overlay-toggle-in-scope)
 
-    "M-n" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
-    "M-t" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
-    "M-<up>" '(lambda () (interactive) (symbol-overlay-jump-prev) (recenter))
-    "M-<down>" '(lambda () (interactive) (symbol-overlay-jump-next) (recenter))
-    "M-N" '(lambda () (interactive) (symbol-overlay-switch-backward) (recenter))
-    "M-T" '(lambda () (interactive) (symbol-overlay-switch-forward) (recenter))
+   ("M-n" . (lambda () (interactive) (symbol-overlay-jump-prev) (recenter)))
+   ("M-t" . (lambda () (interactive) (symbol-overlay-jump-next) (recenter)))
+   ("M-<up>" . (lambda () (interactive) (symbol-overlay-jump-prev) (recenter)))
+   ("M-<down>" . (lambda () (interactive) (symbol-overlay-jump-next) (recenter)))
+   ("M-N" . (lambda () (interactive) (symbol-overlay-switch-backward) (recenter)))
+   ("M-T" . (lambda () (interactive) (symbol-overlay-switch-forward) (recenter)))
 
-    "c" 'symbol-overlay-put
-    "C" 'symbol-overlay-remove-all)
-
-  (my/leader-keys
-    "hs" #'symbol-overlay-put
-    "hn" #'symbol-overlay-switch-backward
-    "ht" #'symbol-overlay-switch-forward
-    "hc" #'symbol-overlay-remove-all
-    "hM" #'symbol-overlay-mode))
+   ("c" . symbol-overlay-put)
+   ("C" . symbol-overlay-remove-all))
 #+end_src
 
 * Languages
@@ -4482,23 +4388,16 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-toggle-reset-window-configration-after-exit nil)
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
-  :general
-  (my/leader-util
-    "g" #'my/global-vterm-toggle
-    "G" #'my/global-vterm-toggle-cd
-    "t" #'my/project-vterm-toggle
-    "T" #'my/project-vterm-toggle-cd
-    )
-  (my/leader-keys
-    "og" #'my/global-vterm-toggle
-    "oG" #'my/global-vterm-toggle-cd
-    "ot" #'my/project-vterm-toggle
-    "oT" #'my/project-vterm-toggle-cd
-    )
-  (:keymaps 'vterm-mode-map
-   :states '(insert normal)
-   "C-'" #'my/project-vterm-toggle
-   "C-." #'vterm-toggle-insert-cd)
+  :bind
+  (:map my/main-map
+   ("j g" . my/global-vterm-toggle)
+   ("j G" . my/global-vterm-toggle-cd)
+   ("j t" . my/project-vterm-toggle)
+   ("j T" . my/project-vterm-toggle-cd)
+
+   :map vterm-mode-map
+   ("C-'" . my/project-vterm-toggle)
+   ("C-." . vterm-toggle-insert-cd))
 
   :init
   (defun my/vterm-toggle-same-window (scope &optional cd)
@@ -4564,23 +4463,8 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
     (setq-local imenu-generic-expression '(("Prompt" "^[^#$\n]* [#] \\(.*\\)$" 1)))
 
-    (general-def
-      :keymaps 'eshell-mode-map
-      :states '(insert)
-      "M-n" #'eshell-previous-input
-      "M-t" #'eshell-next-input
-      "M-<up>" #'eshell-previous-input
-      "M-<down>" #'eshell-next-input
 
-      "C-r" #'consult-history)
 
-    (general-def
-      :keymaps 'eshell-mode-map
-      :states '(normal)
-      "M-n" #'eshell-previous-prompt
-      "M-t" #'eshell-next-prompt
-      "M-<up>" #'eshell-previous-prompt
-      "M-<down>" #'eshell-next-prompt)
 
     (eshell/alias "ll" "ls -l")
     (eshell/alias "la" "ls -al")
@@ -4741,19 +4625,13 @@ any directory proferred by `consult-dir'."
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t)
 
-  :general
-  (general-define-key
-    :keymaps 'dired-mode-map
-    :states '(normal)
-    "t" nil)
+  :bind
+  (:map my/main-map
+   ("j x x" . my/dired-open)
+   ("j u" . dired-jump)
+   :map dired-mode-map
+   ("t" . nil))
 
-  (my/leader-keys
-    "cp" #'my/dired-copy-full-path
-    "cP" #'my/dired-copy-full-path-quoted
-    "xx" #'my/dired-open)
-
-  (my/leader-nav
-    "u" #'dired-jump)
 
   :init
   (defun my/dired-copy-full-path ()
@@ -4885,11 +4763,9 @@ Version 2017-09-01"
              dired-subtree-cycle)
   :hook (after-load-theme . my/set-dired-subtree-background)
 
-  :general
-  (general-define-key
-   :states 'normal
-   :keymaps 'dired-mode-map
-   "<tab>" 'dired-subtree-toggle)
+  :bind
+  (:map dired-mode-map
+   ("<tab>" . dired-subtree-toggle))
 
   :init
   (defun my/set-dired-subtree-background ()
@@ -4934,12 +4810,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :hook ((dired-mode . dired-filter-mode)
          (dired-filter-mode . dired-filter-by-dot-files))
 
-  :general
-  (general-define-key
-   :states 'normal
-   :keymaps 'dired-mode-map
-   ;;TODO "{" '(lambda () (interactive) (counsel-M-x "dired-filter-by-"))
-   ")" 'dired-filter-pop))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4987,12 +4857,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
 #+begin_src emacs-lisp :noweb yes
 (use-package hydra
-  :general
-  (my/leader-keys
-    "rc" #'hydra-codereading/body
-    "rg" #'hydra-git-gutter/body
-    "ro" #'hydra-org/body
-    "rr" #'hydra-reading/body)
 
   :custom
   (hydra-hint-display-type 'lv)
@@ -5122,12 +4986,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (use-package pretty-hydra
   :after hydra
   :commands (pretty-hydra-define)
-  :general
-  (my/leader-keys
-    "," #'my/toggles/body
-    "'" #'my/movement/body
-    "G" 'hydra-git/body
-    "rR" 'my/reading/body)
 
   :config
   <<pretty-hydras>>
@@ -5329,9 +5187,9 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
 
 #+begin_src emacs-lisp :noweb yes
 (use-package major-mode-hydra
-  :general
-  (my/leader-keys
-    "." #'major-mode-hydra)
+  :bind
+  (:map my/main-map
+   ("." . major-mode-hydra))
 
   :config
   (major-mode-hydra-define emacs-lisp-mode
@@ -5427,13 +5285,11 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package elfeed
   :commands (elfeed)
-  :general
-  (:keymaps 'elfeed-search-mode-map
-   :states 'normal
-   "o" #'elfeed-search-show-entry)
-  (:keymaps 'elfeed-show-mode-map
-   :states 'normal
-   "U" #'my/elfeed-mark-unread-and-exit)
+  :bind
+  (:map elfeed-search-mode-map
+   ("o" . elfeed-search-show-entry)
+   :map elfeed-show-mode-map
+   ("U" . my/elfeed-mark-unread-and-exit))
 
   :config
   (defun my/elfeed-mark-unread-and-exit ()
@@ -5731,9 +5587,9 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
   (websearch-define "mdn"
       :query-separator "+"
       :query-url "developer.mozilla.org/en-US/search?q=")
-  :general
-  (my/leader-keys
-    "sw" #'websearch))
+  :bind
+  (:map my/main-map
+   ("sw" . websearch)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5881,13 +5737,10 @@ See `beframe-rename-frame'."
 (use-package iedit
   :commands (iedit-mode
              iedit-rectangle-mode)
-  :general
-  (my/leader-util
-    "i" #'iedit-mode)
-  (general-define-key
-   :states '(normal visual)
-   "C-;" #'iedit-mode)
-  )
+  :bind
+  (("C-;" . iedit-mode)
+   :map my/main-map
+   ("i" . iedit-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5899,12 +5752,9 @@ See `beframe-rename-frame'."
 (use-package diff-at-point
   :commands (diff-at-point-open-and-goto-hunk
              diff-at-point-goto-source-and-close)
-  :general
-  (general-define-key
-   :keymaps 'diff-mode-shared-map
-   :states '(normal visual)
-   "gG" #'diff-at-point-goto-source-and-close)
-  )
+  :bind
+  (:map diff-mode-shared-map
+   ("gG" . diff-at-point-goto-source-and-close)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5928,11 +5778,10 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package treemacs
   :commands (treemacs)
-  :general
-  (:keymaps 'treemacs-mode-map
-   :states 'treemacs
-   "t" #'treemacs-next-line
-   "n" #'treemacs-previous-line))
+  :bind
+  (:map treemacs-mode-map
+   ("t" . treemacs-next-line)
+   ("n" . treemacs-previous-line)))
 
 (use-package treemacs-projectile
   :after (treemacs
@@ -5947,10 +5796,6 @@ See `beframe-rename-frame'."
 (use-package literate-calc-mode
   :commands (literate-calc-mode
              literate-calc-minor-mode)
-  :general
-  (my/leader-keys
-    :keymaps 'org-mode-map
-    "vC" #'literate-calc-minor-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6074,11 +5919,11 @@ See `beframe-rename-frame'."
   :after embark
   :commands (sudo-edit
              sudo-edit-find-file)
-  :general
-  (:keymaps 'embark-file-map
-   "$" #'sudo-edit-find-file)
-  (:keymaps 'embark-become-file+buffer-map
-   "$" #'sudo-edit-find-file))
+  :bind
+  (:map embark-file-map
+   ("$" . sudo-edit-find-file)
+   :map embark-become-file+buffer-map
+   ("$" . sudo-edit-find-file)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6090,10 +5935,10 @@ See `beframe-rename-frame'."
 (use-package link-hint
   :commands (link-hint-open-link
              link-hint-define-type)
-  :general
-  (my/leader-util
-    "f" #'link-hint-open-link
-    "F" #'my/link-hint-open-in-external)
+  :bind
+  (:map my/main-map
+   ("f" . link-hint-open-link)
+   ("F" . my/link-hint-open-in-external))
 
   :config
   (link-hint-define-type 'text-url
@@ -6133,11 +5978,9 @@ See `beframe-rename-frame'."
   :commands (xref-find-definitions
              xref-find-definitions-other-window)
   :hook (xref-backend-functions #'dumb-jump-xref-activate)
-  :general
-  (general-def
-    :states 'normal
-    :prefix "j"
-    "d" #'xref-find-definitions)
+  :bind
+  (:map my/main-map
+   ("j d" . xref-find-definitions))
   :custom
   (dumb-jump-prefer-searcher 'rg))
 #+end_src
@@ -6166,29 +6009,28 @@ See `beframe-rename-frame'."
     (interactive)
     (deadgrep (deadgrep--read-search-term) default-directory))
 
-  :general
-  (my/leader-keys
-    "sr" #'deadgrep
-    "sR" #'my/deadgrep-here)
+  :bind
+  (:map my/main-map
+   ("sr" . deadgrep)
+   ("sR" . my/deadgrep-here)
 
-  (general-define-key
-   :keymaps 'deadgrep-mode-map
-   :states '(emacs normal)
-   "M-n" #'deadgrep-backward-match
-   "M-t" #'deadgrep-forward-match
-   "M-<up>" #'deadgrep-backward-match
-   "M-<down>" #'deadgrep-forward-match
-   "M-h" #'deadgrep-backward-filename
-   "M-s" #'deadgrep-forward-filename
-   "D" #'deadgrep-search-directory
-   "S" #'deadgrep-search-term
-   "+" #'my/deadgrep-context-more
-   "-" #'my/deadgrep-context-less)
+   :map deadgrep-mode-map
+   ("M-n" . deadgrep-backward-match)
+   ("M-t" . deadgrep-forward-match)
+   ("M-<up>" . deadgrep-backward-match)
+   ("M-<down>" . deadgrep-forward-match)
+   ("M-h" . deadgrep-backward-filename)
+   ("M-s" . deadgrep-forward-filename)
+   ("D" . deadgrep-search-directory)
+   ("S" . deadgrep-search-term)
+   ("+" . my/deadgrep-context-more)
+   ("-" . my/deadgrep-context-less))
 
   :config
-  (general-add-advice (list #'deadgrep-backward-filename
-                            #'deadgrep-forward-filename)
-                      :after #'my/recenter-after)
+  (advice-add 'deadgrep-backward-filename :after #'my/recenter-after)
+  (advice-add 'deadgrep-forward-filename :after #'my/recenter-after)
+  (advice-add 'deadgrep-backward-match :after #'my/recenter-after)
+  (advice-add 'deadgrep-forward-match :after #'my/recenter-after)
 
   (defun my/deadgrep--include-args (rg-args)
     (if (string= (projectile-project-name) ".config")
@@ -6221,9 +6063,9 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-  :general
-  (my/leader-keys
-    "vd" #'rainbow-delimiters-mode)
+  :bind
+  (:map my/main-map
+   ("k d" . rainbow-delimiters-mode))
 
   :custom-face
   (rainbow-delimiters-unmatched-face ((t (:height 1.0 :inherit 'error))))
@@ -6323,9 +6165,10 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package rainbow-mode
-  :general
-  (my/leader-keys
-    "vc" #'rainbow-mode))
+  :commands (rainbow-mode)
+  :bind
+  (:map my/main-map
+   ("k c" . rainbow-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6388,22 +6231,12 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package expand-region
   :disabled t
-  :general
-  (general-define-key
-   :states 'visual
-   "v" 'er/expand-region
-   "V" 'er/contract-region))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package expreg
   :straight nil
   :load-path "site-lisp"
-  :general
-  (general-define-key
-   :states 'visual
-   "v" #'expreg-expand
-   "V" #'expreg-contract))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6545,8 +6378,6 @@ the buffer works like a pager."
 (defun hide-cursor-mode-disable ()
   (hide-cursor-mode -1))
 
-(my/leader-util
-  "v" #'hide-cursor-mode)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6593,10 +6424,6 @@ interactively, or via #'embark-act.
   "Insert today's date at point"
   (interactive "*")
   (insert (format-time-string "%F")))
-
-(general-define-key
- :states '(normal insert)
-  "C-c C-." #'insert-date)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6626,9 +6453,7 @@ interactively, or via #'embark-act.
         (indent-region (region-beginning) (region-end))
       (my/indent-buffer))))
 
-(general-define-key
- :states 'normal
- "=" #'my/indent-region-or-block-or-buffer)
+(keymap-set my/main-map "=" #'my/indent-region-or-block-or-buffer)
 #+end_src
 
 A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
