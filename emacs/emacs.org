@@ -643,6 +643,9 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   :custom
   (meow-keypad-leader-dispatch my/main-map)
+  (meow-keypad-start-keys '((?c . ?c)
+                            (?x . ?x)))
+
   :config
   (setq meow-replace-state-name-list '((normal . "N")
                                        (motion . "M")
