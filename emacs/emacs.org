@@ -5391,7 +5391,11 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package surround
-  :bind-keymap ("M-'" . surround-keymap))
+  :bind
+  (:map my/main-map
+   ("Sc" . surround-change)
+   ("Sd" . surround-delete)
+   ("Si" . surround-insert)))
 #+end_src
 
 #+begin_src emacs-lisp
