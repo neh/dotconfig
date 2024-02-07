@@ -3092,7 +3092,9 @@ MimeType=x-scheme-handler/org-protocol;
   :bind
   (:map my/main-map
    ("n n" . org-roam-node-find)
-   ("n i" . org-roam-node-insert))
+   ("n i" . org-roam-node-insert)
+   ("n R" . org-roam-node-random))
+  ;;   "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
 
   :init
 
@@ -4409,6 +4411,13 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
   :hook (eshell-mode . my/eshell-mode-hook)
 
+  :bind
+  (:map eshell-mode-map
+   ("C-r" . consult-history)
+   :repeat-map eshell-prompt-repeat-map
+   ("p" . eshell-previous-prompt)
+   ("n" . eshell-next-prompt))
+
   :init
   (defun my/eshell-mode-hook ()
     (add-to-list 'eshell-visual-commands "htop")
@@ -4418,9 +4427,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
     (add-to-list 'eshell-modules-list 'eshell-tramp)
 
     (setq-local imenu-generic-expression '(("Prompt" "^[^#$\n]* [#] \\(.*\\)$" 1)))
-
-
-
 
     (eshell/alias "ll" "ls -l")
     (eshell/alias "la" "ls -al")
@@ -6216,14 +6222,14 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package expand-region
-  :disabled t
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package expreg
   :straight nil
   :load-path "site-lisp"
+  :bind
+  (("M-v" . expreg-expand)
+   :repeat-map expreg-repeat-map
+   ("v" . expreg-expand)
+   ("V" . expreg-contract)))
 #+end_src
 
 #+begin_src emacs-lisp
