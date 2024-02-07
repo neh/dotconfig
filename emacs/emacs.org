@@ -455,42 +455,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
 * Keybindings
 
-[[https://github.com/noctuid/general.el][General.el]] handles keybinding management.
-
-#+begin_src emacs-lisp
-(use-package general
-  :disabled t
-
-  :config
-  (my/leader-keys
-    "<SPC>" #'save-buffer
-    "Q" #'bury-buffer
-    "y" #'clipboard-yank
-    )
-
-  (my/leader-keys
-    :infix "c"
-    "c" #'comment-or-uncomment-region-or-line
-    "q" #'quick-calc)
-
-  (my/leader-keys
-    :infix "f"
-    "a" #'auto-fill-mode
-    "i" #'indent-region
-    "p" #'fill-paragraph
-    "r" #'fill-region
-    "t" #'toggle-truncate-lines
-    "f" '(lambda () (interactive) (set-frame-width nil fill-column)))
-
-  (my/leader-keys
-    :infix "x"
-    "b" #'eval-buffer
-    "e" #'eval-expression
-    "r" #'eval-region
-    "s" #'eval-last-sexp)
-  )
-#+end_src
-
 #+begin_src emacs-lisp :noweb yes
 (use-package meow
   :custom-face
@@ -592,6 +556,9 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   ;; TODO move these somewhere that makes sense
   (setq my/main-map (make-sparse-keymap))
   (keymap-set my/main-map "e" #'find-file)
+  (keymap-set my/main-map "Q" #'bury-buffer)
+  (keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
+  (keymap-set my/main-map "q" #'quick-calc)
 
   :custom
   (meow-keypad-leader-dispatch my/main-map)
@@ -2642,9 +2609,7 @@ Indent subitems in lists a bit more so they're clearer.
 
 #+begin_src emacs-lisp
 (use-package org-appear
-  :commands (org-appear-mode)
-  :bind
-   ("k E" . org-appear-mode)))
+  :commands (org-appear-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3407,7 +3372,7 @@ MimeType=x-scheme-handler/org-protocol;
   :commands (org-sticky-header-mode)
   :custom
   (org-sticky-header-prefix "🦜 ")
-  (org-sticky-header-full-path 'reversed)
+  (org-sticky-header-full-path 'reversed))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4635,7 +4600,6 @@ any directory proferred by `consult-dir'."
    :map dired-mode-map
    ("t" . nil))
 
-
   :init
   (defun my/dired-copy-full-path ()
     "Copy full path of entries that are marked or at point."
@@ -4811,8 +4775,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 #+begin_src emacs-lisp
 (use-package dired-filter
   :hook ((dired-mode . dired-filter-mode)
-         (dired-filter-mode . dired-filter-by-dot-files))
-
+         (dired-filter-mode . dired-filter-by-dot-files)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4989,6 +4952,13 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (use-package pretty-hydra
   :after hydra
   :commands (pretty-hydra-define)
+  :bind
+  (:map my/main-map
+   ("," . my/toggles/body)
+   ;; "'" #'my/movement/body
+   ;; "G" 'hydra-git/body
+   ;; "rR" 'my/reading/body
+   )
 
   :config
   <<pretty-hydras>>
@@ -5132,12 +5102,16 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
    :title (format "  Options"))
 
   ("Formatting"
-   (("v" global-visual-line-mode "visual lines" :toggle t)
+   (("vl" global-visual-line-mode "visual lines" :toggle t)
+    ("vf" visual-fill-column-mode "visual fill" :toggle t)
     ("w" whitespace-mode "whitespace" :toggle t)
-    ("f" visual-fill-column-mode "visual fill" :toggle t)
     ("c" rainbow-mode "colours" :toggle t)
     ("t" toggle-truncate-lines "truncate lines" :toggle truncate-lines)
-    ("d" rainbow-delimiters-mode "delimiters" :toggle t))
+    ("d" rainbow-delimiters-mode "delimiters" :toggle t)
+    ("i" my/indent-region-or-block-or-buffer "indent" :exit t)
+    ("fa" auto-fill-mode "auto-fill" :toggle t)
+    ("fp" fill-paragraph "fill paragraph" :exit t)
+    ("fr" fill-region "fill region" :exit t))
    "UI"
    (("l" global-hl-line-mode "highlight line" :toggle t)
     ("k" my/toggle-dark-mode "dark mode" :toggle my/dark-mode :exit t)
@@ -5209,6 +5183,17 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
       ("v" describe-variable "variable"))))
   <<major-mode-hydras>>
   )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
+(major-mode-hydra-define org-mode
+  (:color amaranth :quit-key ("q" "<escape>"))
+  ("Show"
+   (("E" org-appear-mode "emphasis" :toggle t)
+    ("H" org-sticky-header-mode "header" :toggle t)
+    ("L" literate-calc-minor-mode "literate calc" :toggle t)
+    )
+  ))
 #+end_src
 
 * Reading and Note-taking
@@ -5803,7 +5788,7 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package literate-calc-mode
   :commands (literate-calc-mode
-             literate-calc-minor-mode)
+             literate-calc-minor-mode))
 #+end_src
 
 #+begin_src emacs-lisp
