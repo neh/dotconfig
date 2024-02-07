@@ -184,6 +184,9 @@ Collect all the global, non-package-specific settings here.
   (unless (fboundp 'original-recenter)
     (fset 'original-recenter (symbol-function 'recenter)))
 
+  :bind
+  (<<misc-keybinds>>)
+
   :init
   (defcustom my/recenter-window-eye-level 0.2
     "The relative position of the line considered as eye level in the
@@ -230,6 +233,8 @@ current window, as a ratio between 0 and 1.")
   (defun my/recenter-after (&rest args)
     "A function to use as :after advice for recentering wherever."
     (recenter 10))
+
+  <<misc-functions>>
 
   :config
   (fset 'yes-or-no-p 'y-or-n-p))
@@ -6265,6 +6270,19 @@ See `beframe-rename-frame'."
 #+end_src
 
 * Misc functions
+
+#+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
+(defun my/join-line ()
+  (interactive)
+  (if (region-active-p)
+      (join-line nil (region-beginning) (region-end))
+    (let ((current-prefix-arg '(4)))
+      (call-interactively #'join-line))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref misc-keybinds
+("J" . my/join-line)
+#+end_src
 
 From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improved_emacs_search/][reddit thread]].
 
