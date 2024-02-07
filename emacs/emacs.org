@@ -5185,6 +5185,7 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
     ("L" literate-calc-minor-mode "literate calc" :toggle t)
     ("l" org-toggle-link-display "links" :toggle t)
     ("i" org-toggle-inline-images "images" :toggle t)
+    ("t" svg-tag-mode "svg tags" :toggle t)
     )
   ))
 #+end_src
