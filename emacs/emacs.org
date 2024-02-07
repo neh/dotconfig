@@ -464,11 +464,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   :config
   (my/leader-keys
     "<SPC>" #'save-buffer
-
-    "e" #'execute-extended-command
-    "E" #'execute-extended-command-for-buffer
     "Q" #'bury-buffer
-
     "y" #'clipboard-yank
     )
 
@@ -495,7 +491,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   )
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
 (use-package meow
   :custom-face
   (meow-insert-indicator
@@ -551,13 +547,13 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("A" . meow-open-below)
      '("b" . meow-back-word)
      '("B" . meow-back-symbol)
-     '("c" . meow-change)
+     '("r" . meow-change)
      '("d" . meow-delete)
      '("D" . meow-backward-delete)
      '("e" . meow-line)
      '("E" . meow-goto-line)
      '("f" . meow-find)
-     '("g" . meow-cancel-selection)
+     ;; '("g" . meow-cancel-selection)
      '("G" . meow-grab)
      '("h" . meow-left)
      '("H" . meow-left-expand)
@@ -566,7 +562,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("j" . meow-join)
      '("k" . meow-kill)
      '("l" . meow-till)
-     '("m" . meow-mark-word)
+     '("*" . meow-mark-word)
      '("M" . meow-mark-symbol)
      '("n" . meow-prev)
      '("N" . meow-prev-expand)
@@ -575,7 +571,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("p" . meow-search)
      '("q" . meow-quit)
      '("Q" . meow-goto-line)
-     '("r" . meow-replace)
+     ;; '("r" . meow-replace)
      '("R" . meow-swap-grab)
      '("s" . meow-right)
      '("S" . meow-right-expand)
@@ -586,7 +582,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("v" . meow-visit)
      '("w" . meow-next-word)
      '("W" . meow-next-symbol)
-     '("x" . meow-save)
+     '("@" . meow-save)
      '("X" . meow-sync-grab)
      '("y" . meow-yank)
      '("z" . meow-pop-selection)
@@ -599,22 +595,74 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   :custom
   (meow-keypad-leader-dispatch my/main-map)
-  (meow-keypad-start-keys '((?c . ?c)
-                            (?x . ?x)))
+  (meow-expand-hint-remove-delay 0)
+  <<meow-custom>>
 
   :config
-  (setq meow-replace-state-name-list '((normal . "N")
-                                       (motion . "M")
-                                       (keypad . "K")
-                                       (insert . "I")
-                                       (beacon . "B")
-                                       (search . "S")))
-
-  (add-to-list 'meow-mode-state-list '(vterm-mode . insert))
+  <<meow-config>>
 
   (meow-setup)
-  (meow-global-mode 1)
-  )
+  (meow-global-mode 1))
+#+end_src
+
+I use don't want the help map too available (although I may change my mind on that, just move it to a different key), so I remove it from the keypad start keys.
+TODO just add my helpful keys (or remap built-ins to it) to the main help map?
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-custom
+(meow-keypad-start-keys '((?c . ?c)
+                          (?x . ?x)))
+#+end_src
+
+I want shorter names for meow states displayed in the mode-line, so =N= for normal mode instead of =NORMAL=. I couldn't get this to take effect in a =custom= block, so a =setq= it is.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(setq meow-replace-state-name-list '((normal . "N")
+                                     (motion . "M")
+                                     (keypad . "K")
+                                     (insert . "I")
+                                     (beacon . "B")
+                                     (search . "S")))
+#+end_src
+
+For some modes, I don't want the default meow state when I enter the buffer. This is mainly just about getting quickly into insert mode when a buffer is just about entering some text right away.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(add-to-list 'meow-mode-state-list '(vterm-mode . insert))
+#+end_src
+
+I learned about this nice bit in this lobste.rs thread: [[https://lobste.rs/s/lb2eld/switching_meow_modal_editing_system_from#c_z3lidr][Switching to the meow modal editing system from evil | Lobsters]]. It gets you into keypad mode without having to press space first, so you can just hit =x= to get to bindings under =C-x= etc.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(meow-normal-define-key '("x" . meow-keypad-start)
+                        '("c" . meow-keypad-start)
+                        '("g" . meow-keypad-start)
+                        '("m" . meow-keypad-start))
+#+end_src
+
+Customizing the list of "things" to operate on is useful.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(meow-thing-register 'angle
+                     '(pair ("<") (">"))
+                     '(pair ("<") (">")))
+#+end_src
+
+After registering any custom "things", set the list of active things.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-custom
+(meow-char-thing-table  '((?r . round)
+                          (?s . square)
+                          (?c . curly)
+                          (?a . angle)
+                          (?\" . string)
+                          (?e . symbol)
+                          (?w . window)
+                          (?b . buffer)
+                          (?p . paragraph)
+                          (?l . line)
+                          (?v . visual-line)
+                          (?d . defun)
+                          (?. . sentence)))
 #+end_src
 
 * Base2
@@ -1534,9 +1582,9 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     ("j o" . consult-org-heading)
     ("o" . consult-buffer)
     ("s f" . consult-find)
-    ("s l" . consult-line)
     ("s g" . consult-ripgrep)
     ("s v" . consult-git-grep)
+    ("l" . consult-line)
     )
    :map embark-buffer-map
    ("F" . consult-buffer-other-frame)
@@ -2735,12 +2783,7 @@ Add a binding for =org-open-at-point=. I need to look into whether this is worth
 ;; (general-def
 ;;   :keymaps 'org-mode-map
 ;;   :states '(normal emacs)
-;;   "<RET>" 'my/org-ret
-;;   "S-<return>" 'my/org-shift-ret
 ;;   "ze" 'outline-show-branches)
-(:map org-mode-map
- ("<RET>" . my/org-ret)
- ("S-<return>" . my/org-shift-ret))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
@@ -3096,7 +3139,6 @@ MimeType=x-scheme-handler/org-protocol;
   :bind
   (:map my/main-map
    ("n n" . org-roam-node-find)
-   :map org-mode-map
    ("n i" . org-roam-node-insert))
 
   :init
@@ -5706,7 +5748,7 @@ See `beframe-rename-frame'."
   :bind
   (("C-;" . iedit-mode)
    :map my/main-map
-   ("i" . iedit-mode)))
+   ("ie" . iedit-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6453,7 +6495,7 @@ A nice couple of functions for opening files from dired asynchronously. Handy us
 
 This function gives me a quicker way to edit src blocks in org mode, as well as making indirect buffer cloning a bit /less/ accessible (only on headings), since I do it relatively infrequently and have actually been ending up in indirect buffers a bit /too/ easily. I just bind this to =enter= in org mode.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun my/org-ret ()
   "Make RET either narrow to the heading at point or edit the src block at point."
   (interactive)
