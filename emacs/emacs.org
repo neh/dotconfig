@@ -4692,7 +4692,9 @@ Version 2017-09-01"
    (("d" dired-hide-details-mode "hide details" :toggle t)
     ("g" dired-git-info-mode "git info" :toggle t)
     ("u" dired-du-mode "usage" :toggle t)
-    ("c" dired-collapse-mode "collapse" :toggle t)
+    ("cl" dired-collapse-mode "collapse" :toggle t)
+    ("cp" my/dired-copy-full-path "copy path" :exit t)
+    ("cP" my/dired-copy-full-path-quoted "copy \"path\"" :exit t)
     )
    "Filter"
    (("p" dired-filter-pop "pop")
