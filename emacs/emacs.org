@@ -2722,18 +2722,6 @@ Show the heading of a table when it's scrolled offscreen.
 
 ** Keybindings
 
-General purpose org keybindings.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
-;; (my/leader-keys
-;;   "oC" '(lambda () (interactive) (find-file org-default-notes-file))
-;;   "o." #'org-open-at-point
-
-;;   "ve" #'my/toggle-local-emphasis-markers
-;;   "vi" #'org-toggle-inline-images
-;;   "vl" #'org-toggle-link-display)
-#+end_src
-
 Add a binding for =org-open-at-point=. I need to look into whether this is worth it, and the differences between this and =browse-url-at-point=.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-keys
@@ -5191,9 +5179,12 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
 (major-mode-hydra-define org-mode
   (:color amaranth :quit-key ("q" "<escape>"))
   ("Show"
-   (("E" org-appear-mode "emphasis" :toggle t)
+   (("e" my/toggle-local-emphasis-markers "emphasis" :toggle t)
+    ("E" org-appear-mode "appear" :toggle t)
     ("H" org-sticky-header-mode "header" :toggle t)
     ("L" literate-calc-minor-mode "literate calc" :toggle t)
+    ("l" org-toggle-link-display "links" :toggle t)
+    ("i" org-toggle-inline-images "images" :toggle t)
     )
   ))
 #+end_src
