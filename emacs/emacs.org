@@ -542,8 +542,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("S" . meow-right-expand)
      '("t" . meow-next)
      '("T" . meow-next-expand)
-     '("u" . meow-undo)
-     '("U" . meow-undo-in-selection)
      '("v" . meow-visit)
      '("w" . meow-next-word)
      '("W" . meow-next-symbol)
@@ -688,11 +686,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :custom
   (eldoc-echo-area-use-multiline-p nil))
 
-(use-package undo-fu-session
-  :hook (after-init . global-undo-fu-session-mode)
-  :custom
-  (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
-
 (use-package paren
   :custom
   (show-paren-delay 0)
@@ -771,6 +764,22 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (auto-revert-check-vc-info nil)
   :config
   (global-auto-revert-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package undo-fu
+  :commands (undo-fu-only-undo
+             undo-fu-only-redo))
+
+(use-package undo-fu-session
+  :hook (after-init . global-undo-fu-session-mode)
+  :custom
+  (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(meow-normal-define-key '("u" . undo-fu-only-undo)
+                        '("U" . undo-fu-only-redo))
 #+end_src
 
 Make sure my local bin dir is in emacs =$PATH=, and keep it updated.

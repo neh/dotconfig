@@ -91,6 +91,7 @@
  ("evil" . "2bd0cea01a5feceb376242b29830370954a45f55")
  ("evil-matchit" . "fe4cc5243a23ba7aa283803b200993f23b5dafef")
  ("exec-path-from-shell" . "99b1b731d55614dceb72b6f16602df2b8d030dc9")
+ ("expand-region.el" . "9e3f86c02c5e2ab6f0d95da8a34045b54f6166d1")
  ("f.el" . "4f03d7bb724a9049b0ab9ef86127694756f99656")
  ("fontaine" . "187d8a02fa3bc0d4d1f5faaae75212d297447e9c")
  ("forge" . "a6e0a634f87154188a0fe7f1ec8bc81dd65402a4")
