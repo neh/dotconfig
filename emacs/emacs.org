@@ -6266,6 +6266,20 @@ See `beframe-rename-frame'."
 
 * Misc functions
 
+I missed easy jumping to matching pairs (quotes, parentheses, etc.) from evil, it turns out you can just use evil-matchit on its own.
+TODO see if I want to bind any more functions from it
+
+#+begin_src emacs-lisp
+(use-package evil-matchit
+  :commands (evil-matchit-mode
+             global-evil-matchit-mode
+             evilmi-jump-items-native)
+  :bind
+  ("%" . evilmi-jump-items-native)
+  :config
+  (global-evil-matchit-mode t))
+#+end_src
+
 I want some repeat maps to timeout, but I don't want to set it globally with =repeat-exit-timeout=, so I have this function that will iterate through a map and apply a timeout setting to them. I may want another function to turn the timeout off for a map, or the option to pass a list of commands so I can set timeout for only some of the commands in a map. I'll deal with that when I actually need it though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
