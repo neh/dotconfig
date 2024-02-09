@@ -5392,12 +5392,16 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
-(use-package surround
+#+begin_src emacs-lisp
+(use-package embrace
+  :commands (embrace-change
+             embrace-delete
+             embrace-add
+             embrace-commander)
+  :hook (org-mode . embrace-org-mode-hook)
   :bind
   (:map my/main-map
-   ("Sc" . surround-change)
-   ("Sd" . surround-delete)
-   ("Si" . surround-insert)))
+   ("S" . embrace-commander)))
 #+end_src
 
 #+begin_src emacs-lisp
