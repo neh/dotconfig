@@ -3679,7 +3679,19 @@ in that direction and display the target buffer in said window."
    ("<mouse-4>" . tab-next)
    ("<mouse-5>" . tab-previous)
    ("<wheel-up>" . tab-next)
-   ("<wheel-down>" . tab-previous))
+   ("<wheel-down>" . tab-previous)
+   :map my/main-map
+   ("wg" . tab-previous)
+   ("wl" . tab-next)
+   ("wG" . tab-bar-move-tab-backward)
+   ("wL" . tab-move)
+   :repeat-map tab-bar-switch-repeat-map
+   ("o" . nil)
+   ("O" . nil)
+   ("g" . tab-previous)
+   ("l" . tab-next)
+   ("G" . tab-bar-move-tab-backward)
+   ("L" . tab-move))
 
   :init
   (defun my/tab-bar-tab-name-format-default (tab i)
@@ -3770,32 +3782,25 @@ in that direction and display the target buffer in said window."
 #+end_src
 
 #+begin_src emacs-lisp
-;; (symbol-plist 'windmove-right)
-;; (put 'windmove-left 'repeat-exit-timeout 1)
-;; (put 'windmove-right 'repeat-exit-timeout 1)
-;; (get 'windmove-right 'repeat-exit-timeout)
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package windmove
   :straight nil
   :bind
   (:map my/main-map
-   ("j m" . windmove-left)
-   ("j z" . windmove-right)
-   ("j v" . windmove-up)
-   ("j w" . windmove-down)
+   ("w h" . windmove-left)
+   ("w s" . windmove-right)
+   ("w n" . windmove-up)
+   ("w t" . windmove-down)
 
-   ("j M" . windmove-swap-states-left)
-   ("j Z" . windmove-swap-states-right)
-   ("j V" . windmove-swap-states-up)
-   ("j W" . windmove-swap-states-down)
+   ("w H" . windmove-swap-states-left)
+   ("w S" . windmove-swap-states-right)
+   ("w N" . windmove-swap-states-up)
+   ("w T" . windmove-swap-states-down)
 
-   ("j g" . tab-previous)
-   ("j l" . tab-next)
-
-   ("j G" . tab-bar-move-tab-backward)
-   ("j L" . tab-move))
+   :repeat-map windmove-repeat-map
+   ("h" . windmove-left)
+   ("s" . windmove-right)
+   ("n" . windmove-up)
+   ("t" . windmove-down)
 
   :config
   ;; add split-in-direction commands to this?
@@ -3828,6 +3833,10 @@ in that direction and display the target buffer in said window."
       (define-key map (kbd "G") 'tab-bar-move-tab-backward)
       (define-key map (kbd "L") 'tab-move)
       map))
+   ("H" . windmove-swap-states-left)
+   ("S" . windmove-swap-states-right)
+   ("N" . windmove-swap-states-up)
+   ("T" . windmove-swap-states-down))
 
   (map-keymap
    (lambda (_key cmd)
