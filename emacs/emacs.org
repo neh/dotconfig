@@ -230,10 +230,6 @@ current window, as a ratio between 0 and 1.")
     (straight-rebuild-all))
   (add-to-list 'command-switch-alist '("--update-packages" . my/update-packages))
 
-  (defun my/recenter-after (&rest args)
-    "A function to use as :after advice for recentering wherever."
-    (recenter 10))
-
   <<misc-functions>>
 
   :config
@@ -6007,10 +6003,10 @@ See `beframe-rename-frame'."
    ("-" . my/deadgrep-context-less))
 
   :config
-  (advice-add 'deadgrep-backward-filename :after #'my/recenter-after)
-  (advice-add 'deadgrep-forward-filename :after #'my/recenter-after)
-  (advice-add 'deadgrep-backward-match :after #'my/recenter-after)
-  (advice-add 'deadgrep-forward-match :after #'my/recenter-after)
+  (advice-add 'deadgrep-backward-filename :after #'recenter)
+  (advice-add 'deadgrep-forward-filename :after #'recenter)
+  (advice-add 'deadgrep-backward-match :after #'recenter)
+  (advice-add 'deadgrep-forward-match :after #'recenter)
 
   (defun my/deadgrep--include-args (rg-args)
     (if (string= (projectile-project-name) ".config")
@@ -6281,6 +6277,9 @@ I want some repeat maps to timeout, but I don't want to set it globally with =re
        (put cmd 'repeat-exit-timeout timeout)))
    keymap))
 #+end_src
+
+I like the vim/evil style join where the next line is pulled up and joined to the one at point, rather than joining the line at point to the previous line. So this function uses the built in =join-line= to do that by default, and preserves the region joining behaviour that I didn't actually know about before.
+
 #+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
 (defun my/join-line ()
   (interactive)
@@ -6289,6 +6288,8 @@ I want some repeat maps to timeout, but I don't want to set it globally with =re
     (let ((current-prefix-arg '(4)))
       (call-interactively #'join-line))))
 #+end_src
+
+And let's give it the same keybinding as evil, since I'm used to it.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref misc-keybinds
 ("J" . my/join-line)
