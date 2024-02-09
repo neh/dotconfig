@@ -725,7 +725,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (helpful-max-buffers 5)
 
   :bind
-  (:map my/main-map
+  (("C-h f" . helpful-callable)
+   ("C-h v" . helpful-variable)
+   ("C-h k" . helpful-key)
+   ("C-h x" . helpful-command)
+   :map my/main-map
    ("h ." . helpful-at-point)
    ("h c" . helpful-callable)
    ("h k" . helpful-key)
