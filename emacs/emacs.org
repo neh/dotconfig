@@ -600,6 +600,7 @@ For some modes, I don't want the default meow state when I enter the buffer. Thi
 
 #+begin_src emacs-lisp :tangle no :noweb-ref meow-config
 (add-to-list 'meow-mode-state-list '(vterm-mode . insert))
+(add-to-list 'meow-mode-state-list '(eshell-mode . insert))
 #+end_src
 
 I learned about this nice bit in this lobste.rs thread: [[https://lobste.rs/s/lb2eld/switching_meow_modal_editing_system_from#c_z3lidr][Switching to the meow modal editing system from evil | Lobsters]]. It gets you into keypad mode without having to press space first, so you can just hit =x= to get to bindings under =C-x= etc.
