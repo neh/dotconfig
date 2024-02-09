@@ -3534,16 +3534,14 @@ Let’s try to get some window behaviour under control.
     (display-buffer-below-selected))
    ("Calendar"
     (display-buffer-below-selected))
-   ("CAPTURE-"
-    (display-buffer-below-selected))
-   ("\\*Capture\\*"
+   ("\\^CAPTURE-"
     (display-buffer-below-selected))
    ("\\*Embark Actions\\*"
     (my/display-buffer-to-right-or-left))
    ("\\*Embark Collect:"
     (my/display-buffer-to-right-or-left))
-   ("\\*Messages\\*$"
-    (display-buffer-use-some-window))
+   ;; ("\\*Messages\\*$"
+   ;;  (display-buffer-below-selected))
    ("magit-diff:"
     (display-buffer-below-selected)
     (window-height . 0.6))
@@ -3722,7 +3720,8 @@ in that direction and display the target buffer in said window."
   (popper-display-control t)
   (popper-display-function #'display-buffer-below-selected)
   (popper-reference-buffers
-   '("\\*Messages\\*$"
+   '("\\*Messages\\*"
+     messages-buffer-mode
      compilation-mode
      help-mode
      "\\*Warnings\\*"
