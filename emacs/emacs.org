@@ -2332,6 +2332,8 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (when (<= (buffer-size) 1)
       (cond ((meow-mode) (meow-insert)))))
 
+  (advice-add 'org-edit-special :after #'recenter)
+
   ;; not sure why advising with :after for these breaks, but it does
   (defun my/around-recenter (orig-fun &rest args)
     (apply orig-fun args)
