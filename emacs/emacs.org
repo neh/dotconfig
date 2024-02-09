@@ -2171,7 +2171,11 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   :bind
   (:map org-mode-map
-   ("C-c C-l" . my/org-insert-link-dwim))
+   ("C-c C-l" . my/org-insert-link-dwim)
+   :repeat-map org-mode-heading-jump-repeat-map
+   ("l" . recenter-top-bottom)
+   ("p" . org-previous-visible-heading)
+   ("n" . org-next-visible-heading))
   <<org-keys>>
 
   (:map org-read-date-minibuffer-local-map
@@ -2328,6 +2332,12 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     ;; )
   ;; (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
   ;; (advice-remove 'org-edit-src-exit 'my/normal-mode-after-src-edit)
+  ;; not sure why advising with :after for these breaks, but it does
+  (defun my/around-recenter (orig-fun &rest args)
+    (apply orig-fun args)
+    (recenter))
+  (advice-add 'org-previous-visible-heading :around #'my/around-recenter)
+  (advice-add 'org-next-visible-heading :around #'my/around-recenter)
   )
 #+end_src
 
