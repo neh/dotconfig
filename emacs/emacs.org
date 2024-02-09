@@ -195,7 +195,7 @@ current window, as a ratio between 0 and 1.")
   (defun my/recenter-eye-level (&optional arg redisplay)
     "Without args, recenter nearer the top of the window. With args, call original recenter."
     (interactive)
-    (let ((line (or arg
+    (let ((line (or (if (number-or-marker-p arg) arg nil)
                     (round (* (window-height) my/recenter-window-eye-level)))))
       (original-recenter line redisplay)))
   (fset 'recenter #'my/recenter-eye-level)
