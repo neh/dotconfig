@@ -2166,7 +2166,8 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 (use-package org
   :ensure org-plus-contrib
   :hook (
-         <<org-hooks>>)
+         <<org-hooks>>
+         )
 
   :bind
   (:map org-mode-map
