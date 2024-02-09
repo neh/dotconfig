@@ -3711,6 +3711,8 @@ in that direction and display the target buffer in said window."
        'face (funcall tab-bar-tab-face-function tab))))
 
   :config
+  (my/set-repeat-map-timeout tab-bar-switch-repeat-map 2)
+
   (tab-bar-mode t))
 #+end_src
 
@@ -3802,50 +3804,13 @@ in that direction and display the target buffer in said window."
    ("n" . windmove-up)
    ("t" . windmove-down)
 
-  :config
-  ;; add split-in-direction commands to this?
-  (defvar windmove-repeat-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "m") 'windmove-left)
-      (define-key map (kbd "z") 'windmove-right)
-      (define-key map (kbd "v") 'windmove-up)
-      (define-key map (kbd "w") 'windmove-down)
-
-      (define-key map (kbd "M") 'windmove-swap-states-left)
-      (define-key map (kbd "Z") 'windmove-swap-states-right)
-      (define-key map (kbd "V") 'windmove-swap-states-up)
-      (define-key map (kbd "W") 'windmove-swap-states-down)
-      map))
-
-  (map-keymap
-   (lambda (_key cmd)
-     (when (symbolp cmd)
-       (put cmd 'repeat-map 'windmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 3)
-       ))
-   windmove-repeat-map)
-
-  (defvar tabmove-repeat-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "g") 'tab-previous)
-      (define-key map (kbd "l") 'tab-next)
-
-      (define-key map (kbd "G") 'tab-bar-move-tab-backward)
-      (define-key map (kbd "L") 'tab-move)
-      map))
    ("H" . windmove-swap-states-left)
    ("S" . windmove-swap-states-right)
    ("N" . windmove-swap-states-up)
    ("T" . windmove-swap-states-down))
 
-  (map-keymap
-   (lambda (_key cmd)
-     (when (symbolp cmd)
-       (put cmd 'repeat-map 'tabmove-repeat-map)
-       (put cmd 'repeat-exit-timeout 3)
-       ))
-   tabmove-repeat-map)
-  )
+  :config
+  (my/set-repeat-map-timeout windmove-repeat-map 2))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6305,6 +6270,17 @@ See `beframe-rename-frame'."
 
 * Misc functions
 
+I want some repeat maps to timeout, but I don't want to set it globally with =repeat-exit-timeout=, so I have this function that will iterate through a map and apply a timeout setting to them. I may want another function to turn the timeout off for a map, or the option to pass a list of commands so I can set timeout for only some of the commands in a map. I'll deal with that when I actually need it though.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
+(defun my/set-repeat-map-timeout (keymap timeout)
+  "Set the TIMEOUT for commands in a repeat map."
+  (map-keymap
+   (lambda (_key cmd)
+     (when (symbolp cmd)
+       (put cmd 'repeat-exit-timeout timeout)))
+   keymap))
+#+end_src
 #+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
 (defun my/join-line ()
   (interactive)
