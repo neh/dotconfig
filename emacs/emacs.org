@@ -1790,11 +1790,9 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package nswbuff
   :bind
   (:map my/main-map
-   ("j c" . nswbuff-switch-to-next-buffer)
-   ("j r" . nswbuff-switch-to-previous-buffer))
-
-  :bind
-  (:repeat-map nswbuff-repeat-map
+   ("jc" . nswbuff-switch-to-next-buffer)
+   ("jr" . nswbuff-switch-to-previous-buffer)
+   :repeat-map nswbuff-repeat-map
    ("c" . nswbuff-switch-to-next-buffer)
    ("r" . nswbuff-switch-to-previous-buffer))
 
