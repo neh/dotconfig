@@ -2332,6 +2332,10 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     ;; )
   ;; (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
   ;; (advice-remove 'org-edit-src-exit 'my/normal-mode-after-src-edit)
+  (defun my/insert-in-empty-src-edit ()
+    (when (<= (buffer-size) 1)
+      (cond ((meow-mode) (meow-insert)))))
+
   ;; not sure why advising with :after for these breaks, but it does
   (defun my/around-recenter (orig-fun &rest args)
     (apply orig-fun args)
@@ -2737,6 +2741,10 @@ Show the heading of a table when it's scrolled offscreen.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
 (org-mode . org-table-header-line-mode)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-src-mode . my/insert-in-empty-src-edit)
 #+end_src
 
 ** Keybindings
