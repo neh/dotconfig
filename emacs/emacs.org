@@ -3903,6 +3903,7 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 
 #+begin_src emacs-lisp
 (use-package scrollkeeper
+  :disabled t
   :custom
   (scrollkeeper-scroll-steps 6)
   (scrollkeeper-scroll-distance 0.80)
@@ -3913,10 +3914,6 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
   :bind
   (([remap scroll-up-command] . scrollkeeper-down)
    ([remap scroll-down-command] . scrollkeeper-up)
-   ;; [remap evil-scroll-up] #'scrollkeeper-up
-   ;; [remap evil-scroll-down] #'scrollkeeper-down
-   ;; [remap evil-scroll-page-up] #'scrollkeeper-up
-   ;; [remap evil-scroll-page-down] #'scrollkeeper-down
    )
   )
 #+end_src
