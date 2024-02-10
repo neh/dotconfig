@@ -3758,6 +3758,11 @@ in that direction and display the target buffer in said window."
    ("k" . popper-kill-latest-popup)
    ("p" . popper-toggle)
 
+   ("o" . other-window)
+
+   ("k" . delete-window)
+   ("K" . delete-other-windows)
+
    :map my/main-map
    ("p" . popper-toggle)
    ("P" . popper-toggle-type))
@@ -3849,8 +3854,7 @@ current window, as a ratio between 0 and 1.")
    ("<prior>" . scroll-other-window-down)
    :exit
    ("k" . delete-window))
-  ;; (:map my/main-map
-  ;;  ("w" . my/window-map)
+   ("K" . delete-other-windows)
   (:map my/window-map
    ("o" . other-window)
    ("<next>" . scroll-other-window)
@@ -3917,7 +3921,10 @@ current window, as a ratio between 0 and 1.")
    ("x" . ace-delete-window)
    ;; ("W j" . aw-flip-window)
    ("z" . my/other-window-prefix)
-   )
+   :repeat-map other-window-repeat-map
+   :exit
+   ("x" . ace-delete-window))
+
 
   :init
   (defun my/other-window-prefix ()
