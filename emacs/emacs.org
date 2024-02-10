@@ -1471,7 +1471,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    :map embark-file-map
    ("s" . my/consult-ripgrep-from-dir)
    ("F" . find-file-other-frame)
-   ("x" . my/dired-open)
+   ;; ("x" . my/dired-open)
    :map embark-symbol-map
    ("g" . consult-ripgrep)
    :map embark-url-map
@@ -1990,6 +1990,15 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              global-diff-hl-mode
              diff-hl-flydiff-mode
              diff-hl-update)
+  :bind
+  (:map my/main-map
+   ("jh" . diff-hl-next-hunk)
+   :repeat-map diff-hl-repeat-map
+   ("t" . diff-hl-next-hunk)
+   ("n" . diff-hl-previous-hunk)
+   ("s" . diff-hl-stage-current-hunk))
+  ;;   "vD" #'diff-hl-mode)
+  ;;   "gG" #'diff-at-point-open-and-goto-hunk
   :init
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
@@ -2008,6 +2017,14 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 (use-package git-gutter
   :disabled
   :hook (prog-mode . git-gutter-mode)
+  ;; :general
+  ;; (general-define-key
+  ;;  :states '(normal visual)
+  ;;  "gp" 'git-gutter:previous-hunk
+  ;;  "gn" 'git-gutter:next-hunk
+  ;;  "gs" 'git-gutter:popup-hunk
+  ;;  "gS" 'git-gutter:stage-hunk
+  ;;  "gU" 'git-gutter:revert-hunk)
 
   :custom-face
   (git-gutter:modified ((t (:foreground "DeepSkyBlue2"))))
@@ -4150,6 +4167,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package hi-lock
   :straight nil
+  ;; :general
+  ;; (my/leader-keys
+  ;;   :infix "h"
+  ;;   "l" #'highlight-lines-matching-regexp
+  ;;   "r" #'highlight-regexp
+  ;;   "u" #'unhighlight-regexp)
   )
 #+end_src
 
@@ -4183,6 +4206,14 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
    ("c" . symbol-overlay-put)
    ("C" . symbol-overlay-remove-all))
+
+  ;; (my/leader-keys
+  ;;   "hs" #'symbol-overlay-put
+  ;;   "hn" #'symbol-overlay-switch-backward
+  ;;   "ht" #'symbol-overlay-switch-forward
+  ;;   "hc" #'symbol-overlay-remove-all
+  ;;   "hM" #'symbol-overlay-mode)
+  )
 #+end_src
 
 * Languages
@@ -4865,6 +4896,12 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
 #+begin_src emacs-lisp :noweb yes
 (use-package hydra
+  ;; :general
+  ;; (my/leader-keys
+  ;;   "rc" #'hydra-codereading/body
+  ;;   "rg" #'hydra-git-gutter/body
+  ;;   "ro" #'hydra-org/body
+  ;;   "rr" #'hydra-reading/body)
 
   :custom
   (hydra-hint-display-type 'lv)
