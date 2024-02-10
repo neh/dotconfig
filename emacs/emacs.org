@@ -3781,6 +3781,24 @@ current window, as a ratio between 0 and 1.")
       (original-recenter line redisplay)))
   (fset 'recenter #'my/recenter-eye-level)
 
+  :bind
+  (:repeat-map other-window-repeat-map
+   ("<next>" . scroll-other-window)
+   ("<prior>" . scroll-other-window-down)
+   :exit
+   ("k" . delete-window))
+  (:map my/main-map
+   ("w" . my/window-prefix-map))
+  (:prefix-map my/window-prefix-map
+   :prefix-docstring "windows"
+   :menu-name "windows"
+   :prefix "w"
+   ("o" . other-window)
+   ("<next>" . scroll-other-window)
+   ("<prior>" . scroll-other-window-down)
+   ))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package which-key
   :config
