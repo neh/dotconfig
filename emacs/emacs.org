@@ -169,6 +169,23 @@ Load any host-specific configuration. Anything set here will just get overridden
   (load-file my/local-conf-file))
 #+end_src
 
+For some keymaps, I want to have multiple packages contribute key bindings, while being able to set a name for the map etc., which as far as I can tell can't be done using the =:bind= convenience of =use-package=. So I'm defining those keymaps here, then the packages can add their bindings later.
+
+#+begin_src emacs-lisp
+(defvar-keymap my/window-map
+  :doc "My general window/navigation keys."
+  :name "Windows")
+
+(defvar-keymap my/main-map
+  :doc "My top-level map."
+  )
+
+(define-key my/main-map "w" my/window-map)
+
+(global-set-key (kbd "C-o") ctl-x-map)
+(global-set-key (kbd "M-w") my/window-map)
+#+end_src
+
 Collect all the global, non-package-specific settings here.
 
 #+begin_src emacs-lisp :noweb yes
@@ -514,8 +531,8 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("M" . meow-mark-symbol)
      '("n" . meow-prev)
      '("N" . meow-prev-expand)
-     '("o" . meow-block)
-     '("O" . meow-to-block)
+     ;; '("o" . meow-block)
+     ;; '("O" . meow-to-block)
      '("p" . meow-search)
      '("q" . meow-quit)
      '("Q" . meow-goto-line)
@@ -536,15 +553,18 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("<escape>" . ignore)))
 
   ;; TODO move these somewhere that makes sense
-  (setq my/main-map (make-sparse-keymap))
   (keymap-set my/main-map "e" #'find-file)
-  (keymap-set my/main-map "Q" #'bury-buffer)
   (keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
-  (keymap-set my/main-map "q" #'quick-calc)
+  (keymap-set my/main-map "q" #'kill-current-buffer)
+  (keymap-set my/main-map "Q" #'bury-buffer)
+  (keymap-set global-map "C-c C" #'quick-calc)
 
   :custom
   (meow-keypad-leader-dispatch my/main-map)
   (meow-expand-hint-remove-delay 0)
+  ;; I don't like doing this, but it seems to be the only way to use
+  ;; some bindings (like M-w).
+  (meow--kbd-kill-ring-save "C-<insert>")
   <<meow-custom>>
 
   :config
@@ -583,7 +603,7 @@ For some modes, I don't want the default meow state when I enter the buffer. Thi
 I learned about this nice bit in this lobste.rs thread: [[https://lobste.rs/s/lb2eld/switching_meow_modal_editing_system_from#c_z3lidr][Switching to the meow modal editing system from evil | Lobsters]]. It gets you into keypad mode without having to press space first, so you can just hit =x= to get to bindings under =C-x= etc.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-normal-define-key '("x" . meow-keypad-start)
+(meow-normal-define-key '("o" . meow-keypad-start)
                         '("c" . meow-keypad-start)
                         '("g" . meow-keypad-start)
                         '("m" . meow-keypad-start))
@@ -3689,11 +3709,11 @@ in that direction and display the target buffer in said window."
    ("<mouse-5>" . tab-previous)
    ("<wheel-up>" . tab-next)
    ("<wheel-down>" . tab-previous)
-   :map my/main-map
-   ("wg" . tab-previous)
-   ("wl" . tab-next)
-   ("wG" . tab-bar-move-tab-backward)
-   ("wL" . tab-move)
+   :map my/window-map
+   ("g" . tab-previous)
+   ("l" . tab-next)
+   ("G" . tab-bar-move-tab-backward)
+   ("L" . tab-move)
    :repeat-map tab-bar-switch-repeat-map
    ("o" . nil)
    ("O" . nil)
@@ -3818,21 +3838,20 @@ current window, as a ratio between 0 and 1.")
   (fset 'recenter #'my/recenter-eye-level)
 
   :bind
-  (:repeat-map other-window-repeat-map
+  (("M-o" . other-window)
+   :repeat-map other-window-repeat-map
    ("<next>" . scroll-other-window)
    ("<prior>" . scroll-other-window-down)
    :exit
    ("k" . delete-window))
-  (:map my/main-map
-   ("w" . my/window-prefix-map))
-  (:prefix-map my/window-prefix-map
-   :prefix-docstring "windows"
-   :menu-name "windows"
-   :prefix "w"
+  ;; (:map my/main-map
+  ;;  ("w" . my/window-map)
+  (:map my/window-map
    ("o" . other-window)
    ("<next>" . scroll-other-window)
    ("<prior>" . scroll-other-window-down)
-   ))
+   )
+  )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3845,16 +3864,16 @@ current window, as a ratio between 0 and 1.")
 (use-package windmove
   :straight nil
   :bind
-  (:map my/main-map
-   ("w h" . windmove-left)
-   ("w s" . windmove-right)
-   ("w n" . windmove-up)
-   ("w t" . windmove-down)
+  (:map my/window-map
+   ("h" . windmove-left)
+   ("s" . windmove-right)
+   ("n" . windmove-up)
+   ("t" . windmove-down)
 
-   ("w H" . windmove-swap-states-left)
-   ("w S" . windmove-swap-states-right)
-   ("w N" . windmove-swap-states-up)
-   ("w T" . windmove-swap-states-down)
+   ("H" . windmove-swap-states-left)
+   ("S" . windmove-swap-states-right)
+   ("N" . windmove-swap-states-up)
+   ("T" . windmove-swap-states-down)
 
    :repeat-map windmove-repeat-map
    ("h" . windmove-left)
@@ -3882,10 +3901,11 @@ current window, as a ratio between 0 and 1.")
   (aw-reverse-frame-list t)
 
   :bind
-  (:map my/main-map
-   ("w j" . ace-window)
-   ("W j" . aw-flip-window)
-   ("z w" . my/other-window-prefix))
+  (:map my/window-map
+   ("j" . ace-window)
+   ;; ("W j" . aw-flip-window)
+   ("z" . my/other-window-prefix)
+   )
 
   :init
   (defun my/other-window-prefix ()
