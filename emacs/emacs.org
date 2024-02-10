@@ -2060,8 +2060,8 @@ Of course, the great magit.
 (straight-use-package 'magit)
 (use-package magit
   :straight nil
-  ;; :hook
-  ;; (git-commit-mode . evil-insert-state)
+  :hook
+  (git-commit-mode . meow-insert)
 
   :custom
   (magit-commit-show-diff t)
