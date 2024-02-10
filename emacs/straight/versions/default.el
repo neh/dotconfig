@@ -78,6 +78,7 @@
  ("emacs-web-server" . "44fd82f255e2c4414786870ab53504ccfd15edeb")
  ("emacs-websearch" . "5120cec3c36ddcdaceb5235c0b52eecbc3b37fcb")
  ("emacs-websocket" . "40c208eaab99999d7c1e4bea883648da24c03be3")
+ ("emacs-which-key" . "4d20bc852545a2e602f59084a630f888542052b1")
  ("emacsmirror-mirror" . "d04dfe53bf7eeb40a5ca88b71362089e9340c91b")
  ("emacsql" . "e2b2df570d213cbaa995dd500a70b1ec95758925")
  ("embark" . "b9f2b3b9a5b9c72cf1416097b9941c4f275dae94")

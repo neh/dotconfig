@@ -3785,6 +3785,11 @@ current window, as a ratio between 0 and 1.")
                     (round (* (window-height) my/recenter-window-eye-level)))))
       (original-recenter line redisplay)))
   (fset 'recenter #'my/recenter-eye-level)
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :config
+  (which-key-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
