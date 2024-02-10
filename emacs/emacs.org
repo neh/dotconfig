@@ -697,7 +697,9 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (helpful-max-buffers 5)
 
   :bind
-  (("C-h f" . helpful-callable)
+  (("C-h C-h" . nil)
+   ("C-h ?" . nil)
+   ("C-h f" . helpful-callable)
    ("C-h v" . helpful-variable)
    ("C-h k" . helpful-key)
    ("C-h x" . helpful-command)
