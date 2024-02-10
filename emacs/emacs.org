@@ -5360,6 +5360,8 @@ Try out =org-noter=.
   :bind
   (:map elfeed-search-mode-map
    ("o" . elfeed-search-show-entry)
+   ("t" . next-line)
+   ("n" . previous-line)
    :map elfeed-show-mode-map
    ("U" . my/elfeed-mark-unread-and-exit))
 
