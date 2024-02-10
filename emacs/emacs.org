@@ -562,20 +562,20 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   :custom
   (meow-keypad-leader-dispatch my/main-map)
   (meow-expand-hint-remove-delay 0)
-  ;; I don't like doing this, but it seems to be the only way to use
-  ;; some bindings (like M-w).
-  (meow--kbd-kill-ring-save "C-<insert>")
   <<meow-custom>>
 
   :config
   <<meow-config>>
+
+  ;; I don't like doing this, but it seems to be the only way to use
+  ;; some bindings (like M-w).
+  (setq meow--kbd-kill-ring-save "C-<insert>")
 
   (meow-setup)
   (meow-global-mode 1))
 #+end_src
 
 I use don't want the help map too available (although I may change my mind on that, just move it to a different key), so I remove it from the keypad start keys.
-TODO just add my helpful keys (or remap built-ins to it) to the main help map?
 
 #+begin_src emacs-lisp :tangle no :noweb-ref meow-custom
 (meow-keypad-start-keys '((?c . ?c)
