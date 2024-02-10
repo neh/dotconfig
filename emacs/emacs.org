@@ -3855,6 +3855,12 @@ current window, as a ratio between 0 and 1.")
    ("o" . other-window)
    ("<next>" . scroll-other-window)
    ("<prior>" . scroll-other-window-down)
+
+   ("|" . split-window-right)
+   ("-" . split-window-below)
+
+   ("k" . delete-window)
+   ("K" . delete-other-windows)
    )
   )
 #+end_src
@@ -3908,6 +3914,7 @@ current window, as a ratio between 0 and 1.")
   :bind
   (:map my/window-map
    ("j" . ace-window)
+   ("x" . ace-delete-window)
    ;; ("W j" . aw-flip-window)
    ("z" . my/other-window-prefix)
    )
