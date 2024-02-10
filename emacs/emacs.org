@@ -3940,19 +3940,6 @@ When `switch-to-buffer-obey-display-actions' is non-nil,
            ace-display-buffer))))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package switchy-window
-  :after pulsar
-  :bind
-  (:map my/main-map
-   ("w w" . switchy-window)
-   :repeat-map switchy-window-repeat-map
-   ("w" . switchy-window))
-  :config
-  (add-to-list 'pulsar-pulse-functions 'switchy-window)
-  (switchy-window-minor-mode t))
-#+end_src
-
 * Scrolling
 
 Set scrolling options. These stop the half-page jumps while scrolling, and make things smoother.
