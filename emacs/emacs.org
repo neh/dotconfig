@@ -768,7 +768,9 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   :straight nil
   :custom
   (search-whitespace-regexp ".*?")
-  (isearch-lazy-count t))
+  (isearch-lazy-count t)
+  :config
+  (advice-add 'isearch-update :after #'recenter))
 #+end_src
 
 #+begin_src emacs-lisp
