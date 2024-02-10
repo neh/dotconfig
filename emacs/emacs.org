@@ -2419,6 +2419,10 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
   :custom
   (org-attach-id-dir (concat org-directory "/data"))
   :config
+  (defun my/attach (file-name)
+    "Use in :tangle args of src blocks to tangle to org-attach-dir."
+    (concat (file-name-as-directory (org-attach-dir t)) file-name))
+
   (require 'org-attach-git))
 #+end_src
 
