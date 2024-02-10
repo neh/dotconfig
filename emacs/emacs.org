@@ -3749,6 +3749,9 @@ in that direction and display the target buffer in said window."
 (use-package popper
   :bind
   (:repeat-map popper-repeat-map
+   ("<next>" . scroll-other-window)
+   ("<prior>" . scroll-other-window-down)
+
    ("c" . popper-cycle)
    ("k" . popper-kill-latest-popup)
    ("p" . popper-toggle)
@@ -3760,8 +3763,8 @@ in that direction and display the target buffer in said window."
   :custom
   (popper-group-function #'my/popper-group)
   ;; (popper-group-function nil)
-  (popper-display-control t)
   (popper-display-function #'display-buffer-below-selected)
+  (popper-display-control nil)
   (popper-reference-buffers
    '("\\*Messages\\*"
      messages-buffer-mode
