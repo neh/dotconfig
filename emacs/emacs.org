@@ -701,12 +701,8 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
    ("C-h v" . helpful-variable)
    ("C-h k" . helpful-key)
    ("C-h x" . helpful-command)
-   :map my/main-map
-   ("h ." . helpful-at-point)
-   ("h c" . helpful-callable)
-   ("h k" . helpful-key)
-   ("h s" . helpful-symbol)
-   ("h v" . helpful-variable)
+   ("C-h ." . helpful-at-point)
+   ("C-h o" . helpful-symbol)
    :map embark-symbol-map
    ("h" . helpful-symbol))
 
@@ -1531,6 +1527,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :bind
   (([remap goto-line] . consult-goto-line)
+   ("C-h i" . consult-info)
+   ("C-h C-m" . consult-man)
    (:map my/main-map
     ("h i" . consult-info)
     ("i y" . consult-yank-pop)
