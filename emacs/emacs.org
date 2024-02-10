@@ -365,7 +365,7 @@ Set some backup file options.
 
 I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager, and apparently ~$SSH_AUTH_SOCK~ doesn’t get set (maybe just for xwayland apps?). So we workaround. I already set a fixed link to the real socket for tmux usage, I can reuse it for this.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (when (string= (getenv "SSH_AUTH_SOCK") nil)
   (setenv "SSH_AUTH_SOCK" (format "%s/ssh-agent.socket" (getenv "XDG_RUNTIME_DIR"))))
 #+end_src
@@ -3071,12 +3071,14 @@ We need a little desktop integration for =org-protocol=, linux-only, currently. 
 Description=Emacs (server)
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
+# need WAYLAND_DISPLAY set in emacs
 [Service]
 Type=forking
 ExecStart=emacs --daemon --chdir %h
 # ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=emacsclient --eval "(kill-emacs)"
-Environment=SSH_AUTH_SOCK=/run/user/%U/ssh-agent.socket
+# Environment=SSH_AUTH_SOCK=/run/user/%U/ssh-agent.socket
+Environment=SSH_AUTH_SOCK=/run/user/%U/keyring/ssh
 # Environment=SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
 # Environment=SSH_AUTH_SOCK=%t/keyring/ssh XDG_RUNTIME_DIR=/run/user/%U EMACS_SOCKET_NAME=/run/user/%U/emacs/server
 Restart=on-failure
