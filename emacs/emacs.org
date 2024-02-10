@@ -4612,7 +4612,8 @@ any directory proferred by `consult-dir'."
    ("j x x" . my/dired-open)
    ("j u" . dired-jump)
    :map dired-mode-map
-   ("t" . nil))
+   ("n" . dired-previous-line)
+   ("t" . dired-next-line))
 
   :init
   (defun my/dired-copy-full-path ()
