@@ -1545,8 +1545,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :custom
   (consult-narrow-key "<")
   :config
-  (setq consult-project-root-function #'projectile-project-root)
-
   (consult-customize consult-line
                      consult-ripgrep
                      :initial (when (use-region-p)
@@ -1889,6 +1887,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package projectile
+  :disabled t
   :commands (projectile-project-root
              projectile-mode
              projectile-project-p)
