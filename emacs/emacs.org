@@ -5147,7 +5147,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("c" rainbow-mode "colours" :toggle t)
     ("t" toggle-truncate-lines "truncate lines" :toggle truncate-lines)
     ("d" rainbow-delimiters-mode "delimiters" :toggle t)
-    ("i" my/indent-region-or-block-or-buffer "indent" :exit t)
+    ("TAB" my/indent-region-or-block-or-buffer "indent" :exit t)
     ("fa" auto-fill-mode "auto-fill" :toggle t)
     ("fp" fill-paragraph "fill paragraph" :exit t)
     ("fr" fill-region "fill region" :exit t))
