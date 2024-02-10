@@ -5373,6 +5373,15 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package string-inflection
+  :commands (string-inflection-all-cycle)
+  :bind
+  (:map my/main-map
+   ("_" . string-inflection-all-cycle)
+   :repeat-map string-inflection-repeat-map
+   ("_" . string-inflection-all-cycle)))
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package whitespace
   :commands (whitespace-mode)
