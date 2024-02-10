@@ -1307,7 +1307,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
           ;; (t reverse)
           ))
   (setq vertico-multiform-commands
-        '((consult-line
+        '((consult-buffer posframe)
+          (find-file posframe)
+          (execute-extended-command posframe)
+          (t
            posframe
            (vertico-posframe-poshandler . posframe-poshandler-frame-bottom-center)
            (vertico-posframe-border-width . 10)
@@ -1316,7 +1319,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
            ;; vertico-buffer-mode will be used as fallback at the
            ;; moment.
            (vertico-posframe-fallback-mode . vertico-buffer-mode))
-          (t posframe))
+          )
         ;; (consult-ripgrep
         ;; buffer
         ;; (vertico-buffer-display-action . (display-buffer-same-window))
