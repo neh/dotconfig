@@ -3773,6 +3773,10 @@ in that direction and display the target buffer in said window."
   ;; save a copy of the original recenter function, because I'm going to replace it
   (unless (fboundp 'original-recenter)
     (fset 'original-recenter (symbol-function 'recenter)))
+
+  :custom
+  (recenter-positions '(0.2 top bottom))
+
   :init
   (defcustom my/recenter-window-eye-level 0.2
     "The relative position of the line considered as eye level in the
