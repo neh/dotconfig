@@ -1440,7 +1440,6 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :demand t
 
   :custom
-  (prefix-help-command #'embark-prefix-help-command)
   (embark-help-key "?")
   (embark-cycle-key ",")
   (embark-mixed-indicator-delay 0.8)
@@ -1448,6 +1447,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
   :bind
   (("C-," . embark-act)
+   ("C-h B" . embark-bindings)
    :map embark-file-map
    ("s" . my/consult-ripgrep-from-dir)
    ("F" . find-file-other-frame)
@@ -1470,6 +1470,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
     "Jump into consult-ripgrep from embark."
     (interactive "fRipgrep from dir:")
     (consult-ripgrep (file-name-directory file)))
+
+  (setq prefix-help-command #'embark-prefix-help-command)
 
   :config
   (require 'embark-org)
@@ -1523,6 +1525,9 @@ targets."
 (use-package avy-embark-collect
   :commands (avy-embark-collect-act
              avy-embark-collect-choose))
+
+(use-package embark-consult
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1591,11 +1596,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                      :initial (when (use-region-p)
                                 (buffer-substring-no-properties
                                  (region-beginning) (region-end)))))
-
-(use-package embark-consult
-  :bind
-  (:map embark-become-match-map
-   ("k" . consult-keep-lines)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3844,7 +3844,7 @@ current window, as a ratio between 0 and 1.")
 #+begin_src emacs-lisp
 (use-package which-key
   :config
-  (which-key-mode t))
+  (which-key-mode -1))
 #+end_src
 
 #+begin_src emacs-lisp
