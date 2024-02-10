@@ -1523,30 +1523,22 @@ Consult takes over for a lot of what counsel did, as well as swiper.
                      (thing-at-point 'symbol))))
       (consult-line initial)))
 
-  (defun my/consult-line-again ()
-    "Repeat the last consult-line search."
-    (interactive)
-    (consult-line (car consult--line-history)))
-
   :bind
   (([remap goto-line] . consult-goto-line)
    ("C-h i" . consult-info)
    ("C-h C-m" . consult-man)
    (:map my/main-map
-    ("h i" . consult-info)
-    ("i y" . consult-yank-pop)
-    ("j i" . consult-imenu)
-    ("j o" . consult-org-heading)
+    ("iy" . consult-yank-pop)
+    ("u" . consult-imenu)
+    ("jo" . consult-org-heading)
     ("o" . consult-buffer)
-    ("s f" . consult-find)
-    ("s g" . consult-ripgrep)
-    ("s v" . consult-git-grep)
+    ("sf" . consult-find)
     ("l" . consult-line)
+    ("sg" . consult-ripgrep)
+    ("sv" . consult-git-grep)
     )
    :map embark-buffer-map
    ("F" . consult-buffer-other-frame)
-   :map embark-file-map
-   ("X" . consult-file-externally)
    :map minibuffer-mode-map
    ("C-c r" . consult-history))
 
