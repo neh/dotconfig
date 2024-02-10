@@ -1479,6 +1479,8 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    :map embark-buffer-map
    ("F" . switch-to-buffer-other-frame)
    ;; ("R" . tabspaces-remove-selected-buffer)
+   :map embark-org-src-block-map
+   ("e" . org-babel-expand-src-block)
    :map embark-heading-map
    ("I" . org-id-get-create)
    ("l" . org-store-link))
