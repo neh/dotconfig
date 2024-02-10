@@ -2070,16 +2070,15 @@ Of course, the great magit.
 
   :bind
   (:map my/main-map
-   ("v s" . magit-status-here)
-   ("v f" . magit-file-dispatch)
-   ("v g" . magit-dispatch))
+   ("vs" . magit-status-here)
+   ("vf" . magit-file-dispatch)
+   ("vg" . magit-dispatch)
 
-  ;; (general-define-key
-  ;;  :keymaps 'magit-diff-mode-map
-  ;;  "/" 'evil-search-forward
-  ;;  "l" 'evil-search-next
-  ;;  "L" 'evil-search-previous)
-  )
+   :map magit-mode-map
+   ("n" . magit-previous-line)
+   ("t" . magit-next-line)
+   ("M-n" . magit-section-backward)
+   ("M-t" . magit-section-forward)))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
