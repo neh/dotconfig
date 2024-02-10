@@ -6289,10 +6289,12 @@ TODO see if I want to bind any more functions from it
   :commands (evil-matchit-mode
              global-evil-matchit-mode
              evilmi-jump-items-native)
-  :bind
-  ("%" . evilmi-jump-items-native)
   :config
   (global-evil-matchit-mode t))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(meow-normal-define-key '("%" . evilmi-jump-items-native))
 #+end_src
 
 I want some repeat maps to timeout, but I don't want to set it globally with =repeat-exit-timeout=, so I have this function that will iterate through a map and apply a timeout setting to them. I may want another function to turn the timeout off for a map, or the option to pass a list of commands so I can set timeout for only some of the commands in a map. I'll deal with that when I actually need it though.
@@ -6320,8 +6322,8 @@ I like the vim/evil style join where the next line is pulled up and joined to th
 
 And let's give it the same keybinding as evil, since I'm used to it.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref misc-keybinds
-("J" . my/join-line)
+#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
+(meow-normal-define-key '("J" . my/join-line))
 #+end_src
 
 From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improved_emacs_search/][reddit thread]].
