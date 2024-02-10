@@ -637,7 +637,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (bookmark-fontify nil)
   :bind
   (:map my/main-map
-   ("j b" . bookmark-jump)))
+   ("jb" . bookmark-jump)))
 
 (use-package saveplace
   :demand t
@@ -659,10 +659,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
                                    projectile-project-command-history
                                    command-history
                                    ))
-  (savehist-autosave-interval 90)
-  ;; :config
-  ;; (savehist-mode 1)
-  )
+  (savehist-autosave-interval 90))
 
 (use-package eldoc
   :straight nil

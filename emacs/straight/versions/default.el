@@ -60,7 +60,6 @@
  ("emacs-async" . "d604187c3c8a3290e78c00b4532b83d8d908b5c3")
  ("emacs-devdocs-browser" . "237720eae1ec55b1bd7ddf207921058bb4cc06ca")
  ("emacs-diff-at-point" . "0a4815a364b636eadf2f9ca6f468fb5996ff8d6f")
- ("emacs-fasd" . "c1d92553f33ebb018135c698db1a6d7f86731a26")
  ("emacs-fish" . "6869efbc05cdb628209338bf57fe52742e53d956")
  ("emacs-idle-highlight-mode" . "c8f0fa148bf748f9fa7b88a4892e3d494c040afe")
  ("emacs-kv" . "721148475bce38a70e0b678ba8aa923652e8900e")
