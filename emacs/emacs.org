@@ -1361,6 +1361,9 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :custom
   (vertico-posframe-parameters '((left-fringe . 20)
                                  (right-fringe . 20)))
+  :bind
+  (:map vertico-multiform-map
+   ("M-p" . nil))
   ;; :config
   ;; (vertico-posframe-mode t)
   )
@@ -1829,7 +1832,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package beginend
-  :commands (beginend-global-mode))
+  :config
+  (beginend-global-mode t))
 #+end_src
 
 * Snippets
@@ -5287,7 +5291,7 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package tab-jump-out
   :config
-  (tab-jump-out-mode t))
+  (tab-jump-out-global-mode t))
 #+end_src
 
 I missed easy jumping to matching pairs (quotes, parentheses, etc.) from evil, it turns out you can just use evil-matchit on its own.
@@ -5310,10 +5314,8 @@ TODO see if I want to bind any more functions from it
 (use-package string-inflection
   :commands (string-inflection-all-cycle)
   :bind
-  (:map my/main-map
-   ("_" . string-inflection-all-cycle)
-   :repeat-map string-inflection-repeat-map
-   ("_" . string-inflection-all-cycle)))
+  ("C-_" . string-inflection-all-cycle))
+#+end_src
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5340,8 +5342,7 @@ TODO see if I want to bind any more functions from it
              embrace-commander)
   :hook (org-mode . embrace-org-mode-hook)
   :bind
-  (:map my/main-map
-   ("S" . embrace-commander)))
+  ("C-'" . embrace-commander))
 #+end_src
 
 #+begin_src emacs-lisp
