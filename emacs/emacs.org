@@ -5493,6 +5493,12 @@ Try out =org-noter=.
 
 * Misc packages
 
+#+begin_src emacs-lisp
+(use-package tab-jump-out
+  :config
+  (tab-jump-out-mode t))
+#+end_src
+
 I missed easy jumping to matching pairs (quotes, parentheses, etc.) from evil, it turns out you can just use evil-matchit on its own.
 TODO see if I want to bind any more functions from it
 

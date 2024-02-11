@@ -229,6 +229,7 @@
  ("sway.el" . "84eae5e16a643eb00b0a422ded751cceb17cc8f0")
  ("swiper" . "8c30f4cab5948aa8d942a3b2bbf5fb6a94d9441d")
  ("symbol-overlay" . "029c6c3b88d12afd3da8512630b2a439d7eefc0b")
+ ("tab-jump-out" . "ff4d9b679566e4cab9bebc59123f681fb35f6cbf")
  ("tablist" . "fcd37147121fabdf003a70279cf86fbe08cfac6f")
  ("taxy" . "43a5f3139a33a574882a97ccab58dffa4b8dbf2a")
  ("taxy-magit-section" . "7e4ba4ecd0464ee45e7e16dae0272e6f790a40e6")
