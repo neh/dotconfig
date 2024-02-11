@@ -101,8 +101,7 @@ Here's also where the rest of this file gets tangled and loaded, but only if it'
     (when (or (not (file-exists-p elfile))
               (file-newer-than-file-p orgfile elfile)
               (file-newer-than-file-p orgfile earlyfile))
-      (org-babel-tangle-file orgfile)))
-  )
+      (org-babel-tangle-file orgfile))))
 #+end_src
 
 Then reset the value of =gc-cons-threshold=, not to its original value; we still leave it much larger than default so that GCs don't happen so often and impact performance. We also tweak =gc-cons-percentage= and set an idle timer to run =garbage-collect= whenever emacs is idle for 5 seconds.
@@ -675,10 +674,8 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :straight nil
   :demand t
   :custom
-  (savehist-additional-variables '(;;evil-jumps-history
-                                   projectile-project-command-history
-                                   command-history
-                                   ))
+  (savehist-additional-variables '(project-regexp-history-variable
+                                   command-history))
   (savehist-autosave-interval 90))
 
 (use-package eldoc
@@ -696,10 +693,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package autorevert
   :demand t
   :straight nil
-  ;; :hook
-  ;; not sure why I have these hooks when I set it globally below...
-  ;; (org-mode . auto-revert-mode)
-  ;; (dired-mode . auto-revert-mode)
   :custom
   (global-auto-revert-non-file-buffers t)
   (auto-revert-check-vc-info nil)
@@ -754,8 +747,8 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :init
   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
-
 #+end_src
+
 #+begin_src emacs-lisp
 (use-package undo-fu
   :commands (undo-fu-only-undo
@@ -898,8 +891,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (defun my/gruvbox-dark-hard-tweaks ()
     (my/match-border-to-background))
   (defun my/gruvbox-light-hard-tweaks ()
-    (my/match-border-to-background))
-  )
+    (my/match-border-to-background)))
 
 (use-package poet-theme)
 #+end_src
@@ -1007,8 +999,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
    "/org/freedesktop/portal/desktop"
    "org.freedesktop.portal.Settings"
    "SettingChanged"
-   #'signal-handler)
-  )
+   #'signal-handler))
 #+end_src
 
 But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller modeline font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
@@ -1149,8 +1140,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (unless my/first-frame-created
     (setq my/first-frame-created t)
     (message "Applying first frame tweaks")
-    <<first-frame-tweaks>>)
-  )
+    <<first-frame-tweaks>>))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1256,7 +1246,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (setq-default doom-modeline-column-zero-based nil))
 #+end_src
 
-
 * Navigation?
 
 I used ivy and friends for a quite a while here, mostly because helm didn't really make sense to me when I started using emacs, and ivy did. So I quickly got a configuration together that worked for me, and enjoyed using ivy, swiper, counsel etc. but I never really put a lot of effort into understanding what I had. Occasionally I would rework some part of it, but I mostly left it alone.
@@ -1285,8 +1274,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    ("C-S-n" . vertico-previous-group)
    ("C-S-<down>" . vertico-next-group)
    ("C-S-<up>" . vertico-previous-group)
-   ("<backtab>" . vertico-insert))
-  )
+   ("<backtab>" . vertico-insert)))
 
 (use-package vertico-mouse
   :after vertico
@@ -1314,8 +1302,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
     (interactive)
     (when (eq 'file (vertico--metadata-get 'category))
       (minibuffer-complete))
-    (vertico-insert))
-  )
+    (vertico-insert)))
 
 (use-package vertico-multiform
   :after vertico
@@ -1564,33 +1551,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package consult
-  :init
-  (defun my/roam-rg ()
-    "Search org-roam notes with ripgrep."
-    (interactive)
-    (if (boundp 'org-roam-directory)
-        (let ((initial (if (use-region-p)
-                           (buffer-substring-no-properties (region-beginning) (region-end))
-                         nil)))
-          (consult-ripgrep org-roam-directory initial))
-      (message "Org-roam notes are not available.")))
-
-  (defun my/consult-buffer-dwim ()
-    "Narrow consult-buffer to current project if there is one."
-    (when (eq this-command #'consult-buffer)
-      (when (consult--project-root)
-        (setq unread-command-events (append unread-command-events (list ?p 32))))))
-  ;; (add-hook 'minibuffer-setup-hook #'my/consult-buffer-dwim)
-
-  (defun consult-line-thing-at-point ()
-    "Start consult-line with thing-at-point as initial input."
-    (interactive)
-    (let ((initial (if (use-region-p)
-                       (progn (buffer-substring-no-properties (region-beginning) (region-end))
-                              (deactivate-mark))
-                     (thing-at-point 'symbol))))
-      (consult-line initial)))
-
   :bind
   (([remap goto-line] . consult-goto-line)
    ("C-h i" . consult-info)
@@ -1627,9 +1587,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :bind
   (:map vertico-map
    ("M-d" . consult-dir)
-   ("M-j" . consult-dir-jump-file))
-  :custom
-  (consult-dir-project-list-function #'consult-dir-projectile-dirs))
+   ("M-j" . consult-dir-jump-file)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1647,9 +1605,9 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :bind
   (:map my/main-map
-   ("s n" . consult-org-roam-search)
-   ("n B" . consult-org-roam-backlinks)
-   ("n F" . consult-org-roam-forward-links))
+   ("sn" . consult-org-roam-search)
+   ("nB" . consult-org-roam-backlinks)
+   ("nF" . consult-org-roam-forward-links))
 
   :init
   (consult-org-roam-mode t))
@@ -1701,8 +1659,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (require 'corfu-popupinfo)
   (setq corfu-popupinfo-delay nil)
   (set-face-attribute 'corfu-popupinfo nil :height 1.0)
-  (corfu-popupinfo-mode t)
-  )
+  (corfu-popupinfo-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1720,27 +1677,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (cape-dabbrev
              cape-file
              cape-company-to-capf)
-  ;; :custom
-  ;; (cape-dabbrev-min-length )
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  )
+  (add-to-list 'completion-at-point-functions #'cape-file))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package company-org-block
-  :disabled t
-  :hook (org-mode . my/corfu-org-block)
-  :custom
-  (company-org-block-auto-indent nil)
-  (company-org-block-explicit-lang-defaults nil)
-  :init
-  (defun my/corfu-org-block ()
-    (add-to-list 'completion-at-point-functions
-                 (cape-company-to-capf #'company-org-block)))
-  )
-
 (use-package org-block-capf
   :straight (:type git :host github :repo "xenodium/org-block-capf")
   :hook (org-mode . org-block-capf-add-to-completion-at-point-functions)
@@ -1843,8 +1785,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
   :init
   (defun my/local-buffer-list ()
-    (seq-remove #'popper-popup-p (beframe--buffer-list)))
-  )
+    (seq-remove #'popper-popup-p (beframe--buffer-list))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1868,45 +1809,12 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (:map ibuffer-mode-map
    ;; a cheap hack to keep me from leaving ibuffer buffers open in the background
    ("q" . kill-current-buffer)))
-
-(use-package ibuffer-projectile
-  :commands (ibuffer-projectile-set-filter-groups)
-  :hook ((ibuffer . (lambda ()
-                      (ibuffer-projectile-set-filter-groups)
-                      )))
-  :init
-  (defun my/ibuffer-magit ()
-    "Open `magit-status' for the current buffer."
-    (interactive)
-    (let ((buf (ibuffer-current-buffer t)))
-      (magit-status (cdr (ibuffer-projectile-root buf))))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package frog-jump-buffer
-  :commands (frog-jump-buffer)
-  :custom
-  (frog-jump-buffer-filter-actions '(("W" "[workspace]"
-                                      my/frog-jump-buffer-filter-local)))
-  (frog-jump-buffer-default-filter #'my/frog-jump-buffer-filter-local)
-  :init
-  (defun my/frog-jump-buffer-filter-local (buffer)
-    (member buffer (beframe--buffer-list))))
 #+end_src
 
 #+begin_src emacs-lisp
 ;; doesn't seem to work in src blocks unless re-enabled?
 (use-package topsy
   :hook (prog-mode . topsy-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package bufler
-  :commands (bufler
-             bufler-mode
-             bufler-switch-buffer
-             bufler-list
-             bufler-workspace-frame-set))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1946,37 +1854,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                              (project-vc-dir "VC-Dir")
                              (project-eshell "Eshell"))
                            ))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package projectile
-  :disabled t
-  :commands (projectile-project-root
-             projectile-mode
-             projectile-project-p)
-  :custom
-  (projectile-completion-system 'auto)
-
-  :bind
-  (:map my/main-map
-   ("j p" . projectile-switch-project)
-   ("j h" . projectile-find-file-dwim))
-
-  :config
-  (setq frame-title-format
-        '(""
-          (:eval
-           (if (and (bound-and-true-p org-roam-directory)
-                    (bound-and-true-p buffer-file-name)
-                    (s-contains-p (expand-file-name org-roam-directory)
-                                  (file-name-directory buffer-file-name)))
-               (replace-regexp-in-string ".*/[0-9]*-?" "✎ " buffer-file-name)
-             "%b"))
-          (:eval
-           (let ((project-name (projectile-project-name)))
-             (unless (string= "-" project-name)
-               (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
-  (projectile-mode t))
 #+end_src
 
 * Git
@@ -2173,8 +2050,7 @@ Handy package to browse to git repo web interfaces.
 #+begin_src emacs-lisp
 (use-package consult-ls-git
   :commands (consult-ls-git
-             consult-ls-git-other-window)
-  )
+             consult-ls-git-other-window))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2189,8 +2065,7 @@ Handy package to browse to git repo web interfaces.
   (blamer-face ((t :foreground "#7a88cf"
                    :background "unspecified"
                    :height 140
-                   :italic t)))
-  )
+                   :italic t))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2245,7 +2120,6 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   <<org-init>>
   (defun my/log-line ()
     (interactive)
-    ;; (evil-open-below 1)
     (org-time-stamp-inactive '(16))
     (insert " "))
 
@@ -2299,8 +2173,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   (defun my/babel-to-buffer-from-narrow ()
     (interactive)
-    (org-src-do-at-code-block '(my/babel-to-buffer))
-    )
+    (org-src-do-at-code-block '(my/babel-to-buffer)))
 
   (defun my/toggle-local-emphasis-markers ()
     "Toggle visibility of org emphasis markers."
@@ -2313,8 +2186,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (concat "id:"
             (org-id-get-with-outline-path-completion org-refile-targets)))
 
-  (let* ((headline      `(:inherit variable-pitch :weight bold))
-         )
+  (let* ((headline      `(:inherit variable-pitch :weight bold)))
 
     (custom-theme-set-faces
      'user
@@ -2403,7 +2275,6 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
 (use-package org-mouse
   :straight nil)
 #+end_src
-
 
 #+begin_src emacs-lisp
 (use-package org-id
@@ -2520,7 +2391,6 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :commands
   (org-babel-execute:restclient))
 #+end_src
-
 
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
 
@@ -2758,15 +2628,6 @@ Indent subitems in lists a bit more so they're clearer.
   (org-indent-indentation-per-level 1))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package org-modern-indent
-  :disabled t
-  :straight (org-modern-indent :type git :host github :repo "jdtsmith/org-modern-indent")
-  :after org-modern
-  :config ; add late to hook
-  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
-#+end_src
-
 ** Hooks
 
 For a bit more org mode prettiness: =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
@@ -2914,19 +2775,6 @@ Show the heading of a table when it's scrolled offscreen.
       ((org-agenda-files '("~/org/work-tveon.org"))
        (org-agenda-span 'day)))
 
-     ;; ("w" "Work"
-     ;;  ((agenda "")
-     ;;   (tags-todo "-archive&+work&+TODO=\"INTERRUPT\""
-     ;;              ((org-agenda-overriding-header "Interruptions")))
-     ;;   (tags-todo "-archive&+work&+TODO=\"DOING\""
-     ;;              ((org-agenda-overriding-header "Doing")))
-     ;;   (tags-todo "-archive&work&(/!WAITING|TESTING)"
-     ;;              ((org-agenda-overriding-header "Waiting/Testing")))
-     ;;   (tags-todo "-archive&+work&+TODO=\"NEXT\""
-     ;;              ((org-agenda-overriding-header "Next")))
-     ;;   )
-     ;;  ((org-agenda-files '("~/org/work-tveon.org"))
-     ;;   (org-agenda-span 'day)))
      ))
 
    ;; (org-super-agenda-groups '(
@@ -2987,12 +2835,6 @@ Show the heading of a table when it's scrolled offscreen.
             :headline "Incoming"
             :template ("* %?" "%T")
             :prepend t)
-           ;; ("meeting"
-           ;;  :keys "m"
-           ;;  :file ""
-           ;;  :headline "Current"
-           ;;  :template ("* %?" "%^T")
-           ;;  :prepend nil)
            ("link"
             :keys "l"
             :file ""
@@ -3013,8 +2855,7 @@ Show the heading of a table when it's scrolled offscreen.
             :prepend t)
            )))
 
-  :hook (;;(org-capture-mode . evil-insert-state)
-         (org-capture-mode . my/full-frame-capture))
+  :hook (org-capture-mode . my/full-frame-capture)
 
   :init
   (defun my/org-capture-someday ()
@@ -3792,7 +3633,6 @@ in that direction and display the target buffer in said window."
 
   :custom
   (popper-group-function #'my/popper-group)
-  ;; (popper-group-function nil)
   (popper-display-function #'display-buffer-below-selected)
   (popper-display-control nil)
   (popper-reference-buffers
@@ -3803,8 +3643,7 @@ in that direction and display the target buffer in said window."
      "\\*Warnings\\*"
      "\\*helpful"
      "Output\\*"
-     ("\\*Shell Command Output\\*" . hide)
-     ))
+     ("\\*Shell Command Output\\*" . hide)))
 
   :init
   (defun my/current-tab-name ()
@@ -3942,12 +3781,10 @@ current window, as a ratio between 0 and 1.")
   (:map my/window-map
    ("j" . ace-window)
    ("x" . ace-delete-window)
-   ;; ("W j" . aw-flip-window)
    ("z" . my/other-window-prefix)
    :repeat-map other-window-repeat-map
    :exit
    ("x" . ace-delete-window))
-
 
   :init
   (defun my/other-window-prefix ()
@@ -4117,17 +3954,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package idle-highlight-mode
-  :commands (idle-highlight-mode
-             global-idle-highlight-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package region-occurrences-highlighter
-  :commands (region-occurrences-highlighter-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package prism
   :commands (prism-mode
              prism-whitespace-mode)
@@ -4244,22 +4070,13 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package lispy
-  :commands (lispy-mode))
-
-(use-package lispyville
-  :hook (lispy-mode . lispyville-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package clojure-mode
   :mode (("\\.clj\\'" . clojure-mode)))
 
 (use-package cider
   :commands (cider
              cider-mode
-             cider-jack-in)
-  )
+             cider-jack-in))
 
 (use-package ob-clojure
   :straight nil
@@ -4303,8 +4120,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :custom
   (comint-scroll-to-bottom-on-input t)
   (comint-scroll-to-bottom-on-output t)
-  (comint-move-point-for-output t)
-  )
+  (comint-move-point-for-output t))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4347,8 +4163,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (sqlformat-command 'pgformatter)
   (sqlformat-args '("-f1"
                     "-u1"
-                    "--spaces=2"))
-  )
+                    "--spaces=2")))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4750,8 +4565,7 @@ Version 2017-09-01"
                           (string-match regexp default-directory)))
                       my-dired-new-file-first-dirs)
       (setq dired-actual-switches "-lahvt")))
-  (add-hook 'dired-mode-hook 'my-dired-mode-hook-setup)
-  )
+  (add-hook 'dired-mode-hook 'my-dired-mode-hook-setup))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5054,7 +4868,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (pretty-hydra-define hydra-go (:hint nil
                                :quit-key "q")
 
-  ("open" (("p" projectile-switch-project "project" :exit t)
+  ("open" (("p" project-switch-project "project" :exit t)
            ("t" org-roam-dailies-goto-today "today's note" :exit t)
            ("o" consult-buffer "buffer" :exit t)
            ("b" ibuffer "ibuffer" :exit t)
@@ -5068,10 +4882,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
              ("F" consult-find "files" :exit t)
              ("A" consult-org-agenda "agenda" :exit t)
              ("5" hydra-5e/body "5e" :exit t))
-
-   ;; "help" (("a" consult-apropos "apropos" :exit t)
-   ;;         ("f" helpful-callable "function" :exit t)
-   ;;         ("v" helpful-variable "variable" :exit t))
    ))
 #+end_src
 
@@ -5079,7 +4889,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 (pretty-hydra-define hydra-5e (:hint nil
                                :quit-key "q")
 
-  ("open" (("p" projectile-switch-project "project" :exit t)
+  ("open" (("p" project-switch-project "project" :exit t)
            ("o" consult-buffer "buffer" :exit t)
            ("f" find-file "file" :exit t))
 
@@ -5152,13 +4962,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
                                   :foreign-keys warn
                                   :quit-key "q")
   ("move up/down" (("N" scroll-down "pg up")
-                   ;; ("n" (evil-scroll-up 0) "1/2 pg up")
-                   ;; ("t" (evil-scroll-down 0) "1/2 pg dn")
                    ("T" scroll-up "pg down"))
-
-   ;; "current line" (("H" (evil-scroll-line-to-top (line-number-at-pos)) "to top")
-   ;;                 ("Z" (evil-scroll-line-to-center (line-number-at-pos)) "to center")
-   ;;                 ("S" (evil-scroll-line-to-bottom (line-number-at-pos)) "to bottom"))
 
    "text size" (("+" (my/adjust-text-height 7) "bigger")
                 ("-" (my/adjust-text-height -7) "smaller")
@@ -5229,19 +5033,11 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("n" windmove-up "up")
     ("s" windmove-right "right"))
    "Split Window"
-   (;;("|" evil-window-vsplit "vertical")
-    ;; ("-" evil-window-split "horizontal")
-    ("=" balance-windows "balance")
+   (("=" balance-windows "balance")
     ("o" delete-other-windows "delete others"))
-   ;; "Move Window"
-   ;; (("M-h" evil-window-move-far-left "far left")
-   ;;  ("M-t" evil-window-move-very-bottom "bottom")
-   ;;  ("M-n" evil-window-move-very-top "top")
-   ;;  ("M-s" evil-window-move-far-right "far right"))
    "Close"
    (("x" bury-buffer "bury buffer")
     ("X" kill-current-buffer "delete buffer")
-    ;;("c" evil-window-delete "close window")
     )
    ))
 #+end_src
@@ -5406,11 +5202,6 @@ Try out =org-noter=.
            (long-enough (or (not my/elfeed-last-update-time)
                             (>= since-last-update my/elfeed-idle-update-interval)))
            )
-      ;; (message "%s Feed update check: %s %s [Last update: %s (Interval: %s)]"
-      ;;          (format-time-string "%F %T" now)
-      ;;          (if elfeed-inactive "[Elfeed inactive]" "[Elfeed active]")
-      ;;          (if idle "[Idle]" "[Not idle]")
-      ;;          since-last-update my/elfeed-idle-update-interval)
       (when (and (daemonp) elfeed-inactive idle long-enough)
         (progn
           (message "%s Updating feeds" (format-time-string "%F %T" now))
@@ -5923,10 +5714,6 @@ See `beframe-rename-frame'."
    ("t" . treemacs-next-line)
    ("n" . treemacs-previous-line)))
 
-(use-package treemacs-projectile
-  :after (treemacs
-          projectile))
-
 (use-package treemacs-magit
   :after (treemacs
           magit))
@@ -6096,8 +5883,7 @@ See `beframe-rename-frame'."
   (defun my/link-hint-open-in-external ()
     (interactive)
     (let ((browse-url-browser-function #'browse-url-default-browser))
-      (link-hint-open-link)))
-  )
+      (link-hint-open-link))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6173,7 +5959,7 @@ See `beframe-rename-frame'."
   (advice-add 'deadgrep-forward-match :after #'recenter)
 
   (defun my/deadgrep--include-args (rg-args)
-    (if (string= (projectile-project-name) ".config")
+    (if (string= (project-name) ".config")
         ;; (push "--hidden" rg-args) ;; consider hidden folders/files
         ;; (push "--follow" rg-args) ;; follow symlink
         (push "--no-ignore-vcs" rg-args) ;; ignore .gitignore
@@ -6354,11 +6140,6 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package counsel-jq
-  :commands (counsel-jq))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package scad-mode
   :mode (("\\.scad__'" . scad-mode)))
 #+end_src
@@ -6534,11 +6315,6 @@ the buffer works like a pager."
     (internal-show-cursor nil t)))
 
 (add-hook 'elfeed-show-mode-hook #'hide-cursor-mode-enable)
-;; (remove-hook 'elfeed-show-mode-hook #'hide-cursor-mode)
-
-;; advice runs, but something fails with the kill
-;; (advice-add 'elfeed-kill-buffer :before #'hide-cursor-mode)
-;; (advice-remove 'elfeed-kill-buffer #'hide-cursor-mode)
 
 (defun hide-cursor-mode-enable ()
   (hide-cursor-mode 1)
@@ -6666,8 +6442,7 @@ This function gives me a quicker way to edit src blocks in org mode, as well as 
   "Make S-RET either narrow to the heading at point or edit the src block at point."
   (interactive)
   (cond ((org-at-heading-p) (org-tree-to-indirect-buffer-other-frame))
-        ((org-in-src-block-p) (org-edit-src-code))
-        ))
+        ((org-in-src-block-p) (org-edit-src-code))))
 #+end_src
 
 I wanted a way to move org items to the top of their own level, and found one [[https://emacs.stackexchange.com/questions/43651/moving-a-subtree-to-the-top-or-bottom-of-its-parent][on stackoverflow]]. I inverted its behaviour to move to the top by default, and to the bottom with a prefix arg.

@@ -31,8 +31,7 @@
       (when (or (not (file-exists-p elfile))
                 (file-newer-than-file-p orgfile elfile)
                 (file-newer-than-file-p orgfile earlyfile))
-        (org-babel-tangle-file orgfile)))
-    )
+        (org-babel-tangle-file orgfile))))
   (setq gc-cons-threshold (* 3200 1000)
         gc-cons-percentage 0.6)
   
