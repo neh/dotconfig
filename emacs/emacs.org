@@ -1082,6 +1082,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
       (fontaine-apply-current-preset)
     (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal)))
 
+  ;; this doesn't seem to apply on startup, only after changing themes
+  (set-face-attribute 'mode-line-active nil
+                      :background (face-background 'mode-line))
+
   (set-face-italic 'font-lock-comment-face t)
 
   (set-face-foreground 'org-hide (face-background 'default))
@@ -1188,11 +1192,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
           :mode-line-width 8
           :tab-width 4
           :right-divider-width 20
-          :scroll-bar-width 8)
-
-        spacious-padding-subtle-mode-line
-        '(:mode-line-active error
-          :mode-line-inactive shadow)))
+          :scroll-bar-width 8)))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref first-frame-tweaks
