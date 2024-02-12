@@ -5171,9 +5171,17 @@ Try out =org-noter=.
    ("t" . next-line)
    ("n" . previous-line)
    :map elfeed-show-mode-map
+   ("I". my/elfeed-show-hide-images)
    ("U" . my/elfeed-mark-unread-and-exit))
 
   :config
+  (defun my/elfeed-show-hide-images ()
+    "Toggle showing images in elfeed articles."
+    (interactive)
+    (setq-local shr-inhibit-images
+                (if (bound-and-true-p shr-inhibit-images) nil t))
+    (elfeed-show-refresh))
+
   (defun my/elfeed-mark-unread-and-exit ()
     "Add unread tag and exit entry."
     (interactive)
