@@ -3620,17 +3620,9 @@ in that direction and display the target buffer in said window."
 (use-package popper
   :bind
   (:repeat-map popper-repeat-map
-   ("<next>" . scroll-other-window)
-   ("<prior>" . scroll-other-window-down)
-
    ("c" . popper-cycle)
    ("k" . popper-kill-latest-popup)
    ("p" . popper-toggle)
-
-   ("o" . other-window)
-
-   ("k" . delete-window)
-   ("K" . delete-other-windows)
 
    :map my/main-map
    ("p" . popper-toggle)
@@ -3715,18 +3707,14 @@ current window, as a ratio between 0 and 1.")
   (fset 'recenter #'my/recenter-eye-level)
 
   :bind
-  (("M-o" . other-window)
-   :repeat-map other-window-repeat-map
+  ("M-o" . other-window)
+  (:repeat-map act-on-other-window-repeat-map
    ("<next>" . scroll-other-window)
    ("<prior>" . scroll-other-window-down)
    :exit
-   ("k" . delete-window))
-   ("K" . delete-other-windows)
+   ("k" . delete-window)
+   ("K" . delete-other-windows))
   (:map my/window-map
-   ("o" . other-window)
-   ("<next>" . scroll-other-window)
-   ("<prior>" . scroll-other-window-down)
-
    ("|" . split-window-right)
    ("-" . split-window-below)
 
@@ -3789,7 +3777,7 @@ current window, as a ratio between 0 and 1.")
    ("j" . ace-window)
    ("x" . ace-delete-window)
    ("z" . my/other-window-prefix)
-   :repeat-map other-window-repeat-map
+   :repeat-map act-on-other-window-repeat-map
    :exit
    ("x" . ace-delete-window))
 
