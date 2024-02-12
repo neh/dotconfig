@@ -196,6 +196,7 @@ Collect all the global, non-package-specific settings here.
   (minibuffer-setup . cursor-intangible-mode)
 
   :bind
+  ("M-p" . mode-line-other-buffer)
   (<<misc-keybinds>>)
 
   :init
