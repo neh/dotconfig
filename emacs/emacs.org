@@ -3691,17 +3691,12 @@ in that direction and display the target buffer in said window."
 (use-package repeat
   :straight nil
   :custom
-  (repeat-exit-key "ESC")
+  (repeat-exit-key "q")
   :config
   (repeat-mode t))
 
 (use-package repeat-help
-  ;; this package seems to break repeat-mode in weird ways
-  :hook (repeat-mode . repeat-help-mode)
-  ;; :custom
-  ;; (repeat-help-key "")
-  ;; (repeat-help-auto nil)
-  )
+  :hook (repeat-mode . repeat-help-mode))
 #+end_src
 
 #+begin_src emacs-lisp
