@@ -789,6 +789,10 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   :custom
   (search-whitespace-regexp ".*?")
   (isearch-lazy-count t)
+  :bind
+  (:repeat-map isearch-repeat-map
+   ("r" . isearch-repeat-backward)
+   ("s" . isearch-repeat-forward))
   :config
   (advice-add 'isearch-update :after #'recenter))
 #+end_src
@@ -2685,6 +2689,11 @@ Show the heading of a table when it's scrolled offscreen.
 
 ** Keybindings
 
+#+begin_src emacs-lisp :tangle no :noweb-ref org-keys
+(:repeat-map org-link-repeat-map
+ ("n" . org-next-link)
+ ("p" . org-previous-link))
+#+end_src
 
 ** Org agenda
 
