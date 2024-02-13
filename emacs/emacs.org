@@ -456,6 +456,14 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
 * Keybindings
 
+#+begin_src emacs-lisp
+(defun my/insert-mode ()
+  "Switch to insert editing mode regardless of modal system."
+  (cond ((bound-and-true-p meow-mode) (meow-insert))
+        ((bound-and-true-p evil-mode) (evil-insert))))
+#+end_src
+
+** Meow
 #+begin_src emacs-lisp :noweb yes
 (use-package meow
   :custom-face
@@ -1982,7 +1990,7 @@ Of course, the great magit.
 (use-package magit
   :straight nil
   :hook
-  (git-commit-mode . meow-insert)
+  (git-commit-mode . my/insert-mode)
 
   :custom
   (magit-commit-show-diff t)
@@ -2667,6 +2675,12 @@ Show the heading of a table when it's scrolled offscreen.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
 (org-src-mode . my/insert-in-empty-src-edit)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
+(org-insert-heading . my/insert-mode)
+(org-metareturn . my/insert-mode)
+(org-capture-mode . my/insert-mode)
 #+end_src
 
 ** Keybindings
