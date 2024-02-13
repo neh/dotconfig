@@ -2281,8 +2281,9 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   (defun my/around-recenter (orig-fun &rest args)
     (apply orig-fun args)
     (recenter))
-  (advice-add 'org-previous-visible-heading :around #'my/around-recenter)
   (advice-add 'org-next-visible-heading :around #'my/around-recenter)
+
+  (advice-add 'org-next-link :after #'recenter)
   )
 #+end_src
 
