@@ -2022,8 +2022,8 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
     )
 
   :bind
-  (:map my/main-map
-   ("nn" . roam-dailies-transient)))
+  (:map my/notes-map
+   ("b" . roam-dailies-transient)))
 #+end_src
 
 #+begin_src emacs-lisp
