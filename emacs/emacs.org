@@ -203,6 +203,8 @@ Collect all the global, non-package-specific settings here.
 
   :bind
   ("M-p" . mode-line-other-buffer)
+  (:repeat-map buffer-switch-repeat-map
+   ("p" . mode-line-other-buffer))
   (<<misc-keybinds>>)
 
   :init
@@ -1580,6 +1582,11 @@ Consult takes over for a lot of what counsel did, as well as swiper.
     ("sg" . consult-ripgrep)
     ("sv" . consult-git-grep)
     )
+   (:repeat-map buffer-switch-repeat-map
+    :exit
+    ("e" . find-file)
+    ("o" . consult-buffer)
+    ("W" . consult-buffer-other-window))
    :map embark-buffer-map
    ("F" . consult-buffer-other-frame)
    :map minibuffer-mode-map
@@ -1782,7 +1789,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (:map my/window-map
    ("c" . nswbuff-switch-to-next-buffer)
    ("r" . nswbuff-switch-to-previous-buffer)
-   :repeat-map nswbuff-repeat-map
+   :repeat-map buffer-switch-repeat-map
    ("c" . nswbuff-switch-to-next-buffer)
    ("r" . nswbuff-switch-to-previous-buffer))
 
@@ -3739,7 +3746,9 @@ current window, as a ratio between 0 and 1.")
    ("k" . delete-window)
    ("K" . delete-other-windows)
    )
-  )
+
+  :config
+  (my/set-repeat-map-timeout other-window-repeat-map 1))
 #+end_src
 
 #+begin_src emacs-lisp
