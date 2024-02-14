@@ -1471,6 +1471,7 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
 
   :bind
   (("C-," . embark-act)
+   ("M-." . embark-dwim)
    ("C-h B" . embark-bindings)
    :map embark-file-map
    ("s" . my/consult-ripgrep-from-dir)
@@ -3037,7 +3038,6 @@ MimeType=x-scheme-handler/org-protocol;
   ;;   "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
 
   :init
-
   (defun my/dnd-only (node)
     (my/by-tag "d&d" node))
 
@@ -4216,6 +4216,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
              vterm-other-window)
   :custom
   (vterm-max-scrollback 10000)
+  (vterm-always-compile-module t)
+
+  :bind
+  (:repeat-map vterm-prompt-repeat-map
+   ("p" . vterm-previous-prompt)
+   ("n" . vterm-next-prompt))
 
   :init
   (defun my/vterm-mode-p (buffer-or-name &optional action)
@@ -5340,7 +5346,11 @@ TODO see if I want to bind any more functions from it
 (use-package string-inflection
   :commands (string-inflection-all-cycle)
   :bind
-  ("C-_" . string-inflection-all-cycle))
+  ("C-_" . string-inflection-all-cycle)
+  (:map embark-identifier-map
+   ("_" . string-inflection-all-cycle))
+  :config
+  (add-to-list 'embark-repeat-actions #'string-inflection-all-cycle))
 #+end_src
 #+end_src
 
@@ -5931,9 +5941,6 @@ See `beframe-rename-frame'."
   :commands (xref-find-definitions
              xref-find-definitions-other-window)
   :hook (xref-backend-functions #'dumb-jump-xref-activate)
-  :bind
-  (:map my/main-map
-   ("j d" . xref-find-definitions))
   :custom
   (dumb-jump-prefer-searcher 'rg))
 #+end_src
