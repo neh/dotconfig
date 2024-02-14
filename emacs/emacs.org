@@ -1921,8 +1921,10 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                              (project-find-dir "Find directory" ?d)
                              (magit-project-status "Git" ?g)
                              (project-vc-dir "VC-Dir")
-                             (project-eshell "Eshell"))
-                           ))
+                             (project-eshell "Eshell")))
+  :hook
+  (after-init . (lambda ()
+                  (define-key ctl-x-map (kbd "C-p") project-prefix-map))))
 #+end_src
 
 * Git
