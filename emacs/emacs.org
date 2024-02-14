@@ -831,17 +831,10 @@ General settings when in text editing modes.
 #+begin_src emacs-lisp
 (use-package simple
   :straight nil
-  :hook ((text-mode prog-mode) . visual-line-mode)
-  :bind
-  (:map my/main-map
-   ("k v" . visual-line-mode))
-  )
+  :hook ((text-mode prog-mode) . visual-line-mode))
 
 (use-package visual-fill-column
   :hook (visual-line-mode . visual-fill-column-mode)
-  :bind
-  (:map my/main-map
-   ("k c" . visual-fill-column-mode))
 
   :custom
   (split-window-preferred-function #'visual-fill-column-split-window-sensibly)
@@ -2683,11 +2676,7 @@ Indent subitems in lists a bit more so they're clearer.
                            ))
 
   :custom-face
-  (org-modern-symbol ((t (:family "Iosevka" :height 1.13))))
-
-  :bind
-  (:map my/main-map
-   ("vm" . org-modern-mode)))
+  (org-modern-symbol ((t (:family "Iosevka" :height 1.13)))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5398,9 +5387,6 @@ TODO see if I want to bind any more functions from it
 #+begin_src emacs-lisp
 (use-package whitespace
   :commands (whitespace-mode)
-  :bind
-  (:map my/main-map
-   ("k w" . whitespace-mode))
   :custom
   (whitespace-line-column 80)
   (whitespace-style '(face trailing tabs lines-tail)))
@@ -6064,10 +6050,6 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-  :bind
-  (:map my/main-map
-   ("k d" . rainbow-delimiters-mode))
-
   :custom-face
   (rainbow-delimiters-unmatched-face ((t (:height 1.0 :inherit 'error))))
   (rainbow-delimiters-depth-1-face ((t (:height 1.0))))
@@ -6166,10 +6148,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package rainbow-mode
-  :commands (rainbow-mode)
-  :bind
-  (:map my/main-map
-   ("k c" . rainbow-mode)))
+  :commands (rainbow-mode))
 #+end_src
 
 #+begin_src emacs-lisp
