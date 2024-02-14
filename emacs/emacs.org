@@ -183,6 +183,12 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 
 (global-set-key (kbd "C-o") ctl-x-map)
 (global-set-key (kbd "M-w") my/window-map)
+
+(keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
+(keymap-set my/main-map "q" #'kill-current-buffer)
+(keymap-set my/main-map "Q" #'bury-buffer)
+
+(keymap-set global-map "C-c C" #'quick-calc)
 #+end_src
 
 Collect all the global, non-package-specific settings here.
@@ -559,13 +565,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("z" . meow-pop-selection)
      '("'" . repeat)
      '("<escape>" . ignore)))
-
-  ;; TODO move these somewhere that makes sense
-  (keymap-set my/main-map "e" #'find-file)
-  (keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
-  (keymap-set my/main-map "q" #'kill-current-buffer)
-  (keymap-set my/main-map "Q" #'bury-buffer)
-  (keymap-set global-map "C-c C" #'quick-calc)
 
   :custom
   (meow-keypad-leader-dispatch my/main-map)
