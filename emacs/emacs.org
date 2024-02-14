@@ -178,8 +178,8 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 (defvar-keymap my/notes-map
   :doc "My note-related keys.")
 
-(defvar-keymap my/main-map
-  :doc "My top-level map.")
+(defvar-keymap my/search-map
+  :doc "My search-related keys.")
 
 (defun my/set-override-keybindings ()
   (keymap-set ctl-x-map "C-w" my/window-map)
@@ -188,11 +188,8 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 
 (global-set-key (kbd "C-o") ctl-x-map)
 
-(keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
-(keymap-set my/main-map "q" #'kill-current-buffer)
-(keymap-set my/main-map "Q" #'bury-buffer)
-
-(keymap-set global-map "C-c C" #'quick-calc)
+(keymap-set mode-specific-map "s" my/search-map)
+(keymap-set mode-specific-map "q" #'kill-current-buffer)
 #+end_src
 
 Collect all the global, non-package-specific settings here.
@@ -466,6 +463,14 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   (delete-selection-mode t))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package calc
+  :straight nil
+  :bind
+  (:map mode-specific-map
+   ("C" . quick-calc)))
+#+end_src
+
 * Keybindings
 
 #+begin_src emacs-lisp
@@ -505,9 +510,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("7" . meow-digit-argument)
      '("8" . meow-digit-argument)
      '("9" . meow-digit-argument)
-     '("0" . meow-digit-argument)
-     '("/" . meow-keypad-describe-key)
-     '("?" . meow-cheatsheet))
+     '("0" . meow-digit-argument))
     (meow-motion-overwrite-define-key
      ;; custom keybinding for motion state
      '("<escape>" . ignore))
@@ -587,7 +590,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
      '("<escape>" . ignore)))
 
   :custom
-  (meow-keypad-leader-dispatch my/main-map)
   (meow-expand-hint-remove-delay 0)
   <<meow-custom>>
 
@@ -681,10 +683,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :demand t
   :straight nil
   :custom
-  (bookmark-fontify nil)
-  :bind
-  (:map my/main-map
-   ("jb" . bookmark-jump)))
+  (bookmark-fontify nil))
 
 (use-package saveplace
   :demand t
@@ -819,9 +818,8 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+begin_src emacs-lisp
 (use-package finder
   :straight nil
-  :bind
-  (:map my/main-map
-   ("h C" . finder-commentary)))
+   ;; ("h C" . finder-commentary))
+  )
 #+end_src
 
 * Text mode
@@ -1366,8 +1364,8 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :straight nil
   :hook (minibuffer-setup . vertico-repeat-save)
   :bind
-  (:map my/main-map
-   ("r" . vertico-repeat)))
+  (:map mode-specific-map
+   ("r". vertico-repeat)))
 
 (use-package vertico-reverse
   :after vertico
@@ -1610,24 +1608,30 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (([remap goto-line] . consult-goto-line)
    ("C-h i" . consult-info)
    ("C-h C-m" . consult-man)
-   (:map ctl-x-map
-    ("C-b" . consult-buffer))
-   (:map my/main-map
-    ("iy" . consult-yank-pop)
-    ("u" . consult-imenu)
-    ("jo" . consult-org-heading)
-    ("sf" . consult-find)
-    ("l" . consult-line)
-    ("sg" . consult-ripgrep)
-    ("sv" . consult-git-grep)
-    )
-   (:repeat-map buffer-switch-repeat-map
-    :exit
-    ("e" . find-file)
-    ("o" . consult-buffer)
-    ("W" . consult-buffer-other-window))
+
+   :map ctl-x-map
+   ("C-b" . consult-buffer)
+
+   :map mode-specific-map
+   ("l" . consult-line)
+   ("iy" . consult-yank-pop)
+   ("u" . consult-imenu)
+   ("jo" . consult-org-heading)
+
+   :map my/search-map
+   ("f" . consult-find)
+   ("g" . consult-ripgrep)
+   ("v" . consult-git-grep)
+
+   :repeat-map buffer-switch-repeat-map
+   :exit
+   ("e" . find-file)
+   ("o" . consult-buffer)
+   ("W" . consult-buffer-other-window)
+
    :map embark-buffer-map
    ("F" . consult-buffer-other-frame)
+
    :map minibuffer-mode-map
    ("C-c r" . consult-history))
 
@@ -1653,8 +1657,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package consult-org-roam
-  :after (consult
-          org-roam)
   :commands (consult-org-roam-mode
              consult-org-roam-search
              consult-org-roam-backlinks
@@ -1665,10 +1667,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-org-roam-grep-func #'consult-ripgrep)
 
   :bind
-  (:map my/main-map
-   ("sn" . consult-org-roam-search)
-   ("nB" . consult-org-roam-backlinks)
-   ("nF" . consult-org-roam-forward-links))
+  (:map my/search-map
+   ("n" . consult-org-roam-search)
+
+   :map my/notes-map
+   ("C-S-b" . consult-org-roam-backlinks)
+   ("C-S-f" . consult-org-roam-forward-links))
 
   :init
   (consult-org-roam-mode t))
@@ -1760,12 +1764,12 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package avy
   :demand t
   :bind
-  (:map my/main-map
-   ("a j" . avy-goto-char-timer)
-   ("a q" . avy-pop-mark)
+  (:map mode-specific-map
+   ("jj" . avy-goto-char-timer)
+   ("jq" . avy-pop-mark)
    ;; "l" #'avy-goto-line
-   ("a l" . avy-copy-line)
-   ("a r" . avy-copy-region)
+   ("jl" . avy-copy-line)
+   ("jr" . avy-copy-region)
    )
 
   ;; TODO might need a little avy transient/hydra for visibility/accessibility of all this good stuff
@@ -1932,7 +1936,7 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              diff-hl-flydiff-mode
              diff-hl-update)
   :bind
-  (:map my/main-map
+  (:map mode-specific-map
    ("jh" . diff-hl-next-hunk)
    :repeat-map diff-hl-repeat-map
    ("t" . diff-hl-next-hunk)
@@ -2049,7 +2053,7 @@ Of course, the great magit.
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 
   :bind
-  (:map my/main-map
+  (:map mode-specific-map
    ("vs" . magit-status-here)
    ("vf" . magit-file-dispatch)
    ("vg" . magit-dispatch)
@@ -2081,10 +2085,10 @@ Handy package to browse to git repo web interfaces.
              git-link-commit
              git-link-homepage)
   :bind
-  (:map my/main-map
-   ("v B" . git-link)
-   ("v C" . git-link-commit)
-   ("v H" . git-link-homepage))
+  (:map mode-specific-map
+   ("vB" . git-link)
+   ("vC" . git-link-commit)
+   ("vH" . git-link-homepage))
   :custom
   (git-link-open-in-browser t))
 #+end_src
@@ -2767,8 +2771,8 @@ Show the heading of a table when it's scrolled offscreen.
   (:map org-mode-map
    ("C-'" . nil)
    ("C-," . nil)
-   :map my/main-map
-   ("A" . org-agenda))
+   :map mode-specific-map
+   ("a" . org-agenda))
 
   :init
   (defun my/agenda-current-window ()
@@ -3692,7 +3696,7 @@ in that direction and display the target buffer in said window."
    ("k" . popper-kill-latest-popup)
    ("p" . popper-toggle)
 
-   :map my/main-map
+   :map mode-specific-map
    ("p" . popper-toggle)
    ("P" . popper-toggle-type))
 
@@ -4302,11 +4306,11 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :bind
-  (:map my/main-map
-   ("j g" . my/global-vterm-toggle)
-   ("j G" . my/global-vterm-toggle-cd)
-   ("j t" . my/project-vterm-toggle)
-   ("j T" . my/project-vterm-toggle-cd)
+  (:map mode-specific-map
+   ("jg" . my/global-vterm-toggle)
+   ("jG" . my/global-vterm-toggle-cd)
+   ("jt" . my/project-vterm-toggle)
+   ("jT" . my/project-vterm-toggle-cd)
 
    :map vterm-mode-map
    ("C-'" . my/project-vterm-toggle)
@@ -4543,9 +4547,9 @@ any directory proferred by `consult-dir'."
   (dired-kill-when-opening-new-dired-buffer t)
 
   :bind
-  (:map my/main-map
-   ("j x x" . my/dired-open)
-   ("j u" . dired-jump)
+  (:map mode-specific-map
+   ("jxx" . my/dired-open)
+   ("ju" . dired-jump)
    :map dired-mode-map
    ("n" . dired-previous-line)
    ("t" . dired-next-line))
@@ -4910,7 +4914,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :after hydra
   :commands (pretty-hydra-define)
   :bind
-  (:map my/main-map
+  (:map mode-specific-map
    ("," . my/toggles/body)
    ;; "'" #'my/movement/body
    ;; "G" 'hydra-git/body
@@ -5105,7 +5109,7 @@ Not using this one yet, but will allow associating a hydra to any major mode to 
 #+begin_src emacs-lisp :noweb yes
 (use-package major-mode-hydra
   :bind
-  (:map my/main-map
+  (:map mode-specific-map
    ("." . major-mode-hydra))
 
   :config
@@ -5583,8 +5587,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
       :query-separator "+"
       :query-url "developer.mozilla.org/en-US/search?q=")
   :bind
-  (:map my/main-map
-   ("sw" . websearch)))
+  (:map my/search-map
+   ("w" . websearch)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5733,9 +5737,7 @@ See `beframe-rename-frame'."
   :commands (iedit-mode
              iedit-rectangle-mode)
   :bind
-  (("C-;" . iedit-mode)
-   :map my/main-map
-   ("ie" . iedit-mode)))
+  ("C-;" . iedit-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5927,7 +5929,7 @@ See `beframe-rename-frame'."
   :commands (link-hint-open-link
              link-hint-define-type)
   :bind
-  (:map my/main-map
+  (:map mode-specific-map
    ("f" . link-hint-open-link)
    ("F" . my/link-hint-open-in-external))
 
@@ -5997,9 +5999,9 @@ See `beframe-rename-frame'."
     (deadgrep (deadgrep--read-search-term) default-directory))
 
   :bind
-  (:map my/main-map
-   ("sr" . deadgrep)
-   ("sR" . my/deadgrep-here)
+  (:map my/search-map
+   ("r" . deadgrep)
+   ("R" . my/deadgrep-here)
 
    :map deadgrep-mode-map
    ("M-n" . deadgrep-backward-match)
@@ -6291,7 +6293,9 @@ I like the vim/evil style join where the next line is pulled up and joined to th
 And let's give it the same keybinding as evil, since I'm used to it.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-normal-define-key '("J" . my/join-line))
+;; need to find a new key for either this or meow-block
+;; jk works now if on second line to be joined
+;; (meow-normal-define-key '("J" . my/join-line))
 #+end_src
 
 From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improved_emacs_search/][reddit thread]].
@@ -6450,8 +6454,6 @@ interactively, or via #'embark-act.
     (if (region-active-p)
         (indent-region (region-beginning) (region-end))
       (my/indent-buffer))))
-
-(keymap-set my/main-map "=" #'my/indent-region-or-block-or-buffer)
 #+end_src
 
 A nice couple of functions for opening files from dired asynchronously. Handy use of =nohup= so external programs keep running when the launching emacs exits. This is a combination of bits from [[https://www.reddit.com/r/emacs/comments/cgbpvl/opening_media_files_straight_from_gnu_emacs_dired/][this thread on reddit]].
