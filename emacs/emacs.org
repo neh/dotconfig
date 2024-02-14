@@ -175,14 +175,18 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   :doc "My general window/navigation keys."
   :name "Windows")
 
-(defvar-keymap my/main-map
-  :doc "My top-level map."
-  )
+(defvar-keymap my/notes-map
+  :doc "My note-related keys.")
 
-(define-key my/main-map "w" my/window-map)
+(defvar-keymap my/main-map
+  :doc "My top-level map.")
+
+(defun my/set-override-keybindings ()
+  (keymap-set ctl-x-map "C-w" my/window-map)
+  (keymap-set ctl-x-map "C-n" my/notes-map))
+(add-hook 'after-init-hook #'my/set-override-keybindings)
 
 (global-set-key (kbd "C-o") ctl-x-map)
-(global-set-key (kbd "M-w") my/window-map)
 
 (keymap-set my/main-map ";" #'comment-or-uncomment-region-or-line)
 (keymap-set my/main-map "q" #'kill-current-buffer)
@@ -1587,11 +1591,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (([remap goto-line] . consult-goto-line)
    ("C-h i" . consult-info)
    ("C-h C-m" . consult-man)
+   (:map ctl-x-map
+    ("C-b" . consult-buffer))
    (:map my/main-map
     ("iy" . consult-yank-pop)
     ("u" . consult-imenu)
     ("jo" . consult-org-heading)
-    ("o" . consult-buffer)
     ("sf" . consult-find)
     ("l" . consult-line)
     ("sg" . consult-ripgrep)
@@ -3045,10 +3050,11 @@ MimeType=x-scheme-handler/org-protocol;
   ;; (org-roam-buffer-window-parameters '((no-other-window . t)))
 
   :bind
-  (:map my/main-map
-   ("n n" . org-roam-node-find)
-   ("n i" . org-roam-node-insert)
-   ("n R" . org-roam-node-random))
+  (:map my/notes-map
+   ("C-n" . org-roam-node-find)
+   ("C-i" . org-roam-node-insert)
+   ("C-S-r" . org-roam-node-random))
+
   ;;   "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
 
   :init
@@ -3226,11 +3232,12 @@ MimeType=x-scheme-handler/org-protocol;
       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
   :bind
-  (:map my/main-map
-   ("n d" . org-roam-dailies-capture-today)
-   ("n D" . org-roam-dailies-capture-date)
-   ("n ." . org-roam-dailies-goto-today)
-   ("n >" . org-roam-dailies-goto-date))
+  (:map my/notes-map
+   ("C-d" . org-roam-dailies-capture-today)
+   ("C-S-d" . org-roam-dailies-capture-date)
+   ("C-." . org-roam-dailies-goto-today)
+   ("C->" . org-roam-dailies-goto-date)
+   ("C-r" . my/org-roam-dailies-review))
 
   :config
   ;; deps: org, org-roam, org-transclusion, ts, s
