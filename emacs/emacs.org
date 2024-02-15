@@ -182,6 +182,7 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   :doc "My search-related keys.")
 
 (defun my/set-override-keybindings ()
+  (define-key esc-map "u" #'execute-extended-command)
   (keymap-set ctl-x-map "C-w" my/window-map)
   (keymap-set ctl-x-map "C-n" my/notes-map))
 (add-hook 'after-init-hook #'my/set-override-keybindings)
