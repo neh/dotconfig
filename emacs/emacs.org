@@ -2036,6 +2036,8 @@ Of course, the great magit.
   :straight nil
   :hook
   (git-commit-mode . my/insert-mode)
+  (git-commit-mode . auto-fill-mode)
+  (git-commit-mode . (lambda () (setq-local fill-column 72)))
 
   :custom
   (magit-commit-show-diff t)
@@ -2050,9 +2052,7 @@ Of course, the great magit.
 
    :map magit-mode-map
    ("n" . magit-previous-line)
-   ("t" . magit-next-line)
-   ("M-n" . magit-section-backward)
-   ("M-t" . magit-section-forward)))
+   ("t" . magit-next-line)))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
