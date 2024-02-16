@@ -1688,17 +1688,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (consult-jump-project))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package consult-notes
-  :commands (consult-notes
-             consult-notes-search-in-all-notes
-             consult-notes-org-roam-find-node
-             consult-notes-org-roam-find-node-relation)
-  :config
-  (setq consult-notes-sources `(("Notes"  ?n  ,org-roam-directory)))
-  (consult-notes-org-roam-mode))
-#+end_src
-
 ** Corfu
 
 #+begin_src emacs-lisp
