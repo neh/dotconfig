@@ -4110,6 +4110,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package jinx
   :hook (text-mode . jinx-mode)
+  :custom (jinx-languages "en_CA en_US")
   :bind ([remap ispell-word] . jinx-correct))
 #+end_src
 
