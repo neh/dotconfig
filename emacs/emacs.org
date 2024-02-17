@@ -21,7 +21,7 @@ emacs -Q -l profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-f
 :header-args:emacs-lisp: :tangle "early-init.el" :dir user-emacs-directory
 :end:
 
-Since this is a literate configuration, a small =init.el= file is needed to handle tangling and loading the rest of the configuration when necessary. That file gets created here, and the tangled result needs to be commited to the git repository whenever any changes are made to it here.
+Since this is a literate configuration, a small =init.el= file is needed to handle tangling and loading the rest of the configuration when necessary. That file gets created here, and the tangled result needs to be committed to the git repository whenever any changes are made to it here.
 
 Right up front, enable [[https://www.emacswiki.org/emacs/DynamicBindingVsLexicalBinding][lexical binding]].
 
@@ -246,7 +246,7 @@ Collect all the global, non-package-specific settings here.
   (fset 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
-Turn off all startup messages, splash screens, menu bars, scrollbars, etc. for a clean start.
+Turn off all startup messages, splash screens, menu bars, scroll bars, etc. for a clean start.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
 (inhibit-splash-screen t)
@@ -1026,7 +1026,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
    #'signal-handler))
 #+end_src
 
-But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller modeline font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
+But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller mode-line font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
 
 #+begin_src emacs-lisp
 (defvar after-load-theme-hook nil
@@ -1223,7 +1223,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 (spacious-padding-mode t)
 #+end_src
 
-* Modeline
+* Mode-line
 
 #+begin_src emacs-lisp
 (use-package doom-modeline
@@ -2328,7 +2328,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
   )
 #+end_src
 
-Org-mouse enables nice mouse interaction with bits of org like headings and checkboxes.
+Org-mouse enables nice mouse interaction with bits of org like headings and check boxes.
 
 #+begin_src emacs-lisp
 (use-package org-mouse
@@ -2609,7 +2609,7 @@ Just always show images; I always want them.
 (org-special-ctrl-a/e t)
 #+end_src
 
-Indent subitems in lists a bit more so they're clearer.
+Indent sub-items in lists a bit more so they're clearer.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-custom
 (org-list-indent-offset 2)
@@ -2685,7 +2685,7 @@ Indent subitems in lists a bit more so they're clearer.
 
 ** Hooks
 
-For a bit more org mode prettiness: =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, monospace fonts for src blocks, and variable width fonts elsewhere.
+For a bit more org mode prettiness: =variable-pitch-mode=, which sets up different fonts for different parts of the file, specifically, mono-space fonts for src blocks, and variable width fonts elsewhere.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
 (org-mode . variable-pitch-mode)
@@ -2971,7 +2971,7 @@ Show the heading of a table when it's scrolled offscreen.
   :after org)
 #+end_src
 
-We need a little desktop integration for =org-protocol=, linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
+We need a little desktop integration for =org-protocol=, Linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
 
 #+begin_src conf :tangle ~/.config/systemd/user/emacs-server.service :mkdirp yes
 [Unit]
@@ -4700,7 +4700,7 @@ Version 2017-09-01"
   (my/set-dired-subtree-background))
 #+end_src
 
-This seems useful, especially in combination with =dired-subtree=, as then it's active in the buffer as you view subtrees.
+This seems useful, especially in combination with =dired-subtree=, as then it's active in the buffer as you view sub-trees.
 
 #+begin_src emacs-lisp
 (use-package dired-collapse
