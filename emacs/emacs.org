@@ -5346,6 +5346,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :commands (goggles-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package tab-jump-out
   :config
   (tab-jump-out-global-mode t))

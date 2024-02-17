@@ -97,6 +97,7 @@
  ("gnu-elpa-mirror" . "ab9bcb0be30511d4fff7e413135507cebc447f7c")
  ("go-eldoc" . "cbbd2ea1e94a36004432a9ac61414cb5a95a39bd")
  ("go-mode.el" . "8dce1e3ba1cdc34a856ad53c8421413cfe33660e")
+ ("goggles" . "41d3669d7ae7b73bd39d298e5373ece48b656ce3")
  ("groovy-emacs-modes" . "7b8520b2e2d3ab1d62b35c426e17ac25ed0120bb")
  ("hammy.el" . "61188c66897fcab359ee555cd30c384a968af64c")
  ("hcl-mode" . "751b79247f326ab52e00032e805775c37ad9f080")
