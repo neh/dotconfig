@@ -4528,7 +4528,7 @@ any directory proferred by `consult-dir'."
 (use-package dired
   :straight nil
   :hook ((dired-mode . dired-hide-details-mode)
-         (dired-mode . dired-async-mode)
+         (dired-mode . dired-async-mode))
   :commands (dired-jump
              dired-mode)
 
