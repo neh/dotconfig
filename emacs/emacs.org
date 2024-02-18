@@ -1338,7 +1338,8 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
            buffer
            (vertico-buffer-display-action . (display-buffer-same-window)))
           ;; (t reverse)
-          ))
+
+          (jinx grid (vertico-grid-annotate . 20))))
   (setq vertico-multiform-commands nil
         ;; '((consult-buffer posframe)
         ;;   (find-file posframe)
