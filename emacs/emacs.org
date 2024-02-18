@@ -6159,7 +6159,9 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package dtrt-indent
   :commands (dtrt-indent-mode
-             dtrt-indent-global-mode))
+             dtrt-indent-global-mode)
+  :config
+  (dtrt-indent-global-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
