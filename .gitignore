@@ -7,3 +7,11 @@
 !/nhowell.net
 !/dconf/user.txt
 !/paperwm/user.css
+
+!/input-remapper-2
+/input-remapper-2/*
+!/input-remapper-2/presets
+/input-remapper-2/presets/*
+!/input-remapper-2/presets/AT Translated Set 2 keyboard/
+/input-remapper-2/presets/AT Translated Set 2 keyboard/*
+!input-remapper-2/presets/AT Translated Set 2 keyboard/tap-esc-hold-ctrl.json
