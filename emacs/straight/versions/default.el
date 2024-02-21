@@ -13,6 +13,7 @@
  ("buffer-move" . "e7800b3ab1bd76ee475ef35507ec51ecd5a3f065")
  ("burly.el" . "6626df0c2054cb0662bf113ba4cbad641b588d0f")
  ("cape" . "80b41c67ab75eb57aa0fb527842f9d3d82002544")
+ ("cc-isearch-menu" . "b6ed361d146dc7306942d4bebe6d74d51227ca36")
  ("cfrs" . "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121")
  ("cider" . "07150f10bf920eb3e8f166592fac1aa8dcfc1e26")
  ("clojure-mode" . "222fdafa2add56a171ded245339a383e5e3078ec")

@@ -817,6 +817,15 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package cc-isearch-menu
+  :after transient
+  :commands (cc-isearch-menu-transient)
+  :bind
+  (:map isearch-mode-map
+   ("<f2>" . cc-isearch-menu-transient)))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package finder
   :straight nil
    ;; ("h C" . finder-commentary))
