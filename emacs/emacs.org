@@ -3355,16 +3355,10 @@ MimeType=x-scheme-handler/org-protocol;
 
 * SVG Prettiness
 
-Built-in SVG rendering provides some nice potential for some pretty, so let's set that up here. First, add the [[https://github.com/rougier/svg-lib][svg-lib]] package. Due to [[https://github.com/rougier/svg-lib/issues/18][issue 18]], we need a [[https://github.com/rougier/svg-lib/issues/18#issuecomment-1278132701][workaround]] for this to work when emacs is running as a daemon.
+Built-in SVG rendering provides some nice potential for some pretty, so let's set that up here. First, add the [[https://github.com/rougier/svg-lib][svg-lib]] package.
 
 #+begin_src emacs-lisp
-(use-package svg-lib
-  :init
-  (when (daemonp)
-    (defun first-graphical-frame-hook-function ()
-      (remove-hook 'server-after-make-frame-hook #'first-graphical-frame-hook-function)
-      (setq svg-lib-style-default (svg-lib-style-compute-default)))
-    (add-hook 'server-after-make-frame-hook #'first-graphical-frame-hook-function)))
+(use-package svg-lib)
 #+end_src
 
 Then we add [[https://github.com/rougier/svg-tag-mode][svg-tag-mode]], which makes it easy to replace some text elements with generated SVG images.
