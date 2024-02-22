@@ -1187,11 +1187,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
              fontaine-restore-latest-preset)
   :hook (kill-emacs . fontaine-store-latest-preset)
   :custom
-  (fontaine-font-families '((default "Iosevka")
-                            (fixed-pitch)
-                            (variable-pitch "Noto Sans" "ETBembo")))
-  (fontaine-presets `(
-                      (normal
+  (fontaine-presets `((normal
                        :default-height ,(round (* my/current-text-size 1.04))
                        :fixed-pitch-height ,(round (* my/current-text-size 1.04))
                        :variable-pitch-height ,(round (* my/current-text-size 1.04)))
@@ -1210,9 +1206,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
                       (t
                        :default-family "Iosevka"
                        :default-weight normal
+                       :fixed-pitch-family "Iosevka"
                        :variable-pitch-family "Noto Sans"
-                       :line-spacing 0.2)
-                      )))
+                       :line-spacing 0.2))))
 #+end_src
 
 #+begin_src emacs-lisp
