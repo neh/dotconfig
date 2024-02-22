@@ -2322,7 +2322,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (when (<= (buffer-size) 1)
       (cond ((meow-mode) (meow-insert)))))
 
-  (advice-add 'org-edit-special :after #'recenter)
+  (advice-add 'org-edit-special :around #'my/around-recenter)
 
   ;; not sure why advising with :after for these breaks, but it does
   (defun my/around-recenter (orig-fun &rest args)
@@ -2330,7 +2330,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (recenter))
   (advice-add 'org-next-visible-heading :around #'my/around-recenter)
 
-  (advice-add 'org-next-link :after #'recenter)
+  (advice-add 'org-next-link :around #'my/around-recenter)
   )
 #+end_src
 
