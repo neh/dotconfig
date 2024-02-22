@@ -5052,7 +5052,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
 
   ("Formatting"
    (("vl" global-visual-line-mode "visual lines" :toggle t)
-    ("vf" visual-fill-column-mode "visual fill" :toggle t)
+    ("vf" visual-line-fill-column-mode "visual fill" :toggle t)
     ("w" whitespace-mode "whitespace" :toggle t)
     ("c" rainbow-mode "colours" :toggle t)
     ("t" toggle-truncate-lines "truncate lines" :toggle truncate-lines)
