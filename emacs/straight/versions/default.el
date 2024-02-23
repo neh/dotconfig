@@ -176,6 +176,7 @@
  ("parseedn" . "3407e4530a367b6c2b857dae261cdbb67a440aaa")
  ("pcre2el" . "380723b2701cceb75c266440fb8db918f3340d50")
  ("pdf-tools" . "c69e7656a4678fe25afbd29f3503dd19ee7f9896")
+ ("pdf-view-restore" . "5a1947c01a3edecc9e0fe7629041a2f53e0610c9")
  ("peg" . "ee4a6a766c5f19bb196e7b2487ffff3ca892eea3")
  ("persist" . "29641378698ff8f05b877e132f82cad8f77be3be")
  ("pfuture" . "19b53aebbc0f2da31de6326c495038901bffb73c")

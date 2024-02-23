@@ -1172,6 +1172,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
   (set-scroll-bar-mode nil)
 
+  ;; look for pdf buffers and sync dark/light in them
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (cond ((eq major-mode 'pdf-view-mode)
+             (pdf-view-themed-minor-mode (if (my/dark-p) +1 -1))))))
+
   <<graphical-tweaks>>
 
   (unless my/first-frame-created
