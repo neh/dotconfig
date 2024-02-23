@@ -5132,9 +5132,26 @@ First, set up =pdf-tools= for nice PDF handling.
 #+begin_src emacs-lisp
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
-  :hook (pdf-view-mode . (lambda () (blink-cursor-mode -1)))
+  :hook ((pdf-view-mode . (lambda () (blink-cursor-mode -1)))
+         (pdf-view-mode . my/pdf-dark-maybe))
+
+  :init
+  (defun my/pdf-dark-maybe ()
+    (when (my/dark-p)
+      pdf-view-themed-minor-mode))
+
   :custom
+  (pdf-view-midnight-colors '("#f8f8f2" . "#282a36"))
   (pdf-view-display-size 'fit-page))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package pdf-view-restore
+  :after pdf-tools
+  :hook
+  (pdf-view-mode . pdf-view-restore-mode)
+  :custom
+  (pdf-view-restore-filename (expand-file-name "pdf-view-history" user-emacs-directory)))
 #+end_src
 
 PDF link handling in =org-mode=.
