@@ -5942,8 +5942,8 @@ See `beframe-rename-frame'."
              link-hint-define-type)
   :bind
   (:map mode-specific-map
-   ("f" . link-hint-open-link)
-   ("F" . my/link-hint-open-in-external))
+   ("w" . link-hint-open-link)
+   ("W" . my/link-hint-open-in-external))
 
   :config
   (link-hint-define-type 'text-url
