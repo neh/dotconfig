@@ -206,7 +206,7 @@ Collect all the global, non-package-specific settings here.
   :bind
   ("M-p" . mode-line-other-buffer)
   (:repeat-map buffer-switch-repeat-map
-   ("p" . mode-line-other-buffer))
+   ("." . mode-line-other-buffer))
   (<<misc-keybinds>>)
 
   :init
@@ -1835,8 +1835,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    ("c" . nswbuff-switch-to-next-buffer)
    ("r" . nswbuff-switch-to-previous-buffer)
    :repeat-map buffer-switch-repeat-map
-   ("c" . nswbuff-switch-to-next-buffer)
-   ("r" . nswbuff-switch-to-previous-buffer))
+   ("n" . nswbuff-switch-to-next-buffer)
+   ("p" . nswbuff-switch-to-previous-buffer))
 
   :custom
   (nswbuff-buffer-list-function #'my/local-buffer-list)
@@ -1852,7 +1852,9 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
   :init
   (defun my/local-buffer-list ()
-    (seq-remove #'popper-popup-p (beframe--buffer-list))))
+    (seq-remove #'popper-popup-p (beframe--buffer-list)))
+  :config
+  (my/set-repeat-map-timeout buffer-switch-repeat-map 2))
 #+end_src
 
 #+begin_src emacs-lisp
