@@ -2308,13 +2308,6 @@ My org config is pretty long, so I've broken it up for easier reading and explan
      (sqlite . t)
      (python . t)))
 
-  ;; (defun my/normal-mode-after-src-edit (&rest args)
-    ;; (apply orig-fun args)
-    ;; (message "Setting evil state back to %s" my/current-evil-state)
-    ;; (evil-change-state "normal")
-    ;; )
-  ;; (advice-add 'org-edit-src-exit :after 'my/normal-mode-after-src-edit)
-  ;; (advice-remove 'org-edit-src-exit 'my/normal-mode-after-src-edit)
   (defun my/insert-in-empty-src-edit ()
     (when (<= (buffer-size) 1)
       (cond ((meow-mode) (meow-insert)))))
@@ -2327,8 +2320,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
     (recenter))
   (advice-add 'org-next-visible-heading :around #'my/around-recenter)
 
-  (advice-add 'org-next-link :around #'my/around-recenter)
-  )
+  (advice-add 'org-next-link :around #'my/around-recenter))
 #+end_src
 
 Org-mouse enables nice mouse interaction with bits of org like headings and check boxes.
