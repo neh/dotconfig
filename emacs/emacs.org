@@ -1852,9 +1852,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
   :init
   (defun my/local-buffer-list ()
-    (seq-remove #'popper-popup-p (beframe--buffer-list)))
-  :config
-  (my/set-repeat-map-timeout buffer-switch-repeat-map 2))
+    (seq-remove #'popper-popup-p (beframe--buffer-list))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3662,8 +3660,6 @@ in that direction and display the target buffer in said window."
        'face (funcall tab-bar-tab-face-function tab))))
 
   :config
-  (my/set-repeat-map-timeout tab-bar-switch-repeat-map 2)
-
   (tab-bar-mode t))
 #+end_src
 
@@ -3720,6 +3716,24 @@ in that direction and display the target buffer in said window."
   :straight nil
   :custom
   (repeat-exit-key "q")
+  (repeat-exit-timeout 2)
+
+  :init
+  (defvar my/repeat-command-timeouts '()
+    "A list of (command . timeout) pairs used to set repeat-exit-timeouts.")
+
+  (setq my/repeat-command-timeouts '((scroll-other-window . no)
+                                     (scroll-other-window-down . no)
+                                     (other-window . 0.3)))
+
+  (defun my/repeat-timeout-setter ()
+    "Set specified repeat-exit-timeouts for some commands."
+    (interactive)
+    (dolist (command my/repeat-command-timeouts)
+      (put (car command) 'repeat-exit-timeout (cdr command))))
+
+  (add-hook 'after-init-hook #'my/repeat-timeout-setter)
+
   :config
   (repeat-mode t))
 
@@ -3765,11 +3779,7 @@ current window, as a ratio between 0 and 1.")
    ("-" . split-window-below)
 
    ("k" . delete-window)
-   ("K" . delete-other-windows)
-   )
-
-  :config
-  (my/set-repeat-map-timeout other-window-repeat-map 1))
+   ("K" . delete-other-windows)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3804,10 +3814,7 @@ current window, as a ratio between 0 and 1.")
    ("H" . windmove-swap-states-left)
    ("S" . windmove-swap-states-right)
    ("N" . windmove-swap-states-up)
-   ("T" . windmove-swap-states-down))
-
-  :config
-  (my/set-repeat-map-timeout windmove-repeat-map 2))
+   ("T" . windmove-swap-states-down)))
 #+end_src
 
 #+begin_src emacs-lisp
