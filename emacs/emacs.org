@@ -3781,13 +3781,18 @@ current window, as a ratio between 0 and 1.")
 
   :bind
   ("M-o" . other-window)
+
   (:repeat-map act-on-other-window-repeat-map
    ("<next>" . scroll-other-window)
    ("<prior>" . scroll-other-window-down)
    :exit
    ("k" . delete-window)
-   ("K" . delete-other-windows))
-  (:map my/window-map
+   ("K" . delete-other-windows)
+
+   :repeat-map center-top-bottom-repeat-map
+   ("r" . move-to-window-line-top-bottom)
+
+   :map my/window-map
    ("|" . split-window-right)
    ("-" . split-window-below)
 
