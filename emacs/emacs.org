@@ -1638,7 +1638,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
    :repeat-map buffer-switch-repeat-map
    :exit
-   ("e" . find-file)
    ("o" . consult-buffer)
    ("W" . consult-buffer-other-window)
 
@@ -1912,7 +1911,21 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                              (project-eshell "Eshell")))
   :hook
   (after-init . (lambda ()
-                  (define-key ctl-x-map (kbd "C-p") project-prefix-map))))
+                  (define-key ctl-x-map (kbd "C-p") project-prefix-map)))
+
+  :init
+  (defun my/find-file ()
+    (interactive)
+    (if (project-current)
+        (project-find-file)
+      (call-interactively #'find-file)))
+
+  :bind
+  (:repeat-map buffer-switch-repeat-map
+   :exit
+   ("f" . my/find-file))
+  (:map ctl-x-map
+   ("C-f" . my/find-file)))
 #+end_src
 
 * Git
