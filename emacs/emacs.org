@@ -5071,6 +5071,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
     ("fr" fill-region "fill region" :exit t))
    "UI"
    (("l" global-hl-line-mode "highlight line" :toggle t)
+    ("B" (my/customize-this "tab-bar-show") "tab bar" :exit t)
     ("k" my/toggle-dark-mode "dark mode" :toggle my/dark-mode :exit t)
     ("T" (my/customize-this "my/themeset") "themeset" :exit t)
     ("D" auto-dim-other-buffers-mode "dimmer" :toggle t)
