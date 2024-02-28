@@ -1198,9 +1198,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
                        :fixed-pitch-height ,(round (* my/current-text-size 1.04))
                        :variable-pitch-height ,(round (* my/current-text-size 1.04)))
                       (large
-                       :default-height ,(round (* my/current-text-size 1.25))
-                       :fixed-pitch-height ,(round (* my/current-text-size 1.25))
-                       :variable-pitch-height ,(round (* my/current-text-size 1.25)))
+                       :default-height ,(round (* my/current-text-size 1.3))
+                       :fixed-pitch-height ,(round (* my/current-text-size 1.3))
+                       :variable-pitch-height ,(round (* my/current-text-size 1.3)))
                       (larger
                        :default-height ,(round (* my/current-text-size 1.5))
                        :fixed-pitch-height ,(round (* my/current-text-size 1.5))
