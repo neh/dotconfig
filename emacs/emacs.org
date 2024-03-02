@@ -1748,15 +1748,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (add-to-list 'completion-at-point-functions #'cape-file))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package org-block-capf
-  :straight (:type git :host github :repo "xenodium/org-block-capf")
-  :hook (org-mode . org-block-capf-add-to-completion-at-point-functions)
-  :custom
-  (org-block-capf-explicit-lang-defaults nil)
-  (org-block-capf-auto-indent nil))
-#+end_src
-
 ** Avy
 
 Avy is a really handy way to jump around your visible buffer contents. One aspect that doesn’t seem to really be documented is the avy-actions mechanism. It lets you do things other than just jump to the point you select. So you can hit the key for whichever avy function you like, then, /before/ making your selection, press the key associated with an avy-action function to do that thing instead. This way, you can easily copy a word from elsewhere on your screen and paste it at your cursor with avy, no cursor movement needed at all. Also, =avy-copy-line= is a useful standalone function. I find it useful particularly when working in Terraform files, as lines need to be duplicated fairly often there.
@@ -2526,6 +2517,54 @@ I was sure I had a function for this, but can't find it anywhere, which means tw
   (org-overview)
   (org-show-entry)
   (org-show-children))
+#+end_src
+
+I was looking for a better way to insert src blocks (and other blocks) in org mode, and found [[https://takeonrules.com/2023/04/09/dig-my-grave-leveraging-the-triple-back-tick-in-org-mode/][Dig My Grave: Leveraging the Triple Back-tick in Org Mode // Take on Rules]], which I am now shamelessly stealing.
+
+#+begin_src emacs-lisp
+(defvar dig-my-grave/templates-alist/org-mode
+  '(("Bash" . "#+begin_src bash :results scalar replace :exports both :tangle yes\n#+end_src")
+    ("Details and Summary" . "#+begin_details\n#+begin_summary\n\n#+end_summary\n#+end_details")
+    ("Emacs Lisp" . "#+begin_src emacs-lisp\n#+end_src")
+    ("Org Structure" . org-insert-structure-template)
+    ("Plant UML" . "#+begin_src plantuml\n@startuml\n!theme amiga\n\n@enduml\n#+end_src")
+    ("Python" . "#+begin_src python\n#+end_src")
+    ("Terraform" . "#+begin_src terraform\n#+end_src"))
+  "A list of `cons' cells with `car' as the label and `cdr' as
+ the value that we'll insert.  Used as the collection for the
+ `dig-my-grave' `completing-read'.")
+
+(define-key org-mode-map (kbd "`") #'dig-my-grave)
+(defun dig-my-grave ()
+  "Three consecutive graves (e.g. “`”) at the start of the line prompts for
+ inserting content.  See `dig-my-grave/templates-alist/org-mode'."
+  (interactive)
+  (if (or (and (> (point) 3)
+               (string= (buffer-substring-no-properties
+                         (- (point) 3) (point)) "\n``"))
+          ;; Account for starting on the first line
+          (and (= (point) 3)
+               (string= (buffer-substring-no-properties
+                         (- (point) 2) (point)) "``")))
+      ;; We have just hit our third backtick at the beginning of the line.
+      (progn
+        (delete-char -2)
+        ;; I use the alist-get pattern a lot...perhaps a function?
+        (let ((value (alist-get (completing-read "Special Content: "
+                                                 dig-my-grave/templates-alist/org-mode nil t)
+                                dig-my-grave/templates-alist/org-mode nil nil #'string=)))
+          (cond
+           ;; Let's assume that we're dealing with registered org blocks.
+           ((stringp value)
+            (insert value) (forward-line -1) (org-edit-special))
+           ;; Trust the function
+           ((commandp value) (call-interactively value))
+           ((functionp value) (funcall value))
+           ((ad-lambda-p) (funcall value))
+           ;; Time for a pull request
+           (t (error "Unprocessable value %s for #'dig-my-grave" value)))))
+    (setq last-command-event ?`)
+    (call-interactively #'org-self-insert-command)))
 #+end_src
 
 ** Options

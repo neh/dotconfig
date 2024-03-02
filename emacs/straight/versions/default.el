@@ -150,7 +150,6 @@
  ("orderless" . "91df48c8e1331e434ce6ce3bab709de2035e3ec4")
  ("org" . "bc0e14a1ab96de1a8a35c9e12cf68010e56ecdb2")
  ("org-appear" . "81eba5d7a5b74cdb1bad091d85667e836f16b997")
- ("org-block-capf" . "9c1e5c63e38f94238dafeb6bbea312920b6e9901")
  ("org-chef" . "1710b54441ed744dcdfb125d08fb88cfaf452f10")
  ("org-d20" . "5993e2b83831c1937eb70ef23629008218210d22")
  ("org-download" . "19e166f0a8c539b4144cfbc614309d47a9b2a9b7")
