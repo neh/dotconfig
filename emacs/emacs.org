@@ -1278,6 +1278,19 @@ And here’s the function where I collect my tweaks to the theme and set up font
                             (eq buffer-file-coding-system 'utf-8)))))
 
   :config
+  (doom-modeline-def-segment my/buffer-info-simple
+    "Display only the current buffer's name, but with fontification."
+    (concat
+     (doom-modeline-spc)
+     (doom-modeline--buffer-mode-icon)
+     (doom-modeline--buffer-simple-name)))
+
+  (doom-modeline-def-modeline 'vterm
+    '(eldoc bar workspace-name window-number modals matches follow my/buffer-info-simple remote-host word-count parrot selection-info)
+    '(compilation objed-state misc-info persp-name battery grip irc mu4e gnus github debug repl lsp minor-modes input-method indent-info buffer-encoding process vcs check time))
+  (add-to-list 'doom-modeline-mode-alist
+               '(vterm-mode . vterm))
+
   (setq-default doom-modeline-column-zero-based nil))
 #+end_src
 
