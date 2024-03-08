@@ -2054,11 +2054,7 @@ Of course, the great magit.
   (:map mode-specific-map
    ("vs" . magit-status-here)
    ("vf" . magit-file-dispatch)
-   ("vg" . magit-dispatch)
-
-   :map magit-mode-map
-   ("n" . magit-previous-line)
-   ("t" . magit-next-line)))
+   ("vg" . magit-dispatch)))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
@@ -4596,10 +4592,7 @@ any directory proferred by `consult-dir'."
   :bind
   (:map mode-specific-map
    ("jxx" . my/dired-open)
-   ("ju" . dired-jump)
-   :map dired-mode-map
-   ("n" . dired-previous-line)
-   ("t" . dired-next-line))
+   ("ju" . dired-jump))
 
   :init
   (defun my/dired-copy-full-path ()
@@ -5288,11 +5281,7 @@ Try out =org-noter=.
 (use-package elfeed
   :commands (elfeed)
   :bind
-  (:map elfeed-search-mode-map
-   ("o" . elfeed-search-show-entry)
-   ("t" . next-line)
-   ("n" . previous-line)
-   :map elfeed-show-mode-map
+  (:map elfeed-show-mode-map
    ("I". my/elfeed-show-hide-images)
    ("U" . my/elfeed-mark-unread-and-exit))
 
