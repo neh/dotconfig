@@ -5417,7 +5417,12 @@ Try out =org-noter=.
 (use-package mastodon
   :custom
   (mastodon-instance-url "https://hachyderm.io")
-  (mastodon-active-user "neh"))
+  (mastodon-active-user "neh")
+
+  (mastodon-tl--highlight-current-toot t)
+  (mastodon-tl--enable-proportional-fonts t)
+  (mastodon-tl--show-avatars t)
+  (mastodon-media--avatar-height 50))
 #+end_src
 
 * Misc packages
