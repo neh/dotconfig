@@ -4004,9 +4004,20 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
   (scroll-on-jump-curve-power 1.0)
 
   :config
-  ;; (with-eval-after-load 'window
-  ;;   ;; (scroll-on-jump-with-scroll-advice-remove recenter-top-bottom)
-  ;;   (scroll-on-jump-with-scroll-advice-remove recenter))
+  (with-eval-after-load 'elfeed
+    (scroll-on-jump-advice-add elfeed-search-last-entry)
+    (scroll-on-jump-advice-add elfeed-search-first-entry)
+    )
+
+  (with-eval-after-load 'beginend
+    (scroll-on-jump-advice-add beginend-elfeed-search-mode-goto-end)
+    (scroll-on-jump-advice-add beginend-elfeed-search-mode-goto-beginning)
+
+    (scroll-on-jump-advice-add beginend-elfeed-show-mode-goto-end)
+    (scroll-on-jump-advice-add beginend-elfeed-show-mode-goto-beginning)
+    (scroll-on-jump-advice-add beginend-org-mode-goto-end)
+    (scroll-on-jump-advice-add beginend-org-mode-goto-beginning)
+    )
 
   (with-eval-after-load 'goto-chg
     (scroll-on-jump-advice-add goto-last-change)
