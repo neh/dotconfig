@@ -808,10 +808,6 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   :custom
   (search-whitespace-regexp ".*?")
   (isearch-lazy-count t)
-  :bind
-  (:repeat-map isearch-repeat-map
-   ("r" . isearch-repeat-backward)
-   ("s" . isearch-repeat-forward))
   :config
   (advice-add 'isearch-update :after #'recenter))
 #+end_src
