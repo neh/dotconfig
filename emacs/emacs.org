@@ -1357,6 +1357,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
         '((file
            buffer
            (vertico-buffer-display-action . (display-buffer-same-window)))
+          (embark-keybinding grid)
           ;; (t reverse)
 
           (jinx grid (vertico-grid-annotate . 20))))
@@ -1495,9 +1496,12 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
   :demand t
 
   :custom
-  (embark-help-key "?")
+  (embark-help-key "C-h")
   (embark-cycle-key ",")
   (embark-mixed-indicator-delay 0.8)
+  (embark-verbose-indicator-display-action
+   '(display-buffer-below-selected
+     (window-height . fit-window-to-buffer)))
   (y-or-n-p-use-read-key t)
 
   :bind
@@ -3850,8 +3854,9 @@ current window, as a ratio between 0 and 1.")
 (use-package which-key
   :custom
   (which-key-popup-type 'minibuffer)
+  (which-key-separator " ")
   :config
-  (which-key-mode -1))
+  (which-key-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
