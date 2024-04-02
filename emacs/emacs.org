@@ -5434,6 +5434,7 @@ Try out =org-noter=.
   (mastodon-tl--highlight-current-toot t)
   (mastodon-tl--enable-proportional-fonts t)
   (mastodon-tl--show-avatars t)
+  (mastodon-media--preview-max-height 500)
   (mastodon-media--avatar-height 50))
 #+end_src
 
