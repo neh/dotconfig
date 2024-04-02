@@ -3548,8 +3548,6 @@ Let’s try to get some window behaviour under control.
     (display-buffer-below-selected))
    ("\\^CAPTURE-"
     (display-buffer-below-selected))
-   ("\\*Embark Actions\\*"
-    (my/display-buffer-to-right-or-left))
    ("\\*Embark Collect:"
     (my/display-buffer-to-right-or-left))
    ;; ("\\*Messages\\*$"
