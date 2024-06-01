@@ -1829,6 +1829,11 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
     t))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package casual-avy
+  :commands (casual-avy-tmenu))
+#+end_src
+
 ** Buffers
 
 #+begin_src emacs-lisp
@@ -4803,6 +4808,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   (dired-du-size-format t))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package casual-dired
+  :commands (casual-dired-tmenu))
+#+end_src
+
 * Hydra
 
 #+begin_src emacs-lisp :noweb yes
@@ -5570,6 +5580,12 @@ Device tree is the format used by ZMK keyboard firmware.
   :after nerd-icons
   :config
   (nerd-icons-completion-mode))
+
+(use-package magit-file-icons
+  :after (nerd-icons
+          magit)
+  :init
+  (magit-file-icons-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
