@@ -6375,6 +6375,21 @@ See `beframe-rename-frame'."
 
 * Misc functions
 
+Handy snippet found [[https://emacs.ch/@bram85/112463005253079332][on mastodon]] and modified a little. Just adds the time and date (and system load) to the mode line when emacs is in fullscreen mode.
+
+#+begin_src emacs-lisp
+(defun my/show-time-when-fullscreen (frame)
+  "Show the time in the modeline when the FRAME becomes full screen."
+  (let ((fullscreen (frame-parameter frame 'fullscreen)))
+    (if (memq fullscreen '(fullscreen fullboth))
+        (display-time-mode 1)
+      (display-time-mode -1))))
+
+(customize-set-variable 'display-time-day-and-date t)
+(customize-set-variable 'display-time-24hr-format t)
+(add-hook 'window-size-change-functions #'my/show-time-when-fullscreen)
+#+end_src
+
 I want some repeat maps to timeout, but I don't want to set it globally with =repeat-exit-timeout=, so I have this function that will iterate through a map and apply a timeout setting to them. I may want another function to turn the timeout off for a map, or the option to pass a list of commands so I can set timeout for only some of the commands in a map. I'll deal with that when I actually need it though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref misc-functions
