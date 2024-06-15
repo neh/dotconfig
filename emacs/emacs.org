@@ -2688,7 +2688,8 @@ Indent sub-items in lists a bit more so they're clearer.
 
   :custom
   (org-modern-hide-stars " ")
-  (org-modern-star '("" "‣" "•" "◦" "•" "◦" "•"))
+  (org-modern-star 'replace)
+  (org-modern-replace-stars '("" "‣" "•" "◦" "•" "◦" "•"))
   ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
 
   (org-modern-block-name '(("src" . ("" "⧟"))
