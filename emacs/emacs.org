@@ -5559,10 +5559,6 @@ Device tree is the format used by ZMK keyboard firmware.
 #+begin_src emacs-lisp
 (use-package nerd-icons)
 
-(use-package nerd-icons-dired
-  :after nerd-icons
-  :hook (dired-mode . nerd-icons-dired-mode))
-
 (use-package nerd-icons-completion
   :after nerd-icons
   :config
@@ -5573,6 +5569,18 @@ Device tree is the format used by ZMK keyboard firmware.
           magit)
   :init
   (magit-file-icons-mode t))
+#+end_src
+
+Large remote directories (at least over ssh) are /really/ slow to load icons, so I'm doing the easy thing for now and only enabling nerd-icons in dired for local directories.
+
+#+begin_src emacs-lisp
+(use-package nerd-icons-dired
+  :after nerd-icons
+  :hook (dired-mode . my/nerd-icons-dired-dwim)
+  :init
+  (defun my/nerd-icons-dired-dwim ()
+    (if (not (file-remote-p dired-directory))
+        (nerd-icons-dired-mode))))
 #+end_src
 
 #+begin_src emacs-lisp
