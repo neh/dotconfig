@@ -4603,6 +4603,7 @@ any directory proferred by `consult-dir'."
   (dired-recursive-copies 'always)
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t)
+  (dired-use-ls-dired t)
 
   :bind
   (:map mode-specific-map
