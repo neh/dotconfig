@@ -813,12 +813,12 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package cc-isearch-menu
+(use-package casual-isearch
   :after transient
-  :commands (cc-isearch-menu-transient)
+  :commands (casual-isearch-tmenu)
   :bind
   (:map isearch-mode-map
-   ("<f2>" . cc-isearch-menu-transient)))
+   ("<f2>" . casual-isearch-tmenu)))
 #+end_src
 
 #+begin_src emacs-lisp
