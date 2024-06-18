@@ -4604,6 +4604,7 @@ any directory proferred by `consult-dir'."
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t)
   (dired-use-ls-dired t)
+  (dired-async-large-file-warning-threshold 10000000000)
 
   :bind
   (:map mode-specific-map
