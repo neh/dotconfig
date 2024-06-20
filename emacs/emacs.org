@@ -3206,14 +3206,10 @@ MimeType=x-scheme-handler/org-protocol;
   (run-with-timer 0 5 #'my/check-org-files)
 
   :config
-  (cl-defmethod org-roam-node-type ((node org-roam-node))
-    "Return the TYPE of NODE."
-    (condition-case nil
-        (file-name-nondirectory
-         (directory-file-name
-          (file-name-directory
-           (file-relative-name (org-roam-node-file node) org-roam-directory))))
-      (error "")))
+  (cl-defmethod org-roam-node-directories ((node org-roam-node))
+    (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+        (format "%s" (car (split-string dirs "/")))
+      ""))
 
   (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
     (let ((level (org-roam-node-level node)))
@@ -3223,7 +3219,7 @@ MimeType=x-scheme-handler/org-protocol;
        (org-roam-node-title node))))
 
   (setq org-roam-node-display-template
-        (concat "${type:8} ${hierarchy:*} "
+        (concat "${directories:8} ${hierarchy:*} "
                 (propertize "${tags:10}" 'face 'org-tag)))
 
   (defun my/org-roam-ref-add-dwim ()
