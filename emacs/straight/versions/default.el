@@ -15,6 +15,7 @@
  ("cape" . "f61da109a9e4491614938c300291060fd8855c1b")
  ("casual-avy" . "6835d78c5b75215da3a0971222ecefad1cfb1a8a")
  ("casual-dired" . "ed114d5ca952d8d725a1a2bae8db3ea591b9f67f")
+ ("casual-info" . "b20e4af7b5760b360089ea6125b8374cfada402e")
  ("casual-isearch" . "e3aed24fe945cb11d9adf4ded4da59ed9ea2e57d")
  ("casual-lib" . "688a32b28d3dbfd2333e7b5be645ef53844537ed")
  ("cfrs" . "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121")

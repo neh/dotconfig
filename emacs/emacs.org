@@ -822,6 +822,12 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package casual-info
+  :after (transient)
+  :commands (casual-info-tmenu))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package finder
   :straight nil
    ;; ("h C" . finder-commentary))
