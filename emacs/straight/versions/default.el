@@ -1,6 +1,7 @@
 (("Emacs-wgrep" . "208b9d01cfffa71037527e3a324684b3ce45ddc4")
  ("abridge-diff" . "31e0ccaa9d0bd4ad257f5de25cc3c0b3395fafa1")
  ("ace-window" . "77115afc1b0b9f633084cf7479c767988106c196")
+ ("activities" . "0072b7ae218b1df57298f81279459825f1e36334")
  ("age.el" . "890c467ebc27538507c54a03afd2f7260630d7f5")
  ("annotate.el" . "bc82194ca5b10a05cab4169f6eacc5c18af61ec0")
  ("apheleia" . "61766b50b24fa16be519d77795dc63522e04dce8")
