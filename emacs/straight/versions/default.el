@@ -213,6 +213,7 @@
  ("seq" . "d6b97ea450817ecef174d9c65d59b69bc5721a35")
  ("sesman" . "7bca68dbbab0af26a6a23be1ff5fa97f9a18e022")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
+ ("sops" . "2cb8621ed588c6f3e210c9e76d713e6dacc03030")
  ("spacious-padding" . "6cedda1cbddb3291c0dd107bca62910eebfd9d84")
  ("spinner" . "be1fcae967a3d3a00cb83ea764d8d329b45f8cd2")
  ("sqlformat" . "ba4534ade5d9010d1119b7334cf1b2aa87b6c4c7")
