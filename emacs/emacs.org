@@ -4804,6 +4804,11 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   :commands (casual-dired-tmenu))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package dired-open-with
+  :commands (dired-open-with))
+#+end_src
+
 * Hydra
 
 #+begin_src emacs-lisp :noweb yes

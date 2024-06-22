@@ -41,6 +41,7 @@
  ("dired-git-info" . "da8400878a532bdaae7c6bde8b7d96beaf5b353d")
  ("dired-hacks" . "a01c126c3b1068655509487c76971895f5459d09")
  ("dired-imenu" . "4f6169f9056fe5f9b9a97e9e75f27825a15e05b9")
+ ("dired-open-with" . "f82f986263c7ded9ae87853544548d5bf7fbae81")
  ("docker.el" . "d5255a65b7240d0038cc417f301b43df05a27922")
  ("dockerfile-mode" . "39a012a27fcf6fb629c447d13b6974baf906714c")
  ("doct" . "5cab660dab653ad88c07b0493360252f6ed1d898")
