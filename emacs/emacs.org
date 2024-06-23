@@ -5759,8 +5759,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
 #+begin_src emacs-lisp
 (use-package activities
-  :commands (activities-mode
-             activities-tab-mode)
   :bind
   (("C-x C-a C-n" . activities-new)
    ("C-x C-a C-d" . activities-define)
@@ -5770,7 +5768,11 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
    ("C-x C-a RET" . activities-switch)
    ("C-x C-a C-b" . activities-switch-buffer)
    ("C-x C-a C-g" . activities-revert)
-   ("C-x C-a C-l" . activities-list)))
+   ("C-x C-a C-l" . activities-list))
+  :init
+  (activities-mode t)
+  (activities-tabs-mode t)
+  (setq edebug-inhibit-emacs-lisp-mode-bindings t))
 #+end_src
 
 #+begin_src emacs-lisp
