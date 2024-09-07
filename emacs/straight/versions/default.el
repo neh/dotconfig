@@ -157,7 +157,7 @@
  ("ob-restclient.el" . "8183f8af08838854cf145ca4855b373f3e7c44b0")
  ("olivetti" . "e264286399acfa28a9d54ad931a06387fa2ef934")
  ("orderless" . "53f5204ad3f541e11eb6eeb9b86584964b7a3678")
- ("org" . "eafa479069687d87d81c11ddf655c181dd57f8b5")
+ ("org" . "6a5d0ed342efeb3a4c402672fbe9bfebd80af8b6")
  ("org-appear" . "81eba5d7a5b74cdb1bad091d85667e836f16b997")
  ("org-chef" . "1710b54441ed744dcdfb125d08fb88cfaf452f10")
  ("org-d20" . "5993e2b83831c1937eb70ef23629008218210d22")
