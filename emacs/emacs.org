@@ -2496,14 +2496,10 @@ A basic start at making different kinds of links look usefully different (eg. it
 Org export.
 
 #+begin_src emacs-lisp
-(use-package ox-pandoc
-  :ensure-system-package (pandoc
-                          pdflatex
-                          mktexfmt))
+(use-package ox-pandoc)
 
 (use-package ox-odt
-  :straight nil
-  :ensure-system-package zip)
+  :straight nil)
 
 (use-package ox-slack
   :commands (org-slack-export-as-slack
@@ -6303,8 +6299,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package envrc
-  :hook (after-init . envrc-global-mode)
-  :ensure-system-package (direnv))
+  :hook (after-init . envrc-global-mode))
 #+end_src
 
 #+begin_src emacs-lisp
