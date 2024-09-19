@@ -130,6 +130,7 @@
  ("kubel" . "7b4f967ee8733a1f8798c39255a26d71aff1f55b")
  ("kubernetes-el" . "24de7a1621dc06234abf63db454d63a522aaa632")
  ("let-alist" . "4e05e158612f360f6080b1349d3962b1c8fee902")
+ ("lin" . "0607a6a618a8bb791cecf47e754f81e28dcb5c92")
  ("link-hint.el" . "bf4ca2126d5c0a06df7ae26f478e94cb03ab932b")
  ("literate-calc-mode.el" . "6edbc5764061df2f03df7333e3f7707a27fd676d")
  ("lua-mode" . "d074e4134b1beae9ed4c9b512af741ca0d852ba3")

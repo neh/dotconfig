@@ -4107,6 +4107,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package lin
+  :config
+  (lin-global-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package hi-lock
   :straight nil
   ;; :general
