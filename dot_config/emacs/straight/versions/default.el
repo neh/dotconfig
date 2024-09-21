@@ -20,6 +20,7 @@
  ("casual-isearch" . "bac5501144bfb37d07a6a7e3e744af6b5474b0a2")
  ("casual-lib" . "66bf8342eee76710df8075158d1e69c633bbd970")
  ("cfrs" . "f3a21f237b2a54e6b9f8a420a9da42b4f0a63121")
+ ("chezmoi.el" . "1389782f8c0780c7e66f8e77b10345ba1f4eabae")
  ("cider" . "87b836f289d5e3935b515eaac2959bd2e1d3ed37")
  ("clojure-mode" . "59888c84b61081e9b0085e388f55132925a66e7a")
  ("closql" . "c1a346d56ecee16d1f0d7707f0d62c72604a8802")

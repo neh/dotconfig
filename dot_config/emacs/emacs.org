@@ -5450,6 +5450,12 @@ Try out =org-noter=.
 * Misc packages
 
 #+begin_src emacs-lisp
+(use-package chezmoi
+  :commands (chezmoi-find
+             chezmoi-write))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package sops
   :commands (sops-mode
              global-sops-mode))
