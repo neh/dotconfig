@@ -1107,7 +1107,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (when (display-graphic-p)
     (let* ((dpi (monitor-dpi))
            (size (cond ((< dpi 110) 125)
-                       ((< dpi 160) 150))))
+                       ((< dpi 160) 150)
+                       ;; need to find a signal other than dpi here, as the framework with 200%
+                       ;; scaling reads as 250+ dpi, but has the same desired text size as 110 dpi
+                       ((< dpi 255) 125))))
       (setq my/default-text-size size)))
 
   (when (not (boundp 'my/current-text-size))
