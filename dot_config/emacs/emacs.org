@@ -813,21 +813,6 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package casual-isearch
-  :after transient
-  :commands (casual-isearch-tmenu)
-  :bind
-  (:map isearch-mode-map
-   ("<f2>" . casual-isearch-tmenu)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package casual-info
-  :after (transient)
-  :commands (casual-info-tmenu))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package finder
   :straight nil
    ;; ("h C" . finder-commentary))
@@ -1838,11 +1823,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
     t))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package casual-avy
-  :commands (casual-avy-tmenu))
-#+end_src
-
 ** Buffers
 
 #+begin_src emacs-lisp
@@ -2088,8 +2068,7 @@ Of course, the great magit.
 
 #+begin_src emacs-lisp
 (use-package forge
-  :after (magit
-          emacsql-sqlite-builtin)
+  :after (magit)
   :init
   (setq forge-add-default-bindings nil)
   (setq forge-database-connector 'sqlite-builtin)
@@ -3092,10 +3071,6 @@ MimeType=x-scheme-handler/org-protocol;
 #+end_src
 
 ** Org-roam
-
-#+begin_src emacs-lisp
-(use-package emacsql-sqlite-builtin)
-#+end_src
 
 #+begin_src emacs-lisp
 (use-package org-roam
@@ -4805,11 +4780,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package casual-dired
-  :commands (casual-dired-tmenu))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package dired-open-with
   :commands (dired-open-with))
 #+end_src
@@ -5448,6 +5418,27 @@ Try out =org-noter=.
 #+end_src
 
 * Misc packages
+
+#+begin_src emacs-lisp
+(use-package casual
+  :after (transient)
+  :commands (casual-agenda-tmenu
+             casual-bookmarks-tmenu
+             casual-calc-tmenu
+             casual-calendar-tmenu
+             casual-dired-tmenu
+             casual-ibuffer-tmenu
+             casual-info-tmenu
+             casual-isearch-tmenu
+             casual-rebuilder-tmenu))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package casual-avy
+  :after (transient
+          casual)
+  :commands (casual-avy-tmenu))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package chezmoi
