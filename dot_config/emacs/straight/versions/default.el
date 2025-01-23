@@ -142,7 +142,7 @@
  ("markdown-mode" . "7659bc470d096e7a53285fa246cbabcb07d66a33")
  ("mastodon.el" . "e2443f1cd425b31228e87739d1fc5035640bba06")
  ("melpa" . "2a0b163f41d7ee70c5a69f974cd86079f1f4a906")
- ("meow" . "af3f10e95ebb0754a1afcd4883e8e2e680490c4b")
+ ("meow" . "cde5f4c57bc8657bd361f60725338cf218b66e7d")
  ("modus-themes" . "3bef1fae4b81676895eed7592c1009181a64e3f5")
  ("nerd-icons-completion" . "8e5b995eb2439850ab21ba6062d9e6942c82ab9c")
  ("nerd-icons-dired" . "c0b0cda2b92f831d0f764a7e8c0c6728d6a27774")
