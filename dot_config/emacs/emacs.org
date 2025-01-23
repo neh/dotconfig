@@ -1101,9 +1101,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (when (not (boundp 'my/current-text-size))
     (setq my/current-text-size my/default-text-size))
 
-  (if (bound-and-true-p fontaine-current-preset)
-      (fontaine-apply-current-preset)
-    (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal)))
+  (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal))
 
   ;; this doesn't seem to apply on startup, only after changing themes
   (set-face-attribute 'mode-line-active nil
@@ -1179,7 +1177,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
 #+begin_src emacs-lisp
 (use-package fontaine
   :commands (fontaine-set-preset
-             fontaine-apply-current-preset
              fontaine-restore-latest-preset)
   :hook (kill-emacs . fontaine-store-latest-preset)
   :custom
