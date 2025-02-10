@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd ~/.config/emacs
+emacs --batch -l org "emacs.org" -f org-babel-tangle
