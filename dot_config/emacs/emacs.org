@@ -34,9 +34,8 @@ Next, we wrap the whole init file in a block that sets =file-name-handler-alist=
 #+begin_src emacs-lisp :noweb yes
 (let ((file-name-handler-alist nil))
   <<init-gc-init>>
-  <<init-straight>>
+  <<early-init-elpaca>>
   <<init-use-package>>
-  <<init-org>>
   <<init-gc-setup>>)
 #+end_src
 
@@ -46,51 +45,76 @@ We set =gc-cons-threshold= to its maximum value, to prevent any garbage collecti
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
-I use [[https://github.com/raxod502/straight.el][straight.el]] instead of package.el.
 
-This setting makes the straight bootstrap /much/ faster. See the discussion [[https://github.com/raxod502/straight.el/issues/304][here]].
+#+begin_src emacs-lisp :tangle no :noweb-ref init-elpaca
+(defvar elpaca-installer-version 0.9)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
-#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
-(setq straight-check-for-modifications '(check-on-save))
+(setq elpaca-lock-file (expand-file-name "versions.lock" elpaca-directory))
+
+;; Install use-package support
+(elpaca elpaca-use-package
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode))
+(elpaca-wait)
 #+end_src
 
-And now bootstrap straight, using the snippet from the docs.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+#+begin_src emacs-lisp :tangle no :noweb-ref early-init-elpaca
+(setq package-enable-at-startup nil)
 #+end_src
 
 I'm using emacs 29 everywhere, which has =use-package= built in, so just assume it's there and do a little configuration. Also, require =org-mode= as early as possible to (hopefully) avoid version mismatch issues.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-use-package
-(straight-use-package 'org)
-(setq straight-use-package-by-default t)
-(setq use-package-verbose nil)
+(setq use-package-verbose nil
+      use-package-always-ensure t)
 #+end_src
 
-Dump any other straight configuration here.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref init-straight
-(setq straight-vc-git-auto-fast-forward nil)
-#+end_src
-
-Load =org-mode= using straight. This needs to happen early, or emacs will load and use its bundled version of =org-mode=, which is just too old.
+Load =org-mode=. This needs to happen early, or emacs will load and use its bundled version of =org-mode=, which is just too old.
 Here's also where the rest of this file gets tangled and loaded, but only if it's newer than the existing tangled file. Tangling is slow (at least it is when you start using no-web references...), so we don't want to do it for no good reason.
+
+#+begin_src emacs-lisp :tangle no :noweb yes
+<<org>>
+#+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-org
 (use-package org
-  :demand t
   :config
   (message "%s" (org-version))
   (setq custom-enabled-themes '())
@@ -130,6 +154,10 @@ Another interesting option here, gc when unfocusing a frame, from https://news.y
 ;; -*- lexical-binding: t -*-
 #+end_src
 
+#+begin_src emacs-lisp :noweb yes
+<<init-elpaca>>
+#+end_src
+
 Lately I've been playing with optimizing my Emacs load time. I have found a couple of useful resources, including:
 
 - [[https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/][Two easy little known steps to speed up Emacs start up time]]
@@ -140,7 +168,7 @@ Based on these, I have added the code below.
 First, a hook that reports how long and how many garbage collections the startup took. Use a hook so the message doesn't get clobbered by other messages.
 
 #+begin_src emacs-lisp
-(add-hook 'emacs-startup-hook
+(add-hook 'elpaca-after-init-hook
           (lambda ()
             (message "Emacs ready in %s with %d garbage collections."
                      (format "%.2f seconds"
@@ -185,7 +213,7 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   (define-key esc-map "u" #'execute-extended-command)
   (keymap-set ctl-x-map "C-w" my/window-map)
   (keymap-set ctl-x-map "C-n" my/notes-map))
-(add-hook 'after-init-hook #'my/set-override-keybindings)
+(add-hook 'elpaca-after-init-hook #'my/set-override-keybindings)
 
 (global-set-key (kbd "C-o") ctl-x-map)
 
@@ -197,6 +225,7 @@ Collect all the global, non-package-specific settings here.
 
 #+begin_src emacs-lisp :noweb yes
 (use-package emacs
+  :ensure nil
   :custom
   <<emacs-custom>>
 
@@ -231,14 +260,6 @@ Collect all the global, non-package-specific settings here.
     "Call customize-set-variable with a specific setting pre-selected."
     (interactive)
     (partially-apply-interactively #'customize-set-variable arg))
-
-  (defun my/update-packages (arg)
-    "Set all packages to the versions in the straight.el lockfile."
-    (straight-pull-recipe-repositories)
-    (straight-fetch-all)
-    (straight-thaw-versions)
-    (straight-rebuild-all))
-  (add-to-list 'command-switch-alist '("--update-packages" . my/update-packages))
 
   <<misc-functions>>
 
@@ -306,7 +327,7 @@ I use the customization system in Emacs via ~:custom~ blocks in ~use-package~, a
 
 #+begin_src emacs-lisp
 (use-package cus-edit
-  :straight nil
+  :ensure nil
   :custom
   (custom-file null-device))
 #+end_src
@@ -407,7 +428,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
 
 #+begin_src emacs-lisp
 (use-package man
-  :straight nil
+  :ensure nil
   :custom
   (Man-width fill-column)
   (Man-width-max fill-column)
@@ -415,7 +436,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
   (Man-notify-method 'aggressive))
 
 (use-package woman
-  :straight nil
+  :ensure nil
   :custom
   (woman-fill-column fill-column))
 #+end_src
@@ -444,7 +465,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
 #+begin_src emacs-lisp
 (use-package xref
-  :straight nil
+  :ensure nil
   :custom
   (xref-show-definitions-function #'xref-show-definitions-completing-read)
   (xref-search-program 'ripgrep))
@@ -452,21 +473,21 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
 #+begin_src emacs-lisp
 (use-package browse-url
-  :straight nil
+  :ensure nil
   :custom
   (browse-url-browser-function 'browse-url-firefox))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package delsel
-  :straight nil
+  :ensure nil
   :config
   (delete-selection-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package calc
-  :straight nil
+  :ensure nil
   :bind
   (:map mode-specific-map
    ("C" . quick-calc)))
@@ -667,11 +688,12 @@ After registering any custom "things", set the list of active things.
 
 * Base2
 
-Not sure where to put everything yet, so this section is a grab bag of stuff that needs package management (straight) to be in place.
+Not sure where to put everything yet, so this section is a grab bag of stuff that needs package management (elpaca) to be in place.
 
 #+begin_src emacs-lisp
 (use-package color
   :demand t
+    :ensure nil
   :config
   (defun my/dark-p ()
     (let ((bg (face-background 'default)))
@@ -682,24 +704,25 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 (use-package bookmark
   :demand t
-  :straight nil
+  :ensure nil
   :custom
   (bookmark-fontify nil))
 
 (use-package saveplace
   :demand t
+    :ensure nil
   :config
   (save-place-mode t))
 
 (use-package recentf
-  :straight nil
+  :ensure nil
   :custom
   (recentf-max-saved-items 100)
   :config
   (recentf-mode t))
 
 (use-package savehist
-  :straight nil
+  :ensure nil
   :demand t
   :custom
   (savehist-additional-variables '(project-regexp-history-variable
@@ -707,11 +730,12 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (savehist-autosave-interval 90))
 
 (use-package eldoc
-  :straight nil
+  :ensure nil
   :custom
   (eldoc-echo-area-use-multiline-p nil))
 
 (use-package paren
+    :ensure nil
   :custom
   (show-paren-delay 0)
   (show-paren-style 'parenthesis)
@@ -720,7 +744,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 (use-package autorevert
   :demand t
-  :straight nil
+  :ensure nil
   :custom
   (global-auto-revert-non-file-buffers t)
   (auto-revert-check-vc-info nil)
@@ -730,7 +754,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 
 #+begin_src emacs-lisp
 (use-package apropos
-  :straight nil)
+  :ensure nil)
 
 (use-package helpful
   :after (apropos)
@@ -783,7 +807,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
              undo-fu-only-redo))
 
 (use-package undo-fu-session
-  :hook (after-init . global-undo-fu-session-mode)
+  :hook (elpaca-after-init . global-undo-fu-session-mode)
   :custom
   (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
 #+end_src
@@ -797,14 +821,14 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
-  :hook (after-init . exec-path-from-shell-initialize)
+  :hook (elpaca-after-init . exec-path-from-shell-initialize)
   :custom
   (exec-path-from-shell-arguments '("-l")))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package isearch
-  :straight nil
+  :ensure nil
   :custom
   (search-whitespace-regexp ".*?")
   (isearch-lazy-count t)
@@ -814,7 +838,7 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
 
 #+begin_src emacs-lisp
 (use-package finder
-  :straight nil
+  :ensure nil
    ;; ("h C" . finder-commentary))
   )
 #+end_src
@@ -825,7 +849,7 @@ General settings when in text editing modes.
 
 #+begin_src emacs-lisp
 (use-package simple
-  :straight nil)
+  :ensure nil)
 
 (use-package visual-fill-column
   :hook ((text-mode prog-mode) . visual-line-fill-column-mode)
@@ -965,28 +989,33 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
       (my/set-dark-mode)
     (my/set-light-mode)))
 
-(defcustom my/themeset "mix"
-  "Indicates which set of themes (dark and light) to use."
-  :type '(choice
-          (const "gruvbox")
-          (const "modus")
-          (const "modus-tinted")
-          (const "bio-operandi")
-          (const "duo")
-          (const "maris")
-          (const "stimmung")
-          (const "mix"))
-  :set 'my/setthemeset
-  :initialize 'custom-initialize-set)
+(defun my/theme-option-setup ()
+  (defcustom my/themeset "duo"
+    "Indicates which set of themes (dark and light) to use."
+    :type '(choice
+            (const "gruvbox")
+            (const "modus")
+            (const "modus-tinted")
+            (const "bio-operandi")
+            (const "duo")
+            (const "maris")
+            (const "stimmung")
+            (const "mix")
+            )
+    :set 'my/setthemeset
+    :initialize 'custom-initialize-set)
 
-(customize-set-variable 'my/themeset "duo")
+  (customize-set-variable 'my/themeset "duo")
+  (my/dbus-colour-setup))
+
+(add-hook 'elpaca-after-init-hook #'my/theme-option-setup)
 #+end_src
 
 #+begin_src emacs-lisp
 ;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
 
 (use-package dbus
-  :straight nil
+  :ensure nil
   :config
   (defun set-dark-or-light (value)
     (if (equal value '1)
@@ -1003,23 +1032,24 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
              (string-equal key "color-scheme"))
         (set-dark-or-light (car value))))
 
-  (dbus-call-method-asynchronously
-   :session
-   "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "Read"
-   #'handler
-   "org.freedesktop.appearance"
-   "color-scheme")
+  (defun my/dbus-colour-setup ()
+    (dbus-call-method-asynchronously
+     :session
+     "org.freedesktop.portal.Desktop"
+     "/org/freedesktop/portal/desktop"
+     "org.freedesktop.portal.Settings"
+     "Read"
+     #'handler
+     "org.freedesktop.appearance"
+     "color-scheme")
 
-  (dbus-register-signal
-   :session
-   "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "SettingChanged"
-   #'signal-handler))
+    (dbus-register-signal
+     :session
+     "org.freedesktop.portal.Desktop"
+     "/org/freedesktop/portal/desktop"
+     "org.freedesktop.portal.Settings"
+     "SettingChanged"
+     #'signal-handler)))
 #+end_src
 
 But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller mode-line font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
@@ -1035,7 +1065,7 @@ But I like some things to be set no matter the theme. For example, I always like
 (setq my/first-frame-created nil)
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'my/theme-tweaks)
-  (add-hook 'after-init-hook #'my/theme-tweaks))
+  (add-hook 'elpaca-after-init-hook #'my/theme-tweaks))
 #+end_src
 
 Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
@@ -1225,7 +1255,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :hook ((after-init . doom-modeline-mode)
+  :hook ((elpaca-after-init . doom-modeline-mode)
          (after-change-major-mode . doom-modeline-conditional-buffer-encoding))
 
   :custom-face
@@ -1293,8 +1323,6 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 #+begin_src emacs-lisp
 (use-package vertico
-  :straight (:files (:defaults "extensions/*"))
-
   :init
   (vertico-mode t)
 
@@ -1313,14 +1341,14 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 (use-package vertico-mouse
   :after vertico
-  :straight nil
+  :ensure nil
 
   :init
   (vertico-mouse-mode t))
 
 (use-package vertico-directory
   :after vertico
-  :straight nil
+  :ensure nil
 
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
@@ -1341,7 +1369,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 (use-package vertico-multiform
   :after vertico
-  :straight nil
+  :ensure nil
   :init
   (vertico-multiform-mode t)
   (setq vertico-multiform-categories
@@ -1375,7 +1403,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 (use-package vertico-repeat
   :after vertico
-  :straight nil
+  :ensure nil
   :hook (minibuffer-setup . vertico-repeat-save)
   :bind
   (:map mode-specific-map
@@ -1383,7 +1411,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
 (use-package vertico-reverse
   :after vertico
-  :straight nil
+  :ensure nil
   :bind
   (:map vertico-reverse-map
    ("C-n" . vertico-next)
@@ -1696,8 +1724,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package consult-jump-project
-  :straight (consult-jump-project
-             :type git
+  :ensure (consult-jump-project
              :host github
              :repo "jdtsmith/consult-jump-project")
   :commands (consult-jump-project))
@@ -1707,7 +1734,9 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package corfu
-  :load-path "straight/build/corfu/extensions"
+  :ensure (:host github
+           :repo "minad/corfu"
+           :files (:defaults "extensions/*"))
 
   :bind
   (:map corfu-map
@@ -1851,7 +1880,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package ibuffer
-  :straight nil
+  :ensure nil
   :hook (ibuffer-mode . ibuffer-auto-mode)
   :custom
   (ibuffer-show-empty-filter-groups nil)
@@ -1896,7 +1925,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package project
-  :straight nil
+  :ensure nil
   :custom
   (project-switch-commands '((project-find-file "Find file" ?f)
                              (project-find-regexp "Find regexp" ?r)
@@ -1905,7 +1934,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                              (project-vc-dir "VC-Dir")
                              (project-eshell "Eshell")))
   :hook
-  (after-init . (lambda ()
+  (elpaca-after-init . (lambda ()
                   (define-key ctl-x-map (kbd "C-p") project-prefix-map)))
 
   :init
@@ -2041,9 +2070,7 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 Of course, the great magit.
 
 #+begin_src emacs-lisp
-(straight-use-package 'magit)
 (use-package magit
-  :straight nil
   :hook
   (git-commit-mode . my/insert-mode)
   (git-commit-mode . auto-fill-mode)
@@ -2141,7 +2168,7 @@ Handy package to browse to git repo web interfaces.
 
 #+begin_src emacs-lisp
 (use-package ediff
-  :straight nil
+  :ensure nil
   :custom
   (ediff-split-window-function #'split-window-horizontally)
   (ediff-window-setup-function #'ediff-setup-windows-plain))
@@ -2151,9 +2178,8 @@ Handy package to browse to git repo web interfaces.
 
 My org config is pretty long, so I've broken it up for easier reading and explanation. The main structure of it is here, with the details following.
 
-#+begin_src emacs-lisp :noweb yes
+#+begin_src emacs-lisp :noweb yes :tangle no :noweb-ref org
 (use-package org
-  :ensure org-plus-contrib
   :hook (
          <<org-hooks>>
          )
@@ -2329,19 +2355,19 @@ Org-mouse enables nice mouse interaction with bits of org like headings and chec
 
 #+begin_src emacs-lisp
 (use-package org-mouse
-  :straight nil)
+  :ensure nil)
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package org-id
-  :straight nil
+  :ensure nil
   :custom
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package org-attach
-  :straight nil
+  :ensure nil
   :after org
   :custom
   (org-attach-id-dir (concat org-directory "/data"))
@@ -2376,7 +2402,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   ;; (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
 
 (use-package ob-plantuml
-  :straight nil
+  :ensure nil
   :custom
   (org-plantuml-exec-mode 'jar)
   (org-plantuml-jar-path "~/bin/plantuml.jar")
@@ -2432,7 +2458,7 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
 ;; need to sort out the load order here so this implementation is active on a restart
 (use-package ob-d2
   :disabled t
-  :straight (ob-d2 :type git :host github :repo "xcapaldi/ob-d2")
+  :ensure (:host github :repo "xcapaldi/ob-d2")
   :commands (org-babel-execute:d2))
 #+end_src
 
@@ -2478,7 +2504,7 @@ Org export.
 (use-package ox-pandoc)
 
 (use-package ox-odt
-  :straight nil)
+  :ensure nil)
 
 (use-package ox-slack
   :commands (org-slack-export-as-slack
@@ -2490,8 +2516,7 @@ Org export.
 (use-package org-menu
   :after (org
           transient)
-  :straight (org-menu
-             :type git
+  :ensure (org-menu
              :host github
              :repo "sheijk/org-menu")
   :commands (org-menu))
@@ -2718,7 +2743,7 @@ Indent sub-items in lists a bit more so they're clearer.
 
 #+begin_src emacs-lisp
 (use-package org-indent
-  :straight nil
+  :ensure nil
   :after org
   :hook (org-mode . org-indent-mode)
   :custom
@@ -2780,7 +2805,7 @@ Show the heading of a table when it's scrolled offscreen.
 
 #+begin_src emacs-lisp
 (use-package org-agenda
-  :straight nil
+  :ensure nil
   :custom
   (org-agenda-files '("~/org/"))
 
@@ -2915,7 +2940,7 @@ Show the heading of a table when it's scrolled offscreen.
 
 #+begin_src emacs-lisp
 (use-package org-capture
-  :straight nil
+  :ensure nil
   :after org
   :custom
   (org-capture-bookmark nil)
@@ -3010,7 +3035,7 @@ Show the heading of a table when it's scrolled offscreen.
 
 #+begin_src emacs-lisp
 (use-package org-protocol
-  :straight nil
+  :ensure nil
   :after org)
 #+end_src
 
@@ -3256,7 +3281,7 @@ MimeType=x-scheme-handler/org-protocol;
 
 (use-package org-roam-dailies
   :after org-roam
-  :straight nil
+  :ensure nil
   :custom
   (org-roam-dailies-directory "daily/")
   (org-roam-dailies-capture-templates
@@ -3617,14 +3642,14 @@ in that direction and display the target buffer in said window."
 
 #+begin_src emacs-lisp
 (use-package winner
-  :straight nil
+  :ensure nil
   :init
   (winner-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package tab-bar
-  :straight nil
+  :ensure nil
   :custom
   (tab-bar-show nil)
   (tab-bar-tab-name-format-function #'my/tab-bar-tab-name-format-default)
@@ -3739,7 +3764,7 @@ in that direction and display the target buffer in said window."
 
 #+begin_src emacs-lisp
 (use-package repeat
-  :straight nil
+  :ensure nil
   :custom
   (repeat-exit-key "q")
   (repeat-exit-timeout 2)
@@ -3758,7 +3783,7 @@ in that direction and display the target buffer in said window."
     (dolist (command my/repeat-command-timeouts)
       (put (car command) 'repeat-exit-timeout (cdr command))))
 
-  (add-hook 'after-init-hook #'my/repeat-timeout-setter)
+  (add-hook 'elpaca-after-init-hook #'my/repeat-timeout-setter)
 
   :config
   (repeat-mode t))
@@ -3769,7 +3794,7 @@ in that direction and display the target buffer in said window."
 
 #+begin_src emacs-lisp
 (use-package window
-  :straight nil
+  :ensure nil
 
   :preface
   ;; save a copy of the original recenter function, because I'm going to replace it
@@ -3824,7 +3849,7 @@ current window, as a ratio between 0 and 1.")
 
 #+begin_src emacs-lisp
 (use-package windmove
-  :straight nil
+  :ensure nil
   :bind
   (:map my/window-map
    ("h" . windmove-left)
@@ -3944,7 +3969,7 @@ New smooth scrolling in emacs 29, would like to see if I can maybe combine it wi
 
 #+begin_src emacs-lisp
 (use-package pixel-scroll
-  :straight nil
+  :ensure nil
   :if (>= emacs-major-version 29)
   :commands (pixel-scroll-precision-mode)
   :custom
@@ -3995,7 +4020,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package phscroll
-  :straight (phscroll :type git :host github :repo "misohena/phscroll")
+  :ensure (:host github :repo "misohena/phscroll")
   :after org
   :commands (org-phscroll-mode)
   :custom
@@ -4017,7 +4042,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package pulse
-  :straight nil
+  :ensure nil
   :defer 0.5
   :custom
   (pulse-flag t)
@@ -4076,7 +4101,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package hl-line-mode
-  :straight nil
+  :ensure nil
   :commands (hl-line-mode
              global-hl-line-mode))
 #+end_src
@@ -4089,7 +4114,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package hi-lock
-  :straight nil
+  :ensure nil
   ;; :general
   ;; (my/leader-keys
   ;;   :infix "h"
@@ -4171,7 +4196,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
              cider-jack-in))
 
 (use-package ob-clojure
-  :straight nil
+  :ensure nil
   :after org
   :custom
   (org-babel-clojure-backend 'cider)
@@ -4193,7 +4218,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   )
 
 (use-package python-mode
-  :straight nil
+  :ensure nil
   :hook (python-mode . my/python-mode-hook)
   :custom
   (python-shell-interpreter "python3")
@@ -4208,7 +4233,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package comint
-  :straight nil
+  :ensure nil
   :custom
   (comint-scroll-to-bottom-on-input t)
   (comint-scroll-to-bottom-on-output t)
@@ -4217,7 +4242,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package eglot
-  :straight nil
+  :ensure nil
   :config
   (add-to-list 'eglot-server-programs
                '(terraform-mode . ("terraform-ls" "serve"))))
@@ -4390,7 +4415,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package eshell
-  :straight nil
+  :ensure nil
   :custom
   (eshell-scroll-to-bottom-on-input 'this)
   (eshell-error-if-no-glob t)
@@ -4570,7 +4595,7 @@ any directory proferred by `consult-dir'."
 
 #+begin_src emacs-lisp
 (use-package dired
-  :straight nil
+  :ensure nil
   :hook ((dired-mode . dired-hide-details-mode)
          (dired-mode . dired-async-mode))
   :commands (dired-jump
@@ -4668,7 +4693,7 @@ Version 2017-09-01"
 
 #+begin_src emacs-lisp
 (use-package ls-lisp
-  :straight nil
+  :ensure nil
   :custom
   (ls-lisp-ignore-case t)
   (ls-lisp-use-insert-directory-program nil))
@@ -4841,8 +4866,7 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
 
   (use-package hydra-posframe
     :disabled
-    :straight (hydra-posframe
-               :type git
+    :ensure (hydra-posframe
                :host github
                :repo "Ladicle/hydra-posframe")
 
@@ -4914,38 +4938,6 @@ Nice dired filtering, plus it replaces =dired-omit-mode=.
   ("<tab>" org-cycle "cycle")
   ("g" org-goto "goto" :exit t)
   ("q" nil "quit" :color blue))
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
-;; from https://github.com/abo-abo/hydra/wiki/straight.el
-(defhydra hydra-straight-helper (:hint nil)
-  "
-  _c_heck all       |_f_etch all     |_m_erge all      |_n_ormalize all   |p_u_sh all
-  _C_heck package   |_F_etch package |_M_erge package  |_N_ormlize package|p_U_sh package
-  ----------------^^+--------------^^+---------------^^+----------------^^+------------||_q_uit||
-  _r_ebuild all     |_p_ull all      |_v_ersions freeze|_w_atcher start   |_g_et recipe
-  _R_ebuild package |_P_ull package  |_V_ersions thaw  |_W_atcher quit    |prun_e_ build"
-  ("c" straight-check-all)
-  ("C" straight-check-package)
-  ("r" straight-rebuild-all)
-  ("R" straight-rebuild-package)
-  ("f" straight-fetch-all)
-  ("F" straight-fetch-package)
-  ("p" straight-pull-all)
-  ("P" straight-pull-package)
-  ("m" straight-merge-all)
-  ("M" straight-merge-package)
-  ("n" straight-normalize-all)
-  ("N" straight-normalize-package)
-  ("u" straight-push-all)
-  ("U" straight-push-package)
-  ("v" straight-freeze-versions)
-  ("V" straight-thaw-versions)
-  ("w" straight-watcher-start)
-  ("W" straight-watcher-quit)
-  ("g" straight-get-recipe)
-  ("e" straight-prune-build)
-  ("q" nil))
 #+end_src
 
 =Pretty-hydra= comes from the =major-mode-hydra= package, but I’m using it separately to define various hydras as I begin to use them more. Each hydra is broken out below.
@@ -5251,7 +5243,7 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package random-table
-  :straight (:host github :repo "jeremyf/random-table.el")
+  :ensure (:host github :repo "jeremyf/random-table.el")
   :commands (random-table/roll
              random-table/register))
 #+end_src
@@ -5373,7 +5365,7 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package notmuch
-  :straight nil
+  :ensure nil
   :commands (notmuch)
   :custom
   (notmuch-show-logo nil)
@@ -5491,6 +5483,7 @@ TODO see if I want to bind any more functions from it
 
 #+begin_src emacs-lisp
 (use-package whitespace
+  :ensure nil
   :commands (whitespace-mode)
   :custom
   (whitespace-line-column 80)
@@ -5515,7 +5508,7 @@ TODO see if I want to bind any more functions from it
 
 #+begin_src emacs-lisp
 (use-package etrace
-  :straight (:type git :host github :repo "aspiers/etrace")
+  :ensure (:host github :repo "aspiers/etrace")
   :commands (etrace-clear
              etrace-write))
 #+end_src
@@ -5579,6 +5572,8 @@ Device tree is the format used by ZMK keyboard firmware.
   (nerd-icons-completion-mode))
 
 (use-package magit-file-icons
+  :disabled t
+  ;; https://github.com/gekoke/magit-file-icons/issues/22
   :after (nerd-icons
           magit)
   :init
@@ -5611,7 +5606,7 @@ Large remote directories (at least over ssh) are /really/ slow to load icons, so
 
 #+begin_src emacs-lisp
 (use-package proced
-  :straight nil
+  :ensure nil
   :custom
   (proced-enable-color-flag t)
   (proced-auto-update-flag t)
@@ -5626,7 +5621,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
 #+begin_src emacs-lisp
 (use-package screenshot
-  :straight (:type git :host github :repo "tecosaur/screenshot")
+  :ensure (:host github :repo "tecosaur/screenshot")
   :commands (screenshot))
 #+end_src
 
@@ -5658,7 +5653,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
 #+begin_src emacs-lisp
 (use-package goto-addr
-  :straight nil
+  :ensure nil
   :hook ((compilation-mode . goto-address-mode)
          (prog-mode . goto-address-prog-mode)
          (eshell-mode . goto-address-mode)
@@ -5720,7 +5715,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package tabspaces
   :disabled t
-  :hook (after-init . tabspaces-mode)
+  :hook (elpaca-after-init . tabspaces-mode)
   :commands (tabspaces-switch-or-create-workspace
              tabspaces-open-or-create-project-and-workspace
              tabspaces--buffer-list)
@@ -5776,7 +5771,7 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 
 #+begin_src emacs-lisp
 (use-package beframe
-  :hook (after-init . beframe-mode)
+  :hook (elpaca-after-init . beframe-mode)
   :custom
   ;; (beframe-rename-function #'beframe-rename-frame)
   (beframe-rename-function #'my/beframe-rename-frame)
@@ -5961,7 +5956,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package compile
-  :straight nil
+  :ensure nil
   :custom
   (compilation-scroll-output 'first-error)
   )
@@ -6168,7 +6163,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package image-mode
-  :straight nil
+  :ensure nil
   :hook (image-mode . (lambda () (blink-cursor-mode -1))))
 #+end_src
 
@@ -6302,7 +6297,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package envrc
-  :hook (after-init . envrc-global-mode))
+  :hook (elpaca-after-init . envrc-global-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6341,7 +6336,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package expreg
-  :straight nil
+  :ensure nil
   :load-path "site-lisp"
   :bind
   (("M-v" . expreg-expand)
@@ -6559,7 +6554,9 @@ interactively, or via #'embark-act.
                  (with-current-buffer buf
                    (revert-buffer))))))
 
-(define-key embark-file-map "z" #'async/open-with-zathura)
+(add-hook 'elpaca-after-init-hook
+          #'(lambda ()
+              (define-key embark-file-map "z" #'async/open-with-zathura)))
 
 ;; this doesn't work, because I don't have dired/funcall-on-marked-files
 (defun dired/async/open-with-zathura ()
