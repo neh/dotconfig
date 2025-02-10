@@ -5430,6 +5430,10 @@ Try out =org-noter=.
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package xkb-mode)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package chezmoi
   :commands (chezmoi-find
              chezmoi-write))
