@@ -2076,10 +2076,13 @@ Of course, the great magit.
   (git-commit-mode . auto-fill-mode)
   (git-commit-mode . (lambda () (setq-local fill-column 72)))
 
+  :after nerd-icons
+
   :custom
   (magit-commit-show-diff t)
   (magit-diff-refine-hunk t)
-  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  (magit-format-file-function #'magit-format-file-nerd-icons)
 
   :bind
   (:map mode-specific-map
@@ -5574,14 +5577,6 @@ Device tree is the format used by ZMK keyboard firmware.
   :after nerd-icons
   :config
   (nerd-icons-completion-mode))
-
-(use-package magit-file-icons
-  :disabled t
-  ;; https://github.com/gekoke/magit-file-icons/issues/22
-  :after (nerd-icons
-          magit)
-  :init
-  (magit-file-icons-mode t))
 #+end_src
 
 Large remote directories (at least over ssh) are /really/ slow to load icons, so I'm doing the easy thing for now and only enabling nerd-icons in dired for local directories.
