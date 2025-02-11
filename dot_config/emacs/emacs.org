@@ -2694,7 +2694,7 @@ Indent sub-items in lists a bit more so they're clearer.
 
 #+begin_src emacs-lisp
 (use-package org-modern
-  :requires org
+  :after org
   :hook (org-mode . org-modern-mode)
 
   :custom
@@ -2709,6 +2709,7 @@ Indent sub-items in lists a bit more so they're clearer.
                            ;; (t . (t " "))
                            ;; (t . ("beg" "eNd"))
                            ))
+  (org-modern-block-fringe nil)
 
   (org-agenda-block-separator ?─)
   (org-agenda-time-grid
