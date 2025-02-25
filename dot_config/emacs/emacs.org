@@ -1,4 +1,4 @@
-#+property: header-args:emacs-lisp :tangle "init.el"
+#+property: header-args:emacs-lisp :tangle (concat user-emacs-directory "init.el")
 #+property: header-args :mkdirp yes :comments no :results silent
 #+startup: showall inlineimages
 
@@ -18,7 +18,7 @@ emacs -Q -l profile-dotemacs.el --eval "(setq profile-dotemacs-file (setq load-f
 
 * Initialization
 :properties:
-:header-args:emacs-lisp: :tangle "early-init.el" :dir user-emacs-directory
+:header-args:emacs-lisp: :tangle (concat user-emacs-directory "early-init.el")
 :end:
 
 Since this is a literate configuration, a small =init.el= file is needed to handle tangling and loading the rest of the configuration when necessary. That file gets created here, and the tangled result needs to be committed to the git repository whenever any changes are made to it here.
