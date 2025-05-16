@@ -212,13 +212,10 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   :doc "My search-related keys.")
 
 (defun my/set-override-keybindings ()
-  (define-key esc-map "u" #'execute-extended-command)
-  (keymap-set ctl-x-map "C-w" my/window-map)
-  (keymap-set ctl-x-map "C-n" my/notes-map))
+  (keymap-set ctl-x-map "w" my/window-map))
 (add-hook 'elpaca-after-init-hook #'my/set-override-keybindings)
 
-(global-set-key (kbd "C-o") ctl-x-map)
-
+(keymap-set mode-specific-map "n" my/notes-map)
 (keymap-set mode-specific-map "s" my/search-map)
 (keymap-set mode-specific-map "q" #'kill-current-buffer)
 #+end_src
@@ -504,188 +501,24 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
-** Meow
-#+begin_src emacs-lisp :noweb yes
-(use-package meow
-  :custom-face
-  (meow-insert-indicator
-   ((t (:background "#ffd700" :foreground "#000000"))))
-  (meow-motion-indicator
-   ((t (:background "SteelBlue" :foreground "#ffffff"))))
-  (meow-normal-indicator
-   ((t (:background "ForestGreen" :foreground "#ffffff"))))
-  (meow-keypad-indicator
-   ((t (:background "SteelBlue" :foreground "#ffffff"))))
-  (meow-search-indicator
-   ((t (:background "#fe8019" :foreground "#000000"))))
-  (meow-beacon-indicator
-   ((t (:background "red4" :foreground "#ffffff"))))
-
-  :init
-  (defun meow-setup ()
-    (setq meow-cheatsheet-layout meow-cheatsheet-layout-dvorak)
-    (meow-leader-define-key
-     '("1" . meow-digit-argument)
-     '("2" . meow-digit-argument)
-     '("3" . meow-digit-argument)
-     '("4" . meow-digit-argument)
-     '("5" . meow-digit-argument)
-     '("6" . meow-digit-argument)
-     '("7" . meow-digit-argument)
-     '("8" . meow-digit-argument)
-     '("9" . meow-digit-argument)
-     '("0" . meow-digit-argument))
-    (meow-motion-overwrite-define-key
-     ;; custom keybinding for motion state
-     '("<escape>" . ignore))
-    (meow-normal-define-key
-     '("0" . meow-expand-0)
-     '("9" . meow-expand-9)
-     '("8" . meow-expand-8)
-     '("7" . meow-expand-7)
-     '("6" . meow-expand-6)
-     '("5" . meow-expand-5)
-     '("4" . meow-expand-4)
-     '("3" . meow-expand-3)
-     '("2" . meow-expand-2)
-     '("1" . meow-expand-1)
-
-     '("-" . negative-argument)
-     '(";" . meow-reverse)
-     '("," . meow-inner-of-thing)
-     '("." . meow-bounds-of-thing)
-     '("<" . meow-beginning-of-thing)
-     '(">" . meow-end-of-thing)
-
-     ;; moving/selecting
-     '("b" . meow-back-word)
-     '("w" . meow-next-word)
-     '("B" . meow-back-symbol)
-     '("W" . meow-next-symbol)
-
-     '("p" . meow-mark-word)
-     '("P" . meow-mark-symbol)
-
-     '("f" . meow-find)
-     '("l" . meow-till)
-
-     '("J" . meow-block)
-     '("K" . meow-to-block)
-
-     '("h" . meow-left)
-     '("t" . meow-next)
-     '("n" . meow-prev)
-     '("s" . meow-right)
-     '("H" . meow-left-expand)
-     '("T" . meow-next-expand)
-     '("N" . meow-prev-expand)
-     '("S" . meow-right-expand)
-
-     '("e" . meow-line)
-     '("j" . meow-join)
-
-     '("_" . meow-cancel-selection)
-     '("z" . meow-pop-selection)
-
-     ;; editing
-     '("i" . meow-insert)
-     '("I" . meow-open-above)
-     '("a" . meow-append)
-     '("A" . meow-open-below)
-
-     '("r" . meow-change)
-     '("d" . meow-delete)
-     '("D" . meow-backward-delete)
-     '("k" . meow-kill)
-     '("x" . meow-save)
-     '("y" . meow-yank)
-     '("Y" . meow-replace)
-
-     ;; other
-     '("G" . meow-grab)
-     '("R" . meow-swap-grab)
-     '("X" . meow-sync-grab)
-
-     '("/" . meow-search)
-     '("v" . meow-visit)
-
-     '("'" . repeat)
-     '("q" . meow-quit)
-     '("<escape>" . ignore)))
-
-  :custom
-  (meow-expand-hint-remove-delay 0)
-  <<meow-custom>>
-
+** Devil
+#+begin_src emacs-lisp
+(use-package devil
+  :ensure (:host github :repo "fbrosda/devil" :branch "dev")
   :config
-  <<meow-config>>
-
-  ;; I don't like doing this, but it seems to be the only way to use
-  ;; some bindings (like M-w).
-  (setq meow--kbd-kill-ring-save "C-<insert>")
-
-  (meow-setup)
-  (meow-global-mode 1))
-#+end_src
-
-I use don't want the help map too available (although I may change my mind on that, just move it to a different key), so I remove it from the keypad start keys.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-custom
-(meow-keypad-start-keys '((?c . ?c)
-                          (?x . ?x)))
-#+end_src
-
-I want shorter names for meow states displayed in the mode-line, so =N= for normal mode instead of =NORMAL=. I couldn't get this to take effect in a =custom= block, so a =setq= it is.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(setq meow-replace-state-name-list '((normal . "N")
-                                     (motion . "M")
-                                     (keypad . "K")
-                                     (insert . "I")
-                                     (beacon . "B")
-                                     (search . "S")))
-#+end_src
-
-For some modes, I don't want the default meow state when I enter the buffer. This is mainly just about getting quickly into insert mode when a buffer is just about entering some text right away.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(add-to-list 'meow-mode-state-list '(vterm-mode . insert))
-(add-to-list 'meow-mode-state-list '(eshell-mode . insert))
-#+end_src
-
-I learned about this nice bit in this lobste.rs thread: [[https://lobste.rs/s/lb2eld/switching_meow_modal_editing_system_from#c_z3lidr][Switching to the meow modal editing system from evil | Lobsters]]. It gets you into keypad mode without having to press space first, so you can just hit =x= to get to bindings under =C-x= etc.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-normal-define-key '("o" . meow-keypad-start)
-                        '("c" . meow-keypad-start)
-                        '("g" . meow-keypad-start)
-                        '("m" . meow-keypad-start))
-#+end_src
-
-Customizing the list of "things" to operate on is useful.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-thing-register 'angle
-                     '(pair ("<") (">"))
-                     '(pair ("<") (">")))
-#+end_src
-
-After registering any custom "things", set the list of active things.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-custom
-(meow-char-thing-table  '((?r . round)
-                          (?s . square)
-                          (?c . curly)
-                          (?a . angle)
-                          (?\" . string)
-                          (?e . symbol)
-                          (?w . window)
-                          (?b . buffer)
-                          (?p . paragraph)
-                          (?l . line)
-                          (?v . visual-line)
-                          (?d . defun)
-                          (?. . sentence)))
+  (global-devil-mode t)
+  (global-set-key (kbd "C-,") #'global-devil-mode))
+;;   :custom
+;;   (devil-exit-key ".")
+;;   (devil-all-keys-repeatable t)
+;;   (devil-highlight-repeatable t)
+;;   (devil-repeatable-keys '(("%k p" "%k n" "%k b" "%k f" "%k a" "%k e")
+;;                            ("%k m n" "%k m p")
+;;                            ("%k m b" "%k m f" "%k m a" "%k m e")
+;;                            ("%k m m f" "%k m m b" "%k m m a" "%k m m e"
+;;                             "%k m m n" "%k m m p" "%k m m u" "%k m m d")))
+;;   :bind
+;;   ([remap describe-key] . devil-describe-key)
 #+end_src
 
 * Base2
@@ -812,11 +645,6 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :hook (elpaca-after-init . global-undo-fu-session-mode)
   :custom
   (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-normal-define-key '("u" . undo-fu-only-undo)
-                        '("U" . undo-fu-only-redo))
 #+end_src
 
 Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
@@ -1657,7 +1485,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    ("C-h C-m" . consult-man)
 
    :map ctl-x-map
-   ("C-b" . consult-buffer)
+   ("b" . consult-buffer)
 
    :map mode-specific-map
    ("l" . consult-line)
@@ -1717,8 +1545,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    ("n" . consult-org-roam-search)
 
    :map my/notes-map
-   ("C-S-b" . consult-org-roam-backlinks)
-   ("C-S-f" . consult-org-roam-forward-links))
+   ("S-b" . consult-org-roam-backlinks)
+   ("S-f" . consult-org-roam-forward-links))
 
   :init
   (consult-org-roam-mode t))
@@ -3132,9 +2960,9 @@ MimeType=x-scheme-handler/org-protocol;
 
   :bind
   (:map my/notes-map
-   ("C-n" . org-roam-node-find)
-   ("C-i" . org-roam-node-insert)
-   ("C-S-r" . org-roam-node-random))
+   ("n" . org-roam-node-find)
+   ("i" . org-roam-node-insert)
+   ("S-r" . org-roam-node-random))
 
   ;;   "N" #'(lambda () (interactive) (my/customize-this "my/org-roam-context"))
 
@@ -3296,11 +3124,11 @@ MimeType=x-scheme-handler/org-protocol;
 
   :bind
   (:map my/notes-map
-   ("C-d" . org-roam-dailies-capture-today)
-   ("C-S-d" . org-roam-dailies-capture-date)
-   ("C-." . org-roam-dailies-goto-today)
-   ("C->" . org-roam-dailies-goto-date)
-   ("C-r" . my/org-roam-dailies-review))
+   ("d" . org-roam-dailies-capture-today)
+   ("S-d" . org-roam-dailies-capture-date)
+   ("." . org-roam-dailies-goto-today)
+   (">" . org-roam-dailies-goto-date)
+   ("r" . my/org-roam-dailies-review))
 
   :config
   ;; deps: org, org-roam, org-transclusion, ts, s
