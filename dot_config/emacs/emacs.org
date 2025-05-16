@@ -3485,7 +3485,7 @@ in that direction and display the target buffer in said window."
 (use-package tab-bar
   :ensure nil
   :custom
-  (tab-bar-show nil)
+  (tab-bar-show 1)
   (tab-bar-tab-name-format-function #'my/tab-bar-tab-name-format-default)
   (tab-bar-format '(tab-bar-format-history
                     tab-bar-format-tabs-groups
