@@ -212,11 +212,12 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   :doc "My search-related keys.")
 
 (defun my/set-override-keybindings ()
+  (keymap-set ctl-x-map "n" my/notes-map)
+  ;; this clobbers built-in bindings, want them to merge instead
   (keymap-set ctl-x-map "w" my/window-map))
 (add-hook 'elpaca-after-init-hook #'my/set-override-keybindings)
 
-(keymap-set mode-specific-map "n" my/notes-map)
-(keymap-set mode-specific-map "s" my/search-map)
+(keymap-set mode-specific-map "C-s" my/search-map)
 (keymap-set mode-specific-map "q" #'kill-current-buffer)
 #+end_src
 
@@ -501,24 +502,94 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
-** Devil
-#+begin_src emacs-lisp
-(use-package devil
-  :ensure (:host github :repo "fbrosda/devil" :branch "dev")
+** Boon
+#+begin_src emacs-lisp :noweb yes
+(use-package boon
   :config
-  (global-devil-mode t)
-  (global-set-key (kbd "C-,") #'global-devil-mode))
-;;   :custom
-;;   (devil-exit-key ".")
-;;   (devil-all-keys-repeatable t)
-;;   (devil-highlight-repeatable t)
-;;   (devil-repeatable-keys '(("%k p" "%k n" "%k b" "%k f" "%k a" "%k e")
-;;                            ("%k m n" "%k m p")
-;;                            ("%k m b" "%k m f" "%k m a" "%k m e")
-;;                            ("%k m m f" "%k m m b" "%k m m a" "%k m m e"
-;;                             "%k m m n" "%k m m p" "%k m m u" "%k m m d")))
-;;   :bind
-;;   ([remap describe-key] . devil-describe-key)
+  ;; (require 'boon-emacs)
+  <<boon-hdpm>>
+  (boon-mode t))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref boon-hdpm
+(define-key boon-select-map "q"  'boon-select-outside-quotes)
+(define-key boon-select-map "w"  'boon-select-word)
+(define-key boon-select-map "p"  'boon-select-paragraph)
+
+(define-key boon-select-map "a"  '("around" . boon-select-borders))
+(define-key boon-select-map "i"  'boon-select-wim)
+(define-key boon-select-map "e"  'boon-select-with-spaces)
+(define-key boon-select-map "E"  '("everything" . boon-select-document))
+
+(define-key boon-select-map ";"  'boon-select-comment)
+(define-key boon-select-map "y"  'boon-select-outside-pairs)
+(define-key boon-select-map "o"  'boon-select-inside-pairs)
+(define-key boon-select-map "c"  'boon-select-content)
+(define-key boon-select-map "<"  'boon-select-blanks)
+
+
+;; free command keys: l b f = { } u H S
+
+;; (define-key boon-moves-map "j" 'boon-switch-mark)
+;; (define-key boon-moves-map "J" 'xref-pop-marker-stack)
+;; (define-key boon-moves-map "f"  '("find" . xref-find-definitions))
+;; (define-key boon-moves-map "F"  'xref-find-references)
+(define-key boon-moves-map "g"  'previous-line)
+(define-key boon-moves-map "w"  'next-line)
+(define-key boon-moves-map "G"  'backward-paragraph)
+(define-key boon-moves-map "W"  'forward-paragraph)
+(define-key boon-moves-map "m"  'boon-beginning-of-line)
+(define-key boon-moves-map "v"  'boon-end-of-line)
+(define-key boon-moves-map "h"  'boon-smarter-backward)
+(define-key boon-moves-map "s"  'boon-smarter-forward)
+(define-key boon-moves-map "T"  'boon-smarter-upward)
+(define-key boon-moves-map "N"  'boon-smarter-downward)
+(define-key boon-moves-map "d"  'boon-beginning-of-expression)
+(define-key boon-moves-map "p"  'boon-end-of-expression)
+(define-key boon-moves-map "t"  'backward-char)
+(define-key boon-moves-map "n"  '("next" . forward-char))
+(define-key boon-moves-map "D"  'beginning-of-buffer)
+(define-key boon-moves-map "P"  'end-of-buffer)
+(define-key boon-moves-map "k"  'avy-goto-word-1)
+(define-key boon-moves-map "K"  'avy-goto-char)
+
+;; inserts one char and stays in command mode
+(define-key boon-command-map "q" 'boon-quote-character)
+(define-key boon-moves-map "," 'boon-backward-search-map)
+(define-key boon-moves-map "." 'boon-forward-search-map)
+
+(define-key boon-moves-map ";"  'boon-qsearch-previous)
+(define-key boon-moves-map ":"  'boon-qsearch-next)
+
+;; (define-key boon-command-map "p" '("print" . occur)) ; print?
+;; (define-key boon-command-map "P" 'kmacro-start-macro)
+;; (define-key boon-command-map "L" '("pLay" . kmacro-end-or-call-macro))
+;; (define-key boon-command-map "Q" 'boon-highlight-regexp)
+
+(define-key boon-command-map "z" 'boon-replace-by-character)
+(define-key boon-command-map "'" '("around" . boon-enclose))
+(define-key boon-command-map "a" '("alter" . boon-substitute-region))
+(define-key boon-command-map "e" '("erase" . boon-take-region))
+(define-key boon-command-map "E" 'boon-treasure-region)
+(define-key boon-command-map "y" 'boon-splice)
+(define-key boon-command-map "Y" 'consult-yank-pop)
+(define-key boon-command-map "j" 'boon-goto-map)
+
+(define-key boon-command-map "r" 'boon-repeat-command)
+(define-key boon-command-map "x" 'boon-x-map)
+(define-key boon-command-map "c" 'boon-c-god)
+(define-key boon-command-map "O" 'boon-open-line-and-insert)
+(define-key boon-command-map "o" 'boon-open-next-line-and-insert)
+(define-key boon-command-map "i" 'boon-set-insert-like-state)
+(define-key boon-command-map ">" 'boon-copy-to-register)
+(define-key boon-command-map "<" 'insert-register)
+
+;; Most of these are actually in the boon-moves-map; however some don't quite work there; so they end up here.
+(define-key boon-command-map (kbd "C-t") 'scroll-down-line)
+(define-key boon-command-map (kbd "C-n") 'scroll-up-line)
+
+(define-key indent-rigidly-map "n" 'indent-rigidly-right)
+(define-key indent-rigidly-map "t" 'indent-rigidly-left)
 #+end_src
 
 * Base2
