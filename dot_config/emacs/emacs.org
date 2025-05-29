@@ -503,6 +503,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 (defun my/insert-mode ()
   "Switch to insert editing mode regardless of modal system."
   (cond ((bound-and-true-p meow-mode) (meow-insert))
+        ((bound-and-true-p boon-mode) (boon-insert))
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
