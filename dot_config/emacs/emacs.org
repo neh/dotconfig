@@ -211,7 +211,11 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 (defvar-keymap my/search-map
   :doc "My search-related keys.")
 
+(defvar-keymap my/git-map
+  :doc "My git-related keys.")
+
 (defun my/set-override-keybindings ()
+  (keymap-set ctl-x-map "g" my/git-map)
   (keymap-set ctl-x-map "n" my/notes-map)
   ;; this clobbers built-in bindings, want them to merge instead
   (keymap-set ctl-x-map "w" my/window-map))
@@ -1986,10 +1990,10 @@ Of course, the great magit.
   (magit-format-file-function #'magit-format-file-nerd-icons)
 
   :bind
-  (:map mode-specific-map
-   ("vs" . magit-status-here)
-   ("vf" . magit-file-dispatch)
-   ("vg" . magit-dispatch)))
+  (:map my/git-map
+   ("s" . magit-status-here)
+   ("f" . magit-file-dispatch)
+   ("g" . magit-dispatch)))
 #+end_src
 
 “Forge” can talk to sites like github and provide tools to work with PRs etc. Installing dependencies manually for now [[https://github.com/raxod502/straight.el/issues/336][because]].
@@ -2011,10 +2015,10 @@ Handy package to browse to git repo web interfaces.
              git-link-commit
              git-link-homepage)
   :bind
-  (:map mode-specific-map
-   ("vB" . git-link)
-   ("vC" . git-link-commit)
-   ("vH" . git-link-homepage))
+  (:map my/git-map
+   ("B" . git-link)
+   ("C" . git-link-commit)
+   ("H" . git-link-homepage))
   :custom
   (git-link-open-in-browser t))
 #+end_src
