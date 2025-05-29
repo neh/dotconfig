@@ -2571,6 +2571,7 @@ Just always show images; I always want them.
 (org-use-sub-superscripts nil)
 
 (org-confirm-babel-evaluate nil)
+(org-babel-results-keyword "results")
 (org-src-fontify-natively t)
 (org-src-window-setup 'current-window)
 (org-src-tab-acts-natively t)
