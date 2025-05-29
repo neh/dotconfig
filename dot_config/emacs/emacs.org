@@ -215,13 +215,13 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
   :doc "My git-related keys.")
 
 (defun my/set-override-keybindings ()
+  (keymap-set ctl-x-map "/" my/search-map)
   (keymap-set ctl-x-map "g" my/git-map)
   (keymap-set ctl-x-map "n" my/notes-map)
   ;; this clobbers built-in bindings, want them to merge instead
   (keymap-set ctl-x-map "w" my/window-map))
 (add-hook 'elpaca-after-init-hook #'my/set-override-keybindings)
 
-(keymap-set mode-specific-map "C-s" my/search-map)
 (keymap-set mode-specific-map "q" #'kill-current-buffer)
 #+end_src
 
@@ -1563,8 +1563,11 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    :map ctl-x-map
    ("b" . consult-buffer)
 
-   :map mode-specific-map
+   :map boon-goto-map
    ("l" . consult-line)
+   ("L" . consult-goto-line)
+
+   :map mode-specific-map
    ("iy" . consult-yank-pop)
    ("u" . consult-imenu)
    ("jo" . consult-org-heading)
