@@ -2966,8 +2966,8 @@ Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
 # need WAYLAND_DISPLAY set in emacs
 [Service]
-Type=forking
-ExecStart=emacs --daemon --chdir %h
+Type=notify
+ExecStart=emacs --fg-daemon --chdir %h
 # ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=emacsclient --eval "(kill-emacs)"
 # Environment=SSH_AUTH_SOCK=/run/user/%U/ssh-agent.socket
