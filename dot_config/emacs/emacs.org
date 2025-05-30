@@ -916,7 +916,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (customize-set-variable 'my/themeset "duo")
   (my/dbus-colour-setup))
 
-(add-hook 'elpaca-after-init-hook #'my/theme-option-setup)
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'my/theme-option-setup)
+  (add-hook 'elpaca-after-init-hook #'my/theme-option-setup))
 #+end_src
 
 #+begin_src emacs-lisp
