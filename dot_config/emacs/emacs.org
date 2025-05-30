@@ -5169,6 +5169,13 @@ Try out =org-noter=.
 * Web
 
 #+begin_src emacs-lisp
+(use-package shr
+  :ensure nil
+  :custom-face
+  (shr-text ((t (:inherit 'variable-pitch)))))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package shrface
   ;; this breaks link recognition in eww/elfeed somehow
   :disabled t
