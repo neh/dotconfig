@@ -511,7 +511,9 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 #+begin_src emacs-lisp :noweb yes
 (use-package boon
   :config
-  ;; (require 'boon-emacs)
+  (add-to-list 'boon-special-mode-list 'elfeed-show-mode)
+  (add-to-list 'boon-special-mode-list 'elfeed-search-mode)
+
   <<boon-hdpm>>
   (boon-mode t))
 #+end_src
