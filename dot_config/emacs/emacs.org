@@ -1866,6 +1866,12 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    ("C-S-f" . find-file)))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package disproject
+  :bind (:map ctl-x-map
+         ("p" . disproject-dispatch)))
+#+end_src
+
 * Git
 
 I find that diff-hl does a better job of showing diff information than git-gutter does. I’d like to use =diff-hl-flydiff-mode=, but it caused issues, which I can’t remember well enough to document now. Will revisit later.
