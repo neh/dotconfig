@@ -3635,14 +3635,14 @@ in that direction and display the target buffer in said window."
 #+begin_src emacs-lisp
 (use-package popper
   :bind
+  (("C-`"   . popper-toggle)
+   ("M-`"   . Popper-cycle)
+   ("C-M-`" . popper-toggle-type))
+
   (:repeat-map popper-repeat-map
    ("c" . popper-cycle)
    ("k" . popper-kill-latest-popup)
-   ("p" . popper-toggle)
-
-   :map mode-specific-map
-   ("p" . popper-toggle)
-   ("P" . popper-toggle-type))
+   ("p" . popper-toggle))
 
   :custom
   (popper-group-function #'my/popper-group)
@@ -4285,11 +4285,11 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :bind
-  (:map mode-specific-map
-   ("jg" . my/global-vterm-toggle)
-   ("jG" . my/global-vterm-toggle-cd)
-   ("jt" . my/project-vterm-toggle)
-   ("jT" . my/project-vterm-toggle-cd)
+  (:map boon-goto-map
+   ("tg" . my/global-vterm-toggle)
+   ("tG" . my/global-vterm-toggle-cd)
+   ("tp" . my/project-vterm-toggle)
+   ("tP" . my/project-vterm-toggle-cd)
 
    :map vterm-mode-map
    ("C-'" . my/project-vterm-toggle)
@@ -4529,9 +4529,9 @@ any directory proferred by `consult-dir'."
   (dired-async-large-file-warning-threshold 10000000000)
 
   :bind
-  (:map mode-specific-map
-   ("jxx" . my/dired-open)
-   ("ju" . dired-jump))
+  (:map boon-goto-map
+   ;; ("jxx" . my/dired-open)
+   ("d" . dired-jump))
 
   :init
   (defun my/dired-copy-full-path ()
@@ -5978,7 +5978,7 @@ See `beframe-rename-frame'."
   :commands (link-hint-open-link
              link-hint-define-type)
   :bind
-  (:map mode-specific-map
+  (:map boon-goto-map
    ("w" . link-hint-open-link)
    ("W" . my/link-hint-open-in-external))
 
