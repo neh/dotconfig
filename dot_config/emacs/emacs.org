@@ -217,12 +217,11 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 (defun my/set-override-keybindings ()
   (keymap-set ctl-x-map "/" my/search-map)
   (keymap-set ctl-x-map "g" my/git-map)
+  (keymap-set ctl-x-map "k" #'kill-current-buffer)
   (keymap-set ctl-x-map "n" my/notes-map)
   ;; this clobbers built-in bindings, want them to merge instead
   (keymap-set ctl-x-map "w" my/window-map))
 (add-hook 'elpaca-after-init-hook #'my/set-override-keybindings)
-
-(keymap-set mode-specific-map "q" #'kill-current-buffer)
 #+end_src
 
 Collect all the global, non-package-specific settings here.
