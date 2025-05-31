@@ -1571,10 +1571,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    :map boon-goto-map
    ("l" . consult-line)
    ("L" . consult-goto-line)
+   ("i" . consult-imenu)
 
    :map mode-specific-map
    ("iy" . consult-yank-pop)
-   ("u" . consult-imenu)
    ("jo" . consult-org-heading)
 
    :map my/search-map
