@@ -1739,7 +1739,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   ;;                                          (evil-forward-char))
   ;;                                 (evil-paste-after 1))))
 
-  (avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
+  (avy-keys '(?c ?i ?e ?a ?h ?t ?n ?s))
   (avy-line-insert-style 'below)
 
   :config
