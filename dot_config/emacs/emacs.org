@@ -6091,6 +6091,7 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package image-mode
   :ensure nil
+  :defer t
   :hook (image-mode . (lambda () (blink-cursor-mode -1))))
 #+end_src
 
