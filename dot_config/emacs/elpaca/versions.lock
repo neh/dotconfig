@@ -392,8 +392,8 @@
                         "docs/*.texi" "docs/*.texinfo"
                         (:exclude ".dir-locals.el" "test.el" "tests.el" "*-test.el" "*-tests.el"
                                   "LICENSE" "README*" "*-pkg.el"))
-                       :source "MELPA" :protocol https :inherit t :depth treeless :ref
-                       "4cd9d4041f17826dd577bf777e5226c0b55f0f35"))
+                       :source "elpaca-menu-lock-file" :protocol https :inherit t :depth treeless
+                       :ref "4cd9d4041f17826dd577bf777e5226c0b55f0f35"))
  (docker :source "elpaca-menu-lock-file" :recipe
          (:package "docker" :fetcher github :repo "Silex/docker.el" :files
                    ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir" "doc/*.info"
@@ -430,6 +430,11 @@
                                      "LICENSE" "README*" "*-pkg.el"))
                           :source "elpaca-menu-lock-file" :protocol https :inherit t :depth treeless
                           :ref "a85cb28da8bcb29be232e21879f0f5a1e8551b8c"))
+ (doric-themes :source "elpaca-menu-lock-file" :recipe
+               (:package "doric-themes" :repo
+                         ("https://github.com/protesilaos/doric-themes" . "doric-themes") :files
+                         ("*" (:exclude ".git")) :source "GNU ELPA" :protocol https :inherit t
+                         :depth treeless :ref "9c48c20c939c83bc1f057fb510ddac57eefe54aa"))
  (dtrt-indent :source "elpaca-menu-lock-file" :recipe
               (:package "dtrt-indent" :fetcher github :repo "jscheid/dtrt-indent" :files
                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir" "doc/*.info"

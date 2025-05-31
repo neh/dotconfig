@@ -814,6 +814,8 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 
 (use-package ef-themes)
 
+(use-package doric-themes)
+
 (use-package stimmung-themes
   :commands (stimmung-themes-load-light
              stimmung-themes-load-dark
