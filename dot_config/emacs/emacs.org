@@ -5580,15 +5580,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 #+begin_src emacs-lisp
 (use-package goto-addr
   :ensure nil
-  :hook ((compilation-mode . goto-address-mode)
-         (prog-mode . goto-address-prog-mode)
-         (eshell-mode . goto-address-mode)
-         (shell-mode . goto-address-mode))
-  :bind (:map goto-address-highlight-keymap
-         ("<RET>" . goto-address-at-point)
-         ("M-<RET>" . newline))
-  :commands (goto-address-prog-mode
-             goto-address-mode))
+  :config
+  (global-goto-address-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
