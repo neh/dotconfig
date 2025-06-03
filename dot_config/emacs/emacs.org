@@ -1190,7 +1190,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
    ((t (:background "red4" :foreground "#ffffff"))))
 
   :custom
-  (doom-modeline-height 36)
   (doom-modeline-bar-width 0)
   (doom-modeline-hud t)
   (doom-modeline-modal-icon nil)
