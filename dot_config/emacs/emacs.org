@@ -477,8 +477,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 #+begin_src emacs-lisp
 (use-package browse-url
   :ensure nil
-  :custom
-  (browse-url-browser-function 'browse-url-firefox))
+  )
 #+end_src
 
 #+begin_src emacs-lisp
