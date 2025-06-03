@@ -3300,7 +3300,6 @@ MimeType=x-scheme-handler/org-protocol;
 #+begin_src emacs-lisp
 (use-package org-sticky-header
   :after org
-  :hook (org-mode . org-sticky-header-mode)
   :commands (org-sticky-header-mode)
   :custom
   (org-sticky-header-prefix "🦜 ")
