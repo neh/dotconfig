@@ -433,8 +433,8 @@
  (doric-themes :source "elpaca-menu-lock-file" :recipe
                (:package "doric-themes" :repo
                          ("https://github.com/protesilaos/doric-themes" . "doric-themes") :files
-                         ("*" (:exclude ".git")) :source "GNU ELPA" :protocol https :inherit t
-                         :depth treeless :ref "9c48c20c939c83bc1f057fb510ddac57eefe54aa"))
+                         ("*" (:exclude ".git")) :source "elpaca-menu-lock-file" :protocol https
+                         :inherit t :depth treeless :ref "9c48c20c939c83bc1f057fb510ddac57eefe54aa"))
  (dtrt-indent :source "elpaca-menu-lock-file" :recipe
               (:package "dtrt-indent" :fetcher github :repo "jscheid/dtrt-indent" :files
                         ("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo" "doc/dir" "doc/*.info"
@@ -1620,8 +1620,8 @@
                    (:package "spacious-padding" :repo
                              ("https://github.com/protesilaos/spacious-padding" . "spacious-padding")
                              :files ("*" (:exclude ".git" "COPYING" "doclicense.texi")) :source
-                             "elpaca-menu-lock-file" :protocol https :inherit t :depth treeless :ref
-                             "cd33d70f6cd9d8f3a2f6f7831711c8230d21649d"))
+                             "GNU ELPA" :protocol https :inherit t :depth treeless :ref
+                             "60d1a343d2e740920750cdfc389972b363e73411"))
  (spinner :source "elpaca-menu-lock-file" :recipe
           (:package "spinner" :repo ("https://github.com/Malabarba/spinner.el" . "spinner") :files
                     ("*" (:exclude ".git")) :source "elpaca-menu-lock-file" :protocol https :inherit
