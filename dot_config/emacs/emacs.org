@@ -1861,8 +1861,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    :exit
    ("f" . my/find-file))
   (:map ctl-x-map
-   ("C-f" . my/find-file)
-   ("C-S-f" . find-file)))
+   ("f" . my/find-file)
+   ("C-f" . find-file)))
 #+end_src
 
 #+begin_src emacs-lisp
