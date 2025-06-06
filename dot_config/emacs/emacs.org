@@ -1240,10 +1240,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
   :bind
   (:map vertico-map
-   ("C-t" . vertico-next)
-   ("C-n" . vertico-previous)
-   ("C-S-t" . vertico-next-group)
-   ("C-S-n" . vertico-previous-group)
+   ("C-n" . vertico-next)
+   ("C-t" . vertico-previous)
+   ("C-S-n" . vertico-next-group)
+   ("C-S-t" . vertico-previous-group)
    ("C-S-<down>" . vertico-next-group)
    ("C-S-<up>" . vertico-previous-group)
    ("<backtab>" . vertico-insert)))
@@ -1652,8 +1652,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :bind
   (:map corfu-map
-   ("C-t" . corfu-next)
-   ("C-n" . corfu-previous)
+   ("C-n" . corfu-next)
+   ("C-t" . corfu-previous)
 
    ("M-m" . corfu-move-to-minibuffer))
 
