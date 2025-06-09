@@ -208,14 +208,10 @@ For some keymaps, I want to have multiple packages contribute key bindings, whil
 (defvar-keymap my/notes-map
   :doc "My note-related keys.")
 
-(defvar-keymap my/search-map
-  :doc "My search-related keys.")
-
 (defvar-keymap my/git-map
   :doc "My git-related keys.")
 
 (defun my/set-override-keybindings ()
-  (keymap-set ctl-x-map "/" my/search-map)
   (keymap-set ctl-x-map "g" my/git-map)
   (keymap-set ctl-x-map "k" #'kill-current-buffer)
   (keymap-set ctl-x-map "n" my/notes-map)
@@ -1575,7 +1571,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    ("iy" . consult-yank-pop)
    ("jo" . consult-org-heading)
 
-   :map my/search-map
+   :map search-map
    ("f" . consult-find)
    ("g" . consult-ripgrep)
    ("v" . consult-git-grep)
@@ -1623,7 +1619,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   (consult-org-roam-grep-func #'consult-ripgrep)
 
   :bind
-  (:map my/search-map
+  (:map search-map
    ("n" . consult-org-roam-search)
 
    :map my/notes-map
@@ -5615,8 +5611,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
       :query-separator "+"
       :query-url "developer.mozilla.org/en-US/search?q=")
   :bind
-  (:map my/search-map
-   ("w" . websearch)))
+  (:map search-map
+   ("W" . websearch)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -6045,7 +6041,7 @@ See `beframe-rename-frame'."
     (deadgrep (deadgrep--read-search-term) default-directory))
 
   :bind
-  (:map my/search-map
+  (:map search-map
    ("r" . deadgrep)
    ("R" . my/deadgrep-here)
 
