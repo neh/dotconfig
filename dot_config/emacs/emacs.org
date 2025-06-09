@@ -6046,8 +6046,8 @@ See `beframe-rename-frame'."
    ("R" . my/deadgrep-here)
 
    :map deadgrep-mode-map
-   ("M-n" . deadgrep-backward-match)
-   ("M-t" . deadgrep-forward-match)
+   ("M-t" . deadgrep-backward-match)
+   ("M-n" . deadgrep-forward-match)
    ("M-<up>" . deadgrep-backward-match)
    ("M-<down>" . deadgrep-forward-match)
    ("M-h" . deadgrep-backward-filename)
