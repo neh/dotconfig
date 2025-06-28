@@ -8,8 +8,34 @@
             }
         ],
         "target_uinput": "keyboard",
-        "output_symbol": "if_single(key(Escape), hold(Control_L))",
-        "name": "tap-esc-hold-ctrl",
+        "output_symbol": "if_single(key(KEY_CAPSLOCK), hold(Control_L))",
+        "name": "tap-b-hold-ctrl",
+        "mapping_type": "key_macro"
+    },
+    {
+        "input_combination": [
+            {
+                "type": 1,
+                "code": 56,
+                "origin_hash": "384a35c02b3a82bc4756d292e2c41d23"
+            }
+        ],
+        "target_uinput": "keyboard",
+        "output_symbol": "if_single(key(Escape), hold(Alt_L))",
+        "name": "tap-esc-hold-alt",
+        "mapping_type": "key_macro"
+    },
+    {
+        "input_combination": [
+            {
+                "type": 1,
+                "code": 40,
+                "origin_hash": "384a35c02b3a82bc4756d292e2c41d23"
+            }
+        ],
+        "target_uinput": "keyboard",
+        "output_symbol": "if_single(key(KEY_APOSTROPHE), hold(Control_L))",
+        "name": "tap-v-hold-ctrl",
         "mapping_type": "key_macro"
     }
 ]
