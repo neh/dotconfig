@@ -1,4 +1,3 @@
 ! option = symbols
-  hd:pm       = +hd(pm)
-  us:enthium  = +us(enthium)
+  custom:enthium  = +custom(enthium)
 ! include %S/evdev
