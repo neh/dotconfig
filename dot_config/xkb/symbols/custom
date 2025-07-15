@@ -19,11 +19,11 @@ xkb_symbols "enthium"
         name[Group1]= "Enthium";
 
 	key <AD01> { [   apostrophe,    quotedbl ] }; // 
-	key <AD02> { [        equal,        plus ] }; // =+
+	key <AD02> { [            x,           X ] }; // xX
 	key <AD03> { [        minus,  underscore ] }; // -_
 	key <AD04> { [       period,       colon ] }; // .:
-	key <AD05> { [    backslash,         bar ] }; // /?
-	key <AD06> { [            k,           K ] }; // kK
+	key <AD05> { [        equal,        plus ] }; // =+
+	key <AD06> { [     question,      exclam ] }; // /?
 	key <AD07> { [            l,           L ] }; // lL
 	key <AD08> { [            d,           D ] }; // dD
 	key <AD09> { [            w,           W ] }; // wW
@@ -34,7 +34,7 @@ xkb_symbols "enthium"
 	key <AC03> { [            e,           E ] }; // eE
 	key <AC04> { [            a,           A ] }; // aA
 	key <AC05> { [        comma,   semicolon ] }; // ,;
-	key <AC06> { [            j,           J ] }; // jJ
+	key <AC06> { [            k,           K ] }; // kK
 	key <AC07> { [            h,           H ] }; // hH
 	key <AC08> { [            t,           T ] }; // tT
 	key <AC09> { [            n,           N ] }; // nN
@@ -45,8 +45,8 @@ xkb_symbols "enthium"
 	key <AB02> { [            y,           Y ] }; // yY
 	key <AB03> { [            u,           U ] }; // uU
 	key <AB04> { [            o,           O ] }; // oO
-	key <AB05> { [        slash,    question ] }; // \|
-	key <AB06> { [            x,           X ] }; // xX
+	key <AB05> { [        slash,   backslash ] }; // \/
+	key <AB06> { [            j,           J ] }; // jJ
 	key <AB07> { [            m,           M ] }; // mM
 	key <AB08> { [            g,           G ] }; // gG
 	key <AB09> { [            p,           P ] }; // pP
