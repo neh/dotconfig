@@ -21,8 +21,6 @@ blacklistadd gmail.com
 " Binds
 bind n scrollline 20
 bind t scrollline -20
-bind w scrollline 20
-bind d scrollline -20
 
 set smoothscroll true
 
