@@ -16,12 +16,17 @@ blacklistadd nytimes.com/puzzles
 
 blacklistadd feedbin.com
 blacklistadd app.fastmail.com
+blacklistadd gmail.com
 
 " Binds
-bind t scrollline 20
-bind n scrollline -20
+bind n scrollline 20
+bind t scrollline -20
+bind w scrollline 20
+bind d scrollline -20
 
 set smoothscroll true
+
+set hintchars ahetincsomugypbf
 
 " Comment toggler for Reddit, Hacker News and Lobste.rs
 bind ;c hint -Jc [class*="expand"],[class*="togg"],[class="comment_folder"]
