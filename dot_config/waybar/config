@@ -1,0 +1,115 @@
+[{
+    "layer": "top",
+    "height": 24,
+    "modules-left": [
+        "niri/workspaces",
+        "niri/window"
+    ],
+    "modules-center": [
+        "sway/mode"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "battery",
+        "temperature",
+        "network#wired",
+        "network#wireless",
+        "idle_inhibitor",
+        "pulseaudio",
+        "clock",
+        "tray"
+    ],
+    "clock": {
+        "format": "{:%a %b %e  %H:%M}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "🔇",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "cpu": {
+        "states": {
+            "warning": 70,
+            "critical": 95
+        },
+        "format": " {}%",
+        "format-warning": " {}%",
+        "format-critical": " {}%"
+    },
+    "memory": {
+        "states": {
+            //"normal": 30,
+            "warning": 40,
+            "critical": 85
+        },
+        "format": " {}%",
+        //"format-normal": "normal",
+        "format-warning": " w{}%",
+        "format-critical": " c{}%"
+    },
+    "battery": {
+        "states": {
+            "full": 100,
+            "good": 90,
+            "normal": 89,
+            "warning": 20,
+            "critical": 10
+        },
+        "format-normal": "{icon} {capacity}%",
+        "format-good": "",
+        "format-full": "",
+        "format-charging-normal": " {capacity}%",
+        "format-charging-good": "",
+        "format-charging-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network#wireless": {
+        "interface": "wlp*",
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-disconnected": "⚠ Disconnected",
+        "on-click": "nm-connection-editor"
+    },
+    "network#wired": {
+        "interface": "enp*",
+        "format-ethernet": " {ipaddr}",
+        "format-linked": "",
+        "format-disconnected": "",
+        "on-click": "nm-connection-editor"
+    },
+        "idle_inhibitor": {
+            "format": "{icon}",
+            "format-icons": {
+                "activated": "",
+                "deactivated": ""
+            }
+        },
+        "temperature": {
+            // "thermal-zone": 2,
+            // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+            "critical-threshold": 60,
+            "format-critical": "{temperatureC}°C {icon}",
+            "format": ""
+            //"format-icons": ["", "", ""]
+        },
+        "backlight": {
+            // "device": "acpi_video1",
+            "format": "{icon} {percent}%",
+            "format-icons": ["", ""]
+        }
+}]
