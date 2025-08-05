@@ -70,7 +70,9 @@
             "warning": 20,
             "critical": 10
         },
-        "format-normal": "{icon} {capacity}%",
+        "format-critical": "{icon} {capacity}%",
+        "format-warning": "{icon} {capacity}%",
+        "format-normal": "{icon}",
         "format-good": "",
         "format-full": "",
         "format-charging-normal": " {capacity}%",

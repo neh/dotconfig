@@ -310,7 +310,7 @@ animations {
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
 
 window-rule {
-    match title=".* Zen Browser$"
+    match title="Zen Browser$"
     match app-id="firefox$"
     open-maximized true
 }
