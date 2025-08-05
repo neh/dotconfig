@@ -6,7 +6,6 @@
         "niri/window"
     ],
     "modules-center": [
-        "sway/mode"
     ],
     "modules-right": [
         "cpu",
@@ -48,18 +47,18 @@
             "warning": 70,
             "critical": 95
         },
-        "format": " {}%",
+        "format": "",
         "format-warning": " {}%",
         "format-critical": " {}%"
     },
     "memory": {
         "states": {
-            //"normal": 30,
-            "warning": 40,
+            "normal": 30,
+            "warning": 50,
             "critical": 85
         },
-        "format": " {}%",
-        //"format-normal": "normal",
+        "format": "",
+        "format-normal": "",
         "format-warning": " w{}%",
         "format-critical": " c{}%"
     },
