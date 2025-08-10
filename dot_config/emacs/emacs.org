@@ -5337,6 +5337,23 @@ Try out =org-noter=.
 #+begin_src emacs-lisp
 (use-package casual
   :after (transient)
+  :init
+  (defvar casual-tmenu-modes '()
+    "Alist to set casual tmenu commands for modes.")
+  (setq casual-tmenu-modes '((dired-mode . casual-dired-tmenu)
+                             (Info-mode . casual-info-tmenu)
+                             (ibuffer-mode . casual-ibuffer-tmenu)
+                             (calc-mode . casual-calc-tmenu)))
+  (defun casual-tmenu ()
+    (interactive)
+    (if isearch-mode
+        (call-interactively #'casual-isearch-tmenu)
+      (let ((tmenu (alist-get major-mode casual-tmenu-modes)))
+        (if tmenu
+            (call-interactively tmenu)
+          (message "Casual does not support this mode.")))))
+  (global-set-key (kbd "M-'") #'casual-tmenu)
+
   :commands (casual-agenda-tmenu
              casual-bookmarks-tmenu
              casual-calc-tmenu
