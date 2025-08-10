@@ -104,6 +104,11 @@ input {
     position x=1280 y=0
 }
 
+output "Dell Inc. DELL U4025QW 6619C34" {
+    mode "5120x2160@120"
+    scale 1
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
