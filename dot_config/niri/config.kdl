@@ -309,10 +309,23 @@ animations {
 // Find more information on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
 
-window-rule {
-    match title="Zen Browser$"
-    match app-id="firefox$"
-    open-maximized true
+// fuzzel
+layer-rule {
+    match namespace="^launcher$"
+    shadow {
+        on
+        // softness 30
+    }
+    geometry-corner-radius 10
+}
+layer-rule {
+    match namespace="^notifications$"
+    shadow {
+        on
+        // softness 30
+    }
+    geometry-corner-radius 8
+    block-out-from "screencast"
 }
 
 // by setting an empty default-column-width.
@@ -345,9 +358,7 @@ window-rule {
     // block-out-from "screencast"
 }
 
-// Example: enable rounded corners for all windows.
-// (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
