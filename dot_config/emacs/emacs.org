@@ -5201,7 +5201,8 @@ Try out =org-noter=.
   :bind
   (:map elfeed-show-mode-map
    ("I". my/elfeed-show-hide-images)
-   ("U" . my/elfeed-mark-unread-and-exit))
+   ("U" . my/elfeed-mark-unread-and-exit)
+   ("l" . link-hint-open-link))
 
   :config
   (defun my/elfeed-show-hide-images ()
