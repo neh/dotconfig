@@ -418,6 +418,9 @@ binds {
     // toggle wlsunset between on/off/auto
     Mod+J repeat=false { spawn "pkill" "-SIGUSR1" "wlsunset"; }
 
+    // toggle waybar visibility
+    Mod+B repeat=false { spawn "pkill" "-SIGUSR1" "waybar"; }
+
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
