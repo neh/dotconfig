@@ -155,3 +155,12 @@ window#waybar {
 #tray {
     color: @theme_text_color;
 }
+
+tooltip {
+    background: rgba(4, 4, 5, 0.8);
+    border-radius: 5px;
+}
+
+tooltip label {
+    color: white;
+}

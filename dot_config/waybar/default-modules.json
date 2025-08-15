@@ -1,6 +1,6 @@
 {
     "clock": {
-        "format": "{:%a %b %e  %H:%M}",
+        "format": "{:%a %b %e  <b>%H:%M</b>}",
         "format-alt": "{:%Y-%m-%d}"
     },
     "tray": {
