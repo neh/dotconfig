@@ -1,0 +1,10 @@
+[Unit]
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/wlsunset -l 49.8 -L -119.4 -t 3000 -T 6500 -g 1.0
+# TODO figure out how to not hardcode this var
+Environment=WAYLAND_DISPLAY=wayland-1
+Restart=on-failure
