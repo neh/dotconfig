@@ -910,7 +910,8 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     :initialize 'custom-initialize-set)
 
   (customize-set-variable 'my/themeset "duo")
-  (my/dbus-colour-setup))
+  (my/dbus-colour-setup)
+  (remove-hook 'server-after-make-frame-hook #'my/theme-option-setup))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'my/theme-option-setup)
