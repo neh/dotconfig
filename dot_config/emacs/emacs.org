@@ -933,21 +933,15 @@ But I like some things to be set no matter the theme. For example, I always like
 Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
 
 #+begin_src emacs-lisp
-(defun frame-monitor-mm ()
-  "Return the size of the current monitor in mm."
-  (alist-get 'mm-size (frame-monitor-attributes)))
-
-(defun frame-monitor-pixels ()
-  "Return the geometry of the current monitor in pixels."
-  (alist-get 'geometry (frame-monitor-attributes)))
-
 (defun monitor-dpi ()
   "Return the DPI of the current monitor."
-  (let* ((mm (frame-monitor-mm))
+  (let* ((attrs (frame-monitor-attributes))
+         (mm (alist-get 'mm-size attrs))
          (mm-width (car mm))
-         (pixels (frame-monitor-pixels))
-         (pixel-width (nth 2 pixels)))
-    (/ pixel-width (/ mm-width 25.4))))
+         (pixels (alist-get 'geometry attrs))
+         (pixel-width (nth 2 pixels))
+         (scale-factor (alist-get 'scale-factor attrs)))
+    (/ (float mm-width) (/ pixel-width scale-factor))))
 #+end_src
 
 Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =my/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
@@ -983,12 +977,11 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; Set the default text size based on the monitor DPI
   (when (display-graphic-p)
     (let* ((dpi (monitor-dpi))
-           (size (cond ((< dpi 110) 125)
-                       ((< dpi 160) 150)
-                       ;; need to find a signal other than dpi here, as the framework with 200%
-                       ;; scaling reads as 250+ dpi, but has the same desired text size as 110 dpi
-                       ((< dpi 255) 125))))
-      (setq my/default-text-size size)))
+           (size (cond ((< dpi 0) 20)
+                       ((< dpi 0.12) 0)
+                       ((< dpi 0.18) -20)
+                       ((< dpi 0.25) -30))))
+      (setq my/default-text-size (+ size 150))))
 
   (when (not (boundp 'my/current-text-size))
     (setq my/current-text-size my/default-text-size))
