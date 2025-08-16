@@ -1825,7 +1825,9 @@ I find that diff-hl does a better job of showing diff information than git-gutte
   :commands (diff-hl-mode
              global-diff-hl-mode
              diff-hl-flydiff-mode
-             diff-hl-update)
+             diff-hl-update
+             diff-hl-magit-pre-refresh
+             diff-hl-magit-post-refresh)
   :bind
   (:map mode-specific-map
    ("jh" . diff-hl-next-hunk)
