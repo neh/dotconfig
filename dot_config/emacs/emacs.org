@@ -1370,8 +1370,6 @@ There's plenty of useful extra information that can be attached to each candidat
 
 #+begin_src emacs-lisp
 (use-package marginalia
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
   (marginalia-mode t))
 #+end_src
@@ -2578,8 +2576,8 @@ Indent sub-items in lists a bit more so they're clearer.
   :custom
   (org-modern-hide-stars " ")
   (org-modern-star 'replace)
-  (org-modern-replace-stars '("" "‣" "•" "◦" "•" "◦" "•"))
-  ;; (org-modern-star ["▭" "‣" "•" "◦" "•" "◦" "•"])
+  ;; (org-modern-replace-stars '(" " "‣" "•" "◦" "•" "◦" "•"))
+  (org-modern-replace-stars " ‣•◦•◦•")
 
   (org-modern-block-name '(("src" . ("" "⧟"))
                            ("quote" . ("〃" "⧟"))
@@ -2628,8 +2626,9 @@ Indent sub-items in lists a bit more so they're clearer.
 #+begin_src emacs-lisp
 (use-package org-indent
   :straight nil
-  :after org
-  :hook (org-mode . org-indent-mode)
+  :after (org
+          org-modern)
+  :hook (org-modern-mode . org-indent-mode)
   :custom
   (org-indent-mode-turns-on-hiding-stars nil)
   (org-indent-indentation-per-level 1))
