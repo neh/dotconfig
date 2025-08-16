@@ -145,13 +145,6 @@ First, a hook that reports how long and how many garbage collections the startup
                      gcs-done)))
 #+end_src
 
-Set up ESUP for startup profiling.
-
-#+begin_src emacs-lisp
-(use-package esup
-  :commands (esup))
-#+end_src
-
 * Base settings
 
 Load any host-specific configuration. Anything set here will just get overridden by deferred package loads so the way I’m dealing with that is to set vars here with different (=my/…=) names, then set the real vars conditionally in package configurations elsewhere.
@@ -804,8 +797,6 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     (my/match-border-to-background))
   (defun my/gruvbox-light-hard-tweaks ()
     (my/match-border-to-background)))
-
-(use-package poet-theme)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1505,12 +1496,6 @@ targets."
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package embark-vc
-  :disabled t
-  :after embark)
-#+end_src
-
 ** Consult
 
 Consult takes over for a lot of what counsel did, as well as swiper.
@@ -1936,14 +1921,6 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
    ("b" . roam-dailies-transient)))
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package transient-posframe
-  :after (transient)
-  ;; :config
-  ;; (transient-posframe-mode t)
-  )
-#+end_src
-
 Of course, the great magit.
 
 #+begin_src emacs-lisp
@@ -2036,14 +2013,6 @@ Handy package to browse to git repo web interfaces.
                    :background "unspecified"
                    :height 140
                    :italic t))))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package magit-commit-mark
-  ;; will need to figure out keys for this, maybe util leader?
-  ;; maybe a universal dwim mark read/unread/star/urgent/etc setup?
-  :after magit
-  :commands (magit-commit-mark-mode))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2340,18 +2309,6 @@ Add plantuml for nice text-based diagram generation. I’ll mainly use this in o
   :disabled t
   :straight (:host github :repo "xcapaldi/ob-d2")
   :commands (org-babel-execute:d2))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package restclient
-  :commands (restclient-mode
-             restclient-http-send-current
-             restclient-http-send-current-stay-in-window))
-
-(use-package ob-restclient
-  :after (restclient)
-  :commands
-  (org-babel-execute:restclient))
 #+end_src
 
 A basic start at making different kinds of links look usefully different (eg. it's nice to be able to tell internal org/roam links from web links).
@@ -3636,12 +3593,6 @@ in that direction and display the target buffer in said window."
   (popper-echo-mode t))
 #+end_src
 
-** Sway
-
-#+begin_src emacs-lisp
-(use-package sway)
-#+end_src
-
 * Window Navigation
 
 #+begin_src emacs-lisp
@@ -4136,11 +4087,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package groovy-mode
-  :mode ("Jenkinsfile\\'" . groovy-mode))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package go-mode
   :mode "\\.go\\'")
 
@@ -4172,19 +4118,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 * Shells
-
-#+begin_src emacs-lisp
-(use-package terminal-here
-  :commands (terminal-here-launch
-             terminal-here-project-launch)
-  :custom
-  (terminal-here-linux-terminal-command 'alacritty)
-  ;; :general
-  ;; (my/leader-keys
-  ;;   "ot" #'terminal-here-launch
-  ;;   "oT" #'terminal-here-project-launch)
-  )
-#+end_src
 
 #+begin_src emacs-lisp
 (use-package vterm
@@ -4579,24 +4512,6 @@ Version 2017-09-01"
   :custom
   (ls-lisp-ignore-case t)
   (ls-lisp-use-insert-directory-program nil))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
-(major-mode-hydra-define dired-mode
-  (:color amaranth :quit-key ("q" "<escape>"))
-  ("Show"
-   (("d" dired-hide-details-mode "hide details" :toggle t)
-    ("g" dired-git-info-mode "git info" :toggle t)
-    ("u" dired-du-mode "usage" :toggle t)
-    ("cl" dired-collapse-mode "collapse" :toggle t)
-    ("cp" my/dired-copy-full-path "copy path" :exit t)
-    ("cP" my/dired-copy-full-path-quoted "copy \"path\"" :exit t)
-    )
-   "Filter"
-   (("p" dired-filter-pop "pop")
-    ;;TODO ("a" (lambda () (interactive) (counsel-M-x "dired-filter-by-")) "add")
-    ("n" dired-narrow-fuzzy "fuzzy narrow")
-    ("r" revert-buffer "revert"))))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref major-mode-hydras
