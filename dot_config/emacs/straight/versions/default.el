@@ -233,6 +233,7 @@
  ("treepy.el" . "651e2634f01f346da9ec8a64613c51f54b444bc3")
  ("treesit-auto" . "016bd286a1ba4628f833a626f8b9d497882ecdf3")
  ("ts.el" . "552936017cfdec89f7fc20c254ae6b37c3f22c5b")
+ ("ultra-scroll" . "8c92a17743af05fedc76beeb58da5eab48398035")
  ("vertico" . "c479ee6d2d31478a5dd8235157c8308098585b80")
  ("vertico-posframe" . "047474764c6bf9f6296f8e4f959d483de6b5baf7")
  ("visual-fill-column" . "e391b52922086ac38397a3325933900b6d90f9f0")

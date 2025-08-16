@@ -2604,10 +2604,10 @@ Flycheck gives way too many errors when editing src blocks in their own buffer. 
 (org-src-mode . disable-flycheck-in-org-src-block)
 #+end_src
 
-Show the heading of a table when it's scrolled offscreen.
+Show the heading of a table when it's scrolled offscreen. Disabling this because it doesn't interact well with ultra-scroll, even with [[https://github.com/jdtsmith/ultra-scroll/issues/19][Interaction with org-table-header-line-mode · Issue #19 · jdtsmith/ultra-scroll · GitHub]].
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
-(org-mode . org-table-header-line-mode)
+;;(org-mode . org-table-header-line-mode)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref org-hooks
@@ -3788,16 +3788,25 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
 
 #+begin_src emacs-lisp
-(use-package pixel-scroll
-  :straight nil
-  :if (>= emacs-major-version 29)
-  :commands (pixel-scroll-precision-mode)
-  :custom
-  (pixel-scroll-precision-interpolate-page t)
-  (pixel-scroll-precision-interpolation-factor 2.0)
-  (pixel-scroll-precision-large-scroll-height 20)
+;; (use-package pixel-scroll
+;;   :straight nil
+;;   :if (>= emacs-major-version 29)
+;;   :commands (pixel-scroll-precision-mode)
+;;   :custom
+;;   (pixel-scroll-precision-interpolate-page t)
+;;   (pixel-scroll-precision-interpolation-factor 2.0)
+;;   (pixel-scroll-precision-large-scroll-height 20)
+;;   :init
+;;   (pixel-scroll-precision-mode t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ultra-scroll
   :init
-  (pixel-scroll-precision-mode t))
+  (setq scroll-conservatively 101 ; or whatever value you prefer, since v0.4
+        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  :config
+  (ultra-scroll-mode 1))
 #+end_src
 
 #+begin_src emacs-lisp
