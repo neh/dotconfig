@@ -209,28 +209,32 @@ else
     GTK_THEME_DARK='Adwaita-dark'
 fi
 
-ALACRITTY_LIGHT='modus_operandi'
-ALACRITTY_DARK='gruvbox_dark'
+SET_TO=$1
+echo "setting to: ${SET_TO}"
 
 current_theme=$(gsettings get org.gnome.desktop.interface gtk-theme | tr -d "'")
 current_scheme=$(gsettings get org.gnome.desktop.interface color-scheme | tr -d "'")
 
-if [[ "$current_scheme" == "prefer-dark" ]]; then
-    # echo "Currently dark, going light"
-    gsettings set org.gnome.desktop.interface color-scheme "default"
-    darkman set light
-    gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
-    if [[ -e ~/.config/alacritty/schemes.yml ]]; then
-        sed -i "s/colors: \*${ALACRITTY_DARK}$/colors: *${ALACRITTY_LIGHT}/" ~/.config/alacritty/schemes.yml
-    fi
-else
-    # echo "Currently not dark, going dark"
-    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
-    darkman set dark
-    gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
-    if [[ -e ~/.config/alacritty/schemes.yml ]]; then
-        sed -i "s/colors: \*${ALACRITTY_LIGHT}$/colors: *${ALACRITTY_DARK}/" ~/.config/alacritty/schemes.yml
-    fi
+go_light () {
+    echo "Currently dark, going light"
+    /usr/bin/gsettings set org.gnome.desktop.interface color-scheme "default"
+    /usr/bin/gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_LIGHT
+}
+
+go_dark () {
+    echo "Currently not dark, going dark"
+    /usr/bin/gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+    /usr/bin/gsettings set org.gnome.desktop.interface gtk-theme $GTK_THEME_DARK
+}
+
+if [[ "$SET_TO" == "light" ]]; then
+    go_light
+elif [[ "$SET_TO" == "dark" ]]; then
+    go_dark
+elif [[ "$current_scheme" == "prefer-dark" ]]; then
+    go_light
+elif [[ "$current_scheme" == "default" ]]; then
+    go_dark
 fi
 #+end_src
 
