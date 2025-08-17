@@ -242,6 +242,7 @@
  ("vterm-toggle" . "06cb4f3c565e46470a3c4505c11e26066d869715")
  ("with-editor" . "7787e19764c1089390584ac17a80129ef9afaa14")
  ("writeroom-mode" . "cca2b4b3cfcfea1919e1870519d79ed1a69aa5e2")
+ ("ws-butler" . "67c49cfdf5a5a9f28792c500c8eb0017cfe74a3a")
  ("x509-mode" . "a59a548f087bfad4f81d9410b6facdcf0fdd98f9")
  ("xkb-mode" . "0e317a08dd665bfa8d1bbfbe23c7ca3ae0975519")
  ("xterm-color" . "2ad407c651e90fff2ea85d17bf074cee2c022912")
