@@ -919,9 +919,10 @@ But I like some things to be set no matter the theme. For example, I always like
 #+begin_src emacs-lisp
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
-(defadvice load-theme (after run-after-load-theme-hook activate)
+(defun run-after-load-theme-hook (&rest args)
   "Run `after-load-theme-hook'."
   (run-hooks 'after-load-theme-hook))
+(advice-add 'load-theme :after #'run-after-load-theme-hook)
 
 (add-hook 'after-load-theme-hook #'my/theme-tweaks)
 (setq my/first-frame-created nil)
@@ -2823,19 +2824,13 @@ Show the heading of a table when it's scrolled offscreen. Disabling this because
     (interactive)
     (org-capture nil "m"))
 
-  (defadvice org-capture-finalize
-      (after delete-capture-frame activate)
-    "Advise capture-finalize to close the frame"
+  (defun my/delete-capture-frame (&rest args)
+    "Advise to close the frame after capture or refile."
     (when (and (equal "capture" (frame-parameter nil 'name))
                (not (eq this-command 'org-capture-refile)))
       (delete-frame)))
-
-  (defadvice org-capture-refile
-      (after delete-capture-frame activate)
-    "Advise org-refile to close the frame"
-    (when (and (equal "capture" (frame-parameter nil 'name))
-               (not (eq this-command 'org-capture-refile)))
-      (delete-frame)))
+  (advice-add 'org-capture-finalize :after #'my/delete-capture-frame)
+  (advice-add 'org-capture-refile :after #'my/delete-capture-frame)
 
   (defun my/capture-full-frame ()
     "Start org-capture in a frame by itself."
