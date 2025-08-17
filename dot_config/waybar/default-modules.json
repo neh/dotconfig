@@ -9,6 +9,7 @@
     },
     "niri/window": {
         "icon": true,
+        "icon-size": 18,
         "format": "<b>{title}</b>"
     },
     "mpris": {
@@ -68,7 +69,7 @@
         },
         "format-critical": "{icon} {capacity}%",
         "format-warning": "{icon} {capacity}%",
-        "format-normal": "{icon}",
+        "format-normal": "{icon} {capacity}%",
         "format-good": "",
         "format-full": "",
         "format-charging-normal": " {capacity}%",
