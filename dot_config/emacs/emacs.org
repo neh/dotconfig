@@ -1347,6 +1347,9 @@ There's plenty of useful extra information that can be attached to each candidat
 
 #+begin_src emacs-lisp
 (use-package marginalia
+  :bind
+  (:map minibuffer-local-map
+   ("M-a" . marginalia-cycle))
   :init
   (marginalia-mode t))
 #+end_src
