@@ -2866,7 +2866,19 @@ Show the heading of a table when it's scrolled offscreen. Disabling this because
 
 We need a little desktop integration for =org-protocol=, Linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
 
-#+begin_src conf :tangle ~/.config/systemd/user/emacs-server.service :mkdirp yes
+Some special handling here to set the =SSH_AUTH_SOCK= variable with different ssh agents that use different paths.
+
+#+name: ssh-socket-path
+#+begin_src emacs-lisp
+(let ((path (getenv "XDG_RUNTIME_DIR")))
+  (locate-file "ssh"
+               `(,(file-name-concat path "keyring")
+                 ,(file-name-concat path "gcr"))
+               nil
+               #'file-readable-p))
+#+end_src
+
+#+begin_src conf :tangle ~/.config/systemd/user/emacs-server.service :mkdirp yes :noweb yes
 [Unit]
 Description=Emacs (server)
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
@@ -2875,12 +2887,8 @@ Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 [Service]
 Type=notify
 ExecStart=emacs --fg-daemon --chdir %h
-# ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=emacsclient --eval "(kill-emacs)"
-# Environment=SSH_AUTH_SOCK=/run/user/%U/ssh-agent.socket
-Environment=SSH_AUTH_SOCK=/run/user/%U/keyring/ssh
-# Environment=SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
-# Environment=SSH_AUTH_SOCK=%t/keyring/ssh XDG_RUNTIME_DIR=/run/user/%U EMACS_SOCKET_NAME=/run/user/%U/emacs/server
+Environment=SSH_AUTH_SOCK=<<ssh-socket-path()>>
 Restart=on-failure
 
 [Install]
