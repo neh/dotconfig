@@ -4,12 +4,10 @@
         "format-alt": "{:%Y-%m-%d}"
     },
     "tray": {
-        // "icon-size": 21,
         "spacing": 10
     },
     "niri/window": {
         "icon": true,
-        "icon-size": 18,
         "format": "<b>{title}</b>"
     },
     "mpris": {

@@ -8,6 +8,7 @@
         "niri/window"
     ],
     "modules-center": [
+        "clock"
     ],
     "modules-right": [
         "cpu",
@@ -22,7 +23,13 @@
     ],
     "include": [
         "~/.config/waybar/default-modules.json"    
-    ]
+    ],
+    "clock": {
+        "icon-size": 18
+    },
+    "niri/window": {
+        "icon-size": 18
+    }
 }, {
     "layer": "top",
     "position": "bottom",
@@ -30,22 +37,28 @@
     "height": 32,
     "modules-left": [
         "niri/workspaces",
-        "mpris"
-    ],
-    "modules-center": [
         "niri/window"
     ],
+    "modules-center": [
+        "clock"
+    ],
     "modules-right": [
+        "mpris",
         "cpu",
         "memory",
         "temperature",
         "network#wired",
         "idle_inhibitor",
         "pulseaudio",
-        "clock",
         "tray"
     ],
     "include": [
         "~/.config/waybar/default-modules.json"    
-    ]
+    ],
+    "clock": {
+        "icon-size": 24
+    },
+    "niri/window": {
+        "icon-size": 24
+    }
 }]
