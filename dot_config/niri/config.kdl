@@ -389,7 +389,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     // Mod+Shift+E hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
     Mod+space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Super+Ctrl+L hotkey-overlay-title="Lock the Screen" { spawn "pkill" "-SIGUSR1" "swayidle"; }
 
     Mod+period { spawn "emacsclient" "--create-frame"; }
 
@@ -559,7 +559,7 @@ binds {
     // Mod+Ctrl+1 { move-window-to-workspace 1; }
 
     // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
+    Mod+Tab { focus-workspace-previous; }
 
     // The following binds move the focused window in and out of a column.
     // If the window is alone, they will consume it into the nearby column to the side.
