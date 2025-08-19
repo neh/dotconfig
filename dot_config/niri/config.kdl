@@ -391,7 +391,7 @@ binds {
     Mod+space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Ctrl+L hotkey-overlay-title="Lock the Screen" { spawn "pkill" "-SIGUSR1" "swayidle"; }
 
-    Mod+period { spawn "emacsclient" "--create-frame"; }
+    Mod+period hotkey-overlay-title="Emacs client" { spawn "emacsclient" "--create-frame"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
@@ -399,27 +399,26 @@ binds {
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Increase volume" { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true hotkey-overlay-title="Decrease volume" { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute        allow-when-locked=true hotkey-overlay-title="Mute" { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 
-    XF86AudioPlay allow-when-locked=true repeat=false { spawn "playerctl" "play-pause"; }
-    XF86AudioPrev allow-when-locked=true repeat=false { spawn "playerctl" "previous"; }
-    XF86AudioNext allow-when-locked=true repeat=false { spawn "playerctl" "next"; }
+    XF86AudioPlay allow-when-locked=true repeat=false hotkey-overlay-title="Play/Pause" { spawn "playerctl" "play-pause"; }
+    XF86AudioPrev allow-when-locked=true repeat=false hotkey-overlay-title="Play previous" { spawn "playerctl" "previous"; }
+    XF86AudioNext allow-when-locked=true repeat=false hotkey-overlay-title="Play next" { spawn "playerctl" "next"; }
 
     // Example brightness key mappings for brightnessctl.
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
+    XF86MonBrightnessUp allow-when-locked=true hotkey-overlay-title="Increase brightness" { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
+    XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Decrease brightness" { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
 
-    Mod+K repeat=false { spawn "makoctl" "dismiss"; }
-    Mod+Shift+K repeat=false { spawn "makoctl" "restore"; }
+    Mod+K repeat=false hotkey-overlay-title="Dismiss notification" { spawn "makoctl" "dismiss"; }
+    Mod+Shift+K repeat=false hotkey-overlay-title="Recall notification" { spawn "makoctl" "restore"; }
 
     // toggle wlsunset between on/off/auto
-    Mod+J repeat=false { spawn "pkill" "-SIGUSR1" "wlsunset"; }
+    Mod+J repeat=false hotkey-overlay-title="Toggle wlsunset: off/on/auto" { spawn "pkill" "-SIGUSR1" "wlsunset"; }
 
     // toggle waybar visibility
-    Mod+B repeat=false { spawn "pkill" "-SIGUSR1" "waybar"; }
+    Mod+B repeat=false hotkey-overlay-title="Show/hide waybar" { spawn "pkill" "-SIGUSR1" "waybar"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
