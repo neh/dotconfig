@@ -27,6 +27,9 @@
     "clock": {
         "icon-size": 18
     },
+    "tray": {
+        "icon-size": 18
+    },
     "niri/window": {
         "icon-size": 18
     }
@@ -56,6 +59,9 @@
         "~/.config/waybar/default-modules.json"    
     ],
     "clock": {
+        "icon-size": 24
+    },
+    "tray": {
         "icon-size": 24
     },
     "niri/window": {
