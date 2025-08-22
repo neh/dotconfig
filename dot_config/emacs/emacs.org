@@ -878,6 +878,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 
 (use-package dbus
   :straight nil
+  :init
+  (defvar my/text-scaling-factor 1.0
+    "Holds the value of this setting from the Gnome desktop.")
   :config
   (defun set-dark-or-light (value)
     (if (equal value '1)
@@ -886,24 +889,38 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
       (progn (message "Switching to light theme")
              (my/set-light-mode))))
 
-  (defun handler (value)
+  (defun color-scheme-handler (value)
     (set-dark-or-light (car (car value))))
 
-  (defun signal-handler (namespace key value)
-    (if (and (string-equal namespace "org.freedesktop.appearance")
-             (string-equal key "color-scheme"))
-        (set-dark-or-light (car value))))
+  (defun text-scale-handler (value)
+    (setq my/text-scaling-factor (car (car value)))
+    )
 
-  (defun my/dbus-colour-setup ()
+  (defun signal-handler (namespace key value)
+    (cond ((and (string-equal namespace "org.freedesktop.appearance")
+                (string-equal key "color-scheme"))
+           (set-dark-or-light (car value)))
+          ((and (string-equal namespace "org.gnome.desktop.interface")
+                (string-equal key "text-scaling-factor"))
+           (setq my/text-scaling-factor (car value))
+           )))
+
+  (defun my/dbus-read-setting (namespace key handler)
     (dbus-call-method-asynchronously
      :session
      "org.freedesktop.portal.Desktop"
      "/org/freedesktop/portal/desktop"
      "org.freedesktop.portal.Settings"
      "Read"
-     #'handler
-     "org.freedesktop.appearance"
-     "color-scheme")
+     handler
+     namespace
+     key))
+
+  (defun my/dbus-colour-setup ()
+    (my/dbus-read-setting "org.freedesktop.appearance" "color-scheme"
+                          #'color-scheme-handler)
+    (my/dbus-read-setting "org.gnome.desktop.interface" "text-scaling-factor"
+                          #'text-scale-handler)
 
     (dbus-register-signal
      :session
@@ -942,7 +959,7 @@ Handy functions to calculate the DPI of the display that current frame is on. Bi
          (pixels (alist-get 'geometry attrs))
          (pixel-width (nth 2 pixels))
          (scale-factor (alist-get 'scale-factor attrs)))
-    (/ (float mm-width) (/ pixel-width scale-factor))))
+    (/ (float mm-width) (/ pixel-width (* scale-factor my/text-scaling-factor)))))
 #+end_src
 
 Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =my/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
@@ -981,7 +998,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
            (size (cond ((< dpi 0) 20)
                        ((< dpi 0.12) 0)
                        ((< dpi 0.18) -20)
-                       ((< dpi 0.25) -30))))
+                       ((< dpi 0.23) -25)
+                       ((< dpi 0.25) -40))))
       (setq my/default-text-size (+ size 150))))
 
   (when (not (boundp 'my/current-text-size))
@@ -1070,7 +1088,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (fontaine-presets
    `(
      (normal
-      :default-text-height ,my/current-text-size)
+      :default-height ,my/current-text-size)
      (larger :fixed-pitch-height 1.3 :variable-pitch-height 1.3)
      (double :fixed-pitch-height 2.0 :variable-pitch-height 2.0)
      (t
