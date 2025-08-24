@@ -3044,7 +3044,8 @@ MimeType=x-scheme-handler/org-protocol;
 
 
   (defun my/check-org-files ()
-    (when (> (length (directory-files org-directory nil "\\.org$")) 0)
+    (when (and (file-directory-p org-directory)
+               (> (length (directory-files org-directory nil "\\.org$")) 0))
       (org-roam-db-autosync-mode t)
       (cancel-function-timers #'my/check-org-files)))
 
