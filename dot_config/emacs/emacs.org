@@ -351,13 +351,6 @@ Set some backup file options.
 (auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 #+end_src
 
-I’m testing out [[https://github.com/swaywm/sway][sway]] as my window manager, and apparently ~$SSH_AUTH_SOCK~ doesn’t get set (maybe just for xwayland apps?). So we workaround. I already set a fixed link to the real socket for tmux usage, I can reuse it for this.
-
-#+begin_src emacs-lisp :tangle no
-(when (string= (getenv "SSH_AUTH_SOCK") nil)
-  (setenv "SSH_AUTH_SOCK" (format "%s/ssh-agent.socket" (getenv "XDG_RUNTIME_DIR"))))
-#+end_src
-
 Some text fill options.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
@@ -2884,16 +2877,17 @@ Show the heading of a table when it's scrolled offscreen. Disabling this because
 
 We need a little desktop integration for =org-protocol=, Linux-only, currently. First up is the systemd configuration for the emacs server process. Yes, there's one included with emacs, but this way I can customize it more easily. Needs a ~systemctl --user enable emacs-server~ and ~systemctl --user start emacs-server~ to use.
 
-Some special handling here to set the =SSH_AUTH_SOCK= variable with different ssh agents that use different paths.
 
-#+name: ssh-socket-path
-#+begin_src emacs-lisp
-(let ((path (getenv "XDG_RUNTIME_DIR")))
-  (locate-file "ssh"
-               `(,(file-name-concat path "keyring")
-                 ,(file-name-concat path "gcr"))
-               nil
-               #'file-readable-p))
+#+begin_src emacs-lisp :tangle no
+(when (string= (getenv "SSH_AUTH_SOCK") nil)
+  (let ((path (getenv "XDG_RUNTIME_DIR")))
+    (if (file-directory-p path)
+        (setenv "SSH_AUTH_SOCK"
+                (locate-file "ssh"
+                             `(,(file-name-concat path "keyring")
+                               ,(file-name-concat path "gcr"))
+                             nil
+                             #'file-readable-p)))))
 #+end_src
 
 #+begin_src conf :tangle ~/.config/systemd/user/emacs-server.service :mkdirp yes :noweb yes
@@ -2901,12 +2895,10 @@ Some special handling here to set the =SSH_AUTH_SOCK= variable with different ss
 Description=Emacs (server)
 Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
-# need WAYLAND_DISPLAY set in emacs
 [Service]
 Type=notify
 ExecStart=emacs --fg-daemon --chdir %h
 ExecStop=emacsclient --eval "(kill-emacs)"
-Environment=SSH_AUTH_SOCK=<<ssh-socket-path()>>
 Restart=on-failure
 
 [Install]
