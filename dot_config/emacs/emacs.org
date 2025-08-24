@@ -888,6 +888,19 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (defun text-scale-handler (value)
     (setq my/text-scaling-factor (car (car value)))
     )
+  (defun my/font-name-splitter (font)
+    (let* ((parts (split-string font))
+           (size (car (last parts)))
+           (name (string-join (butlast parts) " ")))
+      `(,name ,size)))
+  (defun variable-font-handler (value)
+    (let* ((font (my/font-name-splitter (car (car value)))))
+      (setq my/variable-font-name (pop font)
+            my/variable-font-size (pop font))))
+  (defun fixed-font-handler (value)
+    (let* ((font (my/font-name-splitter (car (car value)))))
+      (setq my/fixed-font-name (pop font)
+            my/fixed-font-size (pop font))))
 
   (defun signal-handler (namespace key value)
     (cond ((and (string-equal namespace "org.freedesktop.appearance")
@@ -914,6 +927,10 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
                           #'color-scheme-handler)
     (my/dbus-read-setting "org.gnome.desktop.interface" "text-scaling-factor"
                           #'text-scale-handler)
+    (my/dbus-read-setting "org.gnome.desktop.interface" "document-font-name"
+                          #'variable-font-handler)
+    (my/dbus-read-setting "org.gnome.desktop.interface" "monospace-font-name"
+                          #'fixed-font-handler)
 
     (dbus-register-signal
      :session
