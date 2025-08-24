@@ -6643,3 +6643,4 @@ Attaching this next one to =org-src-mode= will disable the annoying flycheck war
    (let ((org-indirect-buffer-display 'new-frame))
      (org-tree-to-indirect-buffer)))
 #+end_src
+
