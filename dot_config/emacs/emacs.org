@@ -442,6 +442,427 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
    ("C" . quick-calc)))
 #+end_src
 
+* Appearance
+** Fonts
+
+#+begin_src emacs-lisp
+(defvar my/color-scheme 1
+  "Holds the value of this setting from the Gnome desktop.")
+
+(defvar my/text-scaling-factor 1.0
+  "Holds the value of this setting from the Gnome desktop.")
+
+(defvar my/fixed-font-name "Monospace"
+  "Font name to use for monospace text.")
+(defvar my/fixed-font-size 12
+  "Font size to use for monospace text.")
+(defvar my/variable-font-name "Sans Serif"
+  "Font name to use for variable text.")
+(defvar my/variable-font-size 12
+  "Font size to use for variable text.")
+#+end_src
+
+#+begin_src emacs-lisp
+;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
+
+(use-package dbus
+  :straight nil
+  :commands (dbus-register-signal
+             dbus-call-method-asynchronously)
+
+  :init
+  (defun my/dbus-read-setting (namespace key handler)
+    (dbus-call-method-asynchronously
+     :session
+     "org.freedesktop.portal.Desktop"
+     "/org/freedesktop/portal/desktop"
+     "org.freedesktop.portal.Settings"
+     "Read"
+     handler
+     namespace
+     key))
+
+  :config
+  (defun my/color-scheme-handler (value)
+    (setq my/color-scheme (car (car value))))
+
+  (defun my/text-scaling-factor-handler (value)
+    (setq my/text-scaling-factor (car (car value))))
+
+  (defun my/font-name-splitter (font)
+    (let* ((parts (split-string font))
+           (size (car (last parts)))
+           (name (string-join (butlast parts) " ")))
+      `(,name ,size)))
+  (defun my/document-font-name-handler (value)
+    (let* ((font (my/font-name-splitter (car (car value)))))
+      (setq my/variable-font-name (pop font)
+            my/variable-font-size (string-to-number (pop font)))))
+  (defun my/monospace-font-name-handler (value)
+    (let* ((font (my/font-name-splitter (car (car value)))))
+      (setq my/fixed-font-name (pop font)
+            my/fixed-font-size (string-to-number (pop font)))))
+
+  (defun signal-handler (namespace key value)
+    (let ((handler (intern (format "my/%s-handler" key))))
+      (when (fboundp handler)
+        (funcall handler (car value)))))
+
+  (my/dbus-read-setting "org.freedesktop.appearance" "color-scheme"
+                        #'my/color-scheme-handler)
+  (my/dbus-read-setting "org.gnome.desktop.interface" "text-scaling-factor"
+                        #'my/text-scaling-factor-handler)
+  (my/dbus-read-setting "org.gnome.desktop.interface" "document-font-name"
+                        #'my/document-font-name-handler)
+  (my/dbus-read-setting "org.gnome.desktop.interface" "monospace-font-name"
+                        #'my/monospace-font-name-handler)
+
+  (dbus-register-signal
+   :session
+    "org.freedesktop.portal.Desktop"
+    "/org/freedesktop/portal/desktop"
+    "org.freedesktop.portal.Settings"
+    "SettingChanged"
+    #'signal-handler))
+#+end_src
+
+
+Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
+
+#+begin_src emacs-lisp :tangle no
+(defun monitor-dpi ()
+  "Return the DPI of the current monitor."
+  (let* ((attrs (frame-monitor-attributes))
+         (mm (alist-get 'mm-size attrs))
+         (mm-width (car mm))
+         (pixels (alist-get 'geometry attrs))
+         (pixel-width (nth 2 pixels))
+         (scale-factor (alist-get 'scale-factor attrs)))
+    (/ (float mm-width) (/ pixel-width (* scale-factor my/text-scaling-factor)))))
+#+end_src
+
+Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =my/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
+
+#+begin_src emacs-lisp :tangle no
+(defun my/adjust-text-height (adjustment)
+  "Adjust text size up or down by ADJUSTMENT."
+  (interactive)
+
+  (if (= adjustment 0)
+      (setq my/current-text-size my/default-text-size)
+    (setq my/current-text-size (+ my/current-text-size adjustment)))
+  (my/theme-tweaks)
+  (visual-fill-column-adjust))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package fontaine
+  :commands (fontaine-set-preset
+             fontaine-mode
+             fontaine-restore-latest-preset)
+  :init
+  (defun my/set-fontaine-presets ()
+    (setopt fontaine-presets
+            `((normal
+               :default-height ,(* 10 my/fixed-font-size)
+               :fixed-pitch-height ,(* 10 my/fixed-font-size)
+               :variable-pitch-height ,(* 10 my/variable-font-size))
+              (larger :fixed-pitch-height 1.3 :variable-pitch-height 1.3)
+              (double :fixed-pitch-height 2.0 :variable-pitch-height 2.0)
+              (t
+               :default-family ,my/fixed-font-name
+               :default-weight normal
+               :fixed-pitch-family ,my/fixed-font-name
+               :variable-pitch-family ,my/variable-font-name
+               :line-spacing 0.2)))))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package spacious-padding
+  :commands (spacious-padding-mode)
+  :config
+  (setq spacious-padding-widths
+        '(:internal-border-width 20
+          :header-line-width 4
+          :mode-line-width 3
+          :tab-width 4
+          :right-divider-width 20
+          :scroll-bar-width 8)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref first-frame-tweaks
+(spacious-padding-mode t)
+#+end_src
+
+** Theme
+
+#+begin_src emacs-lisp
+(use-package color
+  :commands (color-distance)
+  :config
+  (defun my/dark-p ()
+    (let ((bg (face-background 'default)))
+      (if (>= (color-distance "black" bg)
+              (color-distance "white" bg))
+          nil
+        t))))
+#+end_src
+
+Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
+
+#+begin_src emacs-lisp
+(define-advice load-theme (:before (&rest _args) theme-dont-propagate)
+  "Discard all themes before loading new."
+  (mapc #'disable-theme custom-enabled-themes))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package modus-themes
+  :custom
+  (modus-themes-org-blocks 'gray-background)
+  (modus-themes-mixed-fonts t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-italic-constructs t)
+  (modus-themes-region '(bg-only)))
+
+(use-package ef-themes)
+
+(use-package doric-themes)
+
+(use-package stimmung-themes
+  :commands (stimmung-themes-load-light
+             stimmung-themes-load-dark
+             stimmung-themes-toggle)
+  :config
+  (defun my/stimmung-themes-dark-tweaks ()
+    (set-face-background 'avy-lead-face "forest green")
+    (set-face-foreground 'avy-lead-face "white"))
+  (defun my/stimmung-themes-light-tweaks ()
+    (set-face-background 'avy-lead-face "red")
+    (set-face-foreground 'avy-lead-face "white")
+    (set-face-foreground 'terraform--resource-name-face "dark orchid")
+    (set-face-foreground 'terraform--resource-type-face "dark green")))
+
+(use-package gruvbox-theme
+  :custom-face
+  (org-block-begin-line ((t (:inherit fixed-pitch
+                             :slant italic))))
+  (org-block-end-line ((t (:inherit fixed-pitch
+                           :slant italic))))
+  :config
+  (defun my/match-border-to-background ()
+    (custom-theme-set-faces
+     'user
+     `(internal-border ((t (:background ,(face-background 'default)))))))
+  (defun my/gruvbox-dark-hard-tweaks ()
+    (my/match-border-to-background))
+  (defun my/gruvbox-light-hard-tweaks ()
+    (my/match-border-to-background)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/set-dark-mode ()
+  "Load dark theme."
+  (interactive)
+  (setq my/dark-mode t)
+  (load-theme my/dark-theme t))
+
+(defun my/set-light-mode ()
+  "Load light theme."
+  (interactive)
+  (setq my/dark-mode nil)
+  (load-theme my/light-theme t))
+
+(defun my/toggle-dark-mode ()
+  "Toggle dark/light theme."
+  (interactive)
+  (if (my/dark-p)
+      (my/set-light-mode)
+    (my/set-dark-mode)))
+
+(defun set-dark-or-light (value)
+  (if (equal value '1)
+      (progn (message "Switching to dark theme")
+             (my/set-dark-mode))
+    (progn (message "Switching to light theme")
+           (my/set-light-mode))))
+
+(defun my/setthemeset (sym value)
+  (cond ((equal value "gruvbox")
+         (setq my/dark-theme 'gruvbox-dark-hard
+               my/light-theme 'gruvbox-light-hard))
+        ((equal value "modus")
+         (setq my/dark-theme 'modus-vivendi
+               my/light-theme 'modus-operandi))
+        ((equal value "modus-tinted")
+         (setq my/dark-theme 'modus-vivendi-tinted
+               my/light-theme 'modus-operandi-tinted))
+        ((equal value "bio-operandi")
+         (setq my/dark-theme 'ef-bio
+               my/light-theme 'modus-operandi-tinted))
+        ((equal value "duo")
+         (setq my/dark-theme 'ef-night
+               my/light-theme 'ef-duo-light))
+        ((equal value "maris")
+         (setq my/dark-theme 'ef-maris-dark
+               my/light-theme 'ef-maris-light))
+        ((equal value "stimmung")
+         (setq my/dark-theme 'stimmung-themes-dark
+               my/light-theme 'stimmung-themes-light))
+        ((equal value "mix")
+         (setq my/dark-theme 'gruvbox-dark-hard
+               my/light-theme 'modus-operandi)))
+  (if (my/dark-p)
+      (my/set-dark-mode)
+    (my/set-light-mode)))
+
+(defun my/theme-option-setup ()
+  (defcustom my/themeset "duo"
+    "Indicates which set of themes (dark and light) to use."
+    :type '(choice
+            (const "gruvbox")
+            (const "modus")
+            (const "modus-tinted")
+            (const "bio-operandi")
+            (const "duo")
+            (const "maris")
+            (const "stimmung")
+            (const "mix")
+            )
+    :set 'my/setthemeset
+    :initialize 'custom-initialize-set)
+
+  (customize-set-variable 'my/themeset "duo")
+  (set-dark-or-light my/color-scheme)
+  (remove-hook 'server-after-make-frame-hook #'my/theme-option-setup))
+
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'my/theme-option-setup)
+  (add-hook 'after-init-hook #'my/theme-option-setup))
+#+end_src
+
+But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller mode-line font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
+
+#+begin_src emacs-lisp
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+(defun run-after-load-theme-hook (&rest args)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+(advice-add 'load-theme :after #'run-after-load-theme-hook)
+
+(add-hook 'after-load-theme-hook #'my/theme-tweaks)
+(setq my/first-frame-created nil)
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'my/theme-tweaks)
+  (add-hook 'after-init-hook #'my/theme-tweaks))
+#+end_src
+
+
+And here’s the function where I collect my tweaks to the theme and set up fonts.
+
+#+begin_src emacs-lisp :noweb yes
+(defun my/theme-tweaks ()
+  "Apply my catchall set of mostly appearance tweaks."
+  (interactive)
+
+  (unless savehist-loaded
+    (savehist-mode 1))
+
+  ;; Workaround so I can use S-SPC as a binding
+  ;; https://www.reddit.com/r/emacs/comments/osscfd/pgtk_emacswaylandgnome_no_shiftspace/
+  ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-07/msg00071.html
+  (when (fboundp 'pgtk-use-im-context)
+    (pgtk-use-im-context nil))
+
+  ;; Set the default text size based on the monitor DPI
+  ;; (when (display-graphic-p)
+  ;;   (let* ((dpi (monitor-dpi))
+  ;;          (size (cond ((< dpi 0) 20)
+  ;;                      ((< dpi 0.12) 0)
+  ;;                      ((< dpi 0.18) -20)
+  ;;                      ((< dpi 0.23) -25)
+  ;;                      ((< dpi 0.25) -40))))
+  ;;     (setq my/default-text-size (+ size 150))))
+
+  ;; (when (not (boundp 'my/current-text-size))
+  ;;   (setq my/current-text-size my/default-text-size))
+
+  (my/set-fontaine-presets)
+  (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal))
+  (fontaine-mode t)
+
+  ;; this doesn't seem to apply on startup, only after changing themes
+  (set-face-attribute 'mode-line-active nil
+                      :background (face-background 'mode-line))
+
+  (set-face-italic 'font-lock-comment-face t)
+
+  (set-face-foreground 'org-hide (face-background 'default))
+
+  ;; Trying out styling src blocks with a line at the top/bottom
+  (let* ((bg (face-background 'default))
+         (block (face-background 'org-block nil 'default))
+         (lc (if (my/dark-p)
+                 (color-lighten-name block 70)
+               (color-darken-name block 20))))
+    (set-face-attribute 'org-block-begin-line nil
+                        :background bg
+                        :underline `(:color ,lc :position t)
+                        :extend t)
+    (set-face-attribute 'org-block-end-line nil
+                        :background bg
+                        :foreground lc
+                        :overline lc
+                        :extend t))
+
+  (let* ((color (face-foreground 'default))
+         (ucolor (if (my/dark-p)
+                     (color-darken-name color 60)
+                   (color-lighten-name color 400))))
+    (set-face-attribute 'org-level-1 nil :underline ucolor))
+
+  ;; for org-modern
+  (dolist (face '(window-divider
+                  window-divider-first-pixel
+                  window-divider-last-pixel))
+    (face-spec-reset-face face)
+    (set-face-foreground face (face-attribute 'default :background)))
+  (set-face-background 'fringe (face-attribute 'default :background))
+
+
+  (set-face-attribute 'shr-text nil :height (face-attribute 'default :height))
+
+  ;; Apply custom theme tweaks if there are any
+  ;; Add a global dark/light tweaks mechanism too?
+  (dolist (theme custom-enabled-themes)
+    (let ((tweaks-fun (intern (concat "my/" (symbol-name theme) "-tweaks"))))
+      (when (fboundp tweaks-fun)
+        (funcall tweaks-fun))))
+
+  (save-current-buffer
+    (mapc (lambda (b)
+            (set-buffer b)
+            (when (equal major-mode 'org-mode)
+              (font-lock-fontify-buffer)))
+          (buffer-list)))
+
+  (set-scroll-bar-mode nil)
+
+  ;; look for pdf buffers and sync dark/light in them
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (cond ((eq major-mode 'pdf-view-mode)
+             (pdf-view-themed-minor-mode (if (my/dark-p) +1 -1))))))
+
+  <<graphical-tweaks>>
+
+  (unless my/first-frame-created
+    (setq my/first-frame-created t)
+    (message "Applying first frame tweaks")
+    <<first-frame-tweaks>>))
+#+end_src
+
 * Keybindings
 
 #+begin_src emacs-lisp
@@ -549,16 +970,6 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 Not sure where to put everything yet, so this section is a grab bag of stuff that needs package management (elpaca) to be in place.
 
 #+begin_src emacs-lisp
-(use-package color
-  :demand t
-  :config
-  (defun my/dark-p ()
-    (let ((bg (face-background 'default)))
-      (if (>= (color-distance "black" bg)
-              (color-distance "white" bg))
-          nil
-        t))))
-
 (use-package bookmark
   :demand t
   :straight nil
@@ -736,395 +1147,6 @@ And let’s try out writeroom mode.
   (writeroom-border-width 40)
   :config
   (add-to-list 'writeroom-global-effects 'writeroom-set-internal-border-width))
-#+end_src
-
-* Pretty it up
-
-Emacs colour themes apparently just load on top of each other, so here’s an advice to disable the current theme before loading a new one, thanks to [[https://www.reddit.com/r/emacs/comments/8v9lgu/emacs_theme_configuration_is_very_confusing/][this thread]].
-
-#+begin_src emacs-lisp
-(define-advice load-theme (:before (&rest _args) theme-dont-propagate)
-  "Discard all themes before loading new."
-  (mapc #'disable-theme custom-enabled-themes))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package modus-themes
-  :custom
-  (modus-themes-org-blocks 'gray-background)
-  (modus-themes-mixed-fonts t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-italic-constructs t)
-  (modus-themes-region '(bg-only)))
-
-(use-package ef-themes)
-
-(use-package doric-themes)
-
-(use-package stimmung-themes
-  :commands (stimmung-themes-load-light
-             stimmung-themes-load-dark
-             stimmung-themes-toggle)
-  :config
-  (defun my/stimmung-themes-dark-tweaks ()
-    (set-face-background 'avy-lead-face "forest green")
-    (set-face-foreground 'avy-lead-face "white"))
-  (defun my/stimmung-themes-light-tweaks ()
-    (set-face-background 'avy-lead-face "red")
-    (set-face-foreground 'avy-lead-face "white")
-    (set-face-foreground 'terraform--resource-name-face "dark orchid")
-    (set-face-foreground 'terraform--resource-type-face "dark green")))
-
-(use-package gruvbox-theme
-  :custom-face
-  (org-block-begin-line ((t (:inherit fixed-pitch
-                             :slant italic))))
-  (org-block-end-line ((t (:inherit fixed-pitch
-                           :slant italic))))
-  :config
-  (defun my/match-border-to-background ()
-    (custom-theme-set-faces
-     'user
-     `(internal-border ((t (:background ,(face-background 'default)))))))
-  (defun my/gruvbox-dark-hard-tweaks ()
-    (my/match-border-to-background))
-  (defun my/gruvbox-light-hard-tweaks ()
-    (my/match-border-to-background)))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun my/set-dark-mode ()
-  "Load dark theme."
-  (interactive)
-  (setq my/dark-mode t)
-  (load-theme my/dark-theme t))
-
-(defun my/set-light-mode ()
-  "Load light theme."
-  (interactive)
-  (setq my/dark-mode nil)
-  (load-theme my/light-theme t))
-
-(defun my/toggle-dark-mode ()
-  "Toggle dark/light theme."
-  (interactive)
-  (if (my/dark-p)
-      (my/set-light-mode)
-    (my/set-dark-mode)))
-
-(defun my/setthemeset (sym value)
-  (cond ((equal value "gruvbox")
-         (setq my/dark-theme 'gruvbox-dark-hard
-               my/light-theme 'gruvbox-light-hard))
-        ((equal value "modus")
-         (setq my/dark-theme 'modus-vivendi
-               my/light-theme 'modus-operandi))
-        ((equal value "modus-tinted")
-         (setq my/dark-theme 'modus-vivendi-tinted
-               my/light-theme 'modus-operandi-tinted))
-        ((equal value "bio-operandi")
-         (setq my/dark-theme 'ef-bio
-               my/light-theme 'modus-operandi-tinted))
-        ((equal value "duo")
-         (setq my/dark-theme 'ef-night
-               my/light-theme 'ef-duo-light))
-        ((equal value "maris")
-         (setq my/dark-theme 'ef-maris-dark
-               my/light-theme 'ef-maris-light))
-        ((equal value "stimmung")
-         (setq my/dark-theme 'stimmung-themes-dark
-               my/light-theme 'stimmung-themes-light))
-        ((equal value "mix")
-         (setq my/dark-theme 'gruvbox-dark-hard
-               my/light-theme 'modus-operandi)))
-  (if (my/dark-p)
-      (my/set-dark-mode)
-    (my/set-light-mode)))
-
-(defun my/theme-option-setup ()
-  (defcustom my/themeset "duo"
-    "Indicates which set of themes (dark and light) to use."
-    :type '(choice
-            (const "gruvbox")
-            (const "modus")
-            (const "modus-tinted")
-            (const "bio-operandi")
-            (const "duo")
-            (const "maris")
-            (const "stimmung")
-            (const "mix")
-            )
-    :set 'my/setthemeset
-    :initialize 'custom-initialize-set)
-
-  (customize-set-variable 'my/themeset "duo")
-  (my/dbus-colour-setup)
-  (remove-hook 'server-after-make-frame-hook #'my/theme-option-setup))
-
-(if (daemonp)
-    (add-hook 'server-after-make-frame-hook #'my/theme-option-setup)
-  (add-hook 'after-init-hook #'my/theme-option-setup))
-#+end_src
-
-#+begin_src emacs-lisp
-;; thanks to https://www.reddit.com/r/emacs/comments/o49v2w/automatically_switch_emacs_theme_when_changing
-
-(use-package dbus
-  :straight nil
-  :init
-  (defvar my/text-scaling-factor 1.0
-    "Holds the value of this setting from the Gnome desktop.")
-  :config
-  (defun set-dark-or-light (value)
-    (if (equal value '1)
-        (progn (message "Switching to dark theme")
-               (my/set-dark-mode))
-      (progn (message "Switching to light theme")
-             (my/set-light-mode))))
-
-  (defun color-scheme-handler (value)
-    (set-dark-or-light (car (car value))))
-
-  (defun text-scale-handler (value)
-    (setq my/text-scaling-factor (car (car value)))
-    )
-  (defun my/font-name-splitter (font)
-    (let* ((parts (split-string font))
-           (size (car (last parts)))
-           (name (string-join (butlast parts) " ")))
-      `(,name ,size)))
-  (defun variable-font-handler (value)
-    (let* ((font (my/font-name-splitter (car (car value)))))
-      (setq my/variable-font-name (pop font)
-            my/variable-font-size (pop font))))
-  (defun fixed-font-handler (value)
-    (let* ((font (my/font-name-splitter (car (car value)))))
-      (setq my/fixed-font-name (pop font)
-            my/fixed-font-size (pop font))))
-
-  (defun signal-handler (namespace key value)
-    (cond ((and (string-equal namespace "org.freedesktop.appearance")
-                (string-equal key "color-scheme"))
-           (set-dark-or-light (car value)))
-          ((and (string-equal namespace "org.gnome.desktop.interface")
-                (string-equal key "text-scaling-factor"))
-           (setq my/text-scaling-factor (car value))
-           )))
-
-  (defun my/dbus-read-setting (namespace key handler)
-    (dbus-call-method-asynchronously
-     :session
-     "org.freedesktop.portal.Desktop"
-     "/org/freedesktop/portal/desktop"
-     "org.freedesktop.portal.Settings"
-     "Read"
-     handler
-     namespace
-     key))
-
-  (defun my/dbus-colour-setup ()
-    (my/dbus-read-setting "org.freedesktop.appearance" "color-scheme"
-                          #'color-scheme-handler)
-    (my/dbus-read-setting "org.gnome.desktop.interface" "text-scaling-factor"
-                          #'text-scale-handler)
-    (my/dbus-read-setting "org.gnome.desktop.interface" "document-font-name"
-                          #'variable-font-handler)
-    (my/dbus-read-setting "org.gnome.desktop.interface" "monospace-font-name"
-                          #'fixed-font-handler)
-
-    (dbus-register-signal
-     :session
-     "org.freedesktop.portal.Desktop"
-     "/org/freedesktop/portal/desktop"
-     "org.freedesktop.portal.Settings"
-     "SettingChanged"
-     #'signal-handler)))
-#+end_src
-
-But I like some things to be set no matter the theme. For example, I always like italic code comments. And the brutalist theme has a smaller mode-line font size that I don’t like. So I set up a hook/advice method of keeping these things “fixed”. I found the idea in [[https://www.reddit.com/r/emacs/comments/4v7tcj/does_emacs_have_a_hook_for_when_the_theme_changes/][this helpful reddit thread]] while looking for what I thought /must/ have a /good/ solution.
-
-#+begin_src emacs-lisp
-(defvar after-load-theme-hook nil
-  "Hook run after a color theme is loaded using `load-theme'.")
-(defun run-after-load-theme-hook (&rest args)
-  "Run `after-load-theme-hook'."
-  (run-hooks 'after-load-theme-hook))
-(advice-add 'load-theme :after #'run-after-load-theme-hook)
-
-(add-hook 'after-load-theme-hook #'my/theme-tweaks)
-(setq my/first-frame-created nil)
-(if (daemonp)
-    (add-hook 'server-after-make-frame-hook #'my/theme-tweaks)
-  (add-hook 'after-init-hook #'my/theme-tweaks))
-#+end_src
-
-Handy functions to calculate the DPI of the display that current frame is on. Bits and pieces of this came from various places, but especially [[https://www.reddit.com/r/emacs/comments/a01fs1/dispwatch_watch_the_current_display_for_changes/][this reddit thread]], which led me to [[https://emacs.stackexchange.com/questions/28390/quickly-adjusting-text-to-dpi-changes/44930#44930][this useful StackExchange question]].
-
-#+begin_src emacs-lisp
-(defun monitor-dpi ()
-  "Return the DPI of the current monitor."
-  (let* ((attrs (frame-monitor-attributes))
-         (mm (alist-get 'mm-size attrs))
-         (mm-width (car mm))
-         (pixels (alist-get 'geometry attrs))
-         (pixel-width (nth 2 pixels))
-         (scale-factor (alist-get 'scale-factor attrs)))
-    (/ (float mm-width) (/ pixel-width (* scale-factor my/text-scaling-factor)))))
-#+end_src
-
-Change global text sizes with this function. This is the function I bind to a key or use in a hydra to change text sizes. It just changes =my/current-text-size=, then calls my theme-tweak function below to make the changes. It also calls =visual-fill-column-adjust= so that everything ends up the right size.
-
-#+begin_src emacs-lisp
-(defun my/adjust-text-height (adjustment)
-  "Adjust text size up or down by ADJUSTMENT."
-  (interactive)
-
-  (if (= adjustment 0)
-      (setq my/current-text-size my/default-text-size)
-    (setq my/current-text-size (+ my/current-text-size adjustment)))
-  (my/theme-tweaks)
-  (visual-fill-column-adjust))
-#+end_src
-
-And here’s the function where I collect my tweaks to the theme and set up fonts.
-
-#+begin_src emacs-lisp :noweb yes
-(defun my/theme-tweaks ()
-  "Apply my catchall set of mostly appearance tweaks."
-  (interactive)
-
-  (unless savehist-loaded
-    (savehist-mode 1))
-
-  ;; Workaround so I can use S-SPC as a binding
-  ;; https://www.reddit.com/r/emacs/comments/osscfd/pgtk_emacswaylandgnome_no_shiftspace/
-  ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-07/msg00071.html
-  (when (fboundp 'pgtk-use-im-context)
-    (pgtk-use-im-context nil))
-
-  ;; Set the default text size based on the monitor DPI
-  (when (display-graphic-p)
-    (let* ((dpi (monitor-dpi))
-           (size (cond ((< dpi 0) 20)
-                       ((< dpi 0.12) 0)
-                       ((< dpi 0.18) -20)
-                       ((< dpi 0.23) -25)
-                       ((< dpi 0.25) -40))))
-      (setq my/default-text-size (+ size 150))))
-
-  (when (not (boundp 'my/current-text-size))
-    (setq my/current-text-size my/default-text-size))
-
-  (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal))
-  (fontaine-mode t)
-
-  ;; this doesn't seem to apply on startup, only after changing themes
-  (set-face-attribute 'mode-line-active nil
-                      :background (face-background 'mode-line))
-
-  (set-face-italic 'font-lock-comment-face t)
-
-  (set-face-foreground 'org-hide (face-background 'default))
-
-  ;; Trying out styling src blocks with a line at the top/bottom
-  (let* ((bg (face-background 'default))
-         (block (face-background 'org-block nil 'default))
-         (lc (if (my/dark-p)
-                 (color-lighten-name block 70)
-               (color-darken-name block 20))))
-    (set-face-attribute 'org-block-begin-line nil
-                        :background bg
-                        :underline `(:color ,lc :position t)
-                        :extend t)
-    (set-face-attribute 'org-block-end-line nil
-                        :background bg
-                        :foreground lc
-                        :overline lc
-                        :extend t))
-
-  (let* ((color (face-foreground 'default))
-         (ucolor (if (my/dark-p)
-                     (color-darken-name color 60)
-                   (color-lighten-name color 400))))
-    (set-face-attribute 'org-level-1 nil :underline ucolor))
-
-  ;; for org-modern
-  (dolist (face '(window-divider
-                  window-divider-first-pixel
-                  window-divider-last-pixel))
-    (face-spec-reset-face face)
-    (set-face-foreground face (face-attribute 'default :background)))
-  (set-face-background 'fringe (face-attribute 'default :background))
-
-
-  (set-face-attribute 'shr-text nil :height (face-attribute 'default :height))
-
-  ;; Apply custom theme tweaks if there are any
-  ;; Add a global dark/light tweaks mechanism too?
-  (dolist (theme custom-enabled-themes)
-    (let ((tweaks-fun (intern (concat "my/" (symbol-name theme) "-tweaks"))))
-      (when (fboundp tweaks-fun)
-        (funcall tweaks-fun))))
-
-  (save-current-buffer
-    (mapc (lambda (b)
-            (set-buffer b)
-            (when (equal major-mode 'org-mode)
-              (font-lock-fontify-buffer)))
-          (buffer-list)))
-
-  (set-scroll-bar-mode nil)
-
-  ;; look for pdf buffers and sync dark/light in them
-  (dolist (buffer (buffer-list))
-    (with-current-buffer buffer
-      (cond ((eq major-mode 'pdf-view-mode)
-             (pdf-view-themed-minor-mode (if (my/dark-p) +1 -1))))))
-
-  <<graphical-tweaks>>
-
-  (unless my/first-frame-created
-    (setq my/first-frame-created t)
-    (message "Applying first frame tweaks")
-    <<first-frame-tweaks>>))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package fontaine
-  :commands (fontaine-set-preset
-             fontaine-mode
-             fontaine-restore-latest-preset)
-  :custom
-  (fontaine-presets
-   `(
-     (normal
-      :default-height ,my/current-text-size)
-     (larger :fixed-pitch-height 1.3 :variable-pitch-height 1.3)
-     (double :fixed-pitch-height 2.0 :variable-pitch-height 2.0)
-     (t
-      :default-family "Iosevka Term"
-      :default-weight normal
-      :fixed-pitch-family "Iosevka Term"
-      :variable-pitch-family "Inter Display"
-      :line-spacing 0.2)))
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package spacious-padding
-  :commands (spacious-padding-mode)
-  :config
-  (setq spacious-padding-widths
-        '(:internal-border-width 20
-          :header-line-width 4
-          :mode-line-width 3
-          :tab-width 4
-          :right-divider-width 20
-          :scroll-bar-width 8)))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no :noweb-ref first-frame-tweaks
-(spacious-padding-mode t)
 #+end_src
 
 * Mode-line
