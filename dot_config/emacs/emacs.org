@@ -484,10 +484,12 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
 
   :config
   (defun my/color-scheme-handler (value)
-    (setq my/color-scheme (car (car value))))
+    (setq my/color-scheme (if (listp value)
+                              (caar value)
+                            value)))
 
   (defun my/text-scaling-factor-handler (value)
-    (setq my/text-scaling-factor (car (car value))))
+    (setq my/text-scaling-factor (caar value)))
 
   (defun my/font-name-splitter (font)
     (let* ((parts (split-string font))
@@ -495,15 +497,15 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
            (name (string-join (butlast parts) " ")))
       `(,name ,size)))
   (defun my/document-font-name-handler (value)
-    (let* ((font (my/font-name-splitter (car (car value)))))
+    (let* ((font (my/font-name-splitter (caar value))))
       (setq my/variable-font-name (pop font)
             my/variable-font-size (string-to-number (pop font)))))
   (defun my/monospace-font-name-handler (value)
-    (let* ((font (my/font-name-splitter (car (car value)))))
+    (let* ((font (my/font-name-splitter (caar value))))
       (setq my/fixed-font-name (pop font)
             my/fixed-font-size (string-to-number (pop font)))))
 
-  (defun signal-handler (namespace key value)
+  (defun my/settings-handler (namespace key value)
     (let ((handler (intern (format "my/%s-handler" key))))
       (when (fboundp handler)
         (funcall handler (car value)))))
@@ -523,7 +525,7 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
     "/org/freedesktop/portal/desktop"
     "org.freedesktop.portal.Settings"
     "SettingChanged"
-    #'signal-handler))
+    #'my/settings-handler))
 #+end_src
 
 
@@ -664,13 +666,11 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 (defun my/set-dark-mode ()
   "Load dark theme."
   (interactive)
-  (setq my/dark-mode t)
   (load-theme my/dark-theme t))
 
 (defun my/set-light-mode ()
   "Load light theme."
   (interactive)
-  (setq my/dark-mode nil)
   (load-theme my/light-theme t))
 
 (defun my/toggle-dark-mode ()
@@ -680,12 +680,17 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
       (my/set-light-mode)
     (my/set-dark-mode)))
 
-(defun set-dark-or-light (value)
-  (if (equal value '1)
+(defun my/set-dark-or-light (value)
+  (if (member value '(1 "prefer-dark"))
       (progn (message "Switching to dark theme")
              (my/set-dark-mode))
     (progn (message "Switching to light theme")
            (my/set-light-mode))))
+
+(defun my/dark-or-light-change (sym new kind where)
+  (message (format "color-scheme changed to %s" new))
+  (my/set-dark-or-light new))
+(add-variable-watcher 'my/color-scheme #'my/dark-or-light-change)
 
 (defun my/setthemeset (sym value)
   (cond ((equal value "gruvbox")
@@ -733,7 +738,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     :initialize 'custom-initialize-set)
 
   (customize-set-variable 'my/themeset "duo")
-  (set-dark-or-light my/color-scheme)
+  (my/set-dark-or-light my/color-scheme)
   (remove-hook 'server-after-make-frame-hook #'my/theme-option-setup))
 
 (if (daemonp)
@@ -4948,7 +4953,7 @@ Another work-in-progress hydra, this one for a general reading/browsing set of c
    (("l" global-hl-line-mode "highlight line" :toggle t)
     ("b" toggle-frame-tab-bar "toggle tab bar" :exit t)
     ("B" (my/customize-this "tab-bar-show") "tab bar" :exit t)
-    ("k" my/toggle-dark-mode "dark mode" :toggle my/dark-mode :exit t)
+    ("k" my/toggle-dark-mode "dark mode" :exit t)
     ("T" (my/customize-this "my/themeset") "themeset" :exit t)
     ("D" auto-dim-other-buffers-mode "dimmer" :toggle t)
     ("O" olivetti-mode "olivetti" :toggle t)
