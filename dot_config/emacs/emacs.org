@@ -2233,7 +2233,7 @@ My org config is pretty long, so I've broken it up for easier reading and explan
 
   (defun my/insert-in-empty-src-edit ()
     (when (<= (buffer-size) 1)
-      (cond ((meow-mode) (meow-insert)))))
+      (my/insert-mode)))
 
   (advice-add 'org-edit-special :around #'my/around-recenter)
 
