@@ -1932,6 +1932,9 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 
 #+begin_src emacs-lisp
 (use-package transient
+  :init
+  (setopt transient-levels
+          '((magit-pull (transient:magit-pull:--autostash . 2))))
   :custom
   (transient-display-buffer-action
    '(display-buffer-below-selected
