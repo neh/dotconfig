@@ -24,6 +24,7 @@
   (setq straight-vc-git-auto-fast-forward nil)
   (straight-use-package 'org)
   (setq straight-use-package-by-default t
+        straight-built-in-pseudo-packages '(emacs nadvice python image-mode project)
         use-package-verbose nil
         use-package-always-ensure t)
   (use-package org

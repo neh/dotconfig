@@ -71,11 +71,13 @@ We set =gc-cons-threshold= to its maximum value, to prevent any garbage collecti
 (setq straight-vc-git-auto-fast-forward nil)
 #+end_src
 
-I'm using emacs 29 everywhere, which has =use-package= built in, so just assume it's there and do a little configuration. Also, require =org-mode= as early as possible to (hopefully) avoid version mismatch issues.
+I'm using emacs >29 everywhere, which has =use-package= built in, so just assume it's there and do a little configuration. Also, require =org-mode= as early as possible to (hopefully) avoid version mismatch issues.
+Adding project to the pseudo packages list here to deal with [[https://github.com/radian-software/straight.el/issues/1146][Can't use eglot with latest Emacs & straight, due to project.el location · Issue #1146 · radian-software/straight.el · GitHub]] for the time being.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-use-package
 (straight-use-package 'org)
 (setq straight-use-package-by-default t
+      straight-built-in-pseudo-packages '(emacs nadvice python image-mode project)
       use-package-verbose nil
       use-package-always-ensure t)
 #+end_src
