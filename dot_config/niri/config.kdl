@@ -372,6 +372,21 @@ window-rule {
     clip-to-geometry true
 }
 
+recent-windows {
+    open-delay-ms 350
+
+    previews {
+                max-height 800
+                max-scale 0.75
+    }
+    binds {
+        Mod+A           { next-window     scope="output"; }
+        Mod+Shift+A     { previous-window scope="output"; }
+        Mod+grave       { next-window     scope="output" filter="app-id"; }
+        Mod+Shift+grave { previous-window scope="output" filter="app-id"; }
+    }
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
