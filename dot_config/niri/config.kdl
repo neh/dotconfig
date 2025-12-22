@@ -113,6 +113,23 @@ cursor {
 output "Dell Inc. DELL U4025QW 6619C34" {
     mode "5120x2160@120"
     scale 1
+
+    layout {
+        gaps 16
+        preset-column-widths {
+            fixed 1170
+            fixed 1900
+            fixed 2292
+            fixed 3428
+        }
+        tab-indicator {
+            width 10
+            gap 8
+        }
+        focus-ring {
+            width 5
+        }
+    }
 }
 
 // Settings that influence how windows are positioned and sized.
