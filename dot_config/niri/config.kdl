@@ -170,6 +170,7 @@ layout {
         gap 5
         gaps-between-tabs 3
         corner-radius 6
+        active-color "#0091ff"
         inactive-color "#888888"
     }
 
