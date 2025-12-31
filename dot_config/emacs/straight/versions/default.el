@@ -36,6 +36,7 @@
  ("dash.el" . "fb443e7a6e660ba849cafcd01021d9aac3ac6764")
  ("deadgrep" . "edb1957d0d6033698c6784686b27508034003fa0")
  ("deflate" . "d3863855d213f73dc7a1a54736d94a75f8f7e9c5")
+ ("denote" . "d1b9c44e1ab2a13916e74abad912a6a762a41426")
  ("detached.el" . "6b64d4d8064cee781e071e825857b442ea96c3d9")
  ("diff-hl" . "4548d29eab3073becf538f76d8d4b59c5b120558")
  ("dired-du" . "c16cad8c40a022a03dee1956a15ff44d1e42dc07")
