@@ -877,6 +877,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   "Switch to insert editing mode regardless of modal system."
   (cond ((bound-and-true-p meow-mode) (meow-insert))
         ((bound-and-true-p boon-mode) (boon-insert))
+        ((bound-and-true-p hel-mode) (hel-insert))
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
