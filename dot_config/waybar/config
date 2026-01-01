@@ -18,7 +18,6 @@
         "network#wireless",
         "idle_inhibitor",
         "pulseaudio",
-        "clock",
         "tray"
     ],
     "include": [
