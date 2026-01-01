@@ -880,9 +880,54 @@ And here’s the function where I collect my tweaks to the theme and set up font
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
+** Hel
+#+begin_src emacs-lisp
+(use-package pcre2el)
+(use-package s)
+(use-package hel
+  :straight (:host github :repo "anuvyklack/hel")
+  :after (avy)
+  :custom
+  (hel-normal-state-cursor '(bar "red"))
+  (hel-insert-state-cursor '(bar "green"))
+  (hel-motion-state-cursor '(hbar . 2))
+  :config
+  (hel-keymap-global-set :state 'normal
+    "t" #'hel-previous-line
+    "n" #'hel-next-line
+    "s" #'hel-forward-char
+
+    "g m g" #'my/global-vterm-toggle
+    "g m G" #'my/global-vterm-toggle-cd
+    "g m p" #'my/project-vterm-toggle
+    "g m P" #'my/project-vterm-toggle-cd
+
+    "g t" #'hel-avy-previous-line
+    "g n" #'hel-avy-next-line
+    "g s" #'hel-end-of-line-command
+
+    "g j" #'dired-jump
+    "g k" #'link-hint-open-link
+    "g l" #'consult-line
+    "g i" #'consult-imenu
+
+    ;; "" #'hel-select-regex
+
+    "L" #'hel-search-previous
+    "l" #'hel-search-next
+
+    "K" #'hel-till-char-back
+    "k" #'hel-till-char-forward
+
+    ;; TODO window commands
+    )
+
+  (hel-mode t))
+#+end_src
 ** Boon
 #+begin_src emacs-lisp :noweb yes
 (use-package boon
+  :disabled t
   :config
   (add-to-list 'boon-special-mode-list 'elfeed-show-mode)
   (add-to-list 'boon-special-mode-list 'elfeed-search-mode)
@@ -1556,10 +1601,10 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    :map ctl-x-map
    ("b" . consult-buffer)
 
-   :map boon-goto-map
-   ("l" . consult-line)
-   ("L" . consult-goto-line)
-   ("i" . consult-imenu)
+   :map hel-normal-state-map
+   ("gl" . consult-line)
+   ("gL" . consult-goto-line)
+   ("gi" . consult-imenu)
 
    :map mode-specific-map
    ("iy" . consult-yank-pop)
@@ -4263,13 +4308,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   (vterm-toggle-hide-method 'bury-all-vterm-buffer)
 
   :bind
-  (:map boon-goto-map
-   ("tg" . my/global-vterm-toggle)
-   ("tG" . my/global-vterm-toggle-cd)
-   ("tp" . my/project-vterm-toggle)
-   ("tP" . my/project-vterm-toggle-cd)
-
-   :map vterm-mode-map
+  (:map vterm-mode-map
    ("C-'" . my/project-vterm-toggle)
    ("C-." . vterm-toggle-insert-cd))
 
@@ -4507,11 +4546,7 @@ any directory proferred by `consult-dir'."
   (dired-async-large-file-warning-threshold 10000000000)
 
   :bind
-  (:map boon-goto-map
-   ;; ("jxx" . my/dired-open)
-   ("d" . dired-jump)
-
-   :map dired-mode-map
+  (:map dired-mode-map
    ("-" . dired-up-directory))
 
   :init
@@ -5956,11 +5991,6 @@ See `beframe-rename-frame'."
 (use-package link-hint
   :commands (link-hint-open-link
              link-hint-define-type)
-  :bind
-  (:map boon-goto-map
-   ("w" . link-hint-open-link)
-   ("W" . my/link-hint-open-in-external))
-
   :config
   (link-hint-define-type 'text-url
     :my-open-eww #'eww)
