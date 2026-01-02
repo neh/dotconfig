@@ -1649,6 +1649,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package consult-org-roam
+  :after (consult
+          org-roam)
   :commands (consult-org-roam-mode
              consult-org-roam-search
              consult-org-roam-backlinks
@@ -1903,6 +1905,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 
 #+begin_src emacs-lisp
 (use-package disproject
+  :after (project)
   :bind (:map ctl-x-map
          ("p" . disproject-dispatch)))
 #+end_src
