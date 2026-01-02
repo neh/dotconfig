@@ -896,6 +896,11 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (hel-motion-state-cursor '(hbar . 2))
   :config
   (hel-keymap-global-set :state 'normal
+    "M-s" 'search-map)
+
+  (hel-keymap-global-set :state 'normal
+    "j" nil
+
     "t" #'hel-previous-line
     "n" #'hel-next-line
     "s" #'hel-forward-char
@@ -913,6 +918,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g k" #'link-hint-open-link
     "g l" #'consult-line
     "g i" #'consult-imenu
+    "g p" #'disproject-dispatch
 
     ;; "" #'hel-select-regex
 
@@ -921,8 +927,42 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
     "K" #'hel-till-char-back
     "k" #'hel-till-char-forward
+    )
 
-    ;; TODO window commands
+  (hel-keymap-set hel-window-map
+    "j" nil
+    "J" nil
+    "k" nil
+    "K" nil
+    "v" nil
+    "C-j" nil
+    "C-k" nil
+    "C-v" nil
+
+    ;; windows
+    "W"   #'other-window-prefix
+    "-"   '("split window horizontally" . hel-window-split)
+    "|"   '("split window vertically" . hel-window-vsplit)
+    "_"   '("split root window horizontally" . hel-root-window-split)
+    "V"   '("split root window vertically" . hel-root-window-vsplit)
+
+    "w"   #'other-window
+    "h"   #'hel-window-left
+    "n"   #'hel-window-down
+    "t"   #'hel-window-up
+    "s"   #'hel-window-right
+
+    "H"   #'hel-move-window-left
+    "N"   #'hel-move-window-down
+    "T"   #'hel-move-window-up
+    "S"   #'hel-move-window-right
+
+    ;; Duplicate all keys with ctrl prefix.
+    "C-w" #'other-window
+    "C-h" #'hel-window-left
+    "C-n" #'hel-window-down
+    "C-t" #'hel-window-up
+    "C-s" #'hel-window-right
     )
   (hel-mode t)
 
@@ -1604,11 +1644,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
    :map ctl-x-map
    ("b" . consult-buffer)
-
-   :map hel-normal-state-map
-   ("gl" . consult-line)
-   ("gL" . consult-goto-line)
-   ("gi" . consult-imenu)
 
    :map mode-specific-map
    ("iy" . consult-yank-pop)
