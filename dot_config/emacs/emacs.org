@@ -4744,12 +4744,12 @@ Handy live filtering of dired buffers.
              dired-narrow-fuzzy))
 #+end_src
 
-Nice dired filtering, plus it replaces =dired-omit-mode=.
-
 #+begin_src emacs-lisp
-(use-package dired-filter
-  :hook ((dired-mode . dired-filter-mode)
-         (dired-filter-mode . dired-filter-by-dot-files)))
+(use-package dired-x
+  :straight nil
+  :custom
+  (dired-omit-files "\\[.]?#\\|^\\.$\\|^\\..+\\'")
+  :hook ((dired-mode . dired-omit-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
