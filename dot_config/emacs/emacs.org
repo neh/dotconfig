@@ -1920,9 +1920,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                              (magit-project-status "Git" ?g)
                              (project-vc-dir "VC-Dir")
                              (project-eshell "Eshell")))
-  :hook
-  (after-init . (lambda ()
-                  (define-key ctl-x-map (kbd "C-p") project-prefix-map)))
 
   :init
   (defun my/find-file ()
@@ -1944,7 +1941,8 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 (use-package disproject
   :after (project)
   :bind (:map ctl-x-map
-         ("p" . disproject-dispatch)))
+         ("p" . disproject-dispatch)
+         ("C-p" . disproject-dispatch)))
 #+end_src
 
 * Git
