@@ -895,8 +895,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (hel-insert-state-cursor '(bar "green"))
   (hel-motion-state-cursor '(hbar . 2))
   :config
-  (hel-keymap-global-set :state 'normal
-    "M-s" 'search-map)
+  (keymap-set mode-specific-map "s" search-map)
 
   (hel-keymap-global-set :state 'normal
     "j" nil
