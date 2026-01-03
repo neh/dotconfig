@@ -919,7 +919,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g i" #'consult-imenu
     "g p" #'disproject-dispatch
 
-    ;; "" #'hel-select-regex
+    "r" #'hel-select-regex
 
     "L" #'hel-search-previous
     "l" #'hel-search-next
