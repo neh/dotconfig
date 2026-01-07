@@ -20,7 +20,7 @@ xkb_symbols "enthium"
 
 	key <AD01> { [   apostrophe,    quotedbl ] }; // 
 	key <AD02> { [            x,           X ] }; // xX
-	key <AD03> { [        minus,  underscore ] }; // -_
+	key <AD03> { [        comma,   semicolon ] }; // -_
 	key <AD04> { [       period,       colon ] }; // .:
 	key <AD05> { [        equal,        plus ] }; // =+
 	key <AD06> { [        slash,   backslash ] }; // \/
@@ -33,7 +33,7 @@ xkb_symbols "enthium"
 	key <AC02> { [            i,           I ] }; // iI
 	key <AC03> { [            e,           E ] }; // eE
 	key <AC04> { [            a,           A ] }; // aA
-	key <AC05> { [        comma,   semicolon ] }; // ,;
+	key <AC05> { [        minus,  underscore ] }; // ,;
 	key <AC06> { [            k,           K ] }; // kK
 	key <AC07> { [            h,           H ] }; // hH
 	key <AC08> { [            t,           T ] }; // tT
