@@ -15,7 +15,7 @@
  ("buffer-move" . "e7800b3ab1bd76ee475ef35507ec51ecd5a3f065")
  ("burly.el" . "d5b7133b5b629dd6bca29bb16660a9e472e82e25")
  ("cape" . "11abd6d12243dd20b5e19b58983d12c72fe07a98")
- ("casual" . "ce236e17eb099255f8bf3c8782b920f7346c15d1")
+ ("casual" . "b5e29b4d1a098160f6562b1d5b67dcd1008881b7")
  ("casual-avy" . "c5bc8e9d57a843f75e6125f097550414af3d5ec7")
  ("cfrs" . "981bddb3fb9fd9c58aed182e352975bd10ad74c8")
  ("chezmoi.el" . "1389782f8c0780c7e66f8e77b10345ba1f4eabae")
