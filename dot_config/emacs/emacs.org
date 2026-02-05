@@ -332,6 +332,7 @@ More options. I’m not sure where to put some things in this file yet. Here are
 
 (completions-header-format nil)
 (completion-show-help nil)
+(completion-show-inline-help nil)
 (completion-auto-select 'second-tab)
 (completion-auto-help 'always)
 #+end_src
