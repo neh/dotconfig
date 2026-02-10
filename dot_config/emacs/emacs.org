@@ -893,7 +893,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   :after (avy)
   :custom
   (hel-normal-state-cursor '(bar "red"))
-  (hel-insert-state-cursor '(bar "green"))
+  (hel-insert-state-cursor '(box "red"))
   (hel-motion-state-cursor '(hbar . 2))
   :config
   (keymap-set mode-specific-map "s" search-map)
