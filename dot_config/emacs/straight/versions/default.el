@@ -240,7 +240,7 @@
  ("vertico" . "c6f6d0674cfeb4374a77dde5e5f899e0fe62dd32")
  ("vertico-posframe" . "11969a45d5ef4ea2c27f169845042adf5dae4bbe")
  ("visual-fill-column" . "e1be9a1545157d24454d950c0ac79553c540edb7")
- ("vterm-toggle" . "81d031f153c5fa656c744cd518b7d54c54506706")
+ ("vterm-toggle" . "06cb4f3c565e46470a3c4505c11e26066d869715")
  ("with-editor" . "902b4d572af2c2f36060da01e3c33d194cdec32b")
  ("writeroom-mode" . "cca2b4b3cfcfea1919e1870519d79ed1a69aa5e2")
  ("x509-mode" . "02e62ebd857946de629e45bff6a7de533f9022bc")
