@@ -4208,6 +4208,10 @@ Finally found a package that lets org tables horizontally scroll while leaving t
    ("n" . vterm-next-prompt))
 
   :config
+  (let ((fish (executable-find "fish")))
+    (if fish
+      (setopt vterm-shell fish)))
+
   (defun my/vterm-mode-p (buffer-or-name &optional action)
     (with-current-buffer buffer-or-name
       (or (equal major-mode 'vterm-mode)
