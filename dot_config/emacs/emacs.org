@@ -892,9 +892,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
              :files (:defaults "extensions/*"))
   :after (avy)
   :custom
-  (hel-normal-state-cursor '(bar "red"))
+  (hel-normal-state-cursor '((bar . 4) "red"))
   (hel-insert-state-cursor '(box "red"))
-  (hel-motion-state-cursor '(hbar . 2))
+  (hel-motion-state-cursor '(hbar . 4))
   :config
   (keymap-set mode-specific-map "s" search-map)
 
