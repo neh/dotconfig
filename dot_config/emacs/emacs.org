@@ -5152,7 +5152,7 @@ Try out =org-noter=.
   (:map elfeed-show-mode-map
    ("I". my/elfeed-show-hide-images)
    ("U" . my/elfeed-mark-unread-and-exit)
-   ("l" . link-hint-open-link))
+   ("k" . link-hint-open-link))
 
   :config
   (defun my/elfeed-show-hide-images ()
