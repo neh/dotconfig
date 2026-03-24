@@ -4,9 +4,9 @@
 //           https://github.com/sunaku/enthium
 //
 // ` 1 2 3 4 5 6 7 8 9 0 cl ra
-//   ' = - . / X M G W Z
-// B C I E A , K H T N S V
-//   Q Y U O < J L D P F
+//   ' X , . = \ L D W V
+// Q C I E A - K H T N S Z
+//   B Y U O ; J M G P F
 //             R
 //
 // B displaces cl (Caps Lock).
@@ -18,12 +18,12 @@ xkb_symbols "enthium"
 	include "us(basic)"
         name[Group1]= "Enthium";
 
-	key <AD01> { [   apostrophe,    quotedbl ] }; // 
+	key <AD01> { [   apostrophe,    quotedbl ] }; // '
 	key <AD02> { [            x,           X ] }; // xX
-	key <AD03> { [        comma,   semicolon ] }; // -_
-	key <AD04> { [       period,       colon ] }; // .:
+	key <AD03> { [        comma,        less ] }; // ,<
+	key <AD04> { [       period,     greater ] }; // .>
 	key <AD05> { [        equal,        plus ] }; // =+
-	key <AD06> { [        slash,   backslash ] }; // \/
+	key <AD06> { [    backslash,        pipe ] }; // \|
 	key <AD07> { [            l,           L ] }; // lL
 	key <AD08> { [            d,           D ] }; // dD
 	key <AD09> { [            w,           W ] }; // wW
@@ -33,7 +33,7 @@ xkb_symbols "enthium"
 	key <AC02> { [            i,           I ] }; // iI
 	key <AC03> { [            e,           E ] }; // eE
 	key <AC04> { [            a,           A ] }; // aA
-	key <AC05> { [        minus,  underscore ] }; // ,;
+	key <AC05> { [        minus,  underscore ] }; // -_
 	key <AC06> { [            k,           K ] }; // kK
 	key <AC07> { [            h,           H ] }; // hH
 	key <AC08> { [            t,           T ] }; // tT
@@ -45,7 +45,7 @@ xkb_symbols "enthium"
 	key <AB02> { [            y,           Y ] }; // yY
 	key <AB03> { [            u,           U ] }; // uU
 	key <AB04> { [            o,           O ] }; // oO
-	key <AB05> { [     question,      exclam ] }; // /?
+	key <AB05> { [    semicolon,       colon ] }; // ;:
 	key <AB06> { [            j,           J ] }; // jJ
 	key <AB07> { [            m,           M ] }; // mM
 	key <AB08> { [            g,           G ] }; // gG
