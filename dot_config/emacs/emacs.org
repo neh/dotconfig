@@ -3298,6 +3298,11 @@ MimeType=x-scheme-handler/org-protocol;
                                  org-transclusion-indent-mode)))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package org-autolist
+  :hook (org-mode . org-autolist-mode))
+#+end_src
+
 * SVG Prettiness
 
 Built-in SVG rendering provides some nice potential for some pretty, so let's set that up here. First, add the [[https://github.com/rougier/svg-lib][svg-lib]] package.
@@ -5821,11 +5826,6 @@ See `beframe-rename-frame'."
 #+begin_src emacs-lisp
 (use-package kubedoc
   :commands (kubedoc))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package kubernetes
-  :commands (kubernetes-overview))
 #+end_src
 
 #+begin_src emacs-lisp
