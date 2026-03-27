@@ -886,11 +886,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
 ** Hel
 #+begin_src emacs-lisp
 (use-package pcre2el)
-(use-package s)
 (use-package hel
   :straight (:host github
              :repo "anuvyklack/hel"
-             :files (:defaults "extensions/*"))
+             :files (:defaults "extensions/**/*.el"))
   :after (avy)
   :custom
   (hel-normal-state-cursor '((bar . 4) "red"))
@@ -967,6 +966,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
     )
   (hel-mode t)
 
+  (with-eval-after-load 'vterm
+    (require 'hel-vterm))
   (require 'hel-leader))
 #+end_src
 

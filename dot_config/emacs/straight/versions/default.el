@@ -108,7 +108,7 @@
  ("goggles" . "81adff62ca58aeead1f8c25ec64f1d4ddbc80f5e")
  ("hammy.el" . "5d33d41f0aa019719f9568e20b9599aed80d7db6")
  ("hcl-mode" . "1da895ed75d28d9f87cbf9b74f075d90ba31c0ed")
- ("hel" . "837a725a3eefe8eeb1c4d7c7d609e4df2e582815")
+ ("hel" . "a26df8f32745f4c06b35d061c49c5dec5fcbe82e")
  ("helpful" . "03756fa6ad4dcca5e0920622b1ee3f70abfc4e39")
  ("highlight-parentheses.el" . "965b18dd69eff4457e17c9e84b3cbfdbfca2ddfb")
  ("highlight-thing.el" . "fd0309e72727e5332be3397e15edb035b426dd0b")
