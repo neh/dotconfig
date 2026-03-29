@@ -23,7 +23,7 @@ xkb_symbols "enthium"
 	key <AD03> { [        comma,        less ] }; // ,<
 	key <AD04> { [       period,     greater ] }; // .>
 	key <AD05> { [        equal,        plus ] }; // =+
-	key <AD06> { [    backslash,        pipe ] }; // \|
+	key <AD06> { [        slash,    question ] }; // /?
 	key <AD07> { [            l,           L ] }; // lL
 	key <AD08> { [            d,           D ] }; // dD
 	key <AD09> { [            w,           W ] }; // wW
