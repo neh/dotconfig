@@ -1477,7 +1477,7 @@ function firefox --description 'firefox flatpak'
 end
 #+end_src
 
-#+begin_src shell :tangle ~/.local/bin/firefox :shebang #!/bin/bash
+#+begin_src shell :tangle (if (executable-find "firefox") "no" "~/.local/bin/firefox") :shebang #!/bin/bash
 flatpak run org.mozilla.firefox $@
 #+end_src
 
