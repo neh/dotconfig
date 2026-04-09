@@ -378,6 +378,23 @@ Show position in the buffer as the percentage of both the top and bottom positio
 (mode-line-percent-position '(6 "%q"))
 #+end_src
 
+Some performance settings from [[https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/][Stealing from the Best Emacs Configs | Emacs Redux]].
+
+#+begin_src emacs-lisp
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+(setopt bidi-inhibit-bpa t)
+
+(setopt redisplay-skip-fontification-on-input t)
+
+(setopt read-process-output-max (* 4 1024 1024)) ; 4MB
+
+(setq-default cursor-in-non-selected-windows nil)
+(setopt highlight-nonselected-windows nil)
+
+(setopt window-combination-resize t)
+#+end_src
+
 I view man pages in emacs sometimes, and want a fixed width for them.
 
 #+begin_src emacs-lisp
@@ -1024,6 +1041,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   (auto-revert-check-vc-info nil)
   :config
   (global-auto-revert-mode 1))
+
+(use-package ffap
+  :straight nil
+  :custom
+  (ffap-machine-p-known 'reject))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1118,7 +1140,10 @@ General settings when in text editing modes.
 
 #+begin_src emacs-lisp
 (use-package simple
-  :straight nil)
+  :straight nil
+  :custom
+  (kill-do-not-save-duplicates t)
+  (save-interprogram-paste-before-kill t))
 
 (use-package visual-fill-column
   :hook ((text-mode prog-mode) . visual-line-fill-column-mode)
