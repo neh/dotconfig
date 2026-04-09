@@ -1002,6 +1002,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package saveplace
   :demand t
   :straight nil
+  :hook
+  (save-place-after-find-file . (lambda ()
+                                  (when buffer-file-name
+                                    (ignore-errors (recenter)))))
+
   :config
   (save-place-mode t))
 
@@ -1017,8 +1022,16 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
   :demand t
   :custom
   (savehist-additional-variables '(project-regexp-history-variable
-                                   command-history))
-  (savehist-autosave-interval 90))
+                                   command-history
+                                   search-ring
+                                   regexp-search-ring
+                                   kill-ring))
+  (savehist-autosave-interval 90)
+  :hook
+  (savehist-save . (lambda ()
+                     (setq kill-ring
+                           (mapcar #'substring-no-properties
+                                   (cl-remove-if-not #'stringp kill-ring))))))
 
 (use-package eldoc
   :straight nil
@@ -1051,6 +1064,11 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 #+begin_src emacs-lisp
 (use-package apropos
   :straight nil)
+
+(use-package help
+  :straight nil
+  :custom
+  (help-window-select t))
 
 (use-package helpful
   :after (apropos)
@@ -1142,6 +1160,7 @@ General settings when in text editing modes.
 (use-package simple
   :straight nil
   :custom
+  (set-mark-command-repeat-pop t)
   (kill-do-not-save-duplicates t)
   (save-interprogram-paste-before-kill t))
 
