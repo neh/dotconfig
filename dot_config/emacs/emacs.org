@@ -4535,7 +4535,9 @@ any directory proferred by `consult-dir'."
 (use-package dired
   :straight nil
   :hook ((dired-mode . dired-hide-details-mode)
-         (dired-mode . dired-async-mode))
+         (dired-mode . dired-async-mode)
+         (dired-mode . (lambda ()
+                         (setq-local mouse-1-click-follows-link 'double))))
   :commands (dired-jump
              dired-mode)
 
@@ -4550,9 +4552,19 @@ any directory proferred by `consult-dir'."
 
   :bind
   (:map dired-mode-map
-   ("-" . dired-up-directory))
+   ("-" . dired-up-directory)
+   ("M-<mouse-1>" . #'my/dired-mouse-toggle-mark))
 
   :init
+  (defun my/dired-mouse-toggle-mark ()
+    "Toggle mark of a Dired item via mouse."
+    (interactive)
+    (unless (use-region-p)
+      (mouse-set-point last-input-event)
+      (if (char-equal (char-after (line-beginning-position)) dired-marker-char)
+          (call-interactively #'dired-unmark)
+        (call-interactively #'dired-mark))))
+
   (defun my/dired-copy-full-path ()
     "Copy full path of entries that are marked or at point."
     (interactive)
