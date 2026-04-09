@@ -4009,8 +4009,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
 #+begin_src emacs-lisp
 (use-package magit-todos
-  :config
-  (magit-todos-mode t))
+  :commands (magit-todos-mode))
 #+end_src
 
 #+begin_src emacs-lisp
