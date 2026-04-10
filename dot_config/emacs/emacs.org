@@ -463,6 +463,18 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
    ("C" . quick-calc)))
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package prog-mode
+  :straight nil
+  :hook (prog-mode . context-menu-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package text-mode
+  :straight nil
+  :hook (text-mode . context-menu-mode))
+#+end_src
+
 * Appearance
 ** Fonts
 
@@ -962,6 +974,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "|"   '("split window vertically" . hel-window-vsplit)
     "_"   '("split root window horizontally" . hel-root-window-split)
     "V"   '("split root window vertically" . hel-root-window-vsplit)
+
+    "o"   #'anju-toggle-one-window
 
     "w"   #'other-window
     "h"   #'hel-window-left
@@ -1844,6 +1858,14 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
              burly-bookmark-windows
              burly-open-bookmark
              burly-open-last-bookmark))
+#+end_src
+
+Trying out some nicer mouse navigation.
+
+#+begin_src emacs-lisp
+(use-package anju
+  :config
+  (anju-init))
 #+end_src
 
 ** Within buffers
@@ -4245,6 +4267,12 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 * Shells
 
 #+begin_src emacs-lisp
+(use-package shell
+  :straight nil
+  :hook (shell-mode . context-menu-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package vterm
   :defer 1
   :commands (vterm
@@ -4536,6 +4564,7 @@ any directory proferred by `consult-dir'."
   :straight nil
   :hook ((dired-mode . dired-hide-details-mode)
          (dired-mode . dired-async-mode)
+         (dired-mode . context-menu-mode)
          (dired-mode . (lambda ()
                          (setq-local mouse-1-click-follows-link 'double))))
   :commands (dired-jump

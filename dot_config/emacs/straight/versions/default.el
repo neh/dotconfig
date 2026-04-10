@@ -3,6 +3,7 @@
  ("ace-window" . "77115afc1b0b9f633084cf7479c767988106c196")
  ("activities" . "d1ff9e14577505ccad4ceddaabd552de71caca6e")
  ("age.el" . "e99165ef5274bc4512b8d77ba2ac208c59b5d456")
+ ("anju" . "9b50c67292189b599dcb17108f93be520caa5647")
  ("annotate.el" . "9c80b465297dce20901abaf0389a48951b6e030f")
  ("apheleia" . "143c1dffed15f1cab3eb06e148fe11224e39471c")
  ("auto-virtualenv" . "0b6ba18f0b449a40e9ff438b4e910b58b8804282")
