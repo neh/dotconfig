@@ -677,22 +677,6 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
     (set-face-foreground 'avy-lead-face "white")
     (set-face-foreground 'terraform--resource-name-face "dark orchid")
     (set-face-foreground 'terraform--resource-type-face "dark green")))
-
-(use-package gruvbox-theme
-  :custom-face
-  (org-block-begin-line ((t (:inherit fixed-pitch
-                             :slant italic))))
-  (org-block-end-line ((t (:inherit fixed-pitch
-                           :slant italic))))
-  :config
-  (defun my/match-border-to-background ()
-    (custom-theme-set-faces
-     'user
-     `(internal-border ((t (:background ,(face-background 'default)))))))
-  (defun my/gruvbox-dark-hard-tweaks ()
-    (my/match-border-to-background))
-  (defun my/gruvbox-light-hard-tweaks ()
-    (my/match-border-to-background)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -812,19 +796,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
   ;; https://lists.gnu.org/archive/html/bug-gnu-emacs/2021-07/msg00071.html
   (when (fboundp 'pgtk-use-im-context)
     (pgtk-use-im-context nil))
-
-  ;; Set the default text size based on the monitor DPI
-  ;; (when (display-graphic-p)
-  ;;   (let* ((dpi (monitor-dpi))
-  ;;          (size (cond ((< dpi 0) 20)
-  ;;                      ((< dpi 0.12) 0)
-  ;;                      ((< dpi 0.18) -20)
-  ;;                      ((< dpi 0.23) -25)
-  ;;                      ((< dpi 0.25) -40))))
-  ;;     (setq my/default-text-size (+ size 150))))
-
-  ;; (when (not (boundp 'my/current-text-size))
-  ;;   (setq my/current-text-size my/default-text-size))
 
   (my/set-fontaine-presets)
   (fontaine-set-preset (or (fontaine-restore-latest-preset) 'normal))
@@ -1195,29 +1166,6 @@ General settings when in text editing modes.
               #'visual-fill-column-adjust))
 #+end_src
 
-I’ll put olivetti mode here since I think it’s mainly a text mode thing rather than for programming, but who knows.
-
-#+begin_src emacs-lisp
-(use-package olivetti
-  :commands (olivetti-mode)
-  :custom
-  (olivetti-body-width fill-column))
-#+end_src
-
-And let’s try out writeroom mode.
-
-#+begin_src emacs-lisp
-(use-package writeroom-mode
-  :commands (writeroom-mode
-             global-writeroom-mode)
-  :custom
-  (writeroom-width fill-column)
-  (writeroom-extra-line-spacing 0)
-  (writeroom-border-width 40)
-  :config
-  (add-to-list 'writeroom-global-effects 'writeroom-set-internal-border-width))
-#+end_src
-
 * Mode-line
 
 #+begin_src emacs-lisp
@@ -1343,7 +1291,6 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
            buffer
            (vertico-buffer-display-action . (display-buffer-same-window)))
           (embark-keybinding grid)
-          ;; (t reverse)
 
           (jinx grid (vertico-grid-annotate . 20))))
   (setq vertico-multiform-commands nil
@@ -1384,20 +1331,6 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
    ("C-t" . vertico-previous)
    ("C-S-n" . vertico-next-group)
    ("C-S-t" . vertico-previous-group)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package vertico-posframe
-  :after (vertico)
-  :custom
-  (vertico-posframe-parameters '((left-fringe . 20)
-                                 (right-fringe . 20)))
-  :bind
-  (:map vertico-multiform-map
-   ("M-p" . nil))
-  ;; :config
-  ;; (vertico-posframe-mode t)
-  )
 #+end_src
 
 ** Orderless
@@ -1497,14 +1430,12 @@ One of the really nice bits here is embark. I haven't really exploited it yet, b
    :map embark-file-map
    ("s" . my/consult-ripgrep-from-dir)
    ("F" . find-file-other-frame)
-   ;; ("x" . my/dired-open)
    :map embark-symbol-map
    ("g" . consult-ripgrep)
    :map embark-url-map
    ("." . hydra-browse/body)
    :map embark-buffer-map
    ("F" . switch-to-buffer-other-frame)
-   ;; ("R" . tabspaces-remove-selected-buffer)
    :map embark-org-src-block-map
    ("e" . org-babel-expand-src-block)
    :map embark-heading-map
@@ -1753,18 +1684,9 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (:map mode-specific-map
    ("jj" . avy-goto-char-timer)
    ("jq" . avy-pop-mark)
-   ;; "l" #'avy-goto-line
    ("jl" . avy-copy-line)
    ("jr" . avy-copy-region)
    )
-
-  ;; TODO might need a little avy transient/hydra for visibility/accessibility of all this good stuff
-  ;; avy-next/prev
-  ;; avy-resume
-  ;; avy-isearch
-  ;; avy-move-line
-  ;; avy-push/pop-mark
-  ;; avy-kill/move-region
 
   :custom
   (avy-dispatch-alist '((?x . avy-action-kill-move)
@@ -1778,14 +1700,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
                         (?Y . avy-action-yank-line)
                         (?i . avy-action-ispell)
                         (?z . avy-action-zap-to-char)))
-
-  ;; TODO look at how avy actions interact with evil; maybe I need more stuff like this
-  ;;                       (?c . (lambda (pt)
-  ;;                               (avy-action-copy pt)
-  ;;                               (if (evil-insert-state-p)
-  ;;                                   (progn (evil-paste-before 1)
-  ;;                                          (evil-forward-char))
-  ;;                                 (evil-paste-after 1))))
 
   (avy-keys '(?c ?i ?e ?a ?h ?t ?n ?s))
   (avy-line-insert-style 'below)
@@ -1968,14 +1882,6 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 (use-package git-gutter
   :disabled
   :hook (prog-mode . git-gutter-mode)
-  ;; :general
-  ;; (general-define-key
-  ;;  :states '(normal visual)
-  ;;  "gp" 'git-gutter:previous-hunk
-  ;;  "gn" 'git-gutter:next-hunk
-  ;;  "gs" 'git-gutter:popup-hunk
-  ;;  "gS" 'git-gutter:stage-hunk
-  ;;  "gU" 'git-gutter:revert-hunk)
 
   :custom-face
   (git-gutter:modified ((t (:foreground "DeepSkyBlue2"))))
@@ -1992,10 +1898,6 @@ Diff-hl may be better at /showing/ diff info, but git-gutter is better at doing 
 
   :init
   (global-git-gutter-mode -1)
-
-  ;; :config
-  ;; (advice-add 'git-gutter:previous-hunk :after #'my/after-jump)
-  ;; (advice-add 'git-gutter:next-hunk :after #'my/after-jump)
   )
 #+end_src
 
@@ -2088,12 +1990,6 @@ Handy package to browse to git repo web interfaces.
    ("H" . git-link-homepage))
   :custom
   (git-link-open-in-browser t))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package git-timemachine
-  :commands (git-timemachine
-             git-timemachine-toggle))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2603,8 +2499,6 @@ Just always show images; I always want them.
 (org-log-into-drawer t)
 (org-log-repeat nil)
 
-;; (org-startup-indented t)
-;; (org-hide-leading-stars t)
 (org-ellipsis " …")
 (org-fontify-whole-heading-line t)
 (org-fontify-todo-headline nil)
@@ -2868,24 +2762,6 @@ Show the heading of a table when it's scrolled offscreen. Disabling this because
        (org-agenda-span 'day)))
 
      ))
-
-   ;; (org-super-agenda-groups '(
-   ;;                            (:name "Today"
-   ;;                             :time-grid t)
-   ;;                            (:name "now"
-   ;;                             :deadline today
-   ;;                             :scheduled today)
-   ;;                            (:name "Doing"
-   ;;                             :todo "DOING")
-   ;;                            (:name "Next"
-   ;;                             ;; :auto-parent t
-   ;;                             :and (:todo "TODO" :priority "A"))
-   ;;                            (:name "Projects"
-   ;;                             :children 'todo)
-   ;;                            (:name "Waiting"
-   ;;                             ;; :auto-parent t
-   ;;                             :todo "WAITING")
-   ;;                            ))
                              )
 #+end_src
 
@@ -3926,38 +3802,6 @@ And let’s try out the new single-line-horizontal-scroll option in emacs 26.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package scrollkeeper
-  :disabled t
-  :custom
-  (scrollkeeper-scroll-steps 6)
-  (scrollkeeper-scroll-distance 0.80)
-  (scrollkeeper-guideline-pulse-interval 0.06)
-  (scrollkeeper-guideline-fn #'scrollkeeper--highlight)
-  :custom-face
-  (scrollkeeper-guideline-highlight ((t (:background "#ffffaa" :extend t))))
-  :bind
-  (([remap scroll-up-command] . scrollkeeper-down)
-   ([remap scroll-down-command] . scrollkeeper-up)
-   )
-  )
-#+end_src
-
-New smooth scrolling in emacs 29, would like to see if I can maybe combine it with scrollkeeper-style highlighting.
-
-#+begin_src emacs-lisp
-;; (use-package pixel-scroll
-;;   :straight nil
-;;   :if (>= emacs-major-version 29)
-;;   :commands (pixel-scroll-precision-mode)
-;;   :custom
-;;   (pixel-scroll-precision-interpolate-page t)
-;;   (pixel-scroll-precision-interpolation-factor 2.0)
-;;   (pixel-scroll-precision-large-scroll-height 20)
-;;   :init
-;;   (pixel-scroll-precision-mode t))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package ultra-scroll
   :init
   (setq scroll-conservatively 101 ; or whatever value you prefer, since v0.4
@@ -4100,12 +3944,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package hi-lock
   :straight nil
-  ;; :general
-  ;; (my/leader-keys
-  ;;   :infix "h"
-  ;;   "l" #'highlight-lines-matching-regexp
-  ;;   "r" #'highlight-regexp
-  ;;   "u" #'unhighlight-regexp)
   )
 #+end_src
 
@@ -4139,13 +3977,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 
    ("c" . symbol-overlay-put)
    ("C" . symbol-overlay-remove-all))
-
-  ;; (my/leader-keys
-  ;;   "hs" #'symbol-overlay-put
-  ;;   "hn" #'symbol-overlay-switch-backward
-  ;;   "ht" #'symbol-overlay-switch-forward
-  ;;   "hc" #'symbol-overlay-remove-all
-  ;;   "hM" #'symbol-overlay-mode)
   )
 #+end_src
 
@@ -4809,13 +4640,6 @@ Handy live filtering of dired buffers.
 
 #+begin_src emacs-lisp :noweb yes
 (use-package hydra
-  ;; :general
-  ;; (my/leader-keys
-  ;;   "rc" #'hydra-codereading/body
-  ;;   "rg" #'hydra-git-gutter/body
-  ;;   "ro" #'hydra-org/body
-  ;;   "rr" #'hydra-reading/body)
-
   :custom
   (hydra-hint-display-type 'lv)
 
@@ -4847,64 +4671,6 @@ Handy live filtering of dired buffers.
   )
 #+end_src
 
-#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
-;; (defhydra hydra-reading (:color red
-;;                          :hint nil)
-;;   "
-;;   _N_ pg up         _gg_ go to top        _zt_ line to top
-;;   _n_ ½ pg up       _G_  go to bottom     _zz_ line to center
-;;   _t_ ½ pg dn       ^ ^                   _zb_ line to bottom
-;;   _T_ pg dn
-
-;; "
-;; ("n" (evil-scroll-up 0))
-;; ("t" (evil-scroll-down 0))
-;; ("T" (scroll-up))
-;; ("N" (scroll-down))
-
-;; ("gg" evil-goto-first-line)
-;; ("G" evil-goto-line)
-
-;; ("zt" (evil-scroll-line-to-top (line-number-at-pos)))
-;; ("zz" (evil-scroll-line-to-center (line-number-at-pos)))
-;; ("zb" (evil-scroll-line-to-bottom (line-number-at-pos)))
-
-;; ("+" (my/adjust-text-height 7) "bigger")
-;; ("-" (my/adjust-text-height -7) "smaller")
-;; ("0" (my/adjust-text-height 0) "reset")
-;; ("q" nil "quit"))
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
-(defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1))
-  "Browse/stage/revert git hunks"
-  ;; ("n" (progn (git-gutter:previous-hunk 1)
-  ;;             (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
-  ;; ("t" (progn (git-gutter:next-hunk 1)
-  ;;             (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
-  ("H" (progn (goto-char (point-min))
-              (git-gutter:next-hunk 1)) "first hunk")
-  ("S" (progn (goto-char (point-min))
-              (git-gutter:previous-hunk 1)) "last hunk")
-  ("c" magit-commit "commit" :exit t)
-  ("s" git-gutter:stage-hunk "stage hunk")
-  ("k" git-gutter:revert-hunk "revert hunk")
-  ("q" nil "quit" :color blue))
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref hydra-hydras :tangle no
-(defhydra hydra-org (:color red :columns 3)
-  "Org Mode Movements"
-  ("t" outline-next-visible-heading "next heading")
-  ("n" outline-previous-visible-heading "prev heading")
-  ("T" org-forward-heading-same-level "next heading at same level")
-  ("N" org-backward-heading-same-level "prev heading at same level")
-  ("H" outline-up-heading "up heading")
-  ("<tab>" org-cycle "cycle")
-  ("g" org-goto "goto" :exit t)
-  ("q" nil "quit" :color blue))
-#+end_src
-
 =Pretty-hydra= comes from the =major-mode-hydra= package, but I’m using it separately to define various hydras as I begin to use them more. Each hydra is broken out below.
 
 #+begin_src emacs-lisp :noweb yes
@@ -4914,9 +4680,6 @@ Handy live filtering of dired buffers.
   :bind
   (:map mode-specific-map
    ("," . my/toggles/body)
-   ;; "'" #'my/movement/body
-   ;; "G" 'hydra-git/body
-   ;; "rR" 'my/reading/body
    )
 
   :config
@@ -4997,10 +4760,6 @@ Working on a =git= hydra to replace all or most of my usual git keybinds. This i
 
   ("go" (("gg" (progn (goto-char (point-min))
                       (git-gutter:next-hunk 1)) "first hunk")
-         ;; ("n" (progn (git-gutter:previous-hunk 1)
-         ;;             (evil-scroll-line-to-center (line-number-at-pos))) "previous hunk")
-         ;; ("t" (progn (git-gutter:next-hunk 1)
-         ;;             (evil-scroll-line-to-center (line-number-at-pos))) "next hunk")
          ("G" (progn (goto-char (point-min))
                      (git-gutter:previous-hunk 1)) "last hunk"))
 
@@ -5334,20 +5093,6 @@ Try out =org-noter=.
   (elfeed-org))
 #+end_src
 
-* Email
-
-#+begin_src emacs-lisp
-(use-package notmuch
-  :straight nil
-  :commands (notmuch)
-  :custom
-  (notmuch-show-logo nil)
-  )
-
-;; doesn't exist any more maybe?
-;; (use-package org-notmuch)
-#+end_src
-
 * Chat
 
 #+begin_src emacs-lisp
@@ -5462,10 +5207,6 @@ TODO see if I want to bind any more functions from it
              evilmi-jump-items-native)
   :config
   (global-evil-matchit-mode t))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-(meow-normal-define-key '("%" . evilmi-jump-items-native))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5885,19 +5626,6 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package treemacs
-  :commands (treemacs)
-  :bind
-  (:map treemacs-mode-map
-   ("t" . treemacs-next-line)
-   ("n" . treemacs-previous-line)))
-
-(use-package treemacs-magit
-  :after (treemacs
-          magit))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package literate-calc-mode
   :commands (literate-calc-mode
              literate-calc-minor-mode))
@@ -6154,21 +5882,6 @@ See `beframe-rename-frame'."
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :custom-face
-  (rainbow-delimiters-unmatched-face ((t (:height 1.0 :inherit 'error))))
-  (rainbow-delimiters-depth-1-face ((t (:height 1.0))))
-  (rainbow-delimiters-depth-2-face ((t (:height 1.1))))
-  (rainbow-delimiters-depth-3-face ((t (:height 1.2))))
-  (rainbow-delimiters-depth-4-face ((t (:height 1.3))))
-  (rainbow-delimiters-depth-5-face ((t (:height 1.4))))
-  (rainbow-delimiters-depth-6-face ((t (:height 1.5))))
-  (rainbow-delimiters-depth-7-face ((t (:height 1.6))))
-  (rainbow-delimiters-depth-8-face ((t (:height 1.7))))
-  (rainbow-delimiters-depth-9-face ((t (:height 1.8)))))
-#+end_src
-
-#+begin_src emacs-lisp
 (use-package wgrep
   :commands wgrep-change-to-wgrep-mode)
 #+end_src
@@ -6407,14 +6120,6 @@ I like the vim/evil style join where the next line is pulled up and joined to th
       (join-line nil (region-beginning) (region-end))
     (let ((current-prefix-arg '(4)))
       (call-interactively #'join-line))))
-#+end_src
-
-And let's give it the same keybinding as evil, since I'm used to it.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref meow-config
-;; need to find a new key for either this or meow-block
-;; jk works now if on second line to be joined
-;; (meow-normal-define-key '("J" . my/join-line))
 #+end_src
 
 From this unrelated [[https://www.reddit.com/r/emacs/comments/13v3op3/an_improved_emacs_search/][reddit thread]].
