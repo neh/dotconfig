@@ -93,6 +93,7 @@
  ("evil-matchit" . "eb2b0c776c9d1cf3199c24473499ce4adfa44178")
  ("exec-path-from-shell" . "7552abf032a383ff761e7d90e6b5cbb4658a728a")
  ("expand-region.el" . "351279272330cae6cecea941b0033a8dd8bcc4e8")
+ ("expreg" . "9919ae406fb191baf059a2dbc64b19203b0a1975")
  ("f.el" . "931b6d0667fe03e7bf1c6c282d6d8d7006143c52")
  ("fontaine" . "df0eb05a0bcef3c5057ef8ff8d75c5e07b00dae4")
  ("forge" . "6c7ed3f87730b7085293db0e277c0c90a29bab38")

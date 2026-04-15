@@ -6024,8 +6024,8 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package expreg
-  :straight nil
-  :load-path "site-lisp"
+  :hook (text-mode . (lambda ()
+                       (add-to-list 'expreg-functions #'expreg--sentence)))
   :bind
   (("M-v" . expreg-expand)
    :repeat-map expreg-repeat-map
