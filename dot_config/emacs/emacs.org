@@ -475,6 +475,24 @@ When pasting (yanking) into emacs, paste at the point, not where I click (I like
   :hook (text-mode . context-menu-mode))
 #+end_src
 
+Trying out =desktop-mode=, as it seems to do the things I want, which is just save everything and bring it back in a fresh session. I don't want autoloading on start as I run standalone test sessions that I want to be empty, so I'm just adding a convenience function to load and enable easily.
+
+#+begin_src emacs-lisp
+(use-package desktop
+  :straight nil
+  :commands (desktop-save
+             desktop-read
+             desktop-save-mode)
+  :custom
+  (desktop-restore-eager 8)
+  :init
+  (defun my/restore-desktop ()
+    "Restore my saved desktop and enable desktop-save-mode."
+    (interactive)
+    (desktop-read)
+    (desktop-save-mode t)))
+#+end_src
+
 * Appearance
 ** Fonts
 
