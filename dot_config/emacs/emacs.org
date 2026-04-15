@@ -916,7 +916,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
     "g j" #'dired-jump
     "g k" #'link-hint-open-link
-    "g l" #'consult-line
+    "g -" #'consult-line
     "g o" #'consult-imenu
     "g p" #'disproject-dispatch
 
