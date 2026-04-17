@@ -937,6 +937,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g -" #'consult-line
     "g o" #'consult-imenu
     "g p" #'disproject-dispatch
+    "g RET" #'consult-buffer
 
     "r" #'hel-select-regex
 
@@ -6046,6 +6047,8 @@ See `beframe-rename-frame'."
                        (add-to-list 'expreg-functions #'expreg--sentence)))
   :bind
   (("M-v" . expreg-expand)
+   ("C-=" . expreg-expand)
+   ("C--" . expreg-contract)
    :repeat-map expreg-repeat-map
    ("v" . expreg-expand)
    ("V" . expreg-contract)))
