@@ -832,7 +832,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
          (block (face-background 'org-block nil 'default))
          (lc (if (my/dark-p)
                  (color-lighten-name block 70)
-               (color-darken-name block 20))))
+               (color-darken-name block 10))))
     (set-face-attribute 'org-block-begin-line nil
                         :background bg
                         :underline `(:color ,lc :position t)
@@ -846,7 +846,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (let* ((color (face-foreground 'default))
          (ucolor (if (my/dark-p)
                      (color-darken-name color 60)
-                   (color-lighten-name color 400))))
+                   (color-lighten-name color 450))))
     (set-face-attribute 'org-level-1 nil :underline ucolor))
 
   ;; for org-modern
