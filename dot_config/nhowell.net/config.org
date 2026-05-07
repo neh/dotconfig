@@ -1539,11 +1539,17 @@ function fish_prompt --description 'Write out the prompt'
         set prompt_status ' ' (set_color $fish_color_status) "[$last_status]" "$normal"
     end
 
+    if test $CMD_DURATION
+        # Show duration of the last command in seconds
+        set duration ' ' (echo "$CMD_DURATION 1000" | awk '{printf "%.3fs", $1 / $2}')
+        # echo $duration
+    end
+
     if test -x kubectl
         set k8senv ' ⎈' (kubectl config current-context)
     end
 
-    echo -n -s (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv $prompt_status $suffix " "
+    echo -n -s (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv $prompt_status $duration $suffix " "
 end
 #+end_src
 
