@@ -909,6 +909,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
              :repo "anuvyklack/hel"
              :files (:defaults "extensions/**/*.el"))
   :after (avy)
+  :hook (after-init . hel-mode)
   :custom
   (hel-normal-state-cursor '((bar . 4) "red"))
   (hel-insert-state-cursor '(box "red"))
@@ -985,7 +986,6 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "C-t" #'hel-window-up
     "C-s" #'hel-window-right
     )
-  (hel-mode t)
 
   (with-eval-after-load 'vterm
     (require 'hel-vterm))
@@ -1802,8 +1802,7 @@ Trying out some nicer mouse navigation.
 
 #+begin_src emacs-lisp
 (use-package anju
-  :config
-  (anju-init))
+  :hook (after-init . anju-init))
 #+end_src
 
 ** Within buffers
@@ -2371,10 +2370,12 @@ A basic start at making different kinds of links look usefully different (eg. it
 Org export.
 
 #+begin_src emacs-lisp
-(use-package ox-pandoc)
+(use-package ox-pandoc
+  :defer 1)
 
 (use-package ox-odt
-  :straight nil)
+  :straight nil
+  :defer 1)
 
 (use-package ox-slack
   :commands (org-slack-export-as-slack
@@ -4078,6 +4079,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package eglot
   :straight nil
+  :defer 1
   :config
   (add-to-list 'eglot-server-programs
                '(terraform-mode . ("terraform-ls" "serve"))))
@@ -5132,6 +5134,7 @@ Try out =org-noter=.
 
 #+begin_src emacs-lisp
 (use-package mastodon
+  :commands (mastodon)
   :custom
   (mastodon-instance-url "https://hachyderm.io")
   (mastodon-active-user "neh")
@@ -5323,19 +5326,20 @@ Device tree is the format used by ZMK keyboard firmware.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package nerd-icons)
+(use-package nerd-icons
+  :demand t)
 
 (use-package nerd-icons-completion
-  :after nerd-icons
-  :config
-  (nerd-icons-completion-mode))
+  :after (nerd-icons)
+  :hook (after-init . nerd-icons-completion-mode))
 #+end_src
 
 Large remote directories (at least over ssh) are /really/ slow to load icons, so I'm doing the easy thing for now and only enabling nerd-icons in dired for local directories.
 
 #+begin_src emacs-lisp
 (use-package nerd-icons-dired
-  :after nerd-icons
+  :after (nerd-icons
+          dired)
   :hook (dired-mode . my/nerd-icons-dired-dwim)
   :init
   (defun my/nerd-icons-dired-dwim ()
@@ -6074,6 +6078,7 @@ See `beframe-rename-frame'."
 
 #+begin_src emacs-lisp
 (use-package expreg
+  :defer 1
   :hook (text-mode . (lambda ()
                        (add-to-list 'expreg-functions #'expreg--sentence)))
   :bind
