@@ -5344,6 +5344,11 @@ Large remote directories (at least over ssh) are /really/ slow to load icons, so
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package nerd-icons-ibuffer
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package powershell
   :commands (powershell-mode)
   :mode (("\\.ps1\\'" . powershell-mode)))

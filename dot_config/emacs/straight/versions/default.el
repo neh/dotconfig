@@ -142,6 +142,7 @@
  ("modus-themes" . "0ace30e471ce9db21590272624787272022f068c")
  ("nerd-icons-completion" . "d09ea987ed3d2cc64137234f27851594050e2b64")
  ("nerd-icons-dired" . "3265d6c4b552eae457d50d423adb10494113d70b")
+ ("nerd-icons-ibuffer" . "13007b941ebfa471122f0658a2315040b8eb4aa4")
  ("nerd-icons.el" . "9a7f44db9a53567f04603bc88d05402cad49c64c")
  ("nix-mode" . "719feb7868fb567ecfe5578f6119892c771ac5e5")
  ("no-littering" . "7d8fd72222b77ffaaaf8a32eedebb1f546d2441f")
