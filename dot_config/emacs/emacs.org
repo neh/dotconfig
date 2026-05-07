@@ -1171,7 +1171,23 @@ General settings when in text editing modes.
   :custom
   (set-mark-command-repeat-pop t)
   (kill-do-not-save-duplicates t)
-  (save-interprogram-paste-before-kill t))
+  (save-interprogram-paste-before-kill t)
+
+  :config
+  ;; stolen from https://emacsredux.com/blog/2025/06/01/let-s-make-keyboard-quit-smarter/
+  (defun my/keyboard-quit ()
+    "Smarter version of the built-in `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it."
+    (interactive)
+    (if (active-minibuffer-window)
+        (if (minibufferp)
+            (minibuffer-keyboard-quit)
+          (abort-recursive-edit))
+      (keyboard-quit)))
+  (global-set-key [remap keyboard-quit] #'my/keyboard-quit))
 
 (use-package visual-fill-column
   :hook ((text-mode prog-mode) . visual-line-fill-column-mode)
