@@ -1582,7 +1582,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    ("C-h C-m" . consult-man)
 
    :map ctl-x-map
-   ("b" . consult-buffer)
+   ("C-b" . consult-buffer)
 
    :map mode-specific-map
    ("iy" . consult-yank-pop)
@@ -1794,10 +1794,42 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :hook (ibuffer-mode . ibuffer-auto-mode)
   :custom
   (ibuffer-show-empty-filter-groups nil)
+  (ibuffer-saved-filter-groups '((".config" (or
+                                             (filename . "/.config/.*")))
+                                 ("Directories" (mode . dired-mode))
+                                 ("Help" (or
+                                          (mode . helpful-mode)
+                                          (mode . help-mode)
+                                          (mode . Info-mode)))
+                                 ("Emacs" (or
+                                           (name . "\\`\\*Custom.*")
+                                           (name . "\\`\\*Org Agenda\\*\\'")
+                                           (name . "\\`\\*straight-.*\\*\\'")
+                                           (name . "\\`\\*Async-native.*\\*\\'")
+                                           (name . "\\`\\*Native-compil.*\\*\\'")
+                                           (name . "\\`\\*scratch.*\\*\\'")
+                                           (name . "\\`\\*Backtrace\\*\\'")
+                                           (name . "\\`\\*Messages\\*\\'")
+                                           (name . "\\`\\*Warnings\\*\\'")))))
   :bind
   (:map ibuffer-mode-map
    ;; a cheap hack to keep me from leaving ibuffer buffers open in the background
-   ("q" . kill-current-buffer)))
+   ("q" . kill-current-buffer)
+   :map ctl-x-map
+   ("b" . ibuffer)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package ibuffer-vc
+  :commands (ibuffer-vc-set-filter-groups-by-vc-root
+             ibuffer-vc-generate-filter-groups-by-vc-root)
+  :hook (ibuffer-mode . my/ibuffer-filter-groups)
+  :init
+  (defun my/ibuffer-filter-groups ()
+    (interactive)
+    (setq ibuffer-filter-groups (append (ibuffer-vc-generate-filter-groups-by-vc-root)
+                                        ibuffer-saved-filter-groups)))
+  )
 #+end_src
 
 #+begin_src emacs-lisp

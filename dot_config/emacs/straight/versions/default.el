@@ -113,6 +113,7 @@
  ("hl-todo" . "9540fc414014822dde00f0188b74e17ac99e916d")
  ("ht.el" . "1c49aad1c820c86f7ee35bf9fff8429502f60fef")
  ("hydra" . "59a2a45a35027948476d1d7751b0f0215b1e61aa")
+ ("ibuffer-vc" . "11f2d44a280728e963d81b28455f1c6091718120")
  ("iedit" . "27c61866b1b9b8d77629ac702e5f48e67dfe0d3b")
  ("inheritenv" . "b9e67cc20c069539698a9ac54d0e6cc11e616c6f")
  ("jinja2-mode" . "03e5430a7efe1d163a16beaf3c82c5fd2c2caee1")
