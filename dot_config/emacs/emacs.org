@@ -1791,9 +1791,21 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   :hook (ibuffer-mode . ibuffer-auto-mode)
   :custom
   (ibuffer-show-empty-filter-groups nil)
+  (ibuffer-movement-cycle nil)
+  (ibuffer-eliding-string "…")
+  (ibuffer-formats '((mark modified read-only locked " "
+                           (name 40 40 :left :elide) " "
+                           (size-h 9 -1 :right) " "
+                           (mode+ 16 16 :left :elide) " "
+                           filename-and-process+)
+                     (mark " " (name 25 -1) " " filename)))
   (ibuffer-saved-filter-groups '((".config" (or
                                              (filename . "/.config/.*")))
+                                 ("Apps" (or
+                                          (mode . elfeed-show-mode)
+                                          (mode . elfeed-search-mode)))
                                  ("Directories" (mode . dired-mode))
+                                 ("Files" (visiting-file))
                                  ("Help" (or
                                           (mode . helpful-mode)
                                           (mode . help-mode)
@@ -5401,7 +5413,15 @@ Large remote directories (at least over ssh) are /really/ slow to load icons, so
 
 #+begin_src emacs-lisp
 (use-package nerd-icons-ibuffer
-  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+  :custom (nerd-icons-ibuffer-formats
+           '((mark modified read-only locked " "
+                   (icon 2 2)
+                   (name 40 40 :left :elide) " "
+                   (size-h 9 -1 :right) " "
+                   (mode+ 20 20 :left :elide) " "
+                   filename-and-process+)
+             (mark " " (name 25 -1) " " filename))))
 #+end_src
 
 #+begin_src emacs-lisp
