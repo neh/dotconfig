@@ -1322,10 +1322,7 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :init
   (vertico-multiform-mode t)
   (setq vertico-multiform-categories
-        '((file
-           buffer
-           (vertico-buffer-display-action . (display-buffer-same-window)))
-          (embark-keybinding grid)
+        '((embark-keybinding grid)
 
           (jinx grid (vertico-grid-annotate . 20))))
   (setq vertico-multiform-commands nil
