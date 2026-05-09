@@ -5418,7 +5418,7 @@ Large remote directories (at least over ssh) are /really/ slow to load icons, so
   :hook (dired-mode . my/nerd-icons-dired-dwim)
   :init
   (defun my/nerd-icons-dired-dwim ()
-    (unless (file-remote-p dired-directory)
+    (unless (file-remote-p default-directory)
         (nerd-icons-dired-mode t))))
 #+end_src
 
