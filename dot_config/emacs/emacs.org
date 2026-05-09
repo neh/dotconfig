@@ -1161,6 +1161,17 @@ Make sure my local bin dir is in emacs =$PATH=, and keep it updated.
   )
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package files
+  :straight nil
+  :custom
+  ;; possible tramp and vc downsides to this one
+  (find-file-visit-truename t)
+  ;; need to consider implications of the symlinked home a bit more
+  (directory-abbrev-alist
+      `((,(regexp-quote (expand-file-name "~")) . "~"))))
+#+end_src
+
 * Text mode
 
 General settings when in text editing modes.
