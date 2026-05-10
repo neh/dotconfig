@@ -1738,7 +1738,6 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
    ("p" . nswbuff-switch-to-previous-buffer))
 
   :custom
-  (nswbuff-buffer-list-function #'my/local-buffer-list)
   (nswbuff-status-window-layout 'scroll)
   (nswbuff-display-intermediate-buffers t)
   (nswbuff-recent-buffers-first t)
