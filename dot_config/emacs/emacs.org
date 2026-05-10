@@ -698,6 +698,9 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
 #+end_src
 
 #+begin_src emacs-lisp
+(defvar my/dark-theme 'ef-maris-dark)
+(defvar my/light-theme 'ef-duo-light)
+
 (defun my/set-dark-mode ()
   "Load dark theme."
   (interactive)
@@ -727,52 +730,7 @@ Emacs colour themes apparently just load on top of each other, so here’s an ad
   (my/set-dark-or-light new))
 (add-variable-watcher 'my/color-scheme #'my/dark-or-light-change)
 
-(defun my/setthemeset (sym value)
-  (cond ((equal value "gruvbox")
-         (setq my/dark-theme 'gruvbox-dark-hard
-               my/light-theme 'gruvbox-light-hard))
-        ((equal value "modus")
-         (setq my/dark-theme 'modus-vivendi
-               my/light-theme 'modus-operandi))
-        ((equal value "modus-tinted")
-         (setq my/dark-theme 'modus-vivendi-tinted
-               my/light-theme 'modus-operandi-tinted))
-        ((equal value "bio-operandi")
-         (setq my/dark-theme 'ef-bio
-               my/light-theme 'modus-operandi-tinted))
-        ((equal value "duo")
-         (setq my/dark-theme 'ef-night
-               my/light-theme 'ef-duo-light))
-        ((equal value "maris")
-         (setq my/dark-theme 'ef-maris-dark
-               my/light-theme 'ef-maris-light))
-        ((equal value "stimmung")
-         (setq my/dark-theme 'stimmung-themes-dark
-               my/light-theme 'stimmung-themes-light))
-        ((equal value "mix")
-         (setq my/dark-theme 'gruvbox-dark-hard
-               my/light-theme 'modus-operandi)))
-  (if (my/dark-p)
-      (my/set-dark-mode)
-    (my/set-light-mode)))
-
 (defun my/theme-option-setup ()
-  (defcustom my/themeset "duo"
-    "Indicates which set of themes (dark and light) to use."
-    :type '(choice
-            (const "gruvbox")
-            (const "modus")
-            (const "modus-tinted")
-            (const "bio-operandi")
-            (const "duo")
-            (const "maris")
-            (const "stimmung")
-            (const "mix")
-            )
-    :set 'my/setthemeset
-    :initialize 'custom-initialize-set)
-
-  (customize-set-variable 'my/themeset "duo")
   (my/set-dark-or-light my/color-scheme)
   (remove-hook 'server-after-make-frame-hook #'my/theme-option-setup))
 
