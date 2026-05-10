@@ -8,7 +8,7 @@
  ("apheleia" . "143c1dffed15f1cab3eb06e148fe11224e39471c")
  ("auto-virtualenv" . "0b6ba18f0b449a40e9ff438b4e910b58b8804282")
  ("avy" . "933d1f36cca0f71e4acb5fac707e9ae26c536264")
- ("beframe" . "fb193249faf928afba26b689b6770d7366f3e23e")
+ ("beframe" . "88b74c94aab8820d3f0d83c0429aa08e8ba29980")
  ("beginend" . "26d6142ceaf7c58705281852410b61ddc0d780ee")
  ("blamer.el" . "aa9b22d4e847d15a5c4659c0407aa8bf4242cc94")
  ("buffer-move" . "e7800b3ab1bd76ee475ef35507ec51ecd5a3f065")

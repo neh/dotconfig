@@ -5566,8 +5566,6 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
 (use-package beframe
   :hook (after-init . beframe-mode)
   :custom
-  ;; (beframe-rename-function #'beframe-rename-frame)
-  (beframe-rename-function #'my/beframe-rename-frame)
   (beframe-create-frame-scratch-buffer nil)
 
   :config
@@ -5579,77 +5577,22 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
       '((t :inherit font-lock-string-face))
       "Face for `consult' framed buffers.")
 
-    (defvar beframe--consult-source
+    (defun my-beframe-buffer-names-sorted (&optional frame)
+      "Return the list of buffers from `beframe-buffer-names' sorted by visibility.
+With optional argument FRAME, return the list of buffers of FRAME."
+      (beframe-buffer-names frame :sort #'beframe-buffer-sort-visibility))
+
+    (defvar beframe-consult-source
       `( :name     "Frame-specific buffers (current frame)"
          :narrow   ?F
          :category buffer
          :face     beframe-buffer
          :history  beframe-history
-         :items    ,#'beframe--buffer-names
+         :items    ,#'my-beframe-buffer-names-sorted
          :action   ,#'switch-to-buffer
          :state    ,#'consult--buffer-state))
 
-    (add-to-list 'consult-buffer-sources 'beframe--consult-source))
-
-  (defun my/beframe-rename-frame (frame &optional name)
-    "Rename FRAME per `beframe-rename-function'.
-
-When called interactively, prompt for FRAME.  Else accept FRAME
-if it is an object that satisfies `framep'.
-
-With optional NAME as a string, use it to name the given FRAME.
-When called interactively, prompt for NAME when a prefix argument
-is given.
-
-With no NAME argument try to infer a name based on the following:
-
-- If the current window has a buffer that visits a file, name the
-  FRAME after the file's name and its `default-directory'.
-
-- If the current window has a non-file-visiting buffer, use the
-  `buffer-name' as the FRAME name.
-
-- Else use the `default-directory'.
-
-Remember that this function doubles as an example for
-`beframe-rename-function': copy it and modify it accordingly."
-    (interactive
-     (let ((select-frame (beframe--frame-prompt)))
-       (list
-        (beframe--frame-object select-frame)
-        (when current-prefix-arg
-          (read-string
-           (format "Rename the frame now called `%s' to: "
-                   select-frame)
-           nil 'beframe--rename-frame-history select-frame)))))
-    (modify-frame-parameters
-     frame
-     (list (cons 'name (my/beframe--infer-frame-name frame name)))))
-
-  (defun my/beframe--infer-frame-name (frame name)
-    "Infer a suitable name for FRAME with given NAME.
-See `beframe-rename-frame'."
-    (let* ((buffer (car (frame-parameter frame 'buffer-list)))
-           (file-name (when (bufferp buffer)
-                        (buffer-file-name buffer)))
-           (id (frame-parameter frame 'window-id))
-           (buf-name (buffer-name buffer))
-           (dir (with-current-buffer buffer
-                  default-directory)))
-
-      ;; completely avoid naming issues; use the window-id as the frame name
-      id
-
-      ;; (cond
-      ;;  ((and name (stringp name))
-      ;;   name)
-      ;;  ((and (not (minibufferp)) file-name)
-      ;;   (format "%s  %s" buf-name dir))
-      ;;  ((not (minibufferp))
-      ;;   buf-name)
-      ;;  (t
-      ;;   dir))
-      ))
+    (add-to-list 'consult-buffer-sources 'beframe-consult-source))
   )
 #+end_src
 
