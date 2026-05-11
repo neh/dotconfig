@@ -5593,6 +5593,18 @@ With optional argument FRAME, return the list of buffers of FRAME."
          :state    ,#'consult--buffer-state))
 
     (add-to-list 'consult-buffer-sources 'beframe-consult-source))
+
+  (defun my/tab-bar-beframe-rename-frame (prevtab currtab)
+    (my/beframe-rename-frame))
+  (defun my/beframe-rename-frame ()
+    (let ((name (cond
+                 ((eq major-mode 'elfeed-show-mode) (elfeed-entry-title elfeed-show-entry))
+                 (t (alist-get 'name (tab-bar--current-tab))))))
+      (modify-frame-parameters
+       (selected-frame)
+       (list (cons 'name name)))))
+  (add-hook 'tab-bar-tab-post-select-functions #'my/tab-bar-beframe-rename-frame)
+  (add-hook 'buffer-list-update-hook #'my/beframe-rename-frame)
   )
 #+end_src
 
