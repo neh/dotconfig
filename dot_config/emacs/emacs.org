@@ -1741,12 +1741,15 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (nswbuff-status-window-layout 'scroll)
   (nswbuff-display-intermediate-buffers t)
   (nswbuff-recent-buffers-first t)
+  (nswbuff-buffer-list-function #'my/nswbuff-list)
   (nswbuff-exclude-buffer-regexps '("^ "
                                     "^\*.*\*"
                                     "^magit.*:.+"))
   (nswbuff-include-buffer-regexps '("^*Org Src"))
 
   :init
+  (defun my/nswbuff-list ()
+    (beframe-buffer-list nil :sort #'my/beframe-buffer-sort-for-nswbuff))
   (defun my/local-buffer-list ()
     (seq-remove #'popper-popup-p (beframe--buffer-list))))
 #+end_src
@@ -5539,7 +5542,8 @@ Very nice screenshot package I learned about here: [[https://www.n16f.net/blog/t
     (defun my-beframe-buffer-names-sorted (&optional frame)
       "Return the list of buffers from `beframe-buffer-names' sorted by visibility.
 With optional argument FRAME, return the list of buffers of FRAME."
-      (beframe-buffer-names frame :sort #'beframe-buffer-sort-visibility))
+      (beframe-buffer-names frame :sort #'my/beframe-buffer-sort))
+    ;; (beframe-buffer-names frame :sort #'beframe-buffer-sort-visibility))
 
     (defvar beframe-consult-source
       `( :name     "Frame-specific buffers (current frame)"
@@ -5552,6 +5556,71 @@ With optional argument FRAME, return the list of buffers of FRAME."
          :state    ,#'consult--buffer-state))
 
     (add-to-list 'consult-buffer-sources 'beframe-consult-source))
+
+  (defun my/window-state-get-buffers (state)
+    "Recursively extract buffers from a window state tree."
+    (let (buffers)
+      (when (listp state)
+        (when-let ((buf (alist-get 'buffer state)))
+          (push (get-buffer (car buf)) buffers))
+        (dolist (child (alist-get 'children state))
+          (setq buffers (append buffers (my/window-state-get-buffers child)))))
+      buffers))
+
+  (defun my/tab-bar-hidden-buffers ()
+    "Return buffers shown in other tabs but not the current one."
+    (let ((current-buffers (mapcar #'window-buffer (window-list))))
+      (cl-loop for tab in (tab-bar-tabs)
+               when (not (eq (car tab) 'current-tab))
+               append (my/window-state-get-buffers (alist-get 'ws tab)))))
+
+  (defun my/tab-bar-all-tab-buffers ()
+    "Return all buffers visible in any tab-bar tab."
+    (cl-loop for tab in (tab-bar-tabs)
+             if (eq (car tab) 'current-tab)
+             append (mapcar #'window-buffer (window-list))
+             else
+             append (my/window-state-get-buffers (alist-get 'ws tab))))
+
+  (defun my/beframe-buffer-sort (buffers)
+    "Group the given BUFFERS by visibility and sort them accordingly.
+Return a sequence that first lists hidden, then visible, and then
+the current buffer.
+
+This function can be used as the :sort key of
+`beframe-buffer-list' or `beframe-buffer-names'."
+    (let* ((visible-in-tabs (my/tab-bar-hidden-buffers))
+           (bufs (seq-group-by
+                  (lambda (buf)
+                    (cond
+                     ((eq buf (current-buffer)) :current)
+                     ((get-buffer-window buf 'visible) :visible)
+                     ((memq buf visible-in-tabs) :visible-in-tabs)
+                     (t :hidden)))
+                  buffers)))
+      (nconc (alist-get :hidden  bufs)
+             (alist-get :visible bufs)
+             (alist-get :visible-in-tabs bufs)
+             (alist-get :current bufs))))
+
+  (defun my/beframe-buffer-sort-for-nswbuff (buffers)
+    "Group the given BUFFERS by visibility and sort them accordingly.
+Return a sequence that first lists hidden, then visible, and then
+the current buffer.
+
+This function can be used as the :sort key of
+`beframe-buffer-list' or `beframe-buffer-names'."
+    (let* ((visible-in-tabs (my/tab-bar-hidden-buffers))
+           (bufs (seq-group-by
+                  (lambda (buf)
+                    (cond
+                     ((eq buf (current-buffer)) :current)
+                     ((get-buffer-window buf 'visible) :visible)
+                     ((memq buf visible-in-tabs) :visible-in-tabs)
+                     (t :hidden)))
+                  buffers)))
+      (nconc (alist-get :hidden  bufs)
+             (alist-get :current bufs))))
 
   (defun my/tab-bar-beframe-rename-frame (prevtab currtab)
     (my/beframe-rename-frame))
