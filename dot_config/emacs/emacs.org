@@ -1744,9 +1744,7 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
   (nswbuff-exclude-buffer-regexps '("^ "
                                     "^\*.*\*"
                                     "^magit.*:.+"))
-  (nswbuff-include-buffer-regexps '("^*Org Src"
-                                    "*elfeed"
-                                    "^*helpful"))
+  (nswbuff-include-buffer-regexps '("^*Org Src"))
 
   :init
   (defun my/local-buffer-list ()
