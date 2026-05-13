@@ -1555,6 +1555,14 @@ end
 #+end_src
 
 #+begin_src fish
+function fish_title
+    hostname
+    echo ":"
+    prompt_pwd
+end
+#+end_src
+
+#+begin_src fish
 function fish_mode_prompt --description "Display my mode indicator for the prompt"
     # Do nothing if not in vi mode
     if test "$fish_key_bindings" = fish_vi_key_bindings

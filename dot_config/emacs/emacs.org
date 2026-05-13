@@ -4163,6 +4163,7 @@ Finally found a package that lets org tables horizontally scroll while leaving t
   :custom
   (vterm-max-scrollback 10000)
   (vterm-always-compile-module t)
+  (vterm-buffer-name-string "%s")
 
   :bind
   (:repeat-map vterm-prompt-repeat-map
