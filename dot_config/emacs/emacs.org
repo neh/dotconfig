@@ -5911,7 +5911,9 @@ This function can be used as the :sort key of
       rg-args
       ))
 
-  (advice-add 'deadgrep--arguments :filter-return #'my/deadgrep--include-args)
+  ;; leaving this here for now, this breaks, but is also not needed now that
+  ;; chezmoi manages the config and .config is not a git repo
+  ;;(advice-add 'deadgrep--arguments :filter-return #'my/deadgrep--include-args)
   )
 #+end_src
 
