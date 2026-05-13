@@ -1531,7 +1531,9 @@ function fish_prompt --description 'Write out the prompt'
             set suffix '#'
         case '*'
             set color_cwd $fish_color_cwd
-            set suffix '  '
+            # the width of the rocket causes wrapping issues with long command lines in emacs/vterm
+            # set suffix ' '
+            set suffix '❯ '
     end
 
     set -l prompt_status
@@ -1542,15 +1544,15 @@ function fish_prompt --description 'Write out the prompt'
     if test $CMD_DURATION
         # Show duration of the last command in seconds
         set duration (echo "$CMD_DURATION 1000" | awk '{printf "%.3fs", $1 / $2}') ' '
-        # echo $duration
     end
 
     if test -x kubectl
         set k8senv ' ⎈' (kubectl config current-context)
     end
 
-    echo -s (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv
-    echo -n -s $prompt_status $duration $suffix " "
+    echo -s ''
+    echo -s $duration (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv
+    echo -n -s $prompt_status $suffix
 end
 #+end_src
 
