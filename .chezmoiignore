@@ -1,0 +1,5 @@
+{{- if eq .chezmoi.os "darwin" }}
+.config/*
+!.config/emacs
+!.config/nhowell.net
+{{- end }}
