@@ -1,4 +1,5 @@
 {{- if eq .chezmoi.os "darwin" }}
+link_niri_services.sh
 .config/*
 !.config/emacs
 !.config/nhowell.net
