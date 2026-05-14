@@ -1,3 +1,20 @@
+{{- if not (lookPath "niri") }}
+link_niri_services.sh
+.config/niri
+.config/waybar
+.config/fuzzel
+.config/mako
+.config/sway*
+{{- end }}
+
+{{- if not (lookPath "zathura") }}
+.config/zathura
+{{- end }}
+
+{{- if not (lookPath "firefox") }}
+.config/tridactyl
+{{- end }}
+
 {{- if eq .chezmoi.os "darwin" }}
 link_niri_services.sh
 .config/*
