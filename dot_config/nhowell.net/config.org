@@ -1551,7 +1551,7 @@ function fish_prompt --description 'Write out the prompt'
     end
 
     echo -s ''
-    echo -s $duration (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv
+    echo -s (fish_mode_prompt2) $duration (set_color $fish_color_user) "$USER" $normal @ (set_color $fish_color_host) (prompt_hostname) $normal ' ' (set_color $color_cwd) (prompt_pwd) $normal (__fish_vcs_prompt) $normal $k8senv
     echo -n -s $prompt_status $suffix
 end
 #+end_src
@@ -1564,8 +1564,10 @@ function fish_title
 end
 #+end_src
 
+Renaming this so that I can place the mode indicator in the main prompt myself.
+
 #+begin_src fish
-function fish_mode_prompt --description "Display my mode indicator for the prompt"
+function fish_mode_prompt2 --description "Display my mode indicator for the prompt"
     # Do nothing if not in vi mode
     if test "$fish_key_bindings" = fish_vi_key_bindings
         or test "$fish_key_bindings" = fish_hybrid_key_bindings
