@@ -1594,6 +1594,12 @@ function fish_mode_prompt2 --description "Display my mode indicator for the prom
 end
 #+end_src
 
+Set the default mode indicator to do nothing to get it out of the way.
+
+#+begin_src fish
+function fish_mode_prompt; end
+#+end_src
+
 *** Fisher
 :PROPERTIES:
 :header-args: :tangle ~/.config/fish/functions/fisher.fish :mkdirp yes
