@@ -581,7 +581,7 @@ docker pull azuresdk/azure-cli-python:latest
 
 * Sway
 :PROPERTIES:
-:header-args: :tangle ~/.config/sway/config :mkdirp yes
+:header-args: :tangle (if (executable-find "sway") "~/.config/sway/config" "no") :mkdirp yes
 :END:
 
 I'm using [[https://github.com/swaywm/sway][Sway]]. I used it before for quite some time, before leaving to use [[https://github.com/paperwm/PaperWM][PaperWM]], a Gnome tiling extension. Unfortunately, Gnome extensions are not the most stable, and don't seem to be a priority for Gnome as a project, so I'm back to Sway for a while to see how I like it now, and if I can get workflows I like. I'm using parts and configuration from the [[https://nwg-piotr.github.io/nwg-shell/][nwg-shell]] project, which is building a nice GTK environment for sway that is reminiscent of Gnome (hopefully in good ways).
@@ -1794,64 +1794,6 @@ function _fisher_now -a elapsed
 end
 #+end_src
 
-** Tilix
-
-#+begin_src json :tangle ~/.config/tilix/schemes/gruvbox-light-hard.json :mkdirp yes
-{
-    "name": "Gruvbox Light Hard",
-    "comment": "Gruvbox Light Scheme (hard contrast)",
-    "use-theme-colors": false,
-    "foreground-color": "#282828",
-    "background-color": "#f9f5d7",
-    "palette": [
-        "#f9f5d7",
-        "#cc241d",
-        "#98971a",
-        "#d79921",
-        "#458588",
-        "#b16286",
-        "#689d6a",
-        "#665c54",
-        "#a89984",
-        "#9d0006",
-        "#79740e",
-        "#b57614",
-        "#076678",
-        "#8f3f71",
-        "#427b58",
-        "#3c3836"
-    ]
-}
-#+end_src
-
-#+begin_src json :tangle ~/.config/tilix/schemes/gruvbox-dark-hard.json :mkdirp yes
-{
-    "name": "Gruvbox Dark Hard",
-    "comment": "Gruvbox Dark Scheme (hard contrast)",
-    "use-theme-colors": false,
-    "foreground-color": "#ebdbb2",
-    "background-color": "#1d2021",
-    "palette": [
-        "#1d2021",
-        "#cc241d",
-        "#98971a",
-        "#d79921",
-        "#458588",
-        "#b16286",
-        "#689d6a",
-        "#bdae93",
-        "#7c6f64",
-        "#fb4934",
-        "#b8bb26",
-        "#fabd2f",
-        "#83a598",
-        "#d3869b",
-        "#8ec07c",
-        "#ebdbb2"
-    ]
-}
-#+end_src
-
 ** tmux
 :properties:
 :header-args: :tangle ~/.tmux.conf
@@ -1996,9 +1938,3 @@ Startup commands.
 #+begin_src conf
 new-session -s main
 #+end_src
-
-* Old Config
-:PROPERTIES:
-:VISIBILITY: folded
-:END:
-Some configuration for tools that I don't really use any more and want out of the way, but want to keep around.
