@@ -3,6 +3,10 @@
         "format": "{:%a %b %e  <b>%H:%M</b>}",
         "format-alt": "{:%Y-%m-%d}"
     },
+    "custom/clock": {
+        "exec": "date '+%a %b %e  %H:%M'",
+        "interval": 10
+    },
     "tray": {
         "spacing": 10
     },
