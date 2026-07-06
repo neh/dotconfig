@@ -465,8 +465,8 @@ binds {
     Mod+Up    { focus-window-or-workspace-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
-    Mod+N     { focus-window-or-workspace-down; }
-    Mod+T     { focus-window-or-workspace-up; }
+    Mod+T     { focus-window-or-workspace-down; }
+    Mod+N     { focus-window-or-workspace-up; }
     Mod+S     { focus-column-right; }
 
     Mod+Shift+Left  { move-column-left; }
@@ -474,8 +474,8 @@ binds {
     Mod+Shift+Up    { move-window-up-or-to-workspace-up; }
     Mod+Shift+Right { move-column-right; }
     Mod+Shift+H     { move-column-left; }
-    Mod+Shift+N     { move-window-down-or-to-workspace-down; }
-    Mod+Shift+T     { move-window-up-or-to-workspace-up; }
+    Mod+Shift+T     { move-window-down-or-to-workspace-down; }
+    Mod+Shift+N     { move-window-up-or-to-workspace-up; }
     Mod+Shift+S     { move-column-right; }
 
     // Alternative commands that move across workspaces when reaching
@@ -495,8 +495,8 @@ binds {
     Mod+Ctrl+Up    { focus-monitor-up; }
     Mod+Ctrl+Right { focus-monitor-right; }
     Mod+Ctrl+H     { focus-monitor-left; }
-    Mod+Ctrl+N     { focus-monitor-down; }
-    Mod+Ctrl+T     { focus-monitor-up; }
+    Mod+Ctrl+T     { focus-monitor-down; }
+    Mod+Ctrl+N     { focus-monitor-up; }
     Mod+Ctrl+S     { focus-monitor-right; }
 
     Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
@@ -504,8 +504,8 @@ binds {
     Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
     Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+N     { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+T     { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+T     { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+N     { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+S     { move-column-to-monitor-right; }
 
     // Alternatively, there are commands to move just a single window:
@@ -525,8 +525,8 @@ binds {
     // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
     // ...
 
-    Mod+Shift+P         { move-workspace-down; }
-    Mod+Shift+G         { move-workspace-up; }
+    Mod+Shift+G         { move-workspace-down; }
+    Mod+Shift+P         { move-workspace-up; }
 
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
