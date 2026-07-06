@@ -878,8 +878,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (hel-keymap-global-set :state 'normal
     "j" nil
 
-    "t" #'hel-previous-line
-    "n" #'hel-next-line
+    "n" #'hel-previous-line
+    "t" #'hel-next-line
     "s" #'hel-forward-char
 
     "g m g" #'my/global-vterm-toggle
@@ -887,8 +887,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g m p" #'my/project-vterm-toggle
     "g m P" #'my/project-vterm-toggle-cd
 
-    "g t" #'hel-avy-previous-line
-    "g n" #'hel-avy-next-line
+    "g n" #'hel-avy-previous-line
+    "g t" #'hel-avy-next-line
     "g s" #'hel-end-of-line-command
 
     "g j" #'dired-jump
@@ -928,20 +928,20 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
     "w"   #'other-window
     "h"   #'hel-window-left
-    "n"   #'hel-window-down
-    "t"   #'hel-window-up
+    "t"   #'hel-window-down
+    "n"   #'hel-window-up
     "s"   #'hel-window-right
 
     "H"   #'hel-move-window-left
-    "N"   #'hel-move-window-down
-    "T"   #'hel-move-window-up
+    "T"   #'hel-move-window-down
+    "N"   #'hel-move-window-up
     "S"   #'hel-move-window-right
 
     ;; Duplicate all keys with ctrl prefix.
     "C-w" #'other-window
     "C-h" #'hel-window-left
-    "C-n" #'hel-window-down
-    "C-t" #'hel-window-up
+    "C-t" #'hel-window-down
+    "C-n" #'hel-window-up
     "C-s" #'hel-window-right
     )
 
@@ -1249,10 +1249,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
 
   :bind
   (:map vertico-map
-   ("C-n" . vertico-next)
-   ("C-t" . vertico-previous)
-   ("C-S-n" . vertico-next-group)
-   ("C-S-t" . vertico-previous-group)
+   ("C-t" . vertico-next)
+   ("C-n" . vertico-previous)
+   ("C-S-t" . vertico-next-group)
+   ("C-S-n" . vertico-previous-group)
    ("C-S-<down>" . vertico-next-group)
    ("C-S-<up>" . vertico-previous-group)
    ("<backtab>" . vertico-insert)))
@@ -1328,10 +1328,10 @@ Let's start with vertico, as it's the interface to most of the rest here. I trie
   :straight nil
   :bind
   (:map vertico-reverse-map
-   ("C-n" . vertico-next)
-   ("C-t" . vertico-previous)
-   ("C-S-n" . vertico-next-group)
-   ("C-S-t" . vertico-previous-group)))
+   ("C-t" . vertico-next)
+   ("C-n" . vertico-previous)
+   ("C-S-t" . vertico-next-group)
+   ("C-S-n" . vertico-previous-group)))
 #+end_src
 
 ** Orderless
@@ -1633,8 +1633,8 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
   :bind
   (:map corfu-map
-   ("C-n" . corfu-next)
-   ("C-t" . corfu-previous)
+   ("C-t" . corfu-next)
+   ("C-n" . corfu-previous)
 
    ("M-m" . corfu-move-to-minibuffer))
 
@@ -5886,8 +5886,8 @@ This function can be used as the :sort key of
    ("R" . my/deadgrep-here)
 
    :map deadgrep-mode-map
-   ("M-t" . deadgrep-backward-match)
-   ("M-n" . deadgrep-forward-match)
+   ("M-n" . deadgrep-backward-match)
+   ("M-t" . deadgrep-forward-match)
    ("M-<up>" . deadgrep-backward-match)
    ("M-<down>" . deadgrep-forward-match)
    ("M-h" . deadgrep-backward-filename)
