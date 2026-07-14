@@ -413,7 +413,7 @@ I view man pages in emacs sometimes, and want a fixed width for them.
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref emacs-custom
-(line-spacing 0.2)
+;;(line-spacing 0.2)
 #+end_src
 
 How to make display buffer names.
@@ -627,7 +627,8 @@ Change global text sizes with this function. This is the function I bind to a ke
                :default-weight normal
                :fixed-pitch-family ,my/fixed-font-name
                :variable-pitch-family ,my/variable-font-name
-               :line-spacing 0.2)))))
+               ;; :line-spacing 0.2
+                )))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -845,7 +846,8 @@ And here’s the function where I collect my tweaks to the theme and set up font
   (unless my/first-frame-created
     (setq my/first-frame-created t)
     (message "Applying first frame tweaks")
-    <<first-frame-tweaks>>))
+    <<first-frame-tweaks>>
+    ))
 #+end_src
 
 * Keybindings
@@ -864,17 +866,18 @@ And here’s the function where I collect my tweaks to the theme and set up font
 (use-package pcre2el)
 (use-package hel
   :straight (:host github
-             :repo "anuvyklack/hel"
-             :files (:defaults "extensions/**/*.el"))
+             :repo "anuvyklack/hel")
   :after (avy)
   :hook (after-init . hel-mode)
+  :custom-face
+  (hel-normal-state-main-cursor ((t (:background "red"))))
+  (hel-insert-state-main-cursor ((t (:background "red"))))
   :custom
-  (hel-normal-state-cursor '((bar . 4) "red"))
-  (hel-insert-state-cursor '(box "red"))
-  (hel-motion-state-cursor '(hbar . 4))
+  (hel-normal-state-cursor-type '(bar . 4))
   :config
   (keymap-set mode-specific-map "s" search-map)
 
+  ;; figure out bindings for hel mark ring options (also consult ones)
   (hel-keymap-global-set :state 'normal
     "j" nil
 
@@ -944,10 +947,17 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "C-n" #'hel-window-up
     "C-s" #'hel-window-right
     )
+  )
 
-  (with-eval-after-load 'vterm
-    (require 'hel-vterm))
-  (require 'hel-leader))
+(use-package hel-leader
+  :straight (:host github
+             :repo "anuvyklack/hel-leader")
+  :after hel)
+
+(use-package hel-vterm
+  :straight (:host github
+             :repo "anuvyklack/hel-vterm")
+  :after (vterm hel))
 #+end_src
 
 * Base2
@@ -3741,7 +3751,7 @@ current window, as a ratio between 0 and 1.")
 #+begin_src emacs-lisp
 (use-package which-key
   :custom
-  (which-key-popup-type 'minibuffer)
+  (which-key-idle-delay 0.6)
   (which-key-separator " ")
   :config
   (which-key-mode t))
