@@ -1633,13 +1633,24 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :commands (consult-jump-project))
 #+end_src
 
-** Corfu
+** Completion
+
+#+begin_src emacs-lisp
+(use-package completion-preview
+  :straight nil
+  :bind
+  (:map completion-preview-active-mode-map
+   ("C-t" . #'completion-preview-next-candidate)
+   ("C-n" . #'completion-preview-prev-candidate))
+  :config
+  (global-completion-preview-mode t))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package corfu
   :straight (:host github
-           :repo "minad/corfu"
-           :files (:defaults "extensions/*"))
+             :repo "minad/corfu"
+             :files (:defaults "extensions/*"))
 
   :bind
   (:map corfu-map
@@ -1651,34 +1662,32 @@ Consult takes over for a lot of what counsel did, as well as swiper.
   :init
   (defun corfu-move-to-minibuffer ()
     (interactive)
-    (let ((completion-extra-properties corfu--extra)
-          completion-cycle-threshold completion-cycling)
-      (apply #'consult-completion-in-region completion-in-region--data)))
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+         (consult-completion-in-region beg end table pred)))))
 
   (global-corfu-mode t)
 
   :config
-  (require 'corfu-popupinfo)
-  (setq corfu-popupinfo-delay nil)
-  (set-face-attribute 'corfu-popupinfo nil :height 1.0)
-  (corfu-popupinfo-mode t))
+  (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+  (corfu-history-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package kind-icon
-  :after  corfu
-  :custom
-  (kind-icon-default-face 'corfu-default)
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+(use-package nerd-icons-corfu
+  :after (corfu)
+  :commands (nerd-icons-corfu-formatter)
+  :init
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 
 #+begin_src emacs-lisp
 (use-package cape
   :after corfu
   :commands (cape-dabbrev
-             cape-file
-             cape-company-to-capf)
+             cape-file)
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
@@ -5257,8 +5266,11 @@ Try out =org-noter=.
   :commands (goggles-mode))
 #+end_src
 
+Disabling this one temporarily since I wasn't using it much, and I'm giving TAB over to corfu or other completion for the time being to experiment.
+
 #+begin_src emacs-lisp
 (use-package tab-jump-out
+  :disabled t
   :config
   (tab-jump-out-global-mode t))
 #+end_src
