@@ -1685,12 +1685,9 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package cape
-  :after corfu
-  :commands (cape-dabbrev
-             cape-file)
   :init
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file))
 #+end_src
 
 ** Avy
