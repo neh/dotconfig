@@ -4171,6 +4171,16 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package ghostel
+  :commands (ghostel)
+  :config
+  (let ((fish (executable-find "fish")))
+    (if fish
+        (setopt ghostel-shell fish)))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package vterm
   :defer 1
   :commands (vterm
@@ -4670,6 +4680,13 @@ Handy live filtering of dired buffers.
 #+begin_src emacs-lisp
 (use-package dired-open-with
   :commands (dired-open-with))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dired-preview
+  :commands (dired-preview-mode)
+  :custom
+  (dired-preview-delay 0.4))
 #+end_src
 
 * Hydra
