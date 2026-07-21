@@ -1045,6 +1045,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 (use-package help
   :straight nil
   :custom
+  (describe-bindings-outline-rules '((match-regexp . "Key translations\\|.*Minor Mode Bindings")))
   (help-window-select t))
 
 (use-package helpful
