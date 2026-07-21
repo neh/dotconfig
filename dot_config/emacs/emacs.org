@@ -6298,7 +6298,7 @@ the buffer works like a pager."
     (scroll-lock-mode -1)
     (internal-show-cursor nil t)))
 
-(add-hook 'elfeed-show-mode-hook #'hide-cursor-mode-enable)
+;;(add-hook 'elfeed-show-mode-hook #'hide-cursor-mode-enable)
 
 (defun hide-cursor-mode-enable ()
   (hide-cursor-mode 1)
