@@ -967,9 +967,7 @@ Not sure where to put everything yet, so this section is a grab bag of stuff tha
 #+begin_src emacs-lisp
 (use-package bookmark
   :demand t
-  :straight nil
-  :custom
-  (bookmark-fontify nil))
+  :straight nil)
 
 (use-package saveplace
   :demand t
