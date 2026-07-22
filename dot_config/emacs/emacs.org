@@ -6158,6 +6158,11 @@ This function can be used as the :sort key of
 #+end_src
 
 #+begin_src emacs-lisp
+(use-package markdown-indent-mode
+  :hook (markdown-mode . markdown-indent-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package hcl-mode
   :commands hcl-mode)
 

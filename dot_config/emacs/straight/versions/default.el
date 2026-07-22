@@ -140,6 +140,7 @@
  ("major-mode-hydra.el" . "2494d71e24b61c1f5ef2dc17885e2f65bf98b3b2")
  ("map" . "f02ecaffea870254be1be76d585d45b77e4eafca")
  ("marginalia" . "0d08fbea0f1182627891240780081ba528c1348b")
+ ("markdown-indent-mode" . "42d61cdc70eb5d611fd768321252d5dcd3b0f0de")
  ("markdown-mode" . "92802fae9ebbc8c2e4c281c06dcdbd74b8bca80e")
  ("mastodon.el" . "3c00418bfbb13f450551c28a97f8870e8ce3fef9")
  ("melpa" . "0a71915fff01c8de0b0accc9a787d64cc1b588f1")
