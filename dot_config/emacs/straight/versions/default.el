@@ -130,7 +130,7 @@
  ("kubedoc.el" . "76fda90b68a7724b02c7c089a8f0deaf36705cf6")
  ("kubel" . "e0138bf95583fd525e4d4cc17c4bc5ba884c3af9")
  ("let-alist" . "0652f1c1388b112894bc130351956df5a0838ccf")
- ("lin" . "ee823853d15e5a1eb355ee35620903156d56fc26")
+ ("lin" . "c16b7d061396c53decd2d8e2c6e90a201ac61bfb")
  ("link-hint.el" . "8fda5dcb9caff5a3c49d22b82e570ac9e29af7dd")
  ("literate-calc-mode.el" . "bdfdb6e526cdcf987ecded3bd9032990e5be1236")
  ("llama" . "2a89ba755b0459914a44b1ffa793e57f759a5b85")
