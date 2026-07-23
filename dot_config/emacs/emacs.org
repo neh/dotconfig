@@ -901,7 +901,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g p" #'disproject-dispatch
     "g RET" #'consult-buffer
 
-    "r" #'hel-select-regex
+    "r" #'hel-select-in-selections
 
     "L" #'hel-search-previous
     "l" #'hel-search-next
