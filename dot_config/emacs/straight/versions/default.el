@@ -239,7 +239,7 @@
  ("ultra-scroll" . "08758c6772c5fbce54fb74fb5cce080b6425c6ce")
  ("vertico" . "c9ffb9532eacff7f38d94d51e1914a1e948d5066")
  ("visual-fill-column" . "e1be9a1545157d24454d950c0ac79553c540edb7")
- ("vterm-toggle" . "81d031f153c5fa656c744cd518b7d54c54506706")
+ ("vterm-toggle" . "06cb4f3c565e46470a3c4505c11e26066d869715")
  ("with-editor" . "902b4d572af2c2f36060da01e3c33d194cdec32b")
  ("x509-mode" . "02e62ebd857946de629e45bff6a7de533f9022bc")
  ("xgqt-elisp-lib-websearch" . "4992c22d23c46495da69d7e6c4e18edc952f1bc7")
