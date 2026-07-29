@@ -1566,6 +1566,7 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    :map search-map
    ("f" . consult-find)
    ("g" . consult-ripgrep)
+   ("s" . consult-ripgrep)
    ("v" . consult-git-grep)
 
    :repeat-map buffer-switch-repeat-map
@@ -1896,9 +1897,12 @@ Trying out some nicer mouse navigation.
 #+begin_src emacs-lisp
 (use-package disproject
   :after (project)
-  :bind (:map ctl-x-map
-         ("p" . disproject-dispatch)
-         ("C-p" . disproject-dispatch)))
+  :bind
+  (:map ctl-x-map
+   ("p" . disproject-dispatch)
+   ("C-p" . disproject-dispatch))
+  (:map mode-specific-map
+   ("p" . disproject-dispatch)))
 #+end_src
 
 * Git

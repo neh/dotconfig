@@ -99,7 +99,7 @@
  ("fontaine" . "df0eb05a0bcef3c5057ef8ff8d75c5e07b00dae4")
  ("forge" . "9628f76740aec9270e9fb31457ff4cb38d9f3f16")
  ("gcode-mode.el" . "a0423aab9aba9f2af8600809bcb1b927fa188d1d")
- ("ghostel" . "5eea3b6473924dccdc8fafc2c4386022629fa7c2")
+ ("ghostel" . "f87c7ee794c34d4e100b229d49f07b89d0fec840")
  ("ghub" . "21e042438537bf2bbfdd2d25a58f5ab5c799a8f6")
  ("git-link" . "12caebc0982d3401a0b74ccddc2d5a651122de8a")
  ("gnu-elpa-mirror" . "1a75d552f3501e228e4390e71dc709d1b391dfdc")
