@@ -1188,34 +1188,38 @@ Use the fish user key bindings function to load the default vi bindings and then
 
 #+begin_src fish :tangle ~/.config/fish/functions/fish_user_key_bindings.fish :mkdirp yes
 function fish_user_key_bindings
-    fish_vi_key_bindings
+    if set -q INSIDE_EMACS
+        fish_default_key_bindings
+    else
+        fish_vi_key_bindings
 
-    bind --user -M default s 'fish_vi_run_count forward-char'
-    bind --user -M default t 'fish_vi_run_count up-or-search'
-    bind --user -M default n 'fish_vi_run_count down-or-search'
+        bind --user -M default s 'fish_vi_run_count forward-char'
+        bind --user -M default t 'fish_vi_run_count up-or-search'
+        bind --user -M default n 'fish_vi_run_count down-or-search'
 
-    bind --user -M operator s 'fish_vi_exec_motion forward-char'
-    bind --user -M operator t 'fish_vi_exec_motion up-line'
-    bind --user -M operator n 'fish_vi_exec_motion down-line'
+        bind --user -M operator s 'fish_vi_exec_motion forward-char'
+        bind --user -M operator t 'fish_vi_exec_motion up-line'
+        bind --user -M operator n 'fish_vi_exec_motion down-line'
 
-    bind --user -M operator k --sets-mode k ''
-    bind --user -M operator K --sets-mode K ''
+        bind --user -M operator k --sets-mode k ''
+        bind --user -M operator K --sets-mode K ''
 
-    bind --user -M k '' get-key 'fish_vi_exec_motion commandline --forward-jump-till=$fish_key' 'set -eg fish_key'
-    bind --user -M K '' get-key 'fish_vi_exec_motion commandline --backward-jump-till=$fish_key' 'set -eg fish_key'
+        bind --user -M k '' get-key 'fish_vi_exec_motion commandline --forward-jump-till=$fish_key' 'set -eg fish_key'
+        bind --user -M K '' get-key 'fish_vi_exec_motion commandline --backward-jump-till=$fish_key' 'set -eg fish_key'
 
-    bind --erase --preset -m insert s
-    bind --erase --preset -m insert S
+        bind --erase --preset -m insert s
+        bind --erase --preset -m insert S
 
-    bind --user k forward-jump-till
-    bind --user K backward-jump-till
+        bind --user k forward-jump-till
+        bind --user K backward-jump-till
 
-    bind --user -M visual s forward-char
-    bind --user -M visual t up-line
-    bind --user -M visual n down-line
-    bind --user -M visual k forward-jump-till
-    bind --user -M visual K backward-jump-till
-    bind --erase --preset -M visual -m insert s
+        bind --user -M visual s forward-char
+        bind --user -M visual t up-line
+        bind --user -M visual n down-line
+        bind --user -M visual k forward-jump-till
+        bind --user -M visual K backward-jump-till
+        bind --erase --preset -M visual -m insert s
+    end
 end
 #+end_src
 
