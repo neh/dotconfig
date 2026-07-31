@@ -1191,12 +1191,12 @@ function fish_user_key_bindings
     if test "$fish_key_bindings" = fish_vi_key_bindings
         or test "$fish_key_bindings" = fish_hybrid_key_bindings
         bind --user -M default s 'fish_vi_run_count forward-char'
-        bind --user -M default t 'fish_vi_run_count up-or-search'
-        bind --user -M default n 'fish_vi_run_count down-or-search'
+        bind --user -M default n 'fish_vi_run_count up-or-search'
+        bind --user -M default t 'fish_vi_run_count down-or-search'
 
         bind --user -M operator s 'fish_vi_exec_motion forward-char'
-        bind --user -M operator t 'fish_vi_exec_motion up-line'
-        bind --user -M operator n 'fish_vi_exec_motion down-line'
+        bind --user -M operator n 'fish_vi_exec_motion up-line'
+        bind --user -M operator t 'fish_vi_exec_motion down-line'
 
         bind --user -M operator k --sets-mode k ''
         bind --user -M operator K --sets-mode K ''
@@ -1211,8 +1211,8 @@ function fish_user_key_bindings
         bind --user K backward-jump-till
 
         bind --user -M visual s forward-char
-        bind --user -M visual t up-line
-        bind --user -M visual n down-line
+        bind --user -M visual n up-line
+        bind --user -M visual t down-line
         bind --user -M visual k forward-jump-till
         bind --user -M visual K backward-jump-till
         bind --erase --preset -M visual -m insert s
