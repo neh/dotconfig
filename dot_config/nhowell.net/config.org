@@ -1188,11 +1188,8 @@ Use the fish user key bindings function to load the default vi bindings and then
 
 #+begin_src fish :tangle ~/.config/fish/functions/fish_user_key_bindings.fish :mkdirp yes
 function fish_user_key_bindings
-    if set -q INSIDE_EMACS
-        fish_default_key_bindings
-    else
-        fish_vi_key_bindings
-
+    if test "$fish_key_bindings" = fish_vi_key_bindings
+        or test "$fish_key_bindings" = fish_hybrid_key_bindings
         bind --user -M default s 'fish_vi_run_count forward-char'
         bind --user -M default t 'fish_vi_run_count up-or-search'
         bind --user -M default n 'fish_vi_run_count down-or-search'
