@@ -861,6 +861,45 @@ And here’s the function where I collect my tweaks to the theme and set up font
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
+#+name: keybindings
+| command             | name    | mode-specific-map | search-map | my/notes-map | terminals-map |
+|---------------------+---------+-------------------+------------+--------------+---------------|
+| disproject-dispatch | project | p                 |            |              |               |
+| find-file-at-point  | file    | f                 |            |              |               |
+| dired-jump          | dired   | d                 |            |              |               |
+| consult-buffer      | buffer  | b                 |            |              |               |
+| consult-imenu       |         |                   |            |              |               |
+| consult-line        |         |                   |            |              |               |
+| consult-outline     |         |                   |            |              |               |
+| consult-org-heading |         |                   |            |              |               |
+|                     |         |                   |            |              |               |
+| search-map          | search  | s                 |            |              |               |
+| consult-ripgrep     | grep    |                   | s          |              |               |
+| my/notes-map        | notes   | n                 |            |              |               |
+| consult-notes       |         |                   |            |              |               |
+| terminals-map?      |         |                   |            |              |               |
+| g prefix access     |         |                   |            |              |               |
+
+#+begin_src emacs-lisp :var bindings=keybindings :colnames no
+(let* ((headers (car bindings))
+       (map-names (cddr headers))
+       (rows (cdr bindings)))
+  (dolist (row rows)
+    (let* ((cmd-sym (intern (car row)))
+           (name (cadr row))
+           (command-or-keymap (or (ignore-errors (symbol-value cmd-sym)) cmd-sym))
+           (defn (if (string-empty-p name)
+                     command-or-keymap
+                   (cons name command-or-keymap))))
+      (dotimes (i (length map-names))
+        (let ((key-str (nth i (cddr row))))
+          (when (not (string-empty-p key-str))
+            (message "setting %s to %s in %s as %s" key-str cmd-sym (nth i map-names) name)
+            (keymap-set (symbol-value (intern (nth i map-names)))
+                        key-str
+                        defn)))))))
+#+end_src
+
 ** Hel
 #+begin_src emacs-lisp
 (use-package pcre2el)
@@ -894,12 +933,9 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "g t" #'hel-avy-next-line
     "g s" #'hel-end-of-line-command
 
-    "g j" #'dired-jump
     "g k" #'link-hint-open-link
     "g -" #'consult-line
     "g o" #'consult-imenu
-    "g p" #'disproject-dispatch
-    "g RET" #'consult-buffer
 
     "r" #'hel-select-in-selections
 
@@ -1556,17 +1592,12 @@ Consult takes over for a lot of what counsel did, as well as swiper.
    ("C-h i" . consult-info)
    ("C-h C-m" . consult-man)
 
-   :map ctl-x-map
-   ("C-b" . consult-buffer)
-
-   :map mode-specific-map
-   ("iy" . consult-yank-pop)
-   ("jo" . consult-org-heading)
+   ;; :map mode-specific-map
+   ;; ("iy" . consult-yank-pop)
+   ;; ("jo" . consult-org-heading)
 
    :map search-map
    ("f" . consult-find)
-   ("g" . consult-ripgrep)
-   ("s" . consult-ripgrep)
    ("v" . consult-git-grep)
 
    :repeat-map buffer-switch-repeat-map
@@ -1697,13 +1728,13 @@ Avy is a really handy way to jump around your visible buffer contents. One aspec
 #+begin_src emacs-lisp
 (use-package avy
   :demand t
-  :bind
-  (:map mode-specific-map
-   ("jj" . avy-goto-char-timer)
-   ("jq" . avy-pop-mark)
-   ("jl" . avy-copy-line)
-   ("jr" . avy-copy-region)
-   )
+  ;; :bind
+  ;; (:map mode-specific-map
+  ;;  ("jj" . avy-goto-char-timer)
+  ;;  ("jq" . avy-pop-mark)
+  ;;  ("jl" . avy-copy-line)
+  ;;  ("jr" . avy-copy-region)
+  ;;  )
 
   :custom
   (avy-dispatch-alist '((?x . avy-action-kill-move)
@@ -1897,12 +1928,7 @@ Trying out some nicer mouse navigation.
 #+begin_src emacs-lisp
 (use-package disproject
   :after (project)
-  :bind
-  (:map ctl-x-map
-   ("p" . disproject-dispatch)
-   ("C-p" . disproject-dispatch))
-  (:map mode-specific-map
-   ("p" . disproject-dispatch)))
+  :commands (disproject-dispatch))
 #+end_src
 
 * Git
@@ -1918,13 +1944,13 @@ I find that diff-hl does a better job of showing diff information than git-gutte
              diff-hl-update
              diff-hl-magit-pre-refresh
              diff-hl-magit-post-refresh)
-  :bind
-  (:map mode-specific-map
-   ("jh" . diff-hl-next-hunk)
-   :repeat-map diff-hl-repeat-map
-   ("t" . diff-hl-next-hunk)
-   ("n" . diff-hl-previous-hunk)
-   ("s" . diff-hl-stage-current-hunk))
+  ;; :bind
+  ;; (:map mode-specific-map
+  ;;  ("jh" . diff-hl-next-hunk)
+  ;;  :repeat-map diff-hl-repeat-map
+  ;;  ("t" . diff-hl-next-hunk)
+  ;;  ("n" . diff-hl-previous-hunk)
+  ;;  ("s" . diff-hl-stage-current-hunk))
   ;;   "vD" #'diff-hl-mode)
   ;;   "gG" #'diff-at-point-open-and-goto-hunk
   :init
@@ -2746,8 +2772,9 @@ Show the heading of a table when it's scrolled offscreen. Disabling this because
   (:map org-mode-map
    ("C-'" . nil)
    ("C-," . nil)
-   :map mode-specific-map
-   ("a" . org-agenda))
+   ;; :map mode-specific-map
+   ;; ("a" . org-agenda)
+   )
 
   :init
   (defun my/agenda-current-window ()
@@ -2996,13 +3023,13 @@ MimeType=x-scheme-handler/org-protocol;
 #+begin_src emacs-lisp
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
-  :bind
-  (("C-c n n" . denote)
-   ("C-c n r" . denote-rename-file)
-   ("C-c n l" . denote-link)
-   ("C-c n b" . denote-backlinks)
-   ("C-c n d" . denote-dired)
-   ("C-c n g" . denote-grep))
+  ;; :bind
+  ;; (("C-c n n" . denote)
+  ;;  ("C-c n r" . denote-rename-file)
+  ;;  ("C-c n l" . denote-link)
+  ;;  ("C-c n b" . denote-backlinks)
+  ;;  ("C-c n d" . denote-dired)
+  ;;  ("C-c n g" . denote-grep))
   :config
   (setq denote-directory (expand-file-name "~/denotes/"))
 
