@@ -861,24 +861,44 @@ And here’s the function where I collect my tweaks to the theme and set up font
         ((bound-and-true-p evil-mode) (evil-insert))))
 #+end_src
 
+#+begin_src emacs-lisp
+(defvar-keymap my/allonsy-map
+  :doc "My let's go keys.")
+(defvar-keymap my/shells-map
+  :doc "My shells keys.")
+#+end_src
+
 #+name: keybindings
-| command             | name    | mode-specific-map | search-map | my/notes-map | terminals-map |
-|---------------------+---------+-------------------+------------+--------------+---------------|
-| disproject-dispatch | project | p                 |            |              |               |
-| find-file-at-point  | file    | f                 |            |              |               |
-| dired-jump          | dired   | d                 |            |              |               |
-| consult-buffer      | buffer  | b                 |            |              |               |
-| consult-imenu       |         |                   |            |              |               |
-| consult-line        |         |                   |            |              |               |
-| consult-outline     |         |                   |            |              |               |
-| consult-org-heading |         |                   |            |              |               |
-|                     |         |                   |            |              |               |
-| search-map          | search  | s                 |            |              |               |
-| consult-ripgrep     | grep    |                   | s          |              |               |
-| my/notes-map        | notes   | n                 |            |              |               |
-| consult-notes       |         |                   |            |              |               |
-| terminals-map?      |         |                   |            |              |               |
-| g prefix access     |         |                   |            |              |               |
+| command                    | name     | mode-specific-map | search-map | my/notes-map | my/shells-map |
+|----------------------------+----------+-------------------+------------+--------------+---------------|
+| disproject-dispatch        | project  | p                 |            |              |               |
+| find-file-at-point         | file     | f                 |            |              |               |
+| dired-jump                 | dired    | d                 |            |              |               |
+| consult-buffer             | buffers  | b                 |            |              |               |
+|                            |          |                   |            |              |               |
+| my/allonsy-map             | allonsy  | a                 |            |              |               |
+| consult-imenu              |          | a i               |            |              |               |
+| consult-line               |          | a -               |            |              |               |
+| consult-outline            |          | a o               |            |              |               |
+| consult-org-heading        |          | a h               |            |              |               |
+|                            |          |                   |            |              |               |
+| search-map                 | search   | s                 |            |              |               |
+| consult-ripgrep            | grep     |                   | r          |              |               |
+| consult-find               | find     |                   | f          |              |               |
+| deadgrep                   |          |                   | d          |              |               |
+| consult-git-grep           | git      |                   | v          |              |               |
+| consult-git-log-grep       | git logs |                   | L          |              |               |
+|                            |          |                   |            |              |               |
+| my/notes-map               | notes    | n                 |            |              |               |
+| consult-notes              |          |                   |            |              |               |
+|                            |          |                   |            |              |               |
+| my/shells-map              | shells   | t                 |            |              |               |
+| my/global-vterm-toggle     |          | t g               |            |              |               |
+| my/global-vterm-toggle-cd  |          | t G               |            |              |               |
+| my/project-vterm-toggle    |          | t p               |            |              |               |
+| my/project-vterm-toggle-cd |          | t P               |            |              |               |
+|                            |          |                   |            |              |               |
+| g prefix access            |          |                   |            |              |               |
 
 #+begin_src emacs-lisp :var bindings=keybindings :colnames no
 (let* ((headers (car bindings))
@@ -893,7 +913,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
                    (cons name command-or-keymap))))
       (dotimes (i (length map-names))
         (let ((key-str (nth i (cddr row))))
-          (when (not (string-empty-p key-str))
+          (unless (string-empty-p key-str)
             (message "setting %s to %s in %s as %s" key-str cmd-sym (nth i map-names) name)
             (keymap-set (symbol-value (intern (nth i map-names)))
                         key-str
@@ -924,18 +944,12 @@ And here’s the function where I collect my tweaks to the theme and set up font
     "t" #'hel-next-line
     "s" #'hel-forward-char
 
-    "g m g" #'my/global-vterm-toggle
-    "g m G" #'my/global-vterm-toggle-cd
-    "g m p" #'my/project-vterm-toggle
-    "g m P" #'my/project-vterm-toggle-cd
-
     "g n" #'hel-avy-previous-line
     "g t" #'hel-avy-next-line
     "g s" #'hel-end-of-line-command
 
     "g k" #'link-hint-open-link
-    "g -" #'consult-line
-    "g o" #'consult-imenu
+    ;; "g o" #'consult-imenu
 
     "r" #'hel-select-in-selections
 
@@ -1587,6 +1601,14 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
 #+begin_src emacs-lisp
 (use-package consult
+  :commands (consult-buffer
+             consult-find
+             consult-git-grep
+             consult-ripgrep
+             consult-line
+             consult-imenu
+             consult-outline
+             consult-org-heading)
   :bind
   (([remap goto-line] . consult-goto-line)
    ("C-h i" . consult-info)
@@ -1594,11 +1616,6 @@ Consult takes over for a lot of what counsel did, as well as swiper.
 
    ;; :map mode-specific-map
    ;; ("iy" . consult-yank-pop)
-   ;; ("jo" . consult-org-heading)
-
-   :map search-map
-   ("f" . consult-find)
-   ("v" . consult-git-grep)
 
    :repeat-map buffer-switch-repeat-map
    :exit
@@ -5924,6 +5941,7 @@ This function can be used as the :sort key of
 
 #+begin_src emacs-lisp
 (use-package deadgrep
+  :commands (deadgrep)
   :init
   (defun my/deadgrep-context-adjust (amount)
     (let* ((old-before (or (car deadgrep--context) 0))
@@ -5947,11 +5965,7 @@ This function can be used as the :sort key of
     (deadgrep (deadgrep--read-search-term) default-directory))
 
   :bind
-  (:map search-map
-   ("r" . deadgrep)
-   ("R" . my/deadgrep-here)
-
-   :map deadgrep-mode-map
+  (:map deadgrep-mode-map
    ("M-n" . deadgrep-backward-match)
    ("M-t" . deadgrep-forward-match)
    ("M-<up>" . deadgrep-backward-match)
