@@ -877,10 +877,10 @@ And here’s the function where I collect my tweaks to the theme and set up font
 | consult-buffer             | buffers  | b                 |            |              |               |
 |                            |          |                   |            |              |               |
 | my/allonsy-map             | allonsy  | a                 |            |              |               |
-| consult-imenu              |          | a i               |            |              |               |
-| consult-line               |          | a -               |            |              |               |
-| consult-outline            |          | a o               |            |              |               |
-| consult-org-heading        |          | a h               |            |              |               |
+| consult-imenu              | imenu    | a i               |            |              |               |
+| consult-line               | line     | a -               |            |              |               |
+| consult-outline            | outline  | a o               |            |              |               |
+| consult-org-heading        | heading  | a h               |            |              |               |
 |                            |          |                   |            |              |               |
 | search-map                 | search   | s                 |            |              |               |
 | consult-ripgrep            | grep     |                   | r          |              |               |
