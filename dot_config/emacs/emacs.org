@@ -869,36 +869,36 @@ And here’s the function where I collect my tweaks to the theme and set up font
 #+end_src
 
 #+name: keybindings
-| command                    | name     | mode-specific-map | search-map | my/notes-map | my/shells-map |
-|----------------------------+----------+-------------------+------------+--------------+---------------|
-| disproject-dispatch        | project  | p                 |            |              |               |
-| find-file-at-point         | file     | f                 |            |              |               |
-| dired-jump                 | dired    | d                 |            |              |               |
-| consult-buffer             | buffers  | b                 |            |              |               |
-|                            |          |                   |            |              |               |
-| my/allonsy-map             | allonsy  | a                 |            |              |               |
-| consult-imenu              | imenu    | a i               |            |              |               |
-| consult-line               | line     | a -               |            |              |               |
-| consult-outline            | outline  | a o               |            |              |               |
-| consult-org-heading        | heading  | a h               |            |              |               |
-|                            |          |                   |            |              |               |
-| search-map                 | search   | s                 |            |              |               |
-| consult-ripgrep            | grep     |                   | r          |              |               |
-| consult-find               | find     |                   | f          |              |               |
-| deadgrep                   |          |                   | d          |              |               |
-| consult-git-grep           | git      |                   | v          |              |               |
-| consult-git-log-grep       | git logs |                   | L          |              |               |
-|                            |          |                   |            |              |               |
-| my/notes-map               | notes    | n                 |            |              |               |
-| consult-notes              |          |                   |            |              |               |
-|                            |          |                   |            |              |               |
-| my/shells-map              | shells   | t                 |            |              |               |
-| my/global-vterm-toggle     |          | t g               |            |              |               |
-| my/global-vterm-toggle-cd  |          | t G               |            |              |               |
-| my/project-vterm-toggle    |          | t p               |            |              |               |
-| my/project-vterm-toggle-cd |          | t P               |            |              |               |
-|                            |          |                   |            |              |               |
-| g prefix access            |          |                   |            |              |               |
+| command                    | name     | mode-specific-map | ctl-x-map | search-map |
+|----------------------------+----------+-------------------+-----------+------------|
+| disproject-dispatch        | project  | p                 |           |            |
+| find-file-at-point         | file     | f                 |           |            |
+| dired-jump                 | dired    | d                 |           |            |
+| consult-buffer             | buffers  | b                 |           |            |
+|                            |          |                   |           |            |
+| my/allonsy-map             | allonsy  | a                 |           |            |
+| consult-imenu              | imenu    | a i               |           |            |
+| consult-line               | line     | a -               |           |            |
+| consult-outline            | outline  | a o               |           |            |
+| consult-org-heading        | heading  | a h               |           |            |
+|                            |          |                   |           |            |
+| search-map                 | search   | s                 |           |            |
+| consult-ripgrep            | grep     |                   |           | r          |
+| consult-find               | find     |                   |           | f          |
+| deadgrep                   |          |                   |           | d          |
+| consult-git-grep           | git      |                   |           | v          |
+| consult-git-log-grep       | git logs |                   |           | L          |
+|                            |          |                   |           |            |
+| my/notes-map               | notes    | n                 |           |            |
+| consult-notes              |          |                   |           |            |
+|                            |          |                   |           |            |
+| my/shells-map              | shells   | t                 |           |            |
+| my/global-vterm-toggle     |          | t g               |           |            |
+| my/global-vterm-toggle-cd  |          | t G               |           |            |
+| my/project-vterm-toggle    |          | t p               |           |            |
+| my/project-vterm-toggle-cd |          | t P               |           |            |
+|                            |          |                   |           |            |
+| g prefix access            |          |                   |           |            |
 
 #+begin_src emacs-lisp :var bindings=keybindings :colnames no
 (let* ((headers (car bindings))
