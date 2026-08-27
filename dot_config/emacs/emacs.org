@@ -4207,7 +4207,10 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package apheleia
   :config
-  (apheleia-global-mode t))
+  (apheleia-global-mode t)
+  ;; upstream switched to tofu as default, but still using this... for now
+  (setf (alist-get 'terraform-mode apheleia-mode-alist) 'terraform)
+)
 #+end_src
 
 * Shells
