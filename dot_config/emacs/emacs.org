@@ -2,7 +2,7 @@
 #+property: header-args :mkdirp yes :comments no :results silent
 #+startup: showall inlineimages
 
-#+title: My Emacs config file
+#+title: Emacs config
 #+author: Nathan Howell
 #+email: nath@nhowell.net
 
@@ -2546,6 +2546,19 @@ I was looking for a better way to insert src blocks (and other blocks) in org mo
            (t (error "Unprocessable value %s for #'dig-my-grave" value)))))
     (setq last-command-event ?`)
     (call-interactively #'org-self-insert-command)))
+#+end_src
+
+From [[https://bsky.app/profile/joarvarndt.se/post/3mt4rr7s7xk2m][@joarvarndt.se on Bluesky]]
+- not great for tab-bar, takes up a lot of space (potentially, depends on title length)
+
+#+begin_src emacs-lisp
+;; extend to pull roam etc titles?
+(defun my/org-title-to-buffer-name ()
+  (interactive)
+  (when-let ((title (and buffer-file-name
+                         (org-get-title))))
+    (rename-buffer title t)))
+;;(add-hook 'org-mode-hook 'org-title-to-buffer-name)
 #+end_src
 
 ** Options
