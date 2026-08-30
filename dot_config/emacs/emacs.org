@@ -4250,10 +4250,38 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package ghostel
   :commands (ghostel)
+  :hook (ghostel-mode . my/insert-mode)
+  :init
+  (defun my/ghostel-buffer-name-by-title (title)
+    "Return \"TITLE\", or nil when TITLE is nil.
+    A `ghostel-buffer-name-function' that names the buffer after the title."
+    (and title (format "%s" title)))
+
+  :custom
+  (ghostel-buffer-name-function #'my/ghostel-buffer-name-by-title)
+
+  :bind
+  (:map ghostel-mode-map
+   ("C-'" . mode-line-other-buffer))
+
   :config
   (let ((fish (executable-find "fish")))
-    (if fish
-        (setopt ghostel-shell fish)))
+    (when fish
+      (setopt ghostel-shell fish)))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package consult-ghostel
+  :hook (after-init . consult-ghostel-mode)
+  :commands (consult-ghostel
+             consult-ghostel-project
+             consult-ghostel-history)
+  ;; :bind (("C-x m" . consult-ghostel)
+  ;;        :map project-prefix-map
+  ;;        ("m" . consult-ghostel-project)
+  ;;        :map ghostel-semi-char-mode-map
+  ;;        ("C-c h" . consult-ghostel-history))
   )
 #+end_src
 
