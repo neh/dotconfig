@@ -4558,6 +4558,8 @@ any directory proferred by `consult-dir'."
   (dired-kill-when-opening-new-dired-buffer t)
   (dired-use-ls-dired t)
   (dired-async-large-file-warning-threshold 10000000000)
+  (dired-mouse-drag-files t)
+  (dired-auto-revert-buffer t)
 
   :bind
   (:map dired-mode-map
