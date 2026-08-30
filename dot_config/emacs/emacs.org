@@ -518,6 +518,7 @@ Trying out =desktop-mode=, as it seems to do the things I want, which is just sa
 
 (use-package dbus
   :straight nil
+  :if (eq system-type 'gnu/linux)
   :commands (dbus-register-signal
              dbus-call-method-asynchronously)
 
