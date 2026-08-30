@@ -635,6 +635,8 @@ Change global text sizes with this function. This is the function I bind to a ke
 #+begin_src emacs-lisp
 (use-package spacious-padding
   :commands (spacious-padding-mode)
+  :custom
+  (spacious-padding-subtle-frame-lines t)
   :config
   (setq spacious-padding-widths
         '(:internal-border-width 20
