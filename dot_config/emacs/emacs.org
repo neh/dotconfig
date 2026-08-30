@@ -915,7 +915,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
       (dotimes (i (length map-names))
         (let ((key-str (nth i (cddr row))))
           (unless (string-empty-p key-str)
-            (message "setting %s to %s in %s as %s" key-str cmd-sym (nth i map-names) name)
+            ;; (message "setting %s to %s in %s as %s" key-str cmd-sym (nth i map-names) name)
             (keymap-set (symbol-value (intern (nth i map-names)))
                         key-str
                         defn)))))))
@@ -2079,6 +2079,10 @@ Of course, the great magit.
   (setq forge-database-connector 'sqlite-builtin)
   ;; (setq forge-bug-reference-hooks nil)
   )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package magit-annex)
 #+end_src
 
 Handy package to browse to git repo web interfaces.
