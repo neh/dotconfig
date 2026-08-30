@@ -922,10 +922,7 @@ And here’s the function where I collect my tweaks to the theme and set up font
 
 ** Hel
 #+begin_src emacs-lisp
-(use-package pcre2el)
 (use-package hel
-  :straight (:host github
-             :repo "anuvyklack/hel")
   :after (avy)
   :hook (after-init . hel-mode)
   :custom-face
