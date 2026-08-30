@@ -8,7 +8,7 @@
         "niri/window"
     ],
     "modules-center": [
-        "custom/clock"
+        "clock"
     ],
     "modules-right": [
         "cpu",
@@ -42,7 +42,7 @@
         "niri/window"
     ],
     "modules-center": [
-        "custom/clock"
+        "clock"
     ],
     "modules-right": [
         "mpris",
