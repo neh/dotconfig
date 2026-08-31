@@ -3,6 +3,7 @@
 (let ((file-name-handler-alist nil))
   (setq gc-cons-threshold most-positive-fixnum)
   (setq package-enable-at-startup nil
+        user-lisp-auto-scrape nil
         straight-check-for-modifications '(check-on-save))
   
   (defvar bootstrap-version)
@@ -25,8 +26,7 @@
   (straight-use-package 'org)
   (setq straight-use-package-by-default t
         straight-built-in-pseudo-packages '(emacs nadvice python image-mode project)
-        use-package-verbose nil
-        use-package-always-ensure t)
+        use-package-verbose nil)
   (use-package org
     :demand t
     :config

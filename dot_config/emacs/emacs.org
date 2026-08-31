@@ -50,6 +50,7 @@ We set =gc-cons-threshold= to its maximum value, to prevent any garbage collecti
 
 #+begin_src emacs-lisp :tangle no :noweb-ref init-straight
 (setq package-enable-at-startup nil
+      user-lisp-auto-scrape nil
       straight-check-for-modifications '(check-on-save))
 
 (defvar bootstrap-version)
@@ -78,8 +79,7 @@ Adding project to the pseudo packages list here to deal with [[https://github.co
 (straight-use-package 'org)
 (setq straight-use-package-by-default t
       straight-built-in-pseudo-packages '(emacs nadvice python image-mode project)
-      use-package-verbose nil
-      use-package-always-ensure t)
+      use-package-verbose nil)
 #+end_src
 
 Load =org-mode=. This needs to happen early, or emacs will load and use its bundled version of =org-mode=, which is just too old.
