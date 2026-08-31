@@ -2147,7 +2147,9 @@ Handy package to browse to git repo web interfaces.
 
 #+begin_src emacs-lisp
 (use-package majutsu
-  :straight (:host github :repo "0WD0/majutsu"))
+  :straight (:host github :repo "0WD0/majutsu")
+  :hook
+  (majutsu-jjdescription-mode . my/insert-mode))
 #+end_src
 
 * Org
