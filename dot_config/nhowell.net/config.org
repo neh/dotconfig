@@ -1104,7 +1104,7 @@ end
 
 #+begin_src fish
 if type -q direnv
-    eval (direnv hook fish)
+    direnv hook fish | source
 end
 #+end_src
 
