@@ -1308,11 +1308,24 @@ function fish_prompt --description 'Write out the prompt'
 end
 #+end_src
 
+Set the window title to start with the name of the current git repo when in one. Shortens the path from the repo root to the current directory.
+
 #+begin_src fish
 function fish_title
-    hostname
-    echo ":"
-    prompt_pwd
+    set -l git_root (git rev-parse --show-toplevel 2>/dev/null)
+
+    if test -n "$git_root"
+        set -l repo (basename "$git_root")
+        set -l relative (string replace "$git_root/" "" "$PWD")
+
+        if test "$PWD" = "$git_root"
+            echo "$repo"
+        else
+            echo "$repo/"(prompt_pwd "$relative")
+        end
+    else
+        prompt_pwd
+    end
 end
 #+end_src
 
