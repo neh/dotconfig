@@ -2577,8 +2577,8 @@ From [[https://bsky.app/profile/joarvarndt.se/post/3mt4rr7s7xk2m][@joarvarndt.se
 ;; extend to pull roam etc titles?
 (defun my/org-title-to-buffer-name ()
   (interactive)
-  (when-let ((title (and buffer-file-name
-                         (org-get-title))))
+  (when-let* ((title (and buffer-file-name
+                          (org-get-title))))
     (rename-buffer title t)))
 ;;(add-hook 'org-mode-hook 'org-title-to-buffer-name)
 #+end_src
@@ -3241,7 +3241,7 @@ MimeType=x-scheme-handler/org-protocol;
   (defun my/open-node-roam-ref-url ()
     "Open the URL in this node's ROAM_REFS property, if one exists"
     (interactive)
-    (when-let ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
+    (when-let* ((ref-url (org-entry-get-with-inheritance "ROAM_REFS")))
       (browse-url ref-url)))
 
   ;; https://ag91.github.io/blog/2021/03/12/find-org-roam-notes-via-their-relations/
@@ -4136,14 +4136,6 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package jinja2-mode
   :mode (("\\.j2\\'" . jinja2-mode)))
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 'prompt)
-  :config
-  (global-treesit-auto-mode t))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -5722,7 +5714,7 @@ With optional argument FRAME, return the list of buffers of FRAME."
     "Recursively extract buffers from a window state tree."
     (let (buffers)
       (when (listp state)
-        (when-let ((buf (alist-get 'buffer state)))
+        (when-let* ((buf (alist-get 'buffer state)))
           (push (get-buffer (car buf)) buffers))
         (dolist (child (alist-get 'children state))
           (setq buffers (append buffers (my/window-state-get-buffers child)))))
