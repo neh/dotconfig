@@ -1103,6 +1103,12 @@ end
 #+end_src
 
 #+begin_src fish
+if type -q brew
+   eval (brew shellenv)
+end
+#+end_src
+
+#+begin_src fish
 if type -q direnv
     direnv hook fish | source
 end
