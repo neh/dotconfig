@@ -1035,6 +1035,15 @@ WantedBy=default.target
 
 * Terminal
 
+** bash
+I mainly use fish, but need a little bash config here and there.
+
+#+begin_src bash :tangle ~/.bashrc.d/brew
+if [ -x $(which brew) ]; then
+    eval $(brew shellenv)
+fi
+#+end_src
+
 ** fish
 *** Main config
 :PROPERTIES:
