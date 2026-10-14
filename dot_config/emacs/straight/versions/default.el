@@ -238,6 +238,7 @@
  ("treesit-auto" . "016bd286a1ba4628f833a626f8b9d497882ecdf3")
  ("ts.el" . "552936017cfdec89f7fc20c254ae6b37c3f22c5b")
  ("ultra-scroll" . "8aa8e7496b06fd7c3585fcae8275300a77e57730")
+ ("vc-jj" . "ca5b556e863052f34687420130367161f8402880")
  ("vertico" . "ccf98566f1940f96f5b8ba21f4ea9db370a177a4")
  ("visual-fill-column" . "e1be9a1545157d24454d950c0ac79553c540edb7")
  ("vterm-toggle" . "06cb4f3c565e46470a3c4505c11e26066d869715")

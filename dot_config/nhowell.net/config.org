@@ -206,7 +206,7 @@ if [[ $(hostname) == "nathan-edl" ]]; then
 else
     # home
     GTK_THEME_LIGHT='Adwaita'
-    GTK_THEME_DARK='Adwaita-dark'
+    GTK_THEME_DARK='Adwaita:dark'
 fi
 
 SET_TO=$1
@@ -247,7 +247,7 @@ user-login-name
 [Desktop Entry]
 Name=Toggle Dark Mode
 Exec=/home/<<username()>>/.local/bin/dark-toggle
-Icon=settings
+Icon=video-display
 Type=Application
 Terminal=false
 Categories=Utility;
@@ -1122,6 +1122,16 @@ end
 #+begin_src fish :tangle ~/.config/fish/functions/ec.fish
 function ec --description 'emacsclient'
     command emacsclient --create-frame --alternate-editor="emacs" $argv
+end
+#+end_src
+
+When running a shell in emacs with ghostel, this alias gives a quick way to start editing a file from the shell, but in the existing emacs session.
+
+#+begin_src fish :tangle ~/.config/fish/functions/e.fish
+function e --description 'edit in emacs'
+    if set -q INSIDE_EMACS
+        ghostel_cmd find-file $argv
+    end
 end
 #+end_src
 

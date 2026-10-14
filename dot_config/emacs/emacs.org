@@ -872,36 +872,36 @@ And here’s the function where I collect my tweaks to the theme and set up font
 #+end_src
 
 #+name: keybindings
-| command                    | name     | mode-specific-map | ctl-x-map | search-map |
-|----------------------------+----------+-------------------+-----------+------------|
-| disproject-dispatch        | project  | p                 |           |            |
-| find-file                  | file     | f                 |           |            |
-| dired-jump                 | dired    | d                 |           |            |
-| consult-buffer             | buffers  | b                 |           |            |
-|                            |          |                   |           |            |
-| my/allonsy-map             | allonsy  | a                 |           |            |
-| consult-imenu              | imenu    | a i               |           |            |
-| consult-line               | line     | a -               |           |            |
-| consult-outline            | outline  | a o               |           |            |
-| consult-org-heading        | heading  | a h               |           |            |
-|                            |          |                   |           |            |
-| search-map                 | search   | s                 |           |            |
-| consult-ripgrep            | grep     |                   |           | r          |
-| consult-find               | find     |                   |           | f          |
-| deadgrep                   |          |                   |           | d          |
-| consult-git-grep           | git      |                   |           | v          |
-| consult-git-log-grep       | git logs |                   |           | L          |
-|                            |          |                   |           |            |
-| my/notes-map               | notes    | n                 |           |            |
-| consult-notes              |          |                   |           |            |
-|                            |          |                   |           |            |
-| my/shells-map              | shells   | t                 |           |            |
-| my/global-vterm-toggle     |          | t g               |           |            |
-| my/global-vterm-toggle-cd  |          | t G               |           |            |
-| my/project-vterm-toggle    |          | t p               |           |            |
-| my/project-vterm-toggle-cd |          | t P               |           |            |
-|                            |          |                   |           |            |
-| g prefix access            |          |                   |           |            |
+| command                 | name     | mode-specific-map | ctl-x-map | search-map |
+|-------------------------+----------+-------------------+-----------+------------|
+| disproject-dispatch     | project  | p                 |           |            |
+| find-file               | file     | f                 |           |            |
+| dired-jump              | dired    | d                 |           |            |
+| consult-buffer          | buffers  | b                 |           |            |
+|                         |          |                   |           |            |
+| my/allonsy-map          | allonsy  | a                 |           |            |
+| consult-imenu           | imenu    | a i               |           |            |
+| consult-line            | line     | a -               |           |            |
+| consult-outline         | outline  | a o               |           |            |
+| consult-org-heading     | heading  | a h               |           |            |
+|                         |          |                   |           |            |
+| search-map              | search   | u                 |           |            |
+| consult-ripgrep         | grep     |                   |           | r          |
+| consult-find            | find     |                   |           | f          |
+| deadgrep                |          |                   |           | d          |
+| consult-git-grep        | git      |                   |           | v          |
+| consult-git-log-grep    | git logs |                   |           | L          |
+|                         |          |                   |           |            |
+| my/notes-map            | notes    | n                 |           |            |
+| consult-notes           |          |                   |           |            |
+|                         |          |                   |           |            |
+| my/shells-map           | shells   | t                 |           |            |
+| ghostel                 |          | t g               |           |            |
+| my/ghostel-here         |          | t G               |           |            |
+| ghostel-project         |          | t p               |           |            |
+| my/ghostel-project-here |          | t P               |           |            |
+|                         |          |                   |           |            |
+| g prefix access         |          |                   |           |            |
 
 #+begin_src emacs-lisp :var bindings=keybindings :colnames no
 (let* ((headers (car bindings))
@@ -1945,7 +1945,11 @@ Trying out some nicer mouse navigation.
 #+begin_src emacs-lisp
 (use-package disproject
   :after (project)
-  :commands (disproject-dispatch))
+  :commands (disproject-dispatch)
+  :custom
+  (disproject-shell-command #'ghostel-project)
+  :config
+  (setf (alist-get 'JJ disproject-vc-status-commands) #'majutsu))
 #+end_src
 
 * Git
@@ -2150,8 +2154,13 @@ Handy package to browse to git repo web interfaces.
 * Jujutsu
 
 #+begin_src emacs-lisp
+(use-package vc-jj)
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package majutsu
   :straight (:host github :repo "0WD0/majutsu")
+  :commands (majutsu)
   :hook
   (majutsu-jjdescription-mode . my/insert-mode))
 #+end_src
@@ -4250,8 +4259,37 @@ Finally found a package that lets org tables horizontally scroll while leaving t
 #+begin_src emacs-lisp
 (use-package ghostel
   :commands (ghostel)
-  :hook (ghostel-mode . my/insert-mode)
+  :hook ((ghostel-mode . my/insert-mode)
+         (after-init . ghostel-compile-global-mode)
+         (after-init . ghostel-comint-global-mode))
   :init
+  (defun my/ghostel-switch (in-project &optional sync-dir)
+    "Switch to a ghostel buffer.  With SYNC-DIR, cd its shell to the current dir."
+    (let ((dir default-directory))
+      (if in-project
+          (ghostel-project)
+        (ghostel))
+      (when (and sync-dir
+                 (not (file-remote-p dir))
+                 (not (equal (file-truename dir)
+                             (file-truename default-directory))))
+        (ghostel-send-string
+         (format "cd %s\n" (shell-quote-argument (expand-file-name dir)))))))
+
+  (defun my/ghostel-here ()
+    "Switch to ghostel and cd to the previous buffer's directory."
+    (interactive)
+    (my/ghostel-switch nil t))
+  (defun my/ghostel-project-here ()
+    "Switch to ghostel in a project and cd to the previous buffer's directory."
+    (interactive)
+    (my/ghostel-switch t t))
+
+  (defun my/ghostel-plain ()
+    "Switch to ghostel without changing directory."
+    (interactive)
+    (my/ghostel-switch nil))
+
   (defun my/ghostel-buffer-name-by-title (title)
     "Return \"TITLE\", or nil when TITLE is nil.
     A `ghostel-buffer-name-function' that names the buffer after the title."
@@ -5482,11 +5520,16 @@ Device tree is the format used by ZMK keyboard firmware.
 
 #+begin_src emacs-lisp
 (use-package nerd-icons
-  :demand t)
+  :demand t
+  :config
+  (add-to-list 'nerd-icons-mode-icon-alist
+               '(ghostel-mode nerd-icons-mdicon "nf-md-ghost" :face nerd-icons-lblue)))
 
 (use-package nerd-icons-completion
-  :after (nerd-icons)
-  :hook (after-init . nerd-icons-completion-mode))
+  :after (nerd-icons
+          marginalia)
+  :hook ((after-init . nerd-icons-completion-mode)
+         (marginalia-mode . nerd-icons-completion-marginalia-setup)))
 #+end_src
 
 Large remote directories (at least over ssh) are /really/ slow to load icons, so I'm doing the easy thing for now and only enabling nerd-icons in dired for local directories.
