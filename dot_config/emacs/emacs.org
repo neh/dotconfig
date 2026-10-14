@@ -4280,15 +4280,11 @@ Finally found a package that lets org tables horizontally scroll while leaving t
     "Switch to ghostel and cd to the previous buffer's directory."
     (interactive)
     (my/ghostel-switch nil t))
+
   (defun my/ghostel-project-here ()
     "Switch to ghostel in a project and cd to the previous buffer's directory."
     (interactive)
     (my/ghostel-switch t t))
-
-  (defun my/ghostel-plain ()
-    "Switch to ghostel without changing directory."
-    (interactive)
-    (my/ghostel-switch nil))
 
   (defun my/ghostel-buffer-name-by-title (title)
     "Return \"TITLE\", or nil when TITLE is nil.
